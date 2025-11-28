@@ -48,7 +48,10 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
                         onClick={() => setIncomeSheetOpen(true)}
                         className="inline-flex items-center gap-1 font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-100 active:scale-95 transition-transform"
                     >
-                        {formatCurrency(income)}
+                        {/* FIX: Wrapped in span with suppressHydrationWarning */}
+                        <span suppressHydrationWarning>
+                            {formatCurrency(income)}
+                        </span>
                         <ChevronDown className="w-4 h-4" />
                     </button>
                     {' '}household.
@@ -63,7 +66,7 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
             >
                 <div className="space-y-8">
                     <div className="text-center">
-                        <span className="text-4xl font-black text-slate-900 tracking-tight">
+                        <span className="text-4xl font-black text-slate-900 tracking-tight" suppressHydrationWarning>
                             {formatCurrency(income)}
                         </span>
                         <p className="text-sm text-slate-500 mt-2">Gross Monthly Income</p>

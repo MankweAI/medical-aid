@@ -4,15 +4,15 @@ import LivingStatement from '@/components/LivingStatement';
 import SmartFeed from '@/components/SmartFeed';
 import { notFound } from 'next/navigation';
 
-// ... (Previous Imports)
-
+// 1. Update Props to use Promise<...> for Next.js 15+
 type Props = {
-    params: { slug: string };
-    searchParams: { [key: string]: string | string[] | undefined };
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-// 1. DYNAMIC METADATA & CANONICALS
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+// 2. Await params in generateMetadata
+export async function generateMetadata(props: Props): Promise<Metadata> {
+    const params = await props.params;
     const { slug } = params;
 
     // Map slugs to "Human" titles for the Title Tag
@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 
     const title = titles[slug] || 'Virtual Actuary Diagnosis';
-    const canonicalUrl = `https://healthos.co.za/personas/${slug}`; // Force clean URL
+    const canonicalUrl = `https://healthos.co.za/personas/${slug}`;
 
     return {
         title: `${title} | HealthOS`,
         description: `AI-powered analysis for ${slug.replace('-', ' ')}. Compare plans based on real income bands and hidden benefits.`,
         alternates: {
-            canonical: canonicalUrl, // CRITICAL: Ignores ?income=...
+            canonical: canonicalUrl,
         },
         openGraph: {
             title,
@@ -40,10 +40,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
-export default async function PersonaPage({ params, searchParams }: Props) {
-    // ... (Existing Logic)
+// 3. Await params and searchParams in the Page Component
+export default async function PersonaPage(props: Props) {
+    const params = await props.params;
+    const searchParams = await props.searchParams;
+
     const { slug } = params;
-    const incomeParam = searchParams.income as string || '20000';
+    const incomeParam = (searchParams.income as string) || '20000';
 
     // 2. SCHEMA MARKUP (JSON-LD)
     const jsonLd = {
@@ -74,16 +77,14 @@ export default async function PersonaPage({ params, searchParams }: Props) {
             />
 
             <section className="pt-24 px-6 pb-8 bg-white rounded-b-[40px] shadow-sm relative z-10">
-                {/* ... LivingStatement ... */}
                 <LivingStatement
                     initialIncome={parseInt(incomeParam)}
                     persona={slug}
-                    need={searchParams.need as string || ''}
+                    need={(searchParams.need as string) || ''}
                 />
             </section>
 
             <section className="px-4 mt-6">
-                {/* ... SmartFeed ... */}
                 <SmartFeed
                     persona={slug}
                     initialIncome={parseInt(incomeParam)}

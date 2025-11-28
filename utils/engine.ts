@@ -1,46 +1,24 @@
-import { Plan, FamilyComposition, IncomeBand, FixedPricing } from './types';
+import { Plan, FamilyComposition, IncomeBand, FixedPricing, Contribution } from './types';
 
-/**
- * Calculates the total monthly premium based on Income and Family Size.
- * Handles both "Fixed" and "Income Banded" pricing models.
- */
+// --- Existing Logic ---
+
 export function calculateMonthlyPremium(
     plan: Plan,
     income: number,
     family: FamilyComposition
 ): number {
-    // 1. Get the primary contribution structure (usually the first one for 2026)
     const contribution = plan.contributions[0];
     if (!contribution) return 0;
 
-    let rates = { main: 0, adult: 0, child: 0 };
-
-    // 2. Resolve Rates based on Model
-    if (contribution.pricing_model === 'Fixed') {
-        rates = contribution.pricing_matrix as FixedPricing;
-    }
-    else if (contribution.pricing_model === 'Income_Banded') {
-        const bands = contribution.pricing_matrix as IncomeBand[];
-        // Find band where income fits (fallback to highest if over max)
-        const activeBand = bands.find(b => income >= b.min && income <= b.max) || bands[bands.length - 1];
-        rates = activeBand;
-    }
-
-    // 3. Calculate Total
-    return (
-        (family.main * rates.main) +
-        (family.adults * rates.adult) +
-        (family.children * rates.child)
-    );
+    // Delegate to the new Engine logic for consistency
+    const profile = PricingEngine.calculateProfile(contribution, family, income);
+    return profile.monthlyPremium;
 }
 
-/**
- * Generates the "Verdict" (Green/Orange Status) for the Smart Feed.
- * Compares user needs against Plan features.
- */
 export function getVerdict(plan: Plan, need: string, income: number): { text: string; type: 'good' | 'warning' | 'neutral' } {
-    // 1. Budget Warning (Simplistic Rule: Don't spend > 15% of income)
     const premium = calculateMonthlyPremium(plan, income, { main: 1, adults: 0, children: 0 });
+
+    // 1. Budget Check
     if (premium > (income * 0.15)) {
         return { text: 'Exceeds recommended 15% of income', type: 'warning' };
     }
@@ -54,13 +32,12 @@ export function getVerdict(plan: Plan, need: string, income: number): { text: st
     }
 
     if (need === 'chronic') {
-        if (plan.network_restriction === 'State') {
-            return { text: 'Meds restricted to State Hospitals', type: 'warning' };
+        if (plan.network_restriction === 'Regional') { // Assuming 'State' mapped to Regional or similar restrictions
+            return { text: 'Restricted Provider Network', type: 'warning' };
         }
         return { text: 'Includes Chronic Medication Benefit', type: 'good' };
     }
 
-    // 3. Default Verdicts based on Plan Type
     if (plan.network_restriction === 'Network') {
         return { text: 'Network Hospitals Only', type: 'neutral' };
     }
@@ -74,4 +51,52 @@ export const formatCurrency = (amount: number) => {
         currency: 'ZAR',
         maximumFractionDigits: 0,
     }).format(amount);
+};
+
+// --- NEW: PricingEngine for Dashboard ---
+
+export const PricingEngine = {
+    calculateProfile: (
+        contribution: Contribution,
+        members: { main: number; adult: number; child: number },
+        income: number
+    ) => {
+        let rates = { main: 0, adult: 0, child: 0 };
+
+        // 1. Determine Rates
+        if (contribution.pricing_model === 'Fixed') {
+            rates = contribution.pricing_matrix as FixedPricing;
+        } else if (contribution.pricing_model === 'Income_Banded') {
+            const bands = contribution.pricing_matrix as IncomeBand[];
+            const activeBand = bands.find((band) => income >= band.min && income <= band.max) || bands[bands.length - 1];
+            rates = activeBand;
+        }
+
+        // 2. Calculate Premium
+        const monthlyPremium =
+            (members.main * rates.main) +
+            (members.adult * rates.adult) +
+            (members.child * rates.child);
+
+        // 3. Calculate Savings (MSA)
+        let annualAllocation = 0;
+        const isPooled = !!(contribution.msa_structure && contribution.msa_structure.type !== 'None');
+
+        if (contribution.msa_structure?.type === 'Percentage') {
+            // Usually 25% of premium x 12
+            annualAllocation = (monthlyPremium * (contribution.msa_structure.value / 100)) * 12;
+        } else if (contribution.msa_structure?.type === 'Fixed') {
+            // Fixed amount logic would depend on member size, simplified here to raw value
+            // In reality, fixed MSA is often per member type. Assuming flat value for MVP if simplified.
+            annualAllocation = contribution.msa_structure.value;
+        }
+
+        return {
+            monthlyPremium,
+            savings: {
+                isPooled,
+                annualAllocation
+            }
+        };
+    }
 };
