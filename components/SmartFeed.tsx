@@ -3,110 +3,133 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCompare } from '@/context/CompareContext';
-import { Check, AlertTriangle, Plus, Shield, ArrowRight } from 'lucide-react';
+import { Check, AlertTriangle, Plus, Shield, ArrowRight, Activity, Zap, Eye } from 'lucide-react';
 import clsx from 'clsx';
 import ExpertModal from '@/components/ExpertModal';
+import BottomSheet from '@/components/ui/BottomSheet';
+import PlanDetails from '@/components/PlanDetails';
 
-// In a real app, import these from your types/utils
-// import { calculateMonthlyPremium } from '@/utils/calculation';
+// --- Types for the Transparent Card ---
+interface PlanData {
+    id: string;
+    name: string;
+    scheme: string;
+    price: number;
+    network_restriction: string;
+    savings_annual: number;
+    chronic_limit: string;
+    red_flag?: string;
+    verdictType: 'good' | 'warning' | 'neutral';
+    benefits: any[]; // For the verbose view
+}
 
 export default function SmartFeed({ persona, initialIncome }: { persona: string, initialIncome: number }) {
     const searchParams = useSearchParams();
-    const { togglePlan, selectedPlans } = useCompare(); // Connect to CompareContext
+    const { togglePlan, selectedPlans } = useCompare();
     const income = parseInt(searchParams.get('income') || initialIncome.toString());
 
-    // Modal State
+    // --- Interaction State ---
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedPlanForModal, setSelectedPlanForModal] = useState('');
+    const [viewingPlan, setViewingPlan] = useState<PlanData | null>(null);
 
-    // Handler for the "Check Availability" Conversion Trigger
-    const handleVerify = (planName: string) => {
+    // --- Handlers ---
+    const handleVerify = (e: React.MouseEvent, planName: string) => {
+        e.stopPropagation(); // Prevent opening the details sheet
         setSelectedPlanForModal(planName);
         setModalOpen(true);
     };
 
-    // Helper to check if a plan is already in the Compare Dock
+    const handleCompare = (e: React.MouseEvent, plan: PlanData) => {
+        e.stopPropagation(); // Prevent opening the details sheet
+        togglePlan({ id: plan.id, name: plan.name, scheme: plan.scheme });
+    };
+
     const isSelected = (id: string) => selectedPlans.some(p => p.id === id);
 
-    // MOCK DATA: Simulating the "Money Engine" output
-    // In production, this data would be passed in as a prop from the Server Component
-    const plans = [
+    // --- MOCK DATA (Enhanced for Transparent Card) ---
+    const plans: PlanData[] = [
         {
             id: 'bonstart-plus',
             name: 'BonStart Plus',
             scheme: 'Bonitas',
-            verdict: 'Fits Budget + Fully Covers Birth',
-            verdictType: 'good', // 'good' = Green, 'warning' = Orange
             price: 1800,
-            network: 'Network',
-            tags: ['Maternity', 'Unlimited GP']
+            network_restriction: 'Network',
+            savings_annual: 0,
+            chronic_limit: 'Basic Formulary',
+            verdictType: 'good',
+            benefits: [
+                { category: 'Hospitalization', benefit_name: 'Private Network', display_text: 'Unlimited cover at BonStart Network hospitals. Emergency treatment covers you at any private hospital.' },
+                { category: 'Maternity', benefit_name: 'Birth Benefit', display_text: '100% of the Bonitas Rate for private ward delivery. Includes 6 antenatal consultations.' }
+            ]
         },
         {
             id: 'keycare-start',
             name: 'KeyCare Start',
             scheme: 'Discovery',
-            verdict: 'State Hospital Restriction',
-            verdictType: 'warning',
             price: 1400,
-            network: 'State/Network',
-            tags: ['Basic Cover', 'Trauma Only']
+            network_restriction: 'State/Network',
+            savings_annual: 0,
+            chronic_limit: 'State Facilities',
+            red_flag: 'Chronic medication restricted to State Facilities only.',
+            verdictType: 'warning',
+            benefits: [
+                { category: 'Hospitalization', benefit_name: 'KeyCare Network', display_text: 'Full cover in the KeyCare Hospital Network. State hospitals for chronic conditions.' },
+                { category: 'Day-to-Day', benefit_name: 'GP Limit', display_text: 'Unlimited visits to your selected KeyCare GP. Casual visits not covered.' }
+            ]
         },
         {
             id: 'classic-saver',
             name: 'Classic Saver',
             scheme: 'Discovery',
-            verdict: 'High Savings but Expensive',
-            verdictType: 'neutral',
             price: 3350,
-            network: 'Any Hospital',
-            tags: ['Savings Account', 'Comprehensive']
+            network_restriction: 'Any',
+            savings_annual: 10450,
+            chronic_limit: 'R22,000 (DSA)',
+            verdictType: 'neutral',
+            benefits: [
+                { category: 'Hospitalization', benefit_name: 'Any Hospital', display_text: 'Go to any private hospital. 20% co-payment only applies to specialists not on the Classic network.' },
+                { category: 'Savings', benefit_name: 'Medical Savings Account', display_text: 'R10,450 available upfront for day-to-day expenses.' }
+            ]
         }
     ];
 
     return (
-        <div className="space-y-4 pb-32 animate-in slide-in-from-bottom-8 duration-700">
+        <div className="space-y-6 pb-32 animate-in slide-in-from-bottom-8 duration-700">
 
-            {/* 1. Contextual Refinement Chips (Visual Only for MVP) */}
-            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                <button className="flex-shrink-0 px-4 py-2 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-600 active:bg-blue-50 active:text-blue-600 transition-colors">
-                    + Private Ward
-                </button>
-                <button className="flex-shrink-0 px-4 py-2 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-600 active:bg-blue-50 active:text-blue-600 transition-colors">
-                    + Gap Cover
-                </button>
+            {/* 1. Truth Toggles (New Filter) */}
+            <div className="flex items-center justify-between px-2">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Found {plans.length} Strategies
+                </p>
+                <div className="flex gap-2">
+                    {/* Visual-only for MVP */}
+                    <span className="text-[10px] font-bold text-slate-300">Show Full Cover Only</span>
+                </div>
             </div>
 
-            {/* 2. The Feed Cards */}
+            {/* 2. The Transparent Cards */}
             {plans.map((plan) => (
                 <div
                     key={plan.id}
+                    onClick={() => setViewingPlan(plan)} // <--- CLICK TO UNFOLD
                     className={clsx(
-                        "bg-white rounded-2xl p-5 shadow-sm border-2 transition-all relative overflow-hidden active:scale-[0.99]",
-                        // Highlight if selected for comparison
+                        "bg-white rounded-2xl border-2 transition-all relative overflow-hidden active:scale-[0.98] cursor-pointer hover:shadow-lg shadow-sm group",
                         isSelected(plan.id)
                             ? "border-blue-500 ring-4 ring-blue-500/10"
-                            : plan.verdictType === 'good' ? "border-emerald-100" : "border-transparent"
+                            : plan.verdictType === 'good' ? "border-emerald-100" : "border-slate-100"
                     )}
                 >
-                    {/* Tier 1 Visual Indicator */}
-                    {plan.verdictType === 'good' && (
-                        <div className="absolute top-0 right-0 bg-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
-                            BEST MATCH
-                        </div>
-                    )}
-
-                    {/* Card Header */}
-                    <div className="flex justify-between items-start mb-4">
+                    {/* HEADER: Identification */}
+                    <div className="p-5 pb-3 flex justify-between items-start">
                         <div>
-                            <h3 className="font-black text-slate-900 text-lg">{plan.name}</h3>
-                            <p className={clsx(
-                                "text-xs font-bold mt-1 flex items-center gap-1.5",
-                                plan.verdictType === 'good' ? "text-emerald-600" :
-                                    plan.verdictType === 'warning' ? "text-amber-600" : "text-slate-500"
-                            )}>
-                                {plan.verdictType === 'good' ? <Check className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
-                                {plan.verdict}
-                            </p>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                {plan.scheme}
+                                {plan.verdictType === 'good' && <Check className="w-3 h-3 text-emerald-500" />}
+                            </span>
+                            <h3 className="font-black text-slate-900 text-xl group-hover:text-blue-600 transition-colors">
+                                {plan.name}
+                            </h3>
                         </div>
                         <div className="text-right">
                             <p className="text-2xl font-black text-slate-900">R{plan.price}</p>
@@ -114,60 +137,116 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
                         </div>
                     </div>
 
-                    {/* Jargon Buster Tags */}
-                    <div className="space-y-2 mb-6">
-                        {plan.tags.map(tag => (
-                            <div key={tag} className="flex items-center gap-2 text-sm text-slate-600">
-                                <Shield className="w-4 h-4 text-slate-300" />
-                                <span className="decoration-dotted underline decoration-slate-300 underline-offset-2 cursor-help">
-                                    {tag}
-                                </span>
-                            </div>
-                        ))}
+                    {/* ZONE A: Key Metrics (The Dashboard) */}
+                    <div className="px-5 py-3 grid grid-cols-3 gap-2 border-b border-slate-50 bg-slate-50/50">
+                        <div className="flex flex-col">
+                            <span className="text-[9px] text-slate-400 font-bold uppercase mb-0.5">Hospital</span>
+                            <span className="text-xs font-bold text-slate-700 truncate">{plan.network_restriction}</span>
+                        </div>
+                        <div className="flex flex-col border-l border-slate-100 pl-3">
+                            <span className="text-[9px] text-slate-400 font-bold uppercase mb-0.5">Savings</span>
+                            <span className={clsx("text-xs font-bold truncate", plan.savings_annual > 0 ? "text-emerald-600" : "text-slate-400")}>
+                                {plan.savings_annual > 0 ? `R${plan.savings_annual}` : 'None'}
+                            </span>
+                        </div>
+                        <div className="flex flex-col border-l border-slate-100 pl-3">
+                            <span className="text-[9px] text-slate-400 font-bold uppercase mb-0.5">Chronic</span>
+                            <span className="text-xs font-bold text-slate-700 truncate">{plan.chronic_limit}</span>
+                        </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-2 mt-6">
-                        {/* Compare Toggle */}
+                    {/* ZONE B: The Red Flag (Anti-Misleading) */}
+                    {plan.red_flag && (
+                        <div className="px-5 py-2.5 bg-amber-50 border-t border-amber-100 flex items-start gap-3">
+                            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                            <p className="text-[11px] text-amber-800 font-bold leading-tight">
+                                {plan.red_flag}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* ZONE C: Footer Actions */}
+                    <div className="p-4 flex gap-3">
                         <button
-                            onClick={() => togglePlan({ id: plan.id, name: plan.name, scheme: plan.scheme })}
+                            onClick={(e) => handleCompare(e, plan)}
                             className={clsx(
-                                "flex-1 py-3 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors",
+                                "flex-1 py-3 border rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors",
                                 isSelected(plan.id)
-                                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                    ? "bg-blue-50 border-blue-200 text-blue-700"
+                                    : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                             )}
                         >
-                            {isSelected(plan.id) ? (
-                                <>
-                                    <Check className="w-4 h-4" /> Added
-                                </>
-                            ) : (
-                                <>
-                                    <Plus className="w-4 h-4" /> Compare
-                                </>
-                            )}
+                            {isSelected(plan.id) ? "Added" : "Compare"}
                         </button>
 
-                        {/* Conversion Trigger */}
                         <button
-                            onClick={() => handleVerify(plan.name)}
-                            className="flex-1 py-3 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-xl shadow-slate-900/10 active:scale-95 transition-transform flex items-center justify-center gap-2"
+                            onClick={(e) => handleVerify(e, plan.name)}
+                            className="flex-[1.5] py-3 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg shadow-slate-900/10 active:scale-95 transition-transform flex items-center justify-center gap-2"
                         >
                             Check Availability
-                            <ArrowRight className="w-4 h-4" />
+                            <ArrowRight className="w-3 h-3" />
                         </button>
                     </div>
+
+                    {/* Subtle "Tap to View" hint */}
+                    <div className="absolute inset-0 bg-black/0 hover:bg-black/[0.01] transition-colors pointer-events-none" />
                 </div>
             ))}
 
-            {/* 3. The Conversion Modal */}
+            {/* 3. CONVERSION MODAL */}
             <ExpertModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 planName={selectedPlanForModal}
-                context={`R${income} Household Strategy`}
+                context={`R${income} Strategy`}
             />
+
+            {/* 4. THE UNFOLDED PAGE (Details Sheet) */}
+            <BottomSheet
+                isOpen={!!viewingPlan}
+                onClose={() => setViewingPlan(null)}
+                title={viewingPlan?.name || 'Plan Intelligence'}
+            >
+                {viewingPlan && (
+                    <div className="space-y-6">
+                        {/* Header Summary */}
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex justify-between items-center">
+                            <div>
+                                <p className="text-xs font-bold text-slate-400 uppercase">Effective Cost</p>
+                                <p className="text-xl font-black text-slate-900">R{viewingPlan.price} <span className="text-xs font-medium text-slate-400">pm</span></p>
+                            </div>
+                            {viewingPlan.savings_annual > 0 && (
+                                <div className="text-right">
+                                    <p className="text-xs font-bold text-slate-400 uppercase">Savings Pool</p>
+                                    <p className="text-lg font-bold text-emerald-600">R{viewingPlan.savings_annual}</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Verbose Data */}
+                        <div>
+                            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <Activity className="w-4 h-4 text-blue-600" />
+                                Verbose Benefit Data
+                            </h4>
+                            <PlanDetails benefits={viewingPlan.benefits} />
+                        </div>
+
+                        {/* Floating CTA in Sheet */}
+                        <div className="sticky bottom-0 bg-white/95 backdrop-blur pt-4 pb-2">
+                            <button
+                                onClick={(e) => {
+                                    setViewingPlan(null);
+                                    handleVerify(e, viewingPlan.name);
+                                }}
+                                className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl shadow-emerald-900/20 active:scale-95 transition-transform"
+                            >
+                                Confirm Availability
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </BottomSheet>
         </div>
     );
 }
