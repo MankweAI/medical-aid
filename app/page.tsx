@@ -1,6 +1,7 @@
 import ActionDock from '@/components/ActionDock';
 import MagicSearch from '@/components/MagicSearch';
 import { Bell, ShieldCheck, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AppHome() {
   return (
@@ -47,37 +48,43 @@ export default function AppHome() {
         <div className="flex gap-4 overflow-x-auto no-scrollbar pr-6 pb-4">
 
           {/* Card 1: Maternity */}
-          <div className="min-w-[160px] h-[200px] bg-white rounded-3xl border border-slate-100 p-5 flex flex-col justify-between shadow-sm active-press cursor-pointer">
-            <div className="w-10 h-10 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600">
-              👶
+          <Link href="/personas/family-planner?need=maternity" className="min-w-[160px]">
+            <div className="h-[200px] bg-white rounded-3xl border border-slate-100 p-5 flex flex-col justify-between shadow-sm active-press cursor-pointer">
+              <div className="w-10 h-10 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600">
+                👶
+              </div>
+              <div>
+                <p className="font-bold text-slate-900 text-lg">Family <br />Planning</p>
+                <p className="text-xs text-slate-400 mt-1">3 Plans matched</p>
+              </div>
             </div>
-            <div>
-              <p className="font-bold text-slate-900 text-lg">Family <br />Planning</p>
-              <p className="text-xs text-slate-400 mt-1">3 Plans matched</p>
-            </div>
-          </div>
+          </Link>
 
           {/* Card 2: Chronic */}
-          <div className="min-w-[160px] h-[200px] bg-white rounded-3xl border border-slate-100 p-5 flex flex-col justify-between shadow-sm active-press cursor-pointer">
-            <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600">
-              💊
+          <Link href="/personas/chronic-warrior?need=chronic" className="min-w-[160px]">
+            <div className="h-[200px] bg-white rounded-3xl border border-slate-100 p-5 flex flex-col justify-between shadow-sm active-press cursor-pointer">
+              <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600">
+                💊
+              </div>
+              <div>
+                <p className="font-bold text-slate-900 text-lg">Chronic <br />Care</p>
+                <p className="text-xs text-slate-400 mt-1">Gap Analysis</p>
+              </div>
             </div>
-            <div>
-              <p className="font-bold text-slate-900 text-lg">Chronic <br />Care</p>
-              <p className="text-xs text-slate-400 mt-1">Gap Analysis</p>
-            </div>
-          </div>
+          </Link>
 
           {/* Card 3: Budget */}
-          <div className="min-w-[160px] h-[200px] bg-white rounded-3xl border border-slate-100 p-5 flex flex-col justify-between shadow-sm active-press cursor-pointer">
-            <div className="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
-              💸
+          <Link href="/personas/budget-conscious?sort=price" className="min-w-[160px]">
+            <div className="h-[200px] bg-white rounded-3xl border border-slate-100 p-5 flex flex-col justify-between shadow-sm active-press cursor-pointer">
+              <div className="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
+                💸
+              </div>
+              <div>
+                <p className="font-bold text-slate-900 text-lg">Budget <br />Saver</p>
+                <p className="text-xs text-slate-400 mt-1">Under R1,500</p>
+              </div>
             </div>
-            <div>
-              <p className="font-bold text-slate-900 text-lg">Budget <br />Saver</p>
-              <p className="text-xs text-slate-400 mt-1">Under R1,500</p>
-            </div>
-          </div>
+          </Link>
 
         </div>
       </section>
