@@ -1,106 +1,130 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, ChevronDown, ArrowRight } from 'lucide-react';
 import clsx from 'clsx';
+import BottomSheet from '@/components/ui/BottomSheet';
 
-const PLACEHOLDERS = [
-    "I am pregnant and earn R15,000...",
-    "I need cover for a chronic condition...",
-    "I want the cheapest hospital plan...",
-    "I need a plan for my elderly parents..."
+// --- Configuration ---
+const INTENTS = [
+    { label: 'cover pregnancy', value: 'maternity', route: '/personas/family-planner' },
+    { label: 'manage chronic illness', value: 'chronic', route: '/personas/chronic-warrior' },
+    { label: 'save money', value: 'affordability', route: '/personas/budget-conscious' },
+    { label: 'get digital cover', value: 'tech', route: '/personas/digital-native' },
 ];
 
-const PROBLEM_CHIPS = [
-    { label: "🤰 Planning a Baby", route: "/personas/family-planner", params: "need=maternity" },
-    { label: "💊 Chronic Care", route: "/personas/chronic-warrior", params: "need=chronic" },
-    { label: "💸 Tight Budget", route: "/personas/budget-conscious", params: "sort=price" },
-    { label: "📲 Digital Only", route: "/personas/digital-native", params: "type=tech" },
+const BENEFICIARIES = [
+    { label: 'my family', icon: '👨‍👩‍👧‍👦' },
+    { label: 'myself', icon: '👤' },
+    { label: 'my parents', icon: '👴' },
 ];
 
 export default function MagicSearch() {
     const router = useRouter();
-    const [input, setInput] = useState("");
-    const [placeholderIndex, setPlaceholderIndex] = useState(0);
-    const [fade, setFade] = useState(false);
 
-    // Typing Animation
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setFade(true);
-            setTimeout(() => {
-                setPlaceholderIndex((prev) => (prev + 1) % PLACEHOLDERS.length);
-                setFade(false);
-            }, 500);
-        }, 3000);
-        return () => clearInterval(interval);
-    }, []);
+    // State
+    const [intent, setIntent] = useState(INTENTS[0]);
+    const [who, setWho] = useState(BENEFICIARIES[0]);
+    const [activeSheet, setActiveSheet] = useState<'none' | 'intent' | 'who'>('none');
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        const lower = input.toLowerCase();
-
-        // --- GHOST ROUTING LOGIC ---
-        // This logic mimics a "Classifier" to teleport users to the right Spoke.
-        if (lower.includes('baby') || lower.includes('pregnant')) {
-            router.push('/personas/family-planner?need=maternity&mode=result');
-        } else if (lower.includes('chronic') || lower.includes('diabetes') || lower.includes('sick')) {
-            router.push('/personas/chronic-warrior?need=chronic&mode=result');
-        } else if (lower.includes('cheap') || lower.includes('budget') || lower.includes('afford')) {
-            router.push('/personas/budget-conscious?sort=price&mode=result');
-        } else {
-            // Fallback: Send raw query to a generic search page (or default persona)
-            router.push(`/personas/budget-conscious?q=${encodeURIComponent(input)}`);
-        }
+    // Routing Logic
+    const handleDiagnose = () => {
+        const query = `need=${intent.value}&who=${who.label}`;
+        router.push(`${intent.route}?${query}`);
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
-            <div className="relative group z-20">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                <form onSubmit={handleSearch} className="relative bg-white rounded-2xl shadow-xl flex items-center p-2 border border-slate-100 transform transition-transform group-hover:scale-[1.01]">
-                    <div className="pl-4 pr-3 text-slate-400">
-                        <Search className="w-6 h-6" />
-                    </div>
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        className="flex-grow py-4 px-2 text-lg md:text-xl font-medium text-slate-900 placeholder-transparent outline-none bg-transparent"
-                        placeholder="Search"
-                    />
+        <div className="w-full relative z-20">
 
-                    {/* The "Living" Placeholder */}
-                    {!input && (
-                        <div className={clsx(
-                            "absolute left-14 text-lg md:text-xl text-slate-400 pointer-events-none transition-opacity duration-500 flex items-center gap-2",
-                            fade ? "opacity-0" : "opacity-100"
-                        )}>
-                            <Sparkles className="w-4 h-4 text-blue-400" />
-                            {PLACEHOLDERS[placeholderIndex]}
-                        </div>
-                    )}
+            {/* The Sentence Builder */}
+            <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-2xl shadow-blue-900/10 rounded-[32px] p-8 text-center transition-all hover:scale-[1.01] duration-500">
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
+                    Start Diagnosis
+                </p>
 
-                    <button type="submit" className="bg-slate-900 hover:bg-slate-800 text-white py-3 px-6 rounded-xl transition-all duration-300 flex items-center gap-2 font-bold text-sm shadow-lg shadow-slate-900/20">
-                        <span>Diagnose</span>
-                        <ArrowRight className="w-4 h-4" />
-                    </button>
-                </form>
-            </div>
+                <div className="text-2xl md:text-3xl font-light text-slate-900 leading-relaxed">
+                    I am looking to <br className="md:hidden" />
 
-            {/* Smart Chips */}
-            <div className="mt-8 flex flex-wrap justify-center gap-3 animate-in slide-in-from-bottom-4 duration-700 delay-100">
-                {PROBLEM_CHIPS.map((chip) => (
+                    {/* Intent Selector */}
                     <button
-                        key={chip.label}
-                        onClick={() => router.push(`${chip.route}?${chip.params}`)}
-                        className="px-5 py-2.5 bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-200 rounded-full text-sm font-semibold text-slate-600 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
+                        onClick={() => setActiveSheet('intent')}
+                        className="inline-flex items-center gap-1 font-bold text-blue-600 bg-blue-50/50 px-3 py-1 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors mx-1 active:scale-95"
                     >
-                        {chip.label}
+                        {intent.label} <ChevronDown className="w-5 h-5 opacity-50" />
                     </button>
-                ))}
+
+                    <br className="hidden md:block" />
+                    on medical aid for
+
+                    {/* Who Selector */}
+                    <button
+                        onClick={() => setActiveSheet('who')}
+                        className="inline-flex items-center gap-1 font-bold text-emerald-600 bg-emerald-50/50 px-3 py-1 rounded-xl border border-emerald-100 hover:bg-emerald-100 transition-colors mx-1 active:scale-95"
+                    >
+                        {who.label} <ChevronDown className="w-5 h-5 opacity-50" />
+                    </button>
+                </div>
+
+                <div className="mt-8">
+                    <button
+                        onClick={handleDiagnose}
+                        className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-lg py-4 rounded-2xl shadow-xl shadow-slate-900/20 flex items-center justify-center gap-3 transition-all active:scale-95 group"
+                    >
+                        Run Analysis
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                </div>
             </div>
+
+            {/* Sheet 1: Intent Selection */}
+            <BottomSheet
+                isOpen={activeSheet === 'intent'}
+                onClose={() => setActiveSheet('none')}
+                title="What is your main goal?"
+            >
+                <div className="grid gap-3">
+                    {INTENTS.map((item) => (
+                        <button
+                            key={item.value}
+                            onClick={() => { setIntent(item); setActiveSheet('none'); }}
+                            className={clsx(
+                                "p-4 rounded-2xl text-left font-bold text-sm border transition-all",
+                                intent.value === item.value
+                                    ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-900/20"
+                                    : "bg-slate-50 text-slate-600 border-transparent hover:bg-slate-100"
+                            )}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </div>
+            </BottomSheet>
+
+            {/* Sheet 2: Who Selection */}
+            <BottomSheet
+                isOpen={activeSheet === 'who'}
+                onClose={() => setActiveSheet('none')}
+                title="Who needs cover?"
+            >
+                <div className="grid gap-3">
+                    {BENEFICIARIES.map((item) => (
+                        <button
+                            key={item.label}
+                            onClick={() => { setWho(item); setActiveSheet('none'); }}
+                            className={clsx(
+                                "p-4 rounded-2xl text-left font-bold text-sm border transition-all flex items-center gap-3",
+                                who.label === item.label
+                                    ? "bg-emerald-600 text-white border-emerald-600 shadow-lg shadow-emerald-900/20"
+                                    : "bg-slate-50 text-slate-600 border-transparent hover:bg-slate-100"
+                            )}
+                        >
+                            <span className="text-xl">{item.icon}</span>
+                            {item.label}
+                        </button>
+                    ))}
+                </div>
+            </BottomSheet>
         </div>
     );
 }

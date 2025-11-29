@@ -3,7 +3,7 @@
 // 1. Import `use` from react
 import { useState, use } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Shield, Baby, Pill, Zap } from 'lucide-react';
+import { ArrowLeft, Shield, Baby, Pill, Zap, PlusCircle } from 'lucide-react';
 import clsx from 'clsx';
 
 // --- MOCK DATA ---
@@ -51,12 +51,43 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
     const planIds = plans?.split(',') || [];
 
     // Safety: Ensure we have valid plans (Fallback to Mock if IDs missing)
-    const planA = PLANS[planIds[0]] || PLANS['bonstart-plus'];
-    const planB = PLANS[planIds[1]] || PLANS['classic-saver'];
+    let planA = PLANS[planIds[0]];
+    let planB = PLANS[planIds[1]];
+
+    // 1. Resolve Plan A
+    if (!planA) {
+        planA = PLANS['bonstart-plus'];
+    }
+
+    // 2. Resolve Plan B (Ensure it's not the same as Plan A)
+    if (!planB || planB.id === planA.id) {
+        planB = planA.id === 'classic-saver' ? PLANS['bonstart-plus'] : PLANS['classic-saver'];
+    }
 
     const [activeScenario, setActiveScenario] = useState('general');
 
     const getAnnualCost = (p: typeof planA) => p.premium * 12;
+
+    if (planIds.length < 2) {
+        return (
+            <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+                <div className="w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center mb-6 animate-in zoom-in duration-300">
+                    <Shield className="w-10 h-10 text-slate-300" />
+                </div>
+                <h1 className="text-2xl font-black text-slate-900 mb-2">Battle Arena Empty</h1>
+                <p className="text-slate-500 text-sm max-w-xs leading-relaxed mb-8">
+                    To start a head-to-head comparison, you need to select at least 2 strategies from the diagnosis results.
+                </p>
+                <Link
+                    href="/"
+                    className="flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-900/20 active:scale-95 transition-transform"
+                >
+                    <PlusCircle className="w-5 h-5" />
+                    Find Plans to Compare
+                </Link>
+            </main>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-slate-50 pb-32">
@@ -91,7 +122,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                                         <span className="font-black text-slate-900 text-lg">{plan.name}</span>
                                         <div className="text-right">
                                             <span className="block text-xs font-bold text-slate-400 uppercase">Fixed Cost</span>
-                                            <span className="font-bold text-slate-900">R{annual.toLocaleString()}</span>
+                                            <span className="font-bold text-slate-900">R{formatRand(annual)}</span>
                                         </div>
                                     </div>
 
@@ -112,7 +143,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                                     <div className="flex justify-between mt-2 text-[10px] font-bold uppercase tracking-wider">
                                         <div className="flex items-center gap-1 text-emerald-600">
                                             <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                            Savings: R{plan.savings.toLocaleString()}
+                                            Savings: R{formatRand(plan.savings)}
                                         </div>
                                         <div className="flex items-center gap-1 text-rose-500">
                                             <div className="w-2 h-2 rounded-full bg-rose-500 opacity-50" />
@@ -189,7 +220,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                     <div>
                         <h3 className="font-bold text-blue-900 text-sm mb-2">The Virtual Actuary Verdict</h3>
                         <p className="text-xs text-blue-800 leading-relaxed">
-                            If you can afford the extra <strong>R{(planB.premium - planA.premium).toLocaleString()}</strong> per month,
+                            If you can afford the extra <strong>R{formatRand(planB.premium - planA.premium)}</strong> per month,
                             <strong> {planB.name}</strong> is the safer choice because it allows you to use
                             any private hospital and avoids the {planA.features.specialist.val} restriction.
                         </p>
@@ -216,4 +247,9 @@ function Row({ label, valA, valB, highlightDiff }: { label: string, valA: string
             </div>
         </div>
     );
+}
+
+function formatRand(amount: number) {
+    // Use en-US for consistent grouping, then replace commas with spaces for SA format
+    return amount.toLocaleString('en-US').replace(/,/g, ' ');
 }

@@ -3,7 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CompareProvider } from "@/context/CompareContext";
-import CompareDock from "@/components/CompareDock";
+import { PersonaProvider } from "@/context/PersonaContext";
+import ActionDock from "@/components/ActionDock"; // Ensure this is imported
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 1. Viewport must be a separate export in Next.js 14+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -37,12 +37,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* The App Constraint Container */}
         <div id="app-frame">
           <CompareProvider>
-            {children}
-            {/* CompareDock will now be visually constrained by the centered layout */}
-            <CompareDock />
+            <PersonaProvider>
+              {children}
+              {/* The Unified Analyst's Toolkit */}
+              <ActionDock />
+            </PersonaProvider>
           </CompareProvider>
         </div>
       </body>

@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCompare } from '@/context/CompareContext';
+import { Bookmark } from 'lucide-react';
 import {
     Check, AlertTriangle, Plus, Shield, ArrowRight,
     HelpCircle, ThumbsUp, ThumbsDown, Filter
@@ -80,8 +81,9 @@ function EmptyState({ onReset }: { onReset: () => void }) {
 
 export default function SmartFeed({ persona, initialIncome }: { persona: string, initialIncome: number }) {
     const searchParams = useSearchParams();
-    const { togglePlan, selectedPlans } = useCompare();
+    const { togglePlan, toggleSave, selectedPlans, savedPlans } = useCompare();
     const income = parseInt(searchParams.get('income') || initialIncome.toString());
+
 
     // --- Logic State ---
     const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -96,8 +98,10 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
         );
     };
 
-    // --- Handlers ---
+
+    // Helpers
     const isSelected = (id: string) => selectedPlans.some(p => p.id === id);
+    const isSaved = (id: string) => savedPlans.some(p => p.id === id);
 
     const getEffectiveCost = (price: number, savingsAnnual: number) => {
         if (savingsAnnual === 0) return { sunkCost: price, savingsPercent: 0 };
@@ -313,6 +317,20 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
                                 >
                                     {/* HEADER */}
                                     <div className="p-5 pb-3 flex justify-between items-start">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleSave({ id: plan.id, name: plan.name, scheme: plan.scheme, price: plan.price });
+                                            }}
+                                            className={clsx(
+                                                "absolute top-5 right-5 p-2 rounded-full transition-all z-10",
+                                                isSaved(plan.id)
+                                                    ? "bg-blue-100 text-blue-600"
+                                                    : "bg-slate-50 text-slate-300 hover:text-slate-500"
+                                            )}
+                                        >
+                                            <Bookmark className={clsx("w-4 h-4", isSaved(plan.id) && "fill-current")} />
+                                        </button>
                                         <div>
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                                                 {plan.scheme}
@@ -327,7 +345,7 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
                                                 </p>
                                             )}
                                         </div>
-                                        <div className="text-right">
+                                        <div className="text-right mt-8"> {/* Pushed down to clear bookmark */}
                                             <p className="text-2xl font-black text-slate-900">R{plan.price}</p>
                                             <p className="text-[10px] text-slate-400 uppercase font-bold">Per Month</p>
                                         </div>

@@ -2,7 +2,6 @@
 
 :root {
   --desktop-bg: #F1F5F9;
-  /* Slate-100 */
   --app-bg: #FFFFFF;
   --foreground: #0F172A;
   --glass-border: rgba(255, 255, 255, 0.5);
@@ -18,42 +17,101 @@
 
 body {
   background: var(--desktop-bg);
-  /* Grey background for desktop */
   color: var(--foreground);
   font-family: var(--font-sans);
   overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
-
-  /* Centering Logic */
   display: flex;
   justify-content: center;
   min-height: 100vh;
 }
 
-/* The App Container (Phone Screen) */
 #app-frame {
   background: var(--app-bg);
   width: 100%;
   min-height: 100vh;
   position: relative;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-  /* Deep shadow */
   overflow-x: hidden;
 }
 
-/* Desktop: Constrain width */
 @media (min-width: 768px) {
   #app-frame {
     max-width: 600px;
-    /* Tablet/Half-screen feel */
     border-left: 1px solid rgba(0, 0, 0, 0.05);
     border-right: 1px solid rgba(0, 0, 0, 0.05);
   }
 }
 
-.active-press:active {
-  transform: scale(0.96);
-  transition: transform 0.1s ease-out;
+/* --- ANIMATIONS --- */
+
+/* 1. Floating Orbs */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+.animate-float {
+  animation: float 20s infinite ease-in-out;
+}
+
+.animate-float-delayed {
+  animation: float 25s infinite ease-in-out reverse;
+}
+
+/* 2. Soft Pulse */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 3. Ticker Flow */
+@keyframes ticker {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.animate-ticker {
+  animation: ticker 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .glass-panel {
