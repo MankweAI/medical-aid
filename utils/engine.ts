@@ -11,7 +11,16 @@ export function calculateMonthlyPremium(
     if (!contribution) return 0;
 
     // Delegate to the new Engine logic for consistency
-    const profile = PricingEngine.calculateProfile(contribution, family, income);
+    // Fix: Map FamilyComposition (plural) to PricingEngine (singular)
+    const profile = PricingEngine.calculateProfile(
+        contribution,
+        {
+            main: family.main,
+            adult: family.adults,
+            child: family.children
+        },
+        income
+    );
     return profile.monthlyPremium;
 }
 

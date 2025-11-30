@@ -44,7 +44,9 @@ export default function RootLayout({
             <CompareProvider>
               {children}
               <TrustFooter />
-              <ActionDock />
+              <React.Suspense fallback={null}>
+                <ActionDock />
+              </React.Suspense>
             </CompareProvider>
           </PersonaProvider>
         </div>
