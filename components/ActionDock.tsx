@@ -152,6 +152,12 @@ export default function ActionDock() {
                             >
                                 Start a Diagnosis
                             </button>
+                            <button
+                                onClick={() => setShowSaved(false)}
+                                className="w-full mt-3 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm"
+                            >
+                                Close
+                            </button>
                         </div>
                     ) : (
                         <div className="grid gap-3">
@@ -201,6 +207,12 @@ export default function ActionDock() {
                             className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-lg shadow-slate-900/10 active:scale-95 transition-transform"
                         >
                             Find Plans to Compare
+                        </button>
+                        <button
+                            onClick={() => setShowCompareEmpty(false)}
+                            className="w-full mt-3 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm"
+                        >
+                            Close
                         </button>
                     </div>
                 </div>

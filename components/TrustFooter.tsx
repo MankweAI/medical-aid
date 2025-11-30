@@ -26,6 +26,7 @@ export default function TrustFooter() {
 
                 {/* Links for E-E-A-T */}
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <Link href="/about" className="hover:text-blue-600 transition-colors">About the Creator</Link>
                     <Link href="/methodology" className="hover:text-blue-600 transition-colors">Methodology</Link>
                     <Link href="/disclaimer" className="hover:text-blue-600 transition-colors">Disclaimer</Link>
                     <Link href="/privacy" className="hover:text-blue-600 transition-colors">Privacy</Link>

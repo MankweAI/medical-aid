@@ -1,37 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ChevronDown, ArrowRight } from 'lucide-react';
+import { Search, ChevronDown, ArrowRight, MapPin, Activity, Heart, Zap } from 'lucide-react';
 import clsx from 'clsx';
 import BottomSheet from '@/components/ui/BottomSheet';
-
-// --- Configuration ---
-const INTENTS = [
-    { label: 'cover pregnancy', value: 'maternity', route: '/personas/family-planner' },
-    { label: 'manage chronic illness', value: 'chronic', route: '/personas/chronic-warrior' },
-    { label: 'save money', value: 'affordability', route: '/personas/budget-conscious' },
-    { label: 'get digital cover', value: 'tech', route: '/personas/digital-native' },
-];
-
-const BENEFICIARIES = [
-    { label: 'my family', icon: '👨‍👩‍👧‍👦' },
-    { label: 'myself', icon: '👤' },
-    { label: 'my parents', icon: '👴' },
-];
+import { SEARCH_INDEX, BENEFICIARIES } from '@/data/searchIndex';
 
 export default function MagicSearch() {
     const router = useRouter();
 
     // State
-    const [intent, setIntent] = useState(INTENTS[0]);
-    const [who, setWho] = useState(BENEFICIARIES[0]);
+    const [selectedIntent, setSelectedIntent] = useState(SEARCH_INDEX[0]);
+    const [selectedWho, setSelectedWho] = useState(BENEFICIARIES[0]);
     const [activeSheet, setActiveSheet] = useState<'none' | 'intent' | 'who'>('none');
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // Routing Logic
+    // --- Filter Logic ---
+    const filteredIntents = useMemo(() => {
+        if (!searchQuery) return SEARCH_INDEX;
+        const lower = searchQuery.toLowerCase();
+        return SEARCH_INDEX.filter(item =>
+            item.label.includes(lower) ||
+            item.tags.some(t => t.includes(lower))
+        );
+    }, [searchQuery]);
+
+    // --- Routing Logic ---
     const handleDiagnose = () => {
-        const query = `need=${intent.value}&who=${who.label}`;
-        router.push(`${intent.route}?${query}`);
+        // Route to the specific "Persona Page"
+        const query = `who=${selectedWho.value}&ref=magic_search`;
+        router.push(`/personas/${selectedIntent.slug}?${query}`);
     };
 
     return (
@@ -39,30 +38,31 @@ export default function MagicSearch() {
 
             {/* The Sentence Builder */}
             <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-2xl shadow-blue-900/10 rounded-[32px] p-8 text-center transition-all hover:scale-[1.01] duration-500">
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
-                    Start Diagnosis
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center justify-center gap-2">
+                    <Zap className="w-3 h-3 text-amber-500 fill-current" />
+                    AI Diagnosis Engine
                 </p>
 
                 <div className="text-2xl md:text-3xl font-light text-slate-900 leading-relaxed">
-                    I am looking to <br className="md:hidden" />
+                    I need a plan to <br className="md:hidden" />
 
-                    {/* Intent Selector */}
+                    {/* Intent Trigger */}
                     <button
-                        onClick={() => setActiveSheet('intent')}
+                        onClick={() => { setActiveSheet('intent'); setSearchQuery(''); }}
                         className="inline-flex items-center gap-1 font-bold text-blue-600 bg-blue-50/50 px-3 py-1 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors mx-1 active:scale-95"
                     >
-                        {intent.label} <ChevronDown className="w-5 h-5 opacity-50" />
+                        {selectedIntent.label} <ChevronDown className="w-5 h-5 opacity-50" />
                     </button>
 
                     <br className="hidden md:block" />
-                    on medical aid for
+                    for
 
-                    {/* Who Selector */}
+                    {/* Who Trigger */}
                     <button
                         onClick={() => setActiveSheet('who')}
                         className="inline-flex items-center gap-1 font-bold text-emerald-600 bg-emerald-50/50 px-3 py-1 rounded-xl border border-emerald-100 hover:bg-emerald-100 transition-colors mx-1 active:scale-95"
                     >
-                        {who.label} <ChevronDown className="w-5 h-5 opacity-50" />
+                        {selectedWho.label} <ChevronDown className="w-5 h-5 opacity-50" />
                     </button>
                 </div>
 
@@ -77,44 +77,85 @@ export default function MagicSearch() {
                 </div>
             </div>
 
-            {/* Sheet 1: Intent Selection */}
+            {/* SHEET 1: The Command Palette (Intents) */}
             <BottomSheet
                 isOpen={activeSheet === 'intent'}
                 onClose={() => setActiveSheet('none')}
-                title="What is your main goal?"
+                title="What is your priority?"
             >
-                <div className="grid gap-3">
-                    {INTENTS.map((item) => (
-                        <button
-                            key={item.value}
-                            onClick={() => { setIntent(item); setActiveSheet('none'); }}
-                            className={clsx(
-                                "p-4 rounded-2xl text-left font-bold text-sm border transition-all",
-                                intent.value === item.value
-                                    ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-900/20"
-                                    : "bg-slate-50 text-slate-600 border-transparent hover:bg-slate-100"
-                            )}
-                        >
-                            {item.label}
-                        </button>
-                    ))}
+                <div className="space-y-4 h-[60vh]">
+                    {/* Search Input */}
+                    <div className="relative sticky top-0 bg-white z-10 pb-2">
+                        <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
+                        <input
+                            autoFocus
+                            type="text"
+                            placeholder="Type 'pregnancy', 'cancer', 'Durban'..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-12 pr-4 font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        />
+                    </div>
+
+                    {/* Results List */}
+                    <div className="space-y-2 overflow-y-auto pb-8">
+                        {filteredIntents.length > 0 ? (
+                            filteredIntents.map((item) => (
+                                <button
+                                    key={item.label}
+                                    onClick={() => { setSelectedIntent(item); setActiveSheet('none'); }}
+                                    className={clsx(
+                                        "w-full p-4 rounded-2xl text-left border transition-all flex items-center justify-between group",
+                                        selectedIntent.slug === item.slug
+                                            ? "bg-blue-50 border-blue-200 text-blue-700 shadow-sm"
+                                            : "bg-white border-slate-100 text-slate-600 hover:bg-slate-50"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        {/* Dynamic Icon based on Category */}
+                                        <div className={clsx("p-2 rounded-full",
+                                            item.category === 'Health' ? "bg-rose-50 text-rose-500" :
+                                                item.category === 'Location' ? "bg-amber-50 text-amber-500" :
+                                                    "bg-blue-50 text-blue-500"
+                                        )}>
+                                            {item.category === 'Health' ? <Heart className="w-4 h-4" /> :
+                                                item.category === 'Location' ? <MapPin className="w-4 h-4" /> :
+                                                    <Activity className="w-4 h-4" />}
+                                        </div>
+                                        <span className="font-bold text-sm">{item.label}</span>
+                                    </div>
+                                    {selectedIntent.slug === item.slug && <ArrowRight className="w-4 h-4" />}
+                                </button>
+                            ))
+                        ) : (
+                            <div className="text-center py-8 text-slate-400 text-sm">
+                                <p>No specific strategy found.</p>
+                                <button
+                                    onClick={() => setSearchQuery('')}
+                                    className="text-blue-600 font-bold mt-2 hover:underline"
+                                >
+                                    Show all options
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </BottomSheet>
 
-            {/* Sheet 2: Who Selection */}
+            {/* SHEET 2: Who Selection */}
             <BottomSheet
                 isOpen={activeSheet === 'who'}
                 onClose={() => setActiveSheet('none')}
                 title="Who needs cover?"
             >
-                <div className="grid gap-3">
+                <div className="grid gap-3 pb-6">
                     {BENEFICIARIES.map((item) => (
                         <button
                             key={item.label}
-                            onClick={() => { setWho(item); setActiveSheet('none'); }}
+                            onClick={() => { setSelectedWho(item); setActiveSheet('none'); }}
                             className={clsx(
                                 "p-4 rounded-2xl text-left font-bold text-sm border transition-all flex items-center gap-3",
-                                who.label === item.label
+                                selectedWho.label === item.label
                                     ? "bg-emerald-600 text-white border-emerald-600 shadow-lg shadow-emerald-900/20"
                                     : "bg-slate-50 text-slate-600 border-transparent hover:bg-slate-100"
                             )}

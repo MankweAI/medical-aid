@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { PricingEngine } from '@/utils/engine';
-import { PersonaEngine, UserProfile } from '@/utils/persona';
+import { validatePlan, UserProfile } from '@/utils/persona';
 import { AlertTriangle, CheckCircle, ChevronDown, Activity, ChevronRight } from 'lucide-react';
 import { GapGauge, IncomeSlider } from './HeroTools';
 import BottomSheet from '@/components/ui/BottomSheet';
@@ -23,11 +23,11 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
     const rankedPlans = plans.map(plan => {
         const userProfile: UserProfile = {
             persona: persona as any,
-            needs: PersonaEngine.getDefaultsForPersona(persona as any)
+            needs: content.needs,
+            title: content.title || '',
+            description: content.description || ''
         };
-        const risks = PersonaEngine.validatePlan(plan.name, userProfile);
-
-        // Safety check for contributions
+        const risks = validatePlan(plan, userProfile);
         const contribution = plan.contributions?.[0] || {};
         const financials = PricingEngine.calculateProfile(contribution, members, income);
 
@@ -221,24 +221,20 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Full Details Component */}
-                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-blue-600" /> Coverage Highlights
-                </h4>
-                <PlanDetails benefits={selectedPlan.benefits} />
+                        <PlanDetails benefits={selectedPlan.benefits} />
 
-                {/* CTA */}
-                <div className="sticky bottom-0 pt-4 pb-2 bg-white/90 backdrop-blur-sm mt-6">
-                    <button className="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-900/20 active-press">
-                        Select This Plan
-                    </button>
-                </div>
+                        {/* CTA */}
+                        <div className="sticky bottom-0 pt-4 pb-2 bg-white/90 backdrop-blur-sm mt-6">
+                            <button className="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-900/20 active-press">
+                                Select This Plan
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </BottomSheet>
         </div>
-    )
-}
-            </BottomSheet >
-        </div >
     );
 }

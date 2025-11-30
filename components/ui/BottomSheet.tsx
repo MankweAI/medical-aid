@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 
 interface BottomSheetProps {
@@ -22,8 +23,11 @@ export default function BottomSheet({ isOpen, onClose, title, children }: Bottom
 
     if (!visible && !isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center">
+    // Use Portal to escape parent stacking contexts (z-index traps)
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center">
             {/* Backdrop (Blur) */}
             <div
                 className={clsx(
@@ -60,7 +64,8 @@ export default function BottomSheet({ isOpen, onClose, title, children }: Bottom
                     {children}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
 
