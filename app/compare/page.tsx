@@ -5,6 +5,8 @@ import { useState, use } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Shield, Baby, Pill, Zap, PlusCircle } from 'lucide-react';
 import clsx from 'clsx';
+import { usePersona } from '@/context/PersonaContext'; // Import Context
+import ReviewToast from '@/components/ReviewToast';
 
 // --- MOCK DATA ---
 const PLANS: Record<string, any> = {
@@ -46,6 +48,7 @@ const SCENARIOS = [
 export default function ComparePage({ searchParams }: { searchParams: Promise<{ plans?: string }> }) {
     // 3. Unwrap the promise using `use()`
     const { plans } = use(searchParams);
+    const { activePersonaPath } = usePersona(); // Consume Context
 
     // 4. Use the unwrapped value
     const planIds = plans?.split(',') || [];
@@ -68,6 +71,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
 
     const getAnnualCost = (p: typeof planA) => p.premium * 12;
 
+    // --- EMPTY STATE LOGIC ---
     if (planIds.length < 2) {
         return (
             <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
@@ -79,7 +83,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                     To start a head-to-head comparison, you need to select at least 2 strategies from the diagnosis results.
                 </p>
                 <Link
-                    href="/"
+                    href={activePersonaPath || '/'}
                     className="flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-900/20 active:scale-95 transition-transform"
                 >
                     <PlusCircle className="w-5 h-5" />
@@ -94,7 +98,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
 
             {/* Header & Navigation */}
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-                <Link href="/" className="p-2 -ml-2 text-slate-500 hover:text-slate-900 bg-slate-100 rounded-full">
+                <Link href={activePersonaPath || '/'} className="p-2 -ml-2 text-slate-500 hover:text-slate-900 bg-slate-100 rounded-full">
                     <ArrowLeft className="w-5 h-5" />
                 </Link>
                 <h1 className="text-sm font-bold uppercase tracking-wider text-slate-500">
@@ -228,6 +232,7 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                 </div>
 
             </div>
+            <ReviewToast />
         </main>
     );
 }

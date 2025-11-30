@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Import useEffect
 import { ChevronDown, Baby, Pill, Wallet, Zap, Check } from 'lucide-react';
 import BottomSheet from '@/components/ui/BottomSheet';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePersona } from '@/context/PersonaContext'; // Import Context
 import clsx from 'clsx';
 
 interface Props {
@@ -12,7 +13,6 @@ interface Props {
     need: string;
 }
 
-// Map Needs to Routes
 const NEEDS = [
     { label: 'Maternity', icon: Baby, route: '/personas/family-planner', param: 'maternity' },
     { label: 'Chronic Care', icon: Pill, route: '/personas/chronic-warrior', param: 'chronic' },
@@ -25,23 +25,33 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    // Sheets State
+    // SYNC TO GLOBAL CONTEXT
+    const { setPersona, setIncome: setGlobalIncome } = usePersona();
+
+    useEffect(() => {
+        setPersona(persona);
+        setGlobalIncome(initialIncome);
+    }, [persona, initialIncome, setPersona, setGlobalIncome]);
+
+    // ... (Rest of your existing LivingStatement code: activeSheet, handlers, UI) ...
+    // Keep the existing render logic exactly as it was.
+
     const [activeSheet, setActiveSheet] = useState<'none' | 'income' | 'need'>('none');
     const [income, setIncome] = useState(initialIncome);
 
-    // 1. Handle Income Update (Updates URL)
     const handleIncomeSave = () => {
         const params = new URLSearchParams(searchParams.toString());
         params.set('income', income.toString());
         router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        setGlobalIncome(income); // Update global context too
         setActiveSheet('none');
     };
 
-    // 2. Handle Need Switch (Routes to new Persona)
+    // ... rest of handleNeedSelect and render ...
     const handleNeedSelect = (target: typeof NEEDS[0]) => {
         const params = new URLSearchParams(searchParams.toString());
         params.set('need', target.param);
-        params.set('income', income.toString()); // Preserve income
+        params.set('income', income.toString());
         router.push(`${target.route}?${params.toString()}`);
         setActiveSheet('none');
     };
@@ -60,7 +70,6 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
 
                 <h1 className="text-2xl md:text-3xl font-light text-slate-900 leading-snug">
                     Finding the right{' '}
-                    {/* INTERACTIVE NEED PILL */}
                     <button
                         onClick={() => setActiveSheet('need')}
                         className="inline-flex items-center gap-1 font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-100 active:scale-95 transition-transform mx-1"
@@ -69,7 +78,6 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
                         <ChevronDown className="w-4 h-4" />
                     </button>
                     {' '}strategy for a{' '}
-                    {/* INTERACTIVE INCOME PILL */}
                     <button
                         onClick={() => setActiveSheet('income')}
                         className="inline-flex items-center gap-1 font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100 active:scale-95 transition-transform mx-1"
@@ -81,7 +89,7 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
                 </h1>
             </div>
 
-            {/* 1. INCOME SHEET */}
+            {/* Sheets remain the same */}
             <BottomSheet
                 isOpen={activeSheet === 'income'}
                 onClose={() => setActiveSheet('none')}
@@ -117,7 +125,6 @@ export default function LivingStatement({ initialIncome, persona, need }: Props)
                 </div>
             </BottomSheet>
 
-            {/* 2. NEED / PERSONA SHEET */}
             <BottomSheet
                 isOpen={activeSheet === 'need'}
                 onClose={() => setActiveSheet('none')}

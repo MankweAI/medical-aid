@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Sparkles, Layers } from 'lucide-react';
 import { useCompare } from '@/context/CompareContext';
 import { usePersona } from '@/context/PersonaContext';
+import { Trash2 } from 'lucide-react';
 import clsx from 'clsx';
 import BottomSheet from '@/components/ui/BottomSheet';
 
@@ -17,11 +18,14 @@ export default function ActionDock() {
 
     // State for the "Saved" Sheet
     const [showSaved, setShowSaved] = useState(false);
+    const [showCompareEmpty, setShowCompareEmpty] = useState(false);
 
     // --- LOGIC: Determine "Active" State ---
     let activeTab = 'diagnose';
     if (showSaved) {
         activeTab = 'saved';
+    } else if (showCompareEmpty) {
+        activeTab = 'compare'; // Highlight compare tab when empty modal is open
     } else if (pathname.includes('/compare')) {
         activeTab = 'compare';
     } else {
@@ -31,6 +35,7 @@ export default function ActionDock() {
     // --- HANDLER: The Context-Aware Diagnose Button ---
     const handleDiagnoseClick = () => {
         setShowSaved(false);
+        setShowCompareEmpty(false);
 
         if (pathname === '/') {
             // Context: Home
@@ -58,8 +63,8 @@ export default function ActionDock() {
     const getButtonClass = (id: string) => clsx(
         "relative flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300",
         activeTab === id
-            ? "bg-slate-900 text-white shadow-lg shadow-slate-900/30 -translate-y-4 border-4 border-white z-20" // Active Pop
-            : "hover:bg-slate-100 text-slate-400 hover:text-slate-600 z-10 active:scale-95" // Resting
+            ? "bg-slate-900 text-white shadow-lg shadow-slate-900/30 -translate-y-4 border-4 border-white z-20"
+            : "hover:bg-slate-100 text-slate-400 hover:text-slate-600 z-10 active:scale-95"
     );
 
     return (
@@ -70,7 +75,7 @@ export default function ActionDock() {
 
                     {/* 1. SAVED (The Vault) */}
                     <button
-                        onClick={() => setShowSaved(!showSaved)}
+                        onClick={() => { setShowSaved(!showSaved); setShowCompareEmpty(false); }}
                         className={getButtonClass('saved')}
                     >
                         <div className="relative">
@@ -100,6 +105,8 @@ export default function ActionDock() {
                             setShowSaved(false);
                             if (selectedPlans.length > 0) {
                                 router.push(`/compare?plans=${selectedPlans.map(p => p.id).join(',')}`);
+                            } else {
+                                setShowCompareEmpty(!showCompareEmpty);
                             }
                         }}
                         className={getButtonClass('compare')}
@@ -115,7 +122,7 @@ export default function ActionDock() {
 
                         {activeTab === 'compare' && (
                             <span className="absolute -bottom-6 text-[10px] font-bold text-slate-400 opacity-0 animate-in fade-in slide-in-from-top-1 duration-500 fill-mode-forwards whitespace-nowrap">
-                                {selectedPlans.length} Plans
+                                {selectedPlans.length > 0 ? `${selectedPlans.length} Plans` : 'Compare'}
                             </span>
                         )}
                     </button>
@@ -127,49 +134,75 @@ export default function ActionDock() {
             <BottomSheet
                 isOpen={showSaved}
                 onClose={() => setShowSaved(false)}
-                title="Shortlisted Strategies"
+                title={`Shortlisted Strategies (${savedPlans.length})`}
             >
-                <div className="space-y-4">
-                    {savedPlans.length > 0 ? (
-                        <div className="space-y-3">
-                            {savedPlans.map((plan) => (
-                                <div key={plan.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <div>
-                                        <div className="font-bold text-slate-900 text-sm">{plan.name}</div>
-                                        <div className="text-xs text-slate-500">{plan.scheme}</div>
-                                    </div>
-                                    <button
-                                        onClick={() => toggleSave(plan)}
-                                        className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-full transition-colors"
-                                    >
-                                        <Bookmark className="w-4 h-4 fill-current" />
-                                    </button>
-                                </div>
-                            ))}
-                            <button
-                                onClick={() => { setShowSaved(false); handleDiagnoseClick(); }}
-                                className="w-full py-3 mt-4 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-lg shadow-slate-900/10 active:scale-95 transition-transform"
-                            >
-                                Find More Plans
-                            </button>
-                        </div>
-                    ) : (
+                <div className="space-y-4 pb-8">
+                    {savedPlans.length === 0 ? (
                         <div className="text-center py-12 px-6 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
                             <div className="w-12 h-12 bg-white shadow-sm rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
                                 🔖
                             </div>
                             <h4 className="font-bold text-slate-900 text-sm">Your vault is empty</h4>
                             <p className="text-xs text-slate-500 mt-1 mb-6 leading-relaxed">
-                                Tap the "Compare" button on any plan to add it to your shortlist for later.
+                                Tap the "Bookmark" icon on any plan to save it for later consideration.
                             </p>
                             <button
-                                onClick={() => { setShowSaved(false); handleDiagnoseClick(); }}
-                                className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-lg shadow-slate-900/10 active:scale-95 transition-transform"
+                                onClick={() => { setShowSaved(false); router.push('/'); }}
+                                className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl text-sm"
                             >
                                 Start a Diagnosis
                             </button>
                         </div>
+                    ) : (
+                        <div className="grid gap-3">
+                            {savedPlans.map(plan => (
+                                <div key={plan.id} className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
+                                    <div>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase">{plan.scheme}</p>
+                                        <h4 className="font-bold text-slate-900">{plan.name}</h4>
+                                        {plan.price && <p className="text-xs text-emerald-600 font-bold">R{plan.price} pm</p>}
+                                    </div>
+                                    <button
+                                        onClick={() => toggleSave(plan)}
+                                        className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                                    >
+                                        <Trash2 className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            ))}
+                            <button
+                                onClick={() => setShowSaved(false)}
+                                className="w-full mt-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm"
+                            >
+                                Close Vault
+                            </button>
+                        </div>
                     )}
+                </div>
+            </BottomSheet>
+
+            {/* --- COMPARE EMPTY SHEET --- */}
+            <BottomSheet
+                isOpen={showCompareEmpty}
+                onClose={() => setShowCompareEmpty(false)}
+                title="Compare Strategies"
+            >
+                <div className="space-y-4 pb-8">
+                    <div className="text-center py-12 px-6 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                        <div className="w-12 h-12 bg-white shadow-sm rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                            ⚖️
+                        </div>
+                        <h4 className="font-bold text-slate-900 text-sm">No plans selected</h4>
+                        <p className="text-xs text-slate-500 mt-1 mb-6 leading-relaxed">
+                            Tap the "Compare" button on any plan card to add it to your workbench. Select up to 2 plans to compare side-by-side.
+                        </p>
+                        <button
+                            onClick={() => { setShowCompareEmpty(false); handleDiagnoseClick(); }}
+                            className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-lg shadow-slate-900/10 active:scale-95 transition-transform"
+                        >
+                            Find Plans to Compare
+                        </button>
+                    </div>
                 </div>
             </BottomSheet>
         </>

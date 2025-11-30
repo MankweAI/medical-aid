@@ -1,35 +1,64 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+
+// Define the Global State Shape
+interface UserState {
+    income: number;
+    members: { main: number; adult: number; child: number };
+    persona: string | null; // e.g., 'family-planner'
+}
 
 interface PersonaContextType {
-    activePersonaPath: string | null;
+    state: UserState;
+    setIncome: (val: number) => void;
+    setMembers: (val: { main: number; adult: number; child: number }) => void;
+    setPersona: (slug: string) => void;
+    activePersonaPath: string; // <--- New Property
 }
 
 const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
 
 export function PersonaProvider({ children }: { children: React.ReactNode }) {
-    const [activePersonaPath, setActivePersonaPath] = useState<string | null>(null);
-    const pathname = usePathname();
+    const [state, setState] = useState<UserState>({
+        income: 20000,
+        members: { main: 1, adult: 0, child: 0 },
+        persona: null
+    });
 
-    // Track the last active persona page
+    // 1. Hydrate from Local Storage
     useEffect(() => {
-        if (pathname.startsWith('/personas/')) {
-            setActivePersonaPath(pathname);
-            // Optional: Persist to localStorage if needed across reloads
-            // localStorage.setItem('healthos_active_persona', pathname);
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('healthos_profile');
+            if (saved) {
+                try {
+                    setState(JSON.parse(saved));
+                } catch (e) {
+                    console.error("Failed to parse profile", e);
+                }
+            }
         }
-    }, [pathname]);
+    }, []);
 
-    // Optional: Hydrate from localStorage
-    // useEffect(() => {
-    //     const saved = localStorage.getItem('healthos_active_persona');
-    //     if (saved) setActivePersonaPath(saved);
-    // }, []);
+    // 2. Persist Updates
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('healthos_profile', JSON.stringify(state));
+        }
+    }, [state]);
+
+    // Helpers
+    const setIncome = useCallback((val: number) => setState(prev => ({ ...prev, income: val })), []);
+    const setMembers = useCallback((val: { main: number; adult: number; child: number }) => setState(prev => ({ ...prev, members: val })), []);
+    const setPersona = useCallback((slug: string) => setState(prev => ({ ...prev, persona: slug })), []);
+
+    // 3. Derive the Active Path (The "Return to Workbench" Link)
+    const activePersonaPath = state.persona
+        ? `/personas/${state.persona}?income=${state.income}`
+        : '/';
 
     return (
-        <PersonaContext.Provider value={{ activePersonaPath }}>
+        <PersonaContext.Provider value={{ state, setIncome, setMembers, setPersona, activePersonaPath }}>
             {children}
         </PersonaContext.Provider>
     );
