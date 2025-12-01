@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Sparkles, Layers } from 'lucide-react';
 import { useCompare } from '@/context/CompareContext';
@@ -19,6 +19,11 @@ export default function ActionDock() {
     // State for the "Saved" Sheet
     const [showSaved, setShowSaved] = useState(false);
     const [showCompareEmpty, setShowCompareEmpty] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // --- LOGIC: Determine "Active" State ---
     let activeTab = 'diagnose';
@@ -80,7 +85,7 @@ export default function ActionDock() {
                     >
                         <div className="relative">
                             <Bookmark className="w-5 h-5" />
-                            {savedPlans.length > 0 && activeTab !== 'saved' && (
+                            {mounted && savedPlans.length > 0 && activeTab !== 'saved' && (
                                 <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-rose-500 border-2 border-white" />
                             )}
                         </div>
@@ -113,7 +118,7 @@ export default function ActionDock() {
                     >
                         <div className="relative">
                             <Layers className="w-5 h-5" />
-                            {selectedPlans.length > 0 && activeTab !== 'compare' && (
+                            {mounted && selectedPlans.length > 0 && activeTab !== 'compare' && (
                                 <span className="absolute -top-2 -right-2 flex items-center justify-center h-5 w-5 rounded-full bg-rose-500 text-[10px] font-bold text-white border-2 border-white shadow-sm">
                                     {selectedPlans.length}
                                 </span>

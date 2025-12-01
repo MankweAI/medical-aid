@@ -3,6 +3,8 @@ import LivingStatement from '@/components/LivingStatement';
 import SmartFeed from '@/components/SmartFeed';
 import TrustTicker from '@/components/TrustTicker'; // New Import
 import DailyInsight from '@/components/DailyInsight'; // New Import
+import SemanticGlossary from '@/components/SemanticGlossary';
+import PeopleAlsoAsk from '@/components/PeopleAlsoAsk';
 import { notFound } from 'next/navigation';
 
 // 1. Update Props to use Promise<...> for Next.js 15+
@@ -114,6 +116,19 @@ export default async function PersonaPage(props: Props) {
     const activeTicker = TICKER_DATA[slug] || ["Analyzing 2026 Rules...", "Verifying Network Limits...", "Calculating Effective Cost..."];
     const activeInsight = INSIGHT_DATA[slug] || { term: "Waiting Periods", def: "A standard 3-month general waiting period applies to all new memberships not moving from another scheme." };
 
+
+    // 1. Mock Data fetching (Replace with actual DB Query)
+    // const personaData = await getPersona(slug);
+    const personaData = {
+        glossary: [
+            { term: "Prescribed Minimum Benefits (PMB)", definition: "A set of defined benefits..." },
+            { term: "Chronic Disease List (CDL)", definition: "A list of 27 chronic conditions..." }
+        ],
+        faq: [
+            { question: "Can I upgrade my plan later?", answer: "Yes, but usually only in January..." },
+            { question: "Is maternity covered immediately?", answer: "No, a 12-month exclusion often applies..." }
+        ]
+    };
     return (
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden">
 
@@ -153,6 +168,16 @@ export default async function PersonaPage(props: Props) {
                     term={activeInsight.term}
                     definition={activeInsight.def}
                 />
+            </section>
+
+            {/* 5. NEW: Semantic Glossary (The Authority Signal) */}
+            <section className="max-w-2xl mx-auto px-6 mt-8 relative z-10">
+                <SemanticGlossary terms={personaData.glossary} />
+            </section>
+
+            {/* 6. NEW: People Also Ask (The Long Tail) */}
+            <section className="max-w-2xl mx-auto px-6 mb-24 relative z-10">
+                <PeopleAlsoAsk questions={personaData.faq} />
             </section>
 
         </main>
