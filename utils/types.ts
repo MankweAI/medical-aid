@@ -48,3 +48,42 @@ export interface FamilyComposition {
     adults: number;
     children: number;
 }
+
+export interface Rule {
+    id: string;
+    conditions: Condition[];
+    consequence: {
+        type: 'risk';
+        level: 'HIGH' | 'MEDIUM' | 'LOW';
+        warning: string;
+        details_template: string; // e.g. "Plan restricted to {network_restriction}"
+    };
+}
+
+export interface Condition {
+    field: string; // e.g. 'network_restriction'
+    operator: 'equals' | 'not_equals' | 'includes' | 'greater_than' | 'less_than';
+    value?: string | number | boolean; // Optional if comparing to user need
+    source: 'plan' | 'user_need' | 'static'; // Compare plan vs plan OR plan vs user need
+    compareField?: keyof SearchProfile; // If source is 'user_need', which field to check?
+}
+
+// Update UserProfile to include the new rules engine structure
+export interface SearchProfile {
+    minSavings?: number;
+    requiredBenefits?: string[];
+    networkTolerance?: 'Any' | 'Network' | 'State' | 'Coastal' | 'Regional';
+    rules?: Rule[]; // <--- The new Engine Payload
+    mustHaves?: string[];
+}
+
+// utils/types.ts
+
+export interface SearchProfile {
+    minSavings?: number;
+    requiredBenefits?: string[];
+    networkTolerance?: 'Any' | 'Network' | 'State' | 'Coastal' | 'Regional';
+    // NEW: The resolved location data for the engine
+    region?: string;
+    rules?: Rule[];
+}

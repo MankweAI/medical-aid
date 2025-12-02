@@ -1,64 +1,59 @@
 import ActionDock from '@/components/ActionDock';
-import MagicSearch from '@/components/MagicSearch';
-import { Bell, ShieldCheck, Zap, TrendingUp, CheckCircle2 } from 'lucide-react';
+import HeroSection from '@/components/HeroSection'; // NEW
+import FilterBar from '@/components/FilterBar';     // NEW
+import { Bell, Zap, TrendingUp, CheckCircle2 } from 'lucide-react';
+import TrustTicker from '@/components/TrustTicker';
+
+// Default Ticker Data for Home
+const HOME_TICKER = [
+  "Diagnosis complete: R20k Family Strategy",
+  "Verified: Chronic Plan (JHB)",
+  "Optimized: Budget Saver R1,400"
+];
 
 export default function AppHome() {
   return (
     <main className="min-h-screen relative overflow-hidden bg-slate-50/50">
 
       {/* 1. BACKGROUND: The "Neural Network" */}
-      {/* Floating Orbs - Pure CSS Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/20 rounded-full blur-[120px] animate-float" />
         <div className="absolute bottom-[10%] right-[-20%] w-[400px] h-[400px] bg-emerald-400/20 rounded-full blur-[100px] animate-float-delayed" />
       </div>
 
       {/* 2. HEADER: Minimalist */}
-      <header className="relative z-10 px-6 pt-12 pb-4 flex justify-between items-center">
+      <header className="relative z-10 px-6 pt-8 pb-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-slate-900 rounded-xl flex items-center justify-center text-white">
+          <div className="w-8 h-8 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-900/20">
             <Zap className="w-4 h-4 fill-current" />
           </div>
           <span className="font-black text-slate-900 tracking-tight text-lg">HealthOS</span>
         </div>
-        <button className="p-2 bg-white/50 backdrop-blur rounded-full border border-white/50 shadow-sm active:scale-95 transition-transform">
+        <button className="p-2 bg-white/80 backdrop-blur rounded-full border border-white/50 shadow-sm active:scale-95 transition-transform hover:bg-white">
           <Bell className="w-5 h-5 text-slate-600" />
         </button>
       </header>
 
-      {/* 3. CORE: The Focus Mode */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-[60vh] px-4">
+      {/* 3. CORE: The Control Tower (Replacing MagicSearch) */}
+      <div className="relative z-10 flex flex-col items-center pt-12 pb-24 px-4">
 
-        {/* The Magic Search (Statement Builder) */}
-        <MagicSearch />
+        {/* A. Brand Hero */}
+        <HeroSection />
 
-        {/* 4. THE TRUST TICKER (Social Proof) */}
-        <div className="mt-8 flex flex-col items-center space-y-3">
-          <div className="h-8 overflow-hidden relative">
-            <div className="flex flex-col items-center animate-ticker">
-              {/* Ticker Item 1 */}
-              <div className="h-8 flex items-center gap-2 text-xs font-medium text-slate-500 bg-white/60 px-3 rounded-full border border-white/50 shadow-sm">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                Diagnosis complete: <span className="font-bold text-slate-700">R20k Family Strategy</span>
-              </div>
-              {/* Ticker Item 2 */}
-              <div className="h-8 flex items-center gap-2 text-xs font-medium text-slate-500 bg-white/60 px-3 rounded-full border border-white/50 shadow-sm">
-                <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                Verified: <span className="font-bold text-slate-700">Chronic Plan (JHB)</span>
-              </div>
-              {/* Ticker Item 3 */}
-              <div className="h-8 flex items-center gap-2 text-xs font-medium text-slate-500 bg-white/60 px-3 rounded-full border border-white/50 shadow-sm">
-                <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                Optimized: <span className="font-bold text-slate-700">Budget Saver R1,400</span>
-              </div>
-            </div>
-          </div>
+        {/* B. The Functional Controller */}
+        <div className="w-full max-w-5xl">
+          <FilterBar />
+        </div>
+
+        {/* C. Social Proof Ticker */}
+        <div className="mt-12 w-full flex justify-center">
+          <TrustTicker messages={HOME_TICKER} />
         </div>
 
       </div>
 
       {/* 5. FOOTER: The SEO Anchor (Below Fold) */}
-      <section className="px-6 pb-32 relative z-10">
+      <section className="px-6 pb-32 relative z-10 max-w-3xl mx-auto w-full">
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-blue-50 rounded-full text-blue-600">
