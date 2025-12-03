@@ -26,6 +26,7 @@ export interface SimulationLineItem {
     setting: Setting;       // Determines if OHEB or Hospital Benefit applies
     category: LineItemCategory; // Maps to benefit buckets (e.g. 'Specialist')
     is_pmb: boolean;        // If true, triggers PMB protection logic
+    phase: string;          // NEW: Grouping (e.g. "Antenatal", "The Event")
 }
 
 export interface SimulationResult {

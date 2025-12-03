@@ -5,6 +5,7 @@ import { SimulationResult, ClinicalScenario } from '@/types/simulation';
 import { SimulationHero } from './SimulationHero';
 import { SimulatorStage } from './SimulatorStage';
 import { StrategyDock } from './StrategyDock';
+import { usePersona } from '@/context/PersonaContext';
 
 interface SimulatorLayoutProps {
     persona: Persona;
@@ -23,6 +24,14 @@ export function SimulatorLayout({
     challengerResults,
     targetPlan,
 }: SimulatorLayoutProps) {
+    const { state } = usePersona();
+    const { activeScheme } = state;
+
+    // Filter Challengers based on Active Scheme
+    const filteredChallengers = activeScheme === 'All Schemes'
+        ? challengerResults
+        : challengerResults.filter(c => c.plan.scheme === activeScheme);
+
     return (
         <div className="min-h-screen bg-slate-50 pb-32">
             {/* HERO: Context & Inputs */}
@@ -44,7 +53,7 @@ export function SimulatorLayout({
             {/* DOCK: The Optimizer */}
             <StrategyDock
                 currentPlanId={targetPlan.id}
-                challengers={challengerResults}
+                challengers={filteredChallengers}
                 targetPlan={targetPlan}
                 targetResult={targetResult}
             />

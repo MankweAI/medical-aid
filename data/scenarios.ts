@@ -18,7 +18,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 650,
                 setting: 'Out_of_Hospital',
                 category: 'GP',
-                is_pmb: true // Diagnosis of pregnancy is PMB
+                is_pmb: true, // Diagnosis of pregnancy is PMB
+                phase: 'Preparation'
             },
             {
                 label: 'Gynae Consultations (Antenatal)',
@@ -26,7 +27,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 1400, // Private Rate (often 200-300% of scheme rate)
                 setting: 'Out_of_Hospital',
                 category: 'Specialist',
-                is_pmb: false // Schemes usually have a basket, but excess is user risk
+                is_pmb: false, // Schemes usually have a basket, but excess is user risk
+                phase: 'Preparation'
             },
             {
                 label: '2D Ultrasound Scans',
@@ -34,7 +36,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 2200,
                 setting: 'Out_of_Hospital',
                 category: 'Radiology', // Maps to 'Pathology' or add 'Radiology' to types
-                is_pmb: false
+                is_pmb: false,
+                phase: 'Preparation'
             },
 
             // PHASE 2: The Event (In Hospital)
@@ -44,7 +47,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 28500, // Facility Fee
                 setting: 'In_Hospital',
                 category: 'Facility',
-                is_pmb: true // Delivery is PMB, but "Private" facility choice matters
+                is_pmb: true, // Delivery is PMB, but "Private" facility choice matters
+                phase: 'The Event'
             },
             {
                 label: 'Gynae Delivery Fee',
@@ -52,7 +56,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 12000, // High shortfall risk here
                 setting: 'In_Hospital',
                 category: 'Specialist',
-                is_pmb: true
+                is_pmb: true,
+                phase: 'The Event'
             },
             {
                 label: 'Epidural (Anaesthetist)',
@@ -60,7 +65,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 4500, // Often distinct from hospital bill
                 setting: 'In_Hospital',
                 category: 'Specialist',
-                is_pmb: false // Pain relief is often not PMB unless medically indicated
+                is_pmb: false, // Pain relief is often not PMB unless medically indicated
+                phase: 'The Event'
             },
             {
                 label: 'Paediatrician (Newborn Check)',
@@ -68,7 +74,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 2800,
                 setting: 'In_Hospital',
                 category: 'Specialist',
-                is_pmb: true
+                is_pmb: true,
+                phase: 'The Event'
             },
 
             // PHASE 3: Post-Natal
@@ -78,7 +85,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 850,
                 setting: 'Out_of_Hospital',
                 category: 'Medication',
-                is_pmb: false
+                is_pmb: false,
+                phase: 'Recovery'
             }
         ]
     },
@@ -99,7 +107,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 600,
                 setting: 'Out_of_Hospital',
                 category: 'GP',
-                is_pmb: true // Diabetes is a CDL condition
+                is_pmb: true, // Diabetes is a CDL condition
+                phase: 'Routine Care'
             },
             {
                 label: 'HbA1c Blood Tests',
@@ -107,7 +116,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 1100,
                 setting: 'Out_of_Hospital',
                 category: 'Pathology',
-                is_pmb: true
+                is_pmb: true,
+                phase: 'Routine Care'
             },
 
             // MEDICATION (The Monthly Grind)
@@ -117,7 +127,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 950,
                 setting: 'Out_of_Hospital',
                 category: 'Medication',
-                is_pmb: true // BUT restricted by formulary/network on cheaper plans
+                is_pmb: true, // BUT restricted by formulary/network on cheaper plans
+                phase: 'Medication'
             },
 
             // SPECIALIST OVERSIGHT
@@ -127,7 +138,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 3500, // Expensive
                 setting: 'Out_of_Hospital',
                 category: 'Specialist',
-                is_pmb: true // Often requires "Care Plan" approval to be fully covered
+                is_pmb: true, // Often requires "Care Plan" approval to be fully covered
+                phase: 'Specialist Oversight'
             },
             {
                 label: 'Ophthalmologist (Retina Check)',
@@ -135,7 +147,8 @@ export const SCENARIO_DB: ClinicalScenario[] = [
                 cost_per_unit: 2200,
                 setting: 'Out_of_Hospital',
                 category: 'Specialist',
-                is_pmb: false // Often paid from savings
+                is_pmb: false, // Often paid from savings
+                phase: 'Specialist Oversight'
             }
         ]
     }

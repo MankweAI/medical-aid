@@ -12,6 +12,7 @@ interface UserState {
     region: string;
     isDigitalActive: boolean;
     persona: string; // Focus on the Single Active Persona for Simulation
+    activeScheme: string; // NEW: Filter by Scheme
 }
 
 interface PersonaContextType {
@@ -22,6 +23,7 @@ interface PersonaContextType {
     togglePersona: (slug: string) => void;
     setPostalCode: (code: string) => void;
     toggleDigital: () => void;
+    setActiveScheme: (scheme: string) => void; // NEW
     activePersonaPath: string;
 }
 
@@ -37,6 +39,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         region: 'National',
         isDigitalActive: false,
         persona: '',
+        activeScheme: 'All Schemes', // Default
     });
 
     // 1. Hydrate from Local Storage
@@ -53,6 +56,10 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
                         parsed.persona = parsed.personas[0];
                     } else if (!parsed.persona) {
                         parsed.persona = '';
+                    }
+                    // Ensure activeScheme exists
+                    if (!parsed.activeScheme) {
+                        parsed.activeScheme = 'All Schemes';
                     }
                     setState(prev => ({ ...prev, ...parsed }));
                 } catch (e) {
@@ -114,6 +121,9 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     const toggleDigital = useCallback(() =>
         setState(prev => ({ ...prev, isDigitalActive: !prev.isDigitalActive })), []);
 
+    const setActiveScheme = useCallback((scheme: string) =>
+        setState(prev => ({ ...prev, activeScheme: scheme })), []);
+
     // --- FIX: POINT TO SIMULATION ROUTE ---
     // Old: /personas/slug1,slug2
     // New: /simulate/slug1
@@ -130,6 +140,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             togglePersona,
             setPostalCode,
             toggleDigital,
+            setActiveScheme,
             activePersonaPath
         }}>
             {children}

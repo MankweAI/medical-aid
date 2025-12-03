@@ -2,19 +2,18 @@
 'use client';
 
 import { usePersona } from '@/context/PersonaContext';
-import { ChevronDown, MapPin, Wallet } from 'lucide-react';
 import { useEffect } from 'react';
 import { Persona } from '@/types/schema';
+import { CustomizationPanel } from './CustomizationPanel';
 
 interface HeroProps {
     persona: Persona;
     initialIncome: number;
-    scenarioTitle: string;
+    scenarioTitle: string; // Kept for metadata if needed, but panel handles selection
 }
 
 export function SimulationHero({ persona, initialIncome, scenarioTitle }: HeroProps) {
-    const { state, setIncome, setPersona } = usePersona();
-    const { region } = state;
+    const { setIncome, setPersona } = usePersona();
 
     // Sync Server State to Client Context on Mount
     useEffect(() => {
@@ -30,23 +29,20 @@ export function SimulationHero({ persona, initialIncome, scenarioTitle }: HeroPr
                 <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-emerald-500 rounded-full blur-[80px]" />
             </div>
 
-            <div className="relative z-10 max-w-xl mx-auto text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
-                    Actuarial Stress Test
+            <div className="relative z-10 max-w-5xl mx-auto">
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-bold uppercase tracking-widest mb-4 backdrop-blur-md">
+                        Actuarial Stress Test
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-black tracking-tight">
+                        Customize Your Simulation
+                    </h1>
+                    <p className="text-white/60 mt-2 text-sm md:text-base max-w-2xl mx-auto">
+                        Adjust the variables below to see how different medical aid plans perform under your specific clinical and financial conditions.
+                    </p>
                 </div>
 
-                <h1 className="text-2xl md:text-3xl font-light leading-snug">
-                    Simulating a <span className="font-bold text-white border-b border-white/30 pb-0.5">{scenarioTitle}</span> for a family earning{' '}
-                    <button className="inline-flex items-center gap-1 font-bold text-emerald-400 border-b border-emerald-400/30 pb-0.5 hover:text-emerald-300 transition-colors">
-                        <Wallet className="w-4 h-4" />
-                        R{initialIncome.toLocaleString()}
-                    </button>
-                    {' '}living in{' '}
-                    <button className="inline-flex items-center gap-1 font-bold text-blue-400 border-b border-blue-400/30 pb-0.5 hover:text-blue-300 transition-colors">
-                        <MapPin className="w-4 h-4" />
-                        {region === 'National' ? 'SA (National)' : region.replace('_', ' ')}
-                    </button>.
-                </h1>
+                <CustomizationPanel currentScenarioId={persona.slug} />
             </div>
         </div>
     );

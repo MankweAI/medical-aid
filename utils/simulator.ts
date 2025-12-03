@@ -3,19 +3,32 @@ import { PlanProduct } from '@/types/schema';
 import { ClinicalScenario, SimulationResult, SimulationEvent } from '@/types/simulation';
 
 /**
- * THE ACTUARIAL BRAIN
+ * THE ACTUARIAL BRAIN v2.1
  * -------------------
- * Runs a clinical scenario against a specific medical aid plan's ruleset.
+ * Updated to handle legacy plans safely without crashing.
  */
 export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): SimulationResult {
 
+    // 1. Initialize State
     let runningSavingsBalance = plan.savings_account.value; // Initial MSA
     let totalPlanPays = 0;
     let totalPocketPays = 0;
+
+    // SAFEGUARD: Ensure objects exist before access
+    const definedBaskets = plan.defined_baskets || { maternity: { antenatal_consults: 0, ultrasounds_2d: 0, paediatrician_visits: 0 } };
+    const coverageRates = plan.coverage_rates || { specialist_in_hospital: 100 }; // Default to 100%
+
+    // Track Basket Usage
+    const baskets = {
+        maternity_consults: definedBaskets.maternity?.antenatal_consults || 0,
+        maternity_scans: definedBaskets.maternity?.ultrasounds_2d || 0,
+        paeds_visits: definedBaskets.maternity?.paediatrician_visits || 0
+    };
+
     const timeline: SimulationEvent[] = [];
     const warnings: string[] = [];
 
-    // 1. Process each clinical event in the scenario
+    // 2. Iterate Line Items
     scenario.line_items.forEach((item, index) => {
         const itemCost = item.cost_per_unit * item.quantity;
         let amountCovered = 0;
@@ -24,106 +37,105 @@ export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): Si
         let reason = '';
         let status: 'Fully Covered' | 'Partially Covered' | 'Not Covered' = 'Not Covered';
 
-        // --- RULE ENGINE LOGIC ---
+        // Helper: Calculate Plan Rate Coverage
+        const calculateRateCoverage = (rate: number, cost: number) => {
+            if (rate >= 200) return cost;
+            if (rate >= 100) return cost * 0.5; // Heuristic: Private rates are double scheme rates
+            return 0;
+        };
 
-        // A. PMB PROTECTION (The "Golden Rule")
-        const isNetworkAligned = checkNetworkAlignment(plan, item.setting);
-
-        if (item.is_pmb && isNetworkAligned) {
+        // A. MATERNITY BASKET CHECK
+        if (scenario.category === 'Maternity' && item.category === 'Specialist' && item.label.includes('Consult') && baskets.maternity_consults > 0) {
+            const used = Math.min(item.quantity, baskets.maternity_consults);
+            baskets.maternity_consults -= used;
             amountCovered = itemCost;
             source = 'Risk';
-            reason = 'Prescribed Minimum Benefit (PMB) covered at cost.';
+            reason = `Covered by Maternity Benefit (${used} visits).`;
+            status = 'Fully Covered';
+        }
+        else if (scenario.category === 'Maternity' && item.label.includes('Ultrasound') && baskets.maternity_scans > 0) {
+            const used = Math.min(item.quantity, baskets.maternity_scans);
+            baskets.maternity_scans -= used;
+            amountCovered = itemCost;
+            source = 'Risk';
+            reason = 'Covered by Maternity Benefit (Scan).';
             status = 'Fully Covered';
         }
 
-        // B. HOSPITAL BENEFIT (Risk)
+        // B. PMB PROTECTION
+        else if (item.is_pmb && checkNetworkAlignment(plan, item.setting)) {
+            amountCovered = itemCost;
+            source = 'Risk';
+            reason = 'PMB covered at cost (Network compliant).';
+            status = 'Fully Covered';
+        }
+
+        // C. HOSPITAL EVENT (Risk)
         else if (item.setting === 'In_Hospital') {
-            // Check for Procedure Copayments (e.g. Scope in Hospital)
-            const scopePenalty = plan.hard_limits.scope_penalty_hospital || 0;
-            if (item.label.includes('Scope') && scopePenalty > 0) {
-                amountCovered = Math.max(0, itemCost - scopePenalty);
-                amountShortfall = scopePenalty;
-                source = 'Split';
-                reason = `R${scopePenalty} co-payment applied for scope in hospital.`;
-                status = 'Partially Covered';
+            const copay = getProcedureCopay(plan, item.label);
+
+            let rateCover = itemCost;
+            let rateReason = '';
+
+            if (item.category === 'Specialist') {
+                const planRate = coverageRates.specialist_in_hospital;
+                rateCover = calculateRateCoverage(planRate, itemCost);
+                if (rateCover < itemCost) rateReason = `Plan rate ${planRate}% < Doctor rate.`;
             }
-            // Check Network Restriction
-            else if (!isNetworkAligned) {
-                const penalty = itemCost * 0.3; // 30% Co-payment heuristic
-                amountCovered = itemCost - penalty;
-                amountShortfall = penalty;
+
+            if (copay > 0) {
+                amountShortfall += copay;
+                amountCovered = Math.max(0, rateCover - copay);
+                reason = `R${copay} Procedure Co-payment applied. ${rateReason}`;
                 source = 'Split';
-                reason = 'Non-Network Hospital used (30% Co-payment).';
                 status = 'Partially Covered';
-                if (!warnings.includes('Non-Network Hospital Penalty Applied')) warnings.push('Non-Network Hospital Penalty Applied');
-            }
-            // Standard Cover
-            else {
-                // Heuristic: Specialist Shortfall?
-                if (item.category === 'Specialist' && plan.series.includes('Core')) {
-                    const schemeRate = itemCost * 0.8; // User pays 20% gap
-                    amountCovered = schemeRate;
-                    amountShortfall = itemCost - schemeRate;
-                    source = 'Split';
-                    reason = 'Specialist charges > Scheme Rate.';
-                    status = 'Partially Covered';
-                } else {
-                    amountCovered = itemCost;
-                    source = 'Risk';
-                    reason = 'Unlimited Hospital Benefit.';
-                    status = 'Fully Covered';
-                }
+            } else if (rateCover < itemCost) {
+                amountShortfall = itemCost - rateCover;
+                amountCovered = rateCover;
+                reason = rateReason;
+                source = 'Split';
+                status = 'Partially Covered';
+            } else {
+                amountCovered = itemCost;
+                source = 'Risk';
+                reason = 'Unlimited Hospital Benefit.';
+                status = 'Fully Covered';
             }
         }
 
-        // C. DAY-TO-DAY (Savings vs Pocket)
+        // D. DAY-TO-DAY
         else if (item.setting === 'Out_of_Hospital') {
-
-            // 1. Check if "Risk" covers it (e.g. Smart Plan GP visits)
-            if (plan.series.includes('Smart') && item.category === 'GP') {
-                amountCovered = itemCost;
-                source = 'Risk';
-                reason = 'Unlimited Smart GP Benefit.';
-                status = 'Fully Covered';
-            }
-            // 2. Else, check Savings
-            else if (plan.savings_account.type !== 'None') {
+            if (plan.savings_account.type !== 'None') {
                 if (runningSavingsBalance >= itemCost) {
                     amountCovered = itemCost;
                     runningSavingsBalance -= itemCost;
                     source = 'Savings';
-                    reason = 'Paid from Medical Savings Account.';
+                    reason = 'Paid from MSA.';
                     status = 'Fully Covered';
                 } else if (runningSavingsBalance > 0) {
-                    // Split funding
                     amountCovered = runningSavingsBalance;
                     amountShortfall = itemCost - runningSavingsBalance;
                     runningSavingsBalance = 0;
                     source = 'Split';
-                    reason = 'Savings exhausted part-way.';
+                    reason = 'Savings exhausted.';
                     status = 'Partially Covered';
                 } else {
-                    // Empty Savings
                     amountShortfall = itemCost;
                     source = 'Pocket';
-                    reason = 'Savings Account depleted.';
+                    reason = 'Savings depleted.';
                     status = 'Not Covered';
                 }
-            }
-            // 3. No Savings / Hospital Plan
-            else {
+            } else {
                 amountShortfall = itemCost;
                 source = 'Pocket';
-                reason = 'Plan has no day-to-day benefit.';
+                reason = 'No day-to-day benefit.';
                 status = 'Not Covered';
             }
         }
 
-        // Aggregate Totals
         totalPlanPays += amountCovered;
         totalPocketPays += amountShortfall;
 
-        // Push Event
         timeline.push({
             step_label: `Month ${index + 1}: ${item.label}`,
             status,
@@ -135,7 +147,6 @@ export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): Si
         });
     });
 
-    // 2. Generate Final Verdict
     return {
         plan_id: plan.id,
         scenario_id: scenario.id,
@@ -154,18 +165,22 @@ export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): Si
     };
 }
 
-// --- HELPER: Network Check ---
+// --- HELPERS ---
+
 function checkNetworkAlignment(plan: PlanProduct, setting: 'In_Hospital' | 'Out_of_Hospital'): boolean {
-    // 1. Any Network is always compliant
     if (plan.hospital_network === 'Any') return true;
-
-    // 2. If it is a Network plan, check if we are simulating a "Coastal" or "Network" usage
-    // FIX: Removed invalid comparison to 'Coastal' on hospital_network
-    if (plan.hospital_network === 'Network' || plan.network_geofence === 'Coastal') {
-        // Optimistic assumption: User goes to the right hospital
-        return true;
-    }
-
-    // 3. Default safe
     return true;
+}
+
+function getProcedureCopay(plan: PlanProduct, label: string): number {
+    const l = label.toLowerCase();
+    // SAFEGUARD: Optional Chaining for missing hard_limits
+    const cp = plan.hard_limits?.procedure_copays;
+    if (!cp) return 0;
+
+    if (l.includes('scope') || l.includes('gastroscopy')) return cp.scope_in_hospital || 0;
+    if (l.includes('mri') || l.includes('ct scan')) return cp.mri_scan || 0;
+    if (l.includes('joint') || l.includes('replacement')) return cp.joint_replacement || 0;
+
+    return 0;
 }
