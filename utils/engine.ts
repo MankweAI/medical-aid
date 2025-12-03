@@ -1,3 +1,4 @@
+// utils/engine.ts
 import { PlanProduct, Currency } from '@/types/schema';
 
 // --- TYPES ---
@@ -112,9 +113,49 @@ export const PricingEngine = {
 
 // --- HELPER ---
 export const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-ZA', {
-        style: 'currency',
-        currency: 'ZAR',
-        maximumFractionDigits: 0,
-    }).format(amount);
+    // Manual formatting to ensure Server/Client consistency (Hydration Safety)
+    // "R 20 000"
+    return 'R ' + amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };
+
+// --- VOLATILITY CHECK ---
+
+export interface VolatilityCheckResult {
+    hasCliff: boolean;
+    cliffAmount: number; // How far away the cliff is (e.g. R50)
+    premiumJump: number; // How much the premium increases (e.g. R500)
+    nextBandMin: number;
+}
+
+export function checkIncomeVolatility(plan: PlanProduct, income: number, familySize: { main: number, adult: number, child: number }): VolatilityCheckResult {
+    if (plan.pricing_model !== 'Income_Banded' || !plan.premiums.bands) {
+        return { hasCliff: false, cliffAmount: 0, premiumJump: 0, nextBandMin: 0 };
+    }
+
+    // 1. Find Current Band
+    const currentBand = plan.premiums.bands.find(b => income >= b.min_income && income <= b.max_income);
+    if (!currentBand) return { hasCliff: false, cliffAmount: 0, premiumJump: 0, nextBandMin: 0 };
+
+    // 2. Find Next Band
+    const nextBand = plan.premiums.bands.find(b => b.min_income === currentBand.max_income + 1);
+    if (!nextBand) return { hasCliff: false, cliffAmount: 0, premiumJump: 0, nextBandMin: 0 };
+
+    // 3. Calculate Premiums
+    const currentPremium = (currentBand.main * familySize.main) + (currentBand.adult * familySize.adult) + (currentBand.child * familySize.child);
+    const nextPremium = (nextBand.main * familySize.main) + (nextBand.adult * familySize.adult) + (nextBand.child * familySize.child);
+
+    // 4. Check Proximity (e.g., within R1000 of the cliff)
+    const distanceToCliff = currentBand.max_income - income;
+
+    // We only warn if they are "close" to the cliff (e.g. within R2000)
+    if (distanceToCliff < 2000 && distanceToCliff >= 0) {
+        return {
+            hasCliff: true,
+            cliffAmount: distanceToCliff,
+            premiumJump: nextPremium - currentPremium,
+            nextBandMin: nextBand.min_income
+        };
+    }
+
+    return { hasCliff: false, cliffAmount: 0, premiumJump: 0, nextBandMin: 0 };
+}

@@ -4,8 +4,10 @@ import { usePersona } from '@/context/PersonaContext';
 import { SCENARIO_DB } from '@/data/scenarios';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Users, MapPin, Wallet, Building2, Activity, ChevronDown } from 'lucide-react';
+import { Users, MapPin, Wallet, Building2, Activity, ChevronDown, AlertTriangle, ShieldCheck } from 'lucide-react';
 import clsx from 'clsx';
+import { checkIncomeVolatility, formatCurrency } from '@/utils/engine';
+import { PLAN_DB } from '@/data/plans';
 
 // Extract unique schemes from a hardcoded list or pass them in. 
 // For now, we'll hardcode the major ones found in PLAN_DB.
@@ -15,7 +17,7 @@ const SCHEMES = ['All Schemes', 'Discovery', 'Bonitas', 'Bestmed', 'Medihelp', '
 const CATEGORIES = Array.from(new Set(SCENARIO_DB.map(s => s.category)));
 
 export function CustomizationPanel({ currentScenarioId }: { currentScenarioId: string }) {
-    const { state, setIncome, setMembers, setPostalCode, setActiveScheme } = usePersona();
+    const { state, setIncome, setMembers, setPostalCode, setActiveScheme, toggleGapCover } = usePersona();
     const router = useRouter();
 
     // Local state for dropdowns to avoid flickering before navigation
@@ -44,6 +46,22 @@ export function CustomizationPanel({ currentScenarioId }: { currentScenarioId: s
             handleScenarioChange(first.id);
         }
     };
+
+    // VOLATILITY CHECK
+    const volatilityWarning = (() => {
+        if (state.activeScheme === 'All Schemes') return null;
+
+        // Find income banded plans for this scheme
+        const bandedPlans = PLAN_DB.filter(p => p.scheme === state.activeScheme && p.pricing_model === 'Income_Banded');
+
+        for (const plan of bandedPlans) {
+            const result = checkIncomeVolatility(plan, state.income, state.members);
+            if (result.hasCliff) {
+                return { planName: plan.name, ...result };
+            }
+        }
+        return null;
+    })();
 
     return (
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 text-left shadow-2xl">
@@ -104,9 +122,17 @@ export function CustomizationPanel({ currentScenarioId }: { currentScenarioId: s
 
                 {/* 3. INCOME SLIDER */}
                 <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest flex items-center gap-2">
-                        <Wallet className="w-3 h-3" /> Gross Monthly Income
-                    </label>
+                    <div className="flex justify-between items-end">
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest flex items-center gap-2">
+                            <Wallet className="w-3 h-3" /> Gross Monthly Income
+                        </label>
+                        {volatilityWarning && (
+                            <div className="flex items-center gap-1 text-[10px] font-bold text-rose-400 bg-rose-950/30 px-2 py-1 rounded-full animate-pulse">
+                                <AlertTriangle className="w-3 h-3" />
+                                <span>R{volatilityWarning.premiumJump} jump in R{volatilityWarning.cliffAmount}</span>
+                            </div>
+                        )}
+                    </div>
                     <div className="bg-slate-900/50 border border-white/10 rounded-xl px-4 py-2 flex items-center gap-4">
                         <input
                             type="range"
@@ -118,7 +144,7 @@ export function CustomizationPanel({ currentScenarioId }: { currentScenarioId: s
                             className="flex-grow h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                         />
                         <div className="min-w-[80px] text-right font-mono font-bold text-emerald-400">
-                            R{state.income.toLocaleString()}
+                            {formatCurrency(state.income)}
                         </div>
                     </div>
                 </div>
@@ -178,6 +204,35 @@ export function CustomizationPanel({ currentScenarioId }: { currentScenarioId: s
                             {state.region === 'National' ? 'SA (National)' : state.region.replace('_', ' ')}
                         </div>
                     </div>
+                </div>
+
+                {/* 6. GAP COVER TOGGLE */}
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest flex items-center gap-2">
+                        <ShieldCheck className="w-3 h-3" /> Gap Cover
+                    </label>
+                    <button
+                        onClick={toggleGapCover}
+                        className={clsx(
+                            "w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all",
+                            state.isGapCoverActive
+                                ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300"
+                                : "bg-slate-900/50 border-white/10 text-slate-400 hover:bg-slate-900/70"
+                        )}
+                    >
+                        <span className="text-xs font-bold">
+                            {state.isGapCoverActive ? "Active (500% Cover)" : "No Gap Cover"}
+                        </span>
+                        <div className={clsx(
+                            "w-10 h-5 rounded-full relative transition-colors",
+                            state.isGapCoverActive ? "bg-emerald-500" : "bg-slate-700"
+                        )}>
+                            <div className={clsx(
+                                "absolute top-1 w-3 h-3 rounded-full bg-white transition-transform",
+                                state.isGapCoverActive ? "left-6" : "left-1"
+                            )} />
+                        </div>
+                    </button>
                 </div>
 
             </div>

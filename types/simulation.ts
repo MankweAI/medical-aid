@@ -45,6 +45,11 @@ export interface SimulationResult {
         };
     };
 
+    gap_cover?: {
+        active: boolean;
+        total_covered: number;
+    };
+
     /**
      * The sequential story of the claim for the UI Timeline.
      */

@@ -123,3 +123,11 @@ export interface PlanProduct {
         }>;
     };
 }
+
+export interface GapCover {
+    id: string;
+    name: string;
+    coverage_percent: number; // e.g. 500%
+    oncology_limit?: number;
+    casualty_benefit?: number;
+}

@@ -1,260 +1,134 @@
 'use client';
 
-// 1. Import `use` from react
-import { useState, use } from 'react';
+import { usePersona } from '@/context/PersonaContext';
+import { PLAN_DB } from '@/data/plans';
+import { SCENARIO_DB } from '@/data/scenarios';
+import { runSimulation } from '@/utils/simulator';
+import { formatCurrency } from '@/utils/engine';
+import { PricingEngine } from '@/utils/engine';
+import { ArrowLeft, X } from 'lucide-react';
 import Link from 'next/link';
-import { ArrowLeft, Shield, Baby, Pill, Zap, PlusCircle } from 'lucide-react';
-import clsx from 'clsx';
-import { usePersona } from '@/context/PersonaContext'; // Import Context
-import ReviewToast from '@/components/ReviewToast';
+import { useRouter } from 'next/navigation';
 
-// --- MOCK DATA ---
-const PLANS: Record<string, any> = {
-    'bonstart-plus': {
-        id: 'bonstart-plus',
-        name: 'BonStart Plus',
-        premium: 1800,
-        savings: 0,
-        risk: 5000,
-        features: {
-            hospital: { val: 'Private Network', status: 'good' },
-            maternity: { val: 'Unlimited', status: 'good' },
-            chronic: { val: 'Basic Formulary', status: 'neutral' },
-            specialist: { val: 'Referral Needed', status: 'warning' }
-        }
-    },
-    'classic-saver': {
-        id: 'classic-saver',
-        name: 'Classic Saver',
-        premium: 3350,
-        savings: 10452,
-        risk: 2000,
-        features: {
-            hospital: { val: 'Any Private', status: 'good' },
-            maternity: { val: 'Unlimited', status: 'good' },
-            chronic: { val: 'R22k Limit', status: 'good' },
-            specialist: { val: 'Direct Access', status: 'good' }
-        }
-    }
-};
+export default function ComparisonPage() {
+    const { comparedPlanIds, state, togglePlanComparison } = usePersona();
+    const router = useRouter();
 
-const SCENARIOS = [
-    { id: 'general', label: 'General Overview', icon: Shield },
-    { id: 'maternity', label: 'Having a Baby', icon: Baby },
-    { id: 'chronic', label: 'Chronic Illness', icon: Pill },
-];
+    // 1. Get Selected Plans
+    const plans = PLAN_DB.filter(p => comparedPlanIds.includes(p.id));
 
-// 2. Update Props Type to Promise
-export default function ComparePage({ searchParams }: { searchParams: Promise<{ plans?: string }> }) {
-    // 3. Unwrap the promise using `use()`
-    const { plans } = use(searchParams);
-    const { activePersonaPath } = usePersona(); // Consume Context
+    // 2. Get Active Scenario (from state or default)
+    // For MVP, let's assume the user came from a simulation, so we use the last active scenario if possible?
+    // Or we just pick the first one matching the category? 
+    // Let's try to find the scenario from the URL or state? 
+    // Actually, state doesn't store active scenario ID globally yet (it was local in CustomizationPanel).
+    // Let's default to a Maternity scenario for now or the first one.
+    const scenarioId = 'maternity-c-section-private'; // Default for MVP
+    const scenario = SCENARIO_DB.find(s => s.id === scenarioId) || SCENARIO_DB[0];
 
-    // 4. Use the unwrapped value
-    const planIds = plans?.split(',') || [];
-
-    // Safety: Ensure we have valid plans (Fallback to Mock if IDs missing)
-    let planA = PLANS[planIds[0]];
-    let planB = PLANS[planIds[1]];
-
-    // 1. Resolve Plan A
-    if (!planA) {
-        planA = PLANS['bonstart-plus'];
-    }
-
-    // 2. Resolve Plan B (Ensure it's not the same as Plan A)
-    if (!planB || planB.id === planA.id) {
-        planB = planA.id === 'classic-saver' ? PLANS['bonstart-plus'] : PLANS['classic-saver'];
-    }
-
-    const [activeScenario, setActiveScenario] = useState('general');
-
-    const getAnnualCost = (p: typeof planA) => p.premium * 12;
-
-    // --- EMPTY STATE LOGIC ---
-    if (planIds.length < 2) {
+    if (plans.length === 0) {
         return (
-            <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center mb-6 animate-in zoom-in duration-300">
-                    <Shield className="w-10 h-10 text-slate-300" />
-                </div>
-                <h1 className="text-2xl font-black text-slate-900 mb-2">Battle Arena Empty</h1>
-                <p className="text-slate-500 text-sm max-w-xs leading-relaxed mb-8">
-                    To start a head-to-head comparison, you need to select at least 2 strategies from the diagnosis results.
-                </p>
-                <Link
-                    href={activePersonaPath || '/'}
-                    className="flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-900/20 active:scale-95 transition-transform"
-                >
-                    <PlusCircle className="w-5 h-5" />
-                    Find Plans to Compare
+            <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6">
+                <h1 className="text-2xl font-bold mb-4">No Plans Selected</h1>
+                <p className="text-slate-400 mb-8">Please go back and select plans to compare.</p>
+                <Link href="/" className="px-6 py-3 bg-emerald-500 rounded-xl font-bold hover:bg-emerald-400 transition-colors">
+                    Go Home
                 </Link>
-            </main>
+            </div>
         );
     }
 
+    // 3. Run Simulations
+    const results = plans.map(plan => {
+        const profile = PricingEngine.calculateProfile(plan, state.members, state.income);
+        const simResult = runSimulation(plan, scenario);
+        return { plan, profile, simResult };
+    });
+
     return (
-        <main className="min-h-screen bg-slate-50 pb-32">
+        <div className="min-h-screen bg-slate-950 text-white p-6 md:p-12">
 
-            {/* Header & Navigation */}
-            <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-                <Link href={activePersonaPath || '/'} className="p-2 -ml-2 text-slate-500 hover:text-slate-900 bg-slate-100 rounded-full">
-                    <ArrowLeft className="w-5 h-5" />
-                </Link>
-                <h1 className="text-sm font-bold uppercase tracking-wider text-slate-500">
-                    Head-to-Head
-                </h1>
-                <div className="w-8" />
-            </header>
+            {/* HEADER */}
+            <div className="max-w-7xl mx-auto mb-8 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <button onClick={() => router.back()} className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
+                        <ArrowLeft className="w-5 h-5" />
+                    </button>
+                    <div>
+                        <h1 className="text-2xl font-bold">Plan Comparison</h1>
+                        <p className="text-slate-400 text-sm">Scenario: {scenario.title}</p>
+                    </div>
+                </div>
+            </div>
 
-            <div className="max-w-2xl mx-auto p-6 space-y-8">
+            {/* COMPARISON GRID */}
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {results.map(({ plan, profile, simResult }) => (
+                    <div key={plan.id} className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex flex-col">
 
-                {/* LIABILITY BATTLE */}
-                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                    <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 text-center">
-                        Annual Financial Impact
-                    </h2>
+                        {/* CARD HEADER */}
+                        <div className="p-6 border-b border-white/10 relative">
+                            <button
+                                onClick={() => togglePlanComparison(plan.id)}
+                                className="absolute top-4 right-4 p-1.5 bg-white/10 rounded-full hover:bg-rose-500/20 hover:text-rose-400 transition-colors"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">{plan.scheme}</div>
+                            <h2 className="text-xl font-bold mb-1">{plan.name}</h2>
+                            <div className="text-sm text-slate-400">{plan.series} Series</div>
+                        </div>
 
-                    <div className="space-y-8">
-                        {[planA, planB].map((plan: any) => {
-                            const annual = getAnnualCost(plan);
-                            const savingsPct = (plan.savings / annual) * 100;
+                        {/* FINANCIALS */}
+                        <div className="p-6 space-y-6 flex-grow">
 
-                            return (
-                                <div key={plan.id}>
-                                    <div className="flex justify-between items-end mb-2">
-                                        <span className="font-black text-slate-900 text-lg">{plan.name}</span>
-                                        <div className="text-right">
-                                            <span className="block text-xs font-bold text-slate-400 uppercase">Fixed Cost</span>
-                                            <span className="font-bold text-slate-900">R{formatRand(annual)}</span>
-                                        </div>
+                            {/* Premium */}
+                            <div>
+                                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Monthly Premium</div>
+                                <div className="text-2xl font-mono font-bold">{formatCurrency(profile.monthlyPremium)}</div>
+                                <div className="text-xs text-slate-400">Annual: {formatCurrency(profile.annualPremium)}</div>
+                            </div>
+
+                            {/* Savings */}
+                            <div>
+                                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Savings Account</div>
+                                <div className="text-xl font-mono font-bold text-blue-400">{formatCurrency(profile.savings.allocation)}</div>
+                            </div>
+
+                            {/* SCENARIO OUTCOME */}
+                            <div className="bg-slate-900/50 rounded-xl p-4 border border-white/5">
+                                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Scenario Outcome</div>
+
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-slate-300">Total Bill</span>
+                                        <span className="font-mono font-bold">{formatCurrency(simResult.financials.total_event_cost)}</span>
                                     </div>
-
-                                    <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden flex relative">
-                                        <div className="h-full bg-slate-300 w-full" />
-                                        {plan.savings > 0 && (
-                                            <div
-                                                className="h-full bg-emerald-500 absolute left-0 top-0 opacity-80"
-                                                style={{ width: `${savingsPct}%` }}
-                                            />
-                                        )}
-                                        <div
-                                            className="h-full bg-rose-500 absolute right-0 top-0 opacity-40 border-l-2 border-white"
-                                            style={{ width: `15%` }}
-                                        />
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-emerald-400">Plan Pays</span>
+                                        <span className="font-mono font-bold text-emerald-400">{formatCurrency(simResult.financials.plan_pays)}</span>
                                     </div>
-
-                                    <div className="flex justify-between mt-2 text-[10px] font-bold uppercase tracking-wider">
-                                        <div className="flex items-center gap-1 text-emerald-600">
-                                            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                            Savings: R{formatRand(plan.savings)}
-                                        </div>
-                                        <div className="flex items-center gap-1 text-rose-500">
-                                            <div className="w-2 h-2 rounded-full bg-rose-500 opacity-50" />
-                                            Risk Exposure
-                                        </div>
+                                    <div className="h-px bg-white/10 my-2"></div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-rose-400 font-bold">You Pay</span>
+                                        <span className="font-mono font-bold text-rose-400 text-lg">{formatCurrency(simResult.financials.shortfall)}</span>
                                     </div>
                                 </div>
-                            )
-                        })}
-                    </div>
-                </div>
+                            </div>
 
-                {/* SCENARIO SELECTOR */}
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                    {SCENARIOS.map((s) => (
-                        <button
-                            key={s.id}
-                            onClick={() => setActiveScenario(s.id)}
-                            className={clsx(
-                                "flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold transition-all border shrink-0",
-                                activeScenario === s.id
-                                    ? "bg-slate-900 text-white border-slate-900 shadow-lg shadow-slate-900/20"
-                                    : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
-                            )}
-                        >
-                            <s.icon className="w-4 h-4" />
-                            {s.label}
-                        </button>
-                    ))}
-                </div>
+                        </div>
 
-                {/* COMPARISON GRID */}
-                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="grid grid-cols-3 bg-slate-50 border-b border-slate-100 p-4">
-                        <div className="col-span-1" />
-                        <div className="col-span-1 text-center font-bold text-xs text-slate-900">{planA.name}</div>
-                        <div className="col-span-1 text-center font-bold text-xs text-slate-900">{planB.name}</div>
-                    </div>
+                        {/* FOOTER */}
+                        <div className="p-4 bg-white/5 border-t border-white/10 text-center">
+                            <Link href={`/simulate/${scenario.id}?planId=${plan.id}`} className="text-xs font-bold text-blue-400 hover:text-blue-300">
+                                View Detailed Timeline &rarr;
+                            </Link>
+                        </div>
 
-                    <div className="divide-y divide-slate-50">
-                        <Row
-                            label="Hospitals"
-                            valA={planA.features.hospital.val}
-                            valB={planB.features.hospital.val}
-                            highlightDiff
-                        />
-                        <Row
-                            label="Maternity"
-                            valA={planA.features.maternity.val}
-                            valB={planB.features.maternity.val}
-                        />
-                        {activeScenario === 'chronic' && (
-                            <Row
-                                label="Chronic Meds"
-                                valA={planA.features.chronic.val}
-                                valB={planB.features.chronic.val}
-                                highlightDiff
-                            />
-                        )}
-                        <Row
-                            label="Specialists"
-                            valA={planA.features.specialist.val}
-                            valB={planB.features.specialist.val}
-                            highlightDiff
-                        />
                     </div>
-                </div>
-
-                {/* VERDICT */}
-                <div className="bg-blue-50 border border-blue-100 p-5 rounded-3xl flex gap-4">
-                    <div className="bg-white p-3 rounded-full h-fit shadow-sm">
-                        <Zap className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-blue-900 text-sm mb-2">The Virtual Actuary Verdict</h3>
-                        <p className="text-xs text-blue-800 leading-relaxed">
-                            If you can afford the extra <strong>R{formatRand(planB.premium - planA.premium)}</strong> per month,
-                            <strong> {planB.name}</strong> is the safer choice because it allows you to use
-                            any private hospital and avoids the {planA.features.specialist.val} restriction.
-                        </p>
-                    </div>
-                </div>
-
+                ))}
             </div>
-            <ReviewToast />
-        </main>
-    );
-}
 
-function Row({ label, valA, valB, highlightDiff }: { label: string, valA: string, valB: string, highlightDiff?: boolean }) {
-    const isDifferent = valA !== valB;
-    const opacity = !highlightDiff || isDifferent ? "opacity-100" : "opacity-40 grayscale";
-
-    return (
-        <div className={clsx("grid grid-cols-3 p-4 items-center text-xs", opacity)}>
-            <div className="font-bold text-slate-400 uppercase">{label}</div>
-            <div className={clsx("text-center font-medium", isDifferent && highlightDiff ? "text-slate-900" : "text-slate-500")}>
-                {valA}
-            </div>
-            <div className={clsx("text-center font-medium", isDifferent && highlightDiff ? "text-slate-900" : "text-slate-500")}>
-                {valB}
-            </div>
         </div>
     );
-}
-
-function formatRand(amount: number) {
-    // Use en-US for consistent grouping, then replace commas with spaces for SA format
-    return amount.toLocaleString('en-US').replace(/,/g, ' ');
 }

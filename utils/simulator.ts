@@ -7,12 +7,13 @@ import { ClinicalScenario, SimulationResult, SimulationEvent } from '@/types/sim
  * -------------------
  * Updated to handle legacy plans safely without crashing.
  */
-export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): SimulationResult {
+export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario, gapCoverConfig?: { coverage_percent: number }): SimulationResult {
 
     // 1. Initialize State
     let runningSavingsBalance = plan.savings_account.value; // Initial MSA
     let totalPlanPays = 0;
     let totalPocketPays = 0;
+    let totalGapPays = 0;
 
     // SAFEGUARD: Ensure objects exist before access
     const definedBaskets = plan.defined_baskets || { maternity: { antenatal_consults: 0, ultrasounds_2d: 0, paediatrician_visits: 0 } };
@@ -133,6 +134,20 @@ export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): Si
             }
         }
 
+        // GAP COVER LOGIC
+        if (amountShortfall > 0 && gapCoverConfig) {
+            // Simple logic: Gap pays up to X% of scheme rate, or just a % of shortfall for now
+            // Let's assume gapCoverConfig.coverage_percent applies to the shortfall directly for this MVP
+            const gapPays = Math.min(amountShortfall, (amountShortfall * gapCoverConfig.coverage_percent) / 100);
+
+            if (gapPays > 0) {
+                amountShortfall -= gapPays;
+                totalGapPays += gapPays;
+                reason += ` Gap Cover paid R${gapPays.toFixed(0)}.`;
+                if (amountShortfall <= 0) status = 'Fully Covered';
+            }
+        }
+
         totalPlanPays += amountCovered;
         totalPocketPays += amountShortfall;
 
@@ -151,7 +166,7 @@ export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): Si
         plan_id: plan.id,
         scenario_id: scenario.id,
         financials: {
-            total_event_cost: totalPlanPays + totalPocketPays,
+            total_event_cost: totalPlanPays + totalPocketPays + totalGapPays,
             plan_pays: totalPlanPays,
             shortfall: totalPocketPays,
             breakdown: {
@@ -160,6 +175,10 @@ export function runSimulation(plan: PlanProduct, scenario: ClinicalScenario): Si
                 paid_from_pocket: totalPocketPays
             }
         },
+        gap_cover: gapCoverConfig ? {
+            active: true,
+            total_covered: totalGapPays
+        } : undefined,
         timeline,
         critical_warnings: warnings
     };

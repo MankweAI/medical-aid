@@ -6,6 +6,7 @@ import { SimulationHero } from './SimulationHero';
 import { SimulatorStage } from './SimulatorStage';
 import { StrategyDock } from './StrategyDock';
 import { usePersona } from '@/context/PersonaContext';
+import { runSimulation } from '@/utils/simulator';
 
 interface SimulatorLayoutProps {
     persona: Persona;
@@ -27,10 +28,21 @@ export function SimulatorLayout({
     const { state } = usePersona();
     const { activeScheme } = state;
 
+    // --- REACTIVE SIMULATION ---
+    // We use the server-passed results as initial state, but re-calculate when context changes.
+    // Note: runSimulation is a pure function, so it's safe to run on client.
+
+    const dynamicTargetResult = runSimulation(targetPlan, scenario, state.isGapCoverActive ? { coverage_percent: 500 } : undefined);
+
+    const dynamicChallengerResults = challengerResults.map(c => ({
+        plan: c.plan,
+        result: runSimulation(c.plan, scenario, state.isGapCoverActive ? { coverage_percent: 500 } : undefined)
+    }));
+
     // Filter Challengers based on Active Scheme
     const filteredChallengers = activeScheme === 'All Schemes'
-        ? challengerResults
-        : challengerResults.filter(c => c.plan.scheme === activeScheme);
+        ? dynamicChallengerResults
+        : dynamicChallengerResults.filter(c => c.plan.scheme === activeScheme);
 
     return (
         <div className="min-h-screen bg-slate-50 pb-32">
@@ -44,7 +56,7 @@ export function SimulatorLayout({
             {/* STAGE: The Visualizer */}
             <section className="px-4 -mt-6 relative z-10 max-w-xl mx-auto">
                 <SimulatorStage
-                    initialResult={targetResult}
+                    initialResult={dynamicTargetResult}
                     scenario={scenario}
                     planName={targetPlan.name}
                 />
@@ -55,7 +67,7 @@ export function SimulatorLayout({
                 currentPlanId={targetPlan.id}
                 challengers={filteredChallengers}
                 targetPlan={targetPlan}
-                targetResult={targetResult}
+                targetResult={dynamicTargetResult}
             />
         </div>
     );

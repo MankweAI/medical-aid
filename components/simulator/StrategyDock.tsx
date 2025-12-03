@@ -7,6 +7,7 @@ import { SimulationResult } from '@/types/simulation';
 import { ArrowRightLeft, ShieldCheck } from 'lucide-react';
 import ExpertModal from '@/components/ExpertModal';
 import clsx from 'clsx';
+import { ComparisonToggle } from '@/components/ui/ComparisonToggle';
 
 interface DockProps {
     currentPlanId: string;
@@ -36,33 +37,43 @@ export function StrategyDock({ currentPlanId, targetPlan, targetResult, challeng
                         </button>
                     </div>
 
+
                     <div className="grid grid-cols-3 gap-3">
                         {/* 1. The Active Plan */}
-                        <button
-                            onClick={() => setIsExpertOpen(true)}
-                            className="text-left p-3 rounded-xl bg-slate-900 text-white ring-2 ring-slate-900 relative active:scale-95 transition-transform"
-                        >
-                            <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
-                                ACTIVE
+                        <div className="relative group">
+                            <button
+                                onClick={() => setIsExpertOpen(true)}
+                                className="w-full text-left p-3 rounded-xl bg-slate-900 text-white ring-2 ring-slate-900 relative active:scale-95 transition-transform"
+                            >
+                                <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
+                                    ACTIVE
+                                </div>
+                                <p className="text-[10px] opacity-70 mb-0.5">R{targetPlan.premiums.main}/pm</p>
+                                <p className="text-xs font-bold truncate">{targetPlan.name}</p>
+                                <p className="text-[10px] text-emerald-400 mt-1">Gap: R{targetResult.financials.shortfall}</p>
+                            </button>
+                            <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <ComparisonToggle planId={currentPlanId} className="scale-75 origin-top-right" />
                             </div>
-                            <p className="text-[10px] opacity-70 mb-0.5">R{targetPlan.premiums.main}/pm</p>
-                            <p className="text-xs font-bold truncate">{targetPlan.name}</p>
-                            <p className="text-[10px] text-emerald-400 mt-1">Gap: R{targetResult.financials.shortfall}</p>
-                        </button>
+                        </div>
 
                         {/* 2. The Challengers */}
                         {challengers.slice(0, 2).map(({ plan, result }) => (
-                            <button
-                                key={plan.id}
-                                onClick={() => setIsExpertOpen(true)} // In future, this would switch the active plan
-                                className="text-left p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-400 transition-colors active:scale-95"
-                            >
-                                <p className="text-[10px] text-slate-400 mb-0.5">R{plan.premiums.main}/pm</p>
-                                <p className="text-xs font-bold text-slate-700 truncate">{plan.name}</p>
-                                <p className={clsx("text-[10px] mt-1 font-bold", result.financials.shortfall === 0 ? "text-emerald-600" : "text-rose-500")}>
-                                    {result.financials.shortfall === 0 ? "Full Cover" : `Gap: R${result.financials.shortfall}`}
-                                </p>
-                            </button>
+                            <div key={plan.id} className="relative group">
+                                <button
+                                    onClick={() => setIsExpertOpen(true)} // In future, this would switch the active plan
+                                    className="w-full text-left p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-400 transition-colors active:scale-95"
+                                >
+                                    <p className="text-[10px] text-slate-400 mb-0.5">R{plan.premiums.main}/pm</p>
+                                    <p className="text-xs font-bold text-slate-700 truncate">{plan.name}</p>
+                                    <p className={clsx("text-[10px] mt-1 font-bold", result.financials.shortfall === 0 ? "text-emerald-600" : "text-rose-500")}>
+                                        {result.financials.shortfall === 0 ? "Full Cover" : `Gap: R${result.financials.shortfall}`}
+                                    </p>
+                                </button>
+                                <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <ComparisonToggle planId={plan.id} className="scale-75 origin-top-right" />
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>
