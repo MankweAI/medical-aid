@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Bookmark, Sparkles, Layers } from 'lucide-react';
+import { Bookmark, Sparkles, Layers, Trash2 } from 'lucide-react'; // Ensure Trash2 imported if used
 import { useCompare } from '@/context/CompareContext';
 import { usePersona } from '@/context/PersonaContext';
-import { Trash2 } from 'lucide-react';
 import clsx from 'clsx';
 import BottomSheet from '@/components/ui/BottomSheet';
 
 export default function ActionDock() {
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const searchParams = useSearchParams(); // Keep if you plan to use it, else remove
     const { selectedPlans, savedPlans, toggleSave } = useCompare();
     const { activePersonaPath } = usePersona();
 
@@ -30,10 +30,14 @@ export default function ActionDock() {
     if (showSaved) {
         activeTab = 'saved';
     } else if (showCompareEmpty) {
-        activeTab = 'compare'; // Highlight compare tab when empty modal is open
+        activeTab = 'compare';
     } else if (pathname.includes('/compare')) {
         activeTab = 'compare';
+    } else if (pathname.startsWith('/simulate/')) {
+        // FIX: Recognize new Simulation route as "Diagnose" active state
+        activeTab = 'diagnose';
     } else {
+        // Default for Home '/'
         activeTab = 'diagnose';
     }
 
@@ -43,19 +47,17 @@ export default function ActionDock() {
         setShowCompareEmpty(false);
 
         if (pathname === '/') {
-            // Context: Home
-            // Action: Scroll to top / Soft Reset
+            // Context: Home -> Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        else if (pathname.startsWith('/personas/')) {
-            // Context: Deep in a Spoke (e.g. /personas/family-planner)
-            // Action: Reset to the base Spoke (Clear filters, keep Persona)
-            // We use 'pathname' because it excludes query params (?income=..., ?filters=...)
+        else if (pathname.startsWith('/simulate/')) {
+            // Context: Deep in Simulation -> Reset or refresh? 
+            // For now, keep them there or allow "Reset" logic
             router.push(pathname);
         }
         else {
             // Context: Compare Page or others
-            // Action: Return to Active Persona (if exists) or Home
+            // Action: Return to Active Simulation (if exists) or Home
             if (activePersonaPath) {
                 router.push(activePersonaPath);
             } else {
@@ -96,7 +98,7 @@ export default function ActionDock() {
                         )}
                     </button>
 
-                    {/* 2. DIAGNOSE (The Contextual Oracle) */}
+                    {/* 2. DIAGNOSE (The Simulator) */}
                     <button
                         onClick={handleDiagnoseClick}
                         className={getButtonClass('diagnose')}
@@ -155,7 +157,7 @@ export default function ActionDock() {
                                 onClick={() => { setShowSaved(false); router.push('/'); }}
                                 className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl text-sm"
                             >
-                                Start a Diagnosis
+                                Start a Simulation
                             </button>
                             <button
                                 onClick={() => setShowSaved(false)}

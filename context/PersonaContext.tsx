@@ -11,7 +11,7 @@ interface UserState {
     postalCode: string;
     region: string;
     isDigitalActive: boolean;
-    persona: string; // Required string
+    persona: string; // Focus on the Single Active Persona for Simulation
 }
 
 interface PersonaContextType {
@@ -36,7 +36,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         postalCode: '',
         region: 'National',
         isDigitalActive: false,
-        persona: '', // FIX 1: Initialize this property to empty string
+        persona: '',
     });
 
     // 1. Hydrate from Local Storage
@@ -46,8 +46,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-
-                    // Migration: Ensure consistency between string and array
+                    // Migration: Ensure consistency
                     if (parsed.persona && (!parsed.personas || parsed.personas.length === 0)) {
                         parsed.personas = [parsed.persona];
                     } else if (!parsed.persona && parsed.personas && parsed.personas.length > 0) {
@@ -55,7 +54,6 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
                     } else if (!parsed.persona) {
                         parsed.persona = '';
                     }
-
                     setState(prev => ({ ...prev, ...parsed }));
                 } catch (e) {
                     console.error("Failed to parse profile", e);
@@ -72,15 +70,12 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     }, [state]);
 
     // --- ACTIONS ---
-
     const setIncome = useCallback((val: number) =>
         setState(prev => ({ ...prev, income: val })), []);
 
     const setMembers = useCallback((val: { main: number; adult: number; child: number }) =>
         setState(prev => ({ ...prev, members: val })), []);
 
-    // Action: Set Single Persona
-    // FIX 2: Update 'persona' (string) AND 'personas' (array) together
     const setPersona = useCallback((slug: string) =>
         setState(prev => ({
             ...prev,
@@ -88,7 +83,6 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             personas: [slug]
         })), []);
 
-    // Action: Toggle Persona (Stacking)
     const togglePersona = useCallback((slug: string) => {
         setState(prev => {
             const exists = prev.personas.includes(slug);
@@ -96,7 +90,6 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
                 ? prev.personas.filter(p => p !== slug)
                 : [...prev.personas, slug];
 
-            // If we removed the currently active 'persona' string, fallback to the first available or empty
             const newPersonaString = (prev.persona === slug && newPersonas.length > 0)
                 ? newPersonas[0]
                 : (prev.persona === slug) ? '' : prev.persona;
@@ -104,7 +97,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             return {
                 ...prev,
                 personas: newPersonas,
-                persona: newPersonaString
+                persona: newPersonaString // Prioritize single active string
             };
         });
     }, []);
@@ -121,8 +114,11 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     const toggleDigital = useCallback(() =>
         setState(prev => ({ ...prev, isDigitalActive: !prev.isDigitalActive })), []);
 
-    const activePersonaPath = state.personas.length > 0
-        ? `/personas/${state.personas.join(',')}?income=${state.income}`
+    // --- FIX: POINT TO SIMULATION ROUTE ---
+    // Old: /personas/slug1,slug2
+    // New: /simulate/slug1
+    const activePersonaPath = state.persona
+        ? `/simulate/${state.persona}?income=${state.income}`
         : '/';
 
     return (

@@ -1,12 +1,9 @@
-// app/simulate/[persona]/page.tsx
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPersonaData } from '@/lib/controller';
 import { SCENARIO_DB } from '@/data/scenarios';
 import { runSimulation } from '@/utils/simulator';
-import { SimulationHero } from '@/components/simulator/SimulationHero';
-import { SimulatorStage } from '@/components/simulator/SimulatorStage';
-import { StrategyDock } from '@/components/simulator/StrategyDock';
+import { SimulatorLayout } from '@/components/simulator/SimulatorLayout';
 
 type Props = {
     params: Promise<{ persona: string }>;
@@ -52,32 +49,13 @@ export default async function SimulationPage({ params, searchParams }: Props) {
     }));
 
     return (
-        <main className="min-h-screen bg-slate-50 pb-32">
-
-            {/* HERO: Context & Inputs */}
-            <SimulationHero
-                persona={persona}
-                initialIncome={initialIncome}
-                scenarioTitle={scenario.title}
-            />
-
-            {/* STAGE: The Visualizer */}
-            <section className="px-4 -mt-6 relative z-10 max-w-xl mx-auto">
-                <SimulatorStage
-                    initialResult={targetResult}
-                    scenario={scenario}
-                    planName={targetPlan.name}
-                />
-            </section>
-
-            {/* DOCK: The Optimizer */}
-            <StrategyDock
-                currentPlanId={targetPlan.id}
-                challengers={challengerResults}
-                targetPlan={targetPlan}
-                targetResult={targetResult}
-            />
-
-        </main>
+        <SimulatorLayout
+            persona={persona}
+            initialIncome={initialIncome}
+            scenario={scenario}
+            targetResult={targetResult}
+            challengerResults={challengerResults}
+            targetPlan={targetPlan}
+        />
     );
 }

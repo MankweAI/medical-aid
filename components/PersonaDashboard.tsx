@@ -1,13 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { PricingEngine, formatCurrency } from '@/utils/engine';
+import { useState, useEffect, useMemo } from 'react';
 import { Persona, PlanProduct } from '@/types/schema';
-import { ChevronDown, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
+import { ChevronDown, Activity, Wallet, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { usePersona } from '@/context/PersonaContext';
-import { IncomeSlider, GapGauge } from './HeroTools';
+import { IncomeSlider } from './HeroTools';
+// New Imports for the Engine
+import { runSimulation } from '@/utils/simulator';
+import { SCENARIO_DB } from '@/data/scenarios';
+import { formatCurrency } from '@/utils/engine';
+import clsx from 'clsx';
 
-// 1. INTERFACE UPDATE: Accepts strict Typed Data now
 interface DashboardProps {
     persona: Persona;
     targetPlan: PlanProduct;
@@ -17,41 +20,60 @@ interface DashboardProps {
 export default function PersonaDashboard({ persona, targetPlan, initialIncome }: DashboardProps) {
     const { setIncome: setGlobalIncome } = usePersona();
 
-    // Local State
+    // 1. Local State
     const [income, setIncome] = useState(initialIncome);
     const [members, setMembers] = useState(persona.default_family);
     const [showConfig, setShowConfig] = useState(false);
 
-    // 2. ENGINE CALCULATION: Calculates real premium based on income
-    const profile = PricingEngine.calculateProfile(targetPlan, members, income);
-
+    // 2. Sync Global State
     useEffect(() => {
         setGlobalIncome(income);
     }, [income, setGlobalIncome]);
 
     const totalMembers = members.main + members.adult + members.child;
 
+    // 3. AUTO-DETECT SCENARIO (The "Brain")
+    // In the new architecture, we infer the test based on the Persona's intent
+    const activeScenario = useMemo(() => {
+        const intent = persona.intent.toLowerCase();
+        if (intent.includes('baby') || intent.includes('maternity')) {
+            return SCENARIO_DB.find(s => s.id === 'maternity-natural-private') || SCENARIO_DB[0];
+        }
+        return SCENARIO_DB.find(s => s.id === 'chronic-diabetes-type2') || SCENARIO_DB[1];
+    }, [persona.intent]);
+
+    // 4. RUN SIMULATION (The "Stress Test")
+    // We run the engine in real-time as the user adjusts income/plan
+    const simulationResult = useMemo(() => {
+        return runSimulation(targetPlan, activeScenario);
+    }, [targetPlan, activeScenario]); // Note: Simulation engine currently doesn't use income, but pricing does.
+
+    const shortfall = simulationResult.financials.shortfall;
+    const isFullyCovered = shortfall === 0;
+
     return (
         <div className="animate-in fade-in duration-500">
 
-            {/* HERO STATEMENT */}
+            {/* HEADER: Context & Config */}
             <div className="relative mb-8">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
-                    {persona.code} // {persona.intent}
-                </p>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">
+                    <Activity className="w-3 h-3" />
+                    Scenario: {activeScenario.title}
+                </div>
+
                 <h2 className="text-2xl md:text-3xl font-light text-slate-900 leading-snug">
                     <span className="font-bold block mb-2">{persona.title}</span>
                     Optimized for a family of
                     <button
                         onClick={() => setShowConfig(!showConfig)}
-                        className="inline-flex items-center mx-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-xl border border-blue-100 font-bold align-middle active:scale-95"
+                        className="inline-flex items-center mx-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-xl border border-blue-100 font-bold align-middle active:scale-95 transition-transform"
                     >
                         {totalMembers} <ChevronDown className="w-4 h-4 ml-1" />
                     </button>
                     earning
                     <button
                         onClick={() => setShowConfig(!showConfig)}
-                        className="inline-flex items-center mx-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 font-bold align-middle active:scale-95"
+                        className="inline-flex items-center mx-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 font-bold align-middle active:scale-95 transition-transform"
                     >
                         {formatCurrency(income)} <ChevronDown className="w-4 h-4 ml-1" />
                     </button>
@@ -59,7 +81,7 @@ export default function PersonaDashboard({ persona, targetPlan, initialIncome }:
                 </h2>
             </div>
 
-            {/* CONFIGURATION PANEL */}
+            {/* SLIDER: Config Panel */}
             {showConfig && (
                 <div className="mb-8 pt-6 border-t border-slate-100 grid gap-6 animate-in slide-in-from-top-2">
                     <IncomeSlider income={income} setIncome={setIncome} />
@@ -74,26 +96,40 @@ export default function PersonaDashboard({ persona, targetPlan, initialIncome }:
                 </div>
             )}
 
-            {/* DASHBOARD LAYOUT */}
+            {/* MAIN STAGE: Simulation Result */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                {/* LEFT: Visualizers */}
-                <div className="lg:col-span-1 space-y-6">
-                    {/* Only show Gauge if plan actually HAS savings */}
-                    {profile.savings.allocation > 0 && (
-                        <GapGauge financial={profile} />
-                    )}
+                {/* LEFT: The "Actuarial Scorecard" */}
+                <div className="lg:col-span-1 space-y-4">
+                    <div className={clsx(
+                        "p-6 rounded-3xl border-2",
+                        isFullyCovered ? "bg-emerald-50 border-emerald-100" : "bg-rose-50 border-rose-100"
+                    )}>
+                        <p className="text-xs font-bold uppercase tracking-wider mb-2 opacity-60">
+                            Projected Shortfall
+                        </p>
+                        <p className={clsx("text-4xl font-black mb-4", isFullyCovered ? "text-emerald-600" : "text-rose-600")}>
+                            {formatCurrency(shortfall)}
+                        </p>
 
-                    <div className="bg-blue-50 p-5 rounded-3xl border border-blue-100 flex gap-4 items-start">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                            <Activity className="w-5 h-5 text-blue-600" />
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-xs">
+                                <span className="text-slate-600">Event Cost</span>
+                                <span className="font-bold text-slate-900">{formatCurrency(simulationResult.financials.total_event_cost)}</span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-slate-600">Plan Pays</span>
+                                <span className="font-bold text-emerald-600">{formatCurrency(simulationResult.financials.plan_pays)}</span>
+                            </div>
                         </div>
-                        <div>
-                            <h4 className="font-bold text-blue-900 text-sm mb-1">
-                                Virtual Actuary Insight
-                            </h4>
-                            <p className="text-xs text-blue-700 leading-relaxed">
-                                {persona.primary_risk}
+
+                        {/* Quick Insight */}
+                        <div className="mt-6 pt-4 border-t border-black/5 flex gap-3 items-start">
+                            {isFullyCovered ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /> : <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />}
+                            <p className="text-[10px] font-bold leading-tight opacity-70">
+                                {isFullyCovered
+                                    ? "Excellent. This plan covers the scenario 100%."
+                                    : `Warning: You will need to pay R${shortfall.toLocaleString()} from your own pocket.`}
                             </p>
                         </div>
                     </div>
@@ -101,33 +137,37 @@ export default function PersonaDashboard({ persona, targetPlan, initialIncome }:
 
                 {/* RIGHT: Target Plan Card */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white rounded-3xl border-2 border-blue-600 p-6 shadow-xl shadow-blue-900/5 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl">
-                            RECOMMENDED STRATEGY
-                        </div>
-
-                        <div className="flex justify-between items-end mb-4">
+                    <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm relative overflow-hidden hover:shadow-md transition-shadow">
+                        <div className="flex justify-between items-start mb-6">
                             <div>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{targetPlan.scheme}</p>
+                                <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded mb-2 inline-block uppercase tracking-wider">
+                                    {targetPlan.scheme}
+                                </span>
                                 <h3 className="text-2xl font-black text-slate-900">{targetPlan.name}</h3>
                             </div>
                             <div className="text-right">
-                                <p className="text-3xl font-black text-blue-600">{formatCurrency(profile.monthlyPremium)}</p>
-                                <p className="text-[10px] text-slate-400 uppercase font-bold">Per Month</p>
+                                <p className="text-xl font-black text-slate-900">{formatCurrency(simulationResult.financials.plan_pays)}</p>
+                                <p className="text-[10px] text-slate-400 uppercase font-bold">Cover Value</p>
                             </div>
                         </div>
 
-                        {/* Data Badges */}
-                        <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-xs text-slate-600">
-                                <CheckCircle className="w-4 h-4 text-emerald-500" />
-                                <span><strong>Basis:</strong> {persona.mathematical_basis}</span>
-                            </div>
-                            {/* Dynamic Risk Warning */}
-                            <div className="flex items-center gap-2 text-xs text-rose-700 bg-rose-50 p-2 rounded-lg border border-rose-100">
-                                <AlertTriangle className="w-4 h-4 shrink-0" />
-                                <span><strong>Risk:</strong> {persona.primary_risk}</span>
-                            </div>
+                        {/* Timeline Preview (Mini) */}
+                        <div className="space-y-3">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase">Clinical Timeline</p>
+                            {simulationResult.timeline.slice(0, 3).map((event, i) => (
+                                <div key={i} className="flex items-center justify-between text-xs p-2 bg-slate-50 rounded-lg">
+                                    <div className="flex items-center gap-2">
+                                        <div className={clsx("w-2 h-2 rounded-full",
+                                            event.status === 'Fully Covered' ? "bg-emerald-500" :
+                                                event.status === 'Not Covered' ? "bg-rose-500" : "bg-amber-500"
+                                        )} />
+                                        <span className="font-medium text-slate-700">{event.step_label}</span>
+                                    </div>
+                                    <span className={clsx("font-bold", event.shortfall > 0 ? "text-rose-500" : "text-emerald-600")}>
+                                        {event.shortfall > 0 ? `-${formatCurrency(event.shortfall)}` : 'Paid'}
+                                    </span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

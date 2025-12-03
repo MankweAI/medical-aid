@@ -1,11 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPersonaData } from '@/lib/controller';
-import PersonaDashboard from '@/components/PersonaDashboard';
-import SmartFeed from '@/components/SmartFeed';
-import TrustTicker from '@/components/TrustTicker';
+import { SCENARIO_DB } from '@/data/scenarios';
+import { runSimulation } from '@/utils/simulator';
+import { SimulatorLayout } from '@/components/simulator/SimulatorLayout';
 
-// Fix: Use the new Controller Logic instead of mock data
 type Props = {
     params: Promise<{ slug: string }>;
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -35,40 +34,30 @@ export default async function PersonaPage(props: Props) {
     if (!data) return notFound();
 
     const { persona, targetPlan, challengers } = data;
+    const initialIncome = incomeParam || persona.default_income;
 
-    // 3. Prepare Ticker Messages
-    const tickerMessages = [
-        `Analysis: ${persona.mathematical_basis}`,
-        `Risk Identified: ${persona.primary_risk}`,
-        `Optimized for: ${targetPlan.name}`
-    ];
+    // 3. Select Scenario (Logic: Map intent to DB)
+    const scenarioId = persona.intent.toLowerCase().includes('baby') || persona.intent.toLowerCase().includes('maternity')
+        ? 'maternity-natural-private'
+        : 'chronic-diabetes-type2';
+
+    const scenario = SCENARIO_DB.find(s => s.id === scenarioId) || SCENARIO_DB[0];
+
+    // 4. Run Initial Simulations (Server-Side Pre-calc)
+    const targetResult = runSimulation(targetPlan, scenario);
+    const challengerResults = challengers.map(plan => ({
+        plan,
+        result: runSimulation(plan, scenario)
+    }));
 
     return (
-        <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px]" />
-            </div>
-
-            {/* Hero Section */}
-            <section className="relative z-10 pt-24 px-6 pb-12 bg-white rounded-b-[40px] shadow-sm border-b border-slate-100">
-                <PersonaDashboard
-                    persona={persona}
-                    targetPlan={targetPlan}
-                    initialIncome={incomeParam || persona.default_income}
-                />
-                <div className="mt-6 flex justify-center">
-                    <TrustTicker messages={tickerMessages} />
-                </div>
-            </section>
-
-            {/* Smart Feed (Passes the PLANS array, not just a string) */}
-            <section className="px-4 mt-8 relative z-10">
-                <SmartFeed
-                    plans={[targetPlan, ...challengers]}
-                    initialIncome={incomeParam || persona.default_income}
-                />
-            </section>
-        </main>
+        <SimulatorLayout
+            persona={persona}
+            initialIncome={initialIncome}
+            scenario={scenario}
+            targetResult={targetResult}
+            challengerResults={challengerResults}
+            targetPlan={targetPlan}
+        />
     );
 }
