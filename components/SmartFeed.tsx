@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import { usePersona } from '@/context/PersonaContext';
+import { useCompare } from '@/context/CompareContext';
 import { Shield } from 'lucide-react';
 import ExpertModal from '@/components/ExpertModal';
 import PinnedHeader from '@/components/PinnedHeader';
 import FeedCard from '@/components/FeedCard';
+import clsx from 'clsx';
 
-// --- Logic Data (Simplified for this view) ---
+// --- MOCK DATA ---
 const ALL_PLANS = [
     {
         id: 'bonstart-plus',
@@ -17,9 +19,15 @@ const ALL_PLANS = [
         network_restriction: 'Network',
         savings_annual: 0,
         chronic_limit: 'Basic CIB',
-        verdictType: 'good',
+        verdictType: 'good' as const,
+        red_flag: '',
         benefits: [],
-        mustHaves: ['private_ward', 'no_co_pay']
+        // Added flags to match Control Panel logic
+        features: {
+            maternity: true,
+            savings: false,
+            chronic: 'Basic'
+        }
     },
     {
         id: 'keycare-start',
@@ -30,9 +38,13 @@ const ALL_PLANS = [
         savings_annual: 0,
         chronic_limit: 'State Facilities',
         red_flag: 'State Chronic Meds Only',
-        verdictType: 'warning',
+        verdictType: 'warning' as const,
         benefits: [],
-        mustHaves: ['private_ward']
+        features: {
+            maternity: false,
+            savings: false,
+            chronic: 'Basic'
+        }
     },
     {
         id: 'classic-saver',
@@ -42,9 +54,14 @@ const ALL_PLANS = [
         network_restriction: 'Any',
         savings_annual: 10452,
         chronic_limit: 'R22,000 (DSA)',
-        verdictType: 'neutral',
+        verdictType: 'neutral' as const,
+        red_flag: '',
         benefits: [],
-        mustHaves: ['private_ward', 'specialist', 'gap_cover']
+        features: {
+            maternity: true,
+            savings: true,
+            chronic: 'Comprehensive'
+        }
     },
     {
         id: 'flexi-fed-1',
@@ -54,9 +71,14 @@ const ALL_PLANS = [
         network_restriction: 'Network',
         savings_annual: 0,
         chronic_limit: 'Basic',
-        verdictType: 'good',
+        verdictType: 'good' as const,
+        red_flag: '',
         benefits: [],
-        mustHaves: ['private_ward']
+        features: {
+            maternity: true,
+            savings: false,
+            chronic: 'Basic'
+        }
     }
 ];
 
@@ -67,29 +89,45 @@ function EmptyState() {
                 <Shield className="w-6 h-6 text-slate-300" />
             </div>
             <h3 className="text-slate-900 font-bold text-sm">No plans match criteria</h3>
-            <p className="text-xs text-slate-500 mt-2">Try adjusting your filters in the Control Panel.</p>
+            <p className="text-xs text-slate-500 mt-2">Try relaxing your filters in the Control Panel.</p>
         </div>
     );
 }
 
 export default function SmartFeed({ persona, initialIncome }: { persona: string, initialIncome: number }) {
     const { state } = usePersona();
+    const { activePin } = useCompare();
     const { filters } = state;
 
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedPlanForModal, setSelectedPlanForModal] = useState('');
 
-    // --- Filtering Logic ---
+    // --- Filtering Logic (Updated to match Context Types) ---
     const filteredPlans = useMemo(() => {
         return ALL_PLANS.filter(plan => {
-            // 1. Filter by Location
-            if (filters.location !== 'Any' && plan.network_restriction !== filters.location) return false;
 
-            // 2. Filter by Must Haves
-            if (filters.mustHaves.length > 0) {
-                const matches = filters.mustHaves.every(req => plan.mustHaves.includes(req));
-                if (!matches) return false;
+            // 1. Hospital Network Filter
+            // If user selects specific network (not 'Any'), exclude mismatches.
+            // Note: 'Any' plans usually cover 'Network' requests, but 'Network' plans don't cover 'Any'.
+            if (filters.network && filters.network !== 'Any') {
+                if (plan.network_restriction !== filters.network) return false;
             }
+
+            // 2. Savings Filter
+            if (filters.savings === 'Yes') {
+                if (!plan.features.savings) return false;
+            }
+
+            // 3. Chronic Filter
+            if (filters.chronic === 'Comprehensive') {
+                if (plan.features.chronic !== 'Comprehensive') return false;
+            }
+
+            // 4. Maternity Filter
+            if (filters.maternity) {
+                if (!plan.features.maternity) return false;
+            }
+
             return true;
         });
     }, [filters]);
@@ -100,7 +138,7 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
     };
 
     return (
-        <div className="relative min-h-[500px]">
+        <div className={clsx("relative min-h-[500px]", activePin && "pt-32")}>
             {/* 1. STICKY PINNED HEADER */}
             <PinnedHeader />
 

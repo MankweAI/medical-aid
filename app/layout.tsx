@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CompareProvider } from "@/context/CompareContext";
 import { PersonaProvider } from "@/context/PersonaContext"; // 1. Import
-import ActionDock from "@/components/ActionDock";
+import ActionDock from "@/components/PinsFab";
 import TrustFooter from "@/components/TrustFooter";
 
 const geistSans = Geist({

@@ -1,4 +1,4 @@
-import ActionDock from '@/components/ActionDock';
+import ActionDock from '@/components/PinsFab';
 import MagicSearch from '@/components/MagicSearch';
 import { Bell, ShieldCheck, Zap, TrendingUp, CheckCircle2 } from 'lucide-react';
 

@@ -1,9 +1,12 @@
 'use client';
 
 import { useCompare, Plan } from '@/context/CompareContext';
-import { ArrowRight, Activity, Shield, AlertCircle, MapPin } from 'lucide-react';
+// Added HeartPulse, Wallet, Building2 to imports
+import { ArrowRight, Activity, Shield, AlertCircle, MapPin, HeartPulse, Wallet, Building2 } from 'lucide-react';
 import SwipeableCard from '@/components/ui/SwipeableCard';
 import clsx from 'clsx';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface FeedCardProps {
     plan: Plan;
@@ -12,8 +15,9 @@ interface FeedCardProps {
 
 export default function FeedCard({ plan, onVerify }: FeedCardProps) {
     const { activePin, setPin } = useCompare();
+    const [imgError, setImgError] = useState(false);
 
-    // 1. Calculate Delta relative to Pinned Card
+    // 1. Calculate Delta
     const isPinned = activePin?.id === plan.id;
     let delta = null;
 
@@ -26,100 +30,118 @@ export default function FeedCard({ plan, onVerify }: FeedCardProps) {
         };
     }
 
+    const schemeSlug = plan.scheme.toLowerCase().replace(/\s+/g, '-');
+    const logoPath = `/schemes-logo/${schemeSlug}.png`;
+
     return (
         <SwipeableCard onPin={() => setPin(plan)} isPinned={isPinned}>
             <div className={clsx(
-                "border transition-all relative overflow-hidden active:scale-[0.99] rounded-2xl",
+                "border transition-all relative overflow-hidden active:scale-[0.99] rounded-2xl bg-white",
                 isPinned
                     ? "border-blue-500 ring-2 ring-blue-500/10 shadow-md z-10"
                     : "border-slate-200 shadow-sm hover:border-slate-300"
             )}>
 
-                {/* Active Indicator */}
                 {isPinned && (
-                    <div className="absolute top-0 right-0 bg-blue-600 text-white text-[9px] font-bold px-2 py-1 rounded-bl-xl z-20">
-                        ACTIVE REF
+                    <div className="absolute top-0 right-0 bg-blue-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-20 uppercase tracking-wider">
+                        Active Reference
                     </div>
                 )}
 
-                <div className="p-4 grid grid-cols-12 gap-2 items-center">
-
-                    {/* COL 1: Info (7/12) */}
-                    <div className="col-span-7 pr-2">
-                        <div className="flex items-center gap-2 mb-1.5">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                {plan.scheme}
-                            </span>
-                            {plan.network_restriction === 'Network' && (
-                                <span className="text-[8px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full border border-slate-200">
-                                    NET
-                                </span>
-                            )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 text-sm leading-tight mb-2">
-                            {plan.name}
-                        </h3>
-
-                        <div className="flex flex-wrap gap-1.5">
-                            {plan.savings_annual > 0 && (
-                                <span className="inline-flex items-center gap-1 px-1.5 py-1 rounded-md bg-emerald-50/80 border border-emerald-100 text-[9px] font-bold text-emerald-700">
-                                    <Activity className="w-2.5 h-2.5" />
-                                    <span>Svgs: R{Math.round(plan.savings_annual / 12)}</span>
-                                </span>
-                            )}
-                            <span className="inline-flex items-center gap-1 px-1.5 py-1 rounded-md bg-slate-50 border border-slate-100 text-[9px] font-bold text-slate-500">
-                                <Shield className="w-2.5 h-2.5" />
-                                <span>{plan.chronic_limit || 'Basic'}</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* COL 2: Price & Actions (5/12) */}
-                    <div className="col-span-5 flex flex-col items-end justify-between h-full pl-3 border-l border-slate-50">
-
-                        {/* Price & Delta */}
-                        <div className="text-right mb-2">
-                            {delta && (
-                                <div className={clsx("inline-block mb-0.5 text-[9px] font-black px-1.5 py-0.5 rounded-full border", delta.color)}>
-                                    {delta.sign} R{delta.val}
+                <div className="p-3">
+                    {/* TOP ROW: Identity & Price */}
+                    <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                {!imgError ? (
+                                    <Image
+                                        src={logoPath}
+                                        alt={plan.scheme}
+                                        width={32}
+                                        height={32}
+                                        className="object-contain p-0.5"
+                                        onError={() => setImgError(true)}
+                                    />
+                                ) : (
+                                    <span className="text-[9px] font-black text-slate-400 uppercase">{plan.scheme.substring(0, 2)}</span>
+                                )}
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{plan.scheme}</span>
+                                    {plan.network_restriction === 'Network' && (
+                                        <span className="text-[8px] font-bold bg-slate-100 text-slate-500 px-1 py-0.5 rounded border border-slate-200 leading-none">NET</span>
+                                    )}
                                 </div>
-                            )}
-                            <div className="flex items-baseline justify-end gap-0.5">
-                                <span className="text-[10px] text-slate-400 font-medium">R</span>
-                                <span className="font-black text-slate-900 text-xl tracking-tight">
-                                    {plan.price.toLocaleString()}
-                                </span>
+                                <h3 className="font-bold text-slate-900 text-sm leading-tight">{plan.name}</h3>
                             </div>
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex gap-2 w-full justify-end">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setPin(plan); }}
-                                className="h-8 w-8 rounded-lg bg-slate-100 text-slate-400 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center transition-colors"
-                            >
-                                <MapPin className={clsx("w-4 h-4", isPinned && "fill-blue-600 text-blue-600")} />
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); onVerify(plan.name); }}
-                                className="h-8 flex-1 bg-slate-900 text-white rounded-lg flex items-center justify-center gap-1 shadow-lg shadow-slate-900/10 active:scale-95 transition-transform"
-                            >
-                                <span className="text-[10px] font-bold">Details</span>
-                                <ArrowRight className="w-3 h-3 text-slate-400" />
-                            </button>
+                        <div className="text-right">
+                            {delta && (
+                                <div className={clsx("inline-block mb-0.5 text-[9px] font-black px-1.5 py-0 rounded border leading-tight", delta.color)}>
+                                    {delta.sign} R{delta.val}
+                                </div>
+                            )}
+                            <div className="font-black text-slate-900 text-lg leading-none">
+                                R{plan.price.toLocaleString()}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Warning Strip */}
-                {plan.verdictType === 'warning' && (
-                    <div className="bg-amber-50/50 px-4 py-1.5 flex items-center gap-2 border-t border-amber-100/50">
-                        <AlertCircle className="w-3 h-3 text-amber-600/80" />
-                        <p className="text-[9px] font-medium text-amber-900/80 leading-none truncate">
-                            {plan.red_flag}
-                        </p>
+                    {/* MIDDLE ROW: The Data Grid (All Info at a Glance) */}
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                        <div className="bg-slate-50 rounded-lg p-1.5 border border-slate-100">
+                            <div className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 flex items-center gap-1">
+                                <Wallet className="w-2.5 h-2.5" /> Savings
+                            </div>
+                            <div className={clsx("text-[10px] font-bold", plan.savings_annual > 0 ? "text-emerald-600" : "text-slate-400")}>
+                                {plan.savings_annual > 0 ? `R${Math.round(plan.savings_annual / 12)} pm` : 'None'}
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 rounded-lg p-1.5 border border-slate-100">
+                            <div className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 flex items-center gap-1">
+                                <HeartPulse className="w-2.5 h-2.5" /> Chronic
+                            </div>
+                            <div className="text-[10px] font-bold text-slate-700 truncate">
+                                {plan.chronic_limit || 'Basic (PMB)'}
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 rounded-lg p-1.5 border border-slate-100">
+                            <div className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 flex items-center gap-1">
+                                <Building2 className="w-2.5 h-2.5" /> Hospital
+                            </div>
+                            <div className="text-[10px] font-bold text-slate-700 truncate">
+                                {plan.network_restriction === 'Any' ? 'Any Private' : plan.network_restriction}
+                            </div>
+                        </div>
                     </div>
-                )}
+
+                    {/* BOTTOM ROW: Actions & Warnings */}
+                    <div className="flex items-center gap-2">
+                        {plan.red_flag && (
+                            <div className="flex-1 flex items-center gap-1.5 bg-amber-50 border border-amber-100 rounded-lg px-2 py-1.5">
+                                <AlertCircle className="w-3 h-3 text-amber-600 shrink-0" />
+                                <p className="text-[9px] font-bold text-amber-800 leading-none truncate">{plan.red_flag}</p>
+                            </div>
+                        )}
+                        {!plan.red_flag && <div className="flex-1" />} {/* Spacer */}
+
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setPin(plan); }}
+                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        >
+                            <MapPin className={clsx("w-4 h-4", isPinned && "fill-blue-600 text-blue-600")} />
+                        </button>
+
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onVerify(plan.name); }}
+                            className="h-8 px-4 bg-slate-900 text-white rounded-lg flex items-center gap-1.5 font-bold text-[10px] shadow-sm active:scale-95 transition-transform"
+                        >
+                            Select <ArrowRight className="w-3 h-3" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </SwipeableCard>
     );
