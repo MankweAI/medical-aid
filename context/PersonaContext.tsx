@@ -6,7 +6,11 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 interface UserState {
     income: number;
     members: { main: number; adult: number; child: number };
-    persona: string | null; // e.g., 'family-planner'
+    persona: string | null;
+    filters: {
+        location: string; // e.g., 'Any', 'Coastal', 'Network'
+        mustHaves: string[]; // e.g., ['private_ward', 'gap_cover']
+    };
 }
 
 interface PersonaContextType {
@@ -14,7 +18,8 @@ interface PersonaContextType {
     setIncome: (val: number) => void;
     setMembers: (val: { main: number; adult: number; child: number }) => void;
     setPersona: (slug: string) => void;
-    activePersonaPath: string; // <--- New Property
+    setFilter: (key: keyof UserState['filters'], value: any) => void; // Generic setter
+    activePersonaPath: string;
 }
 
 const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
@@ -23,7 +28,11 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     const [state, setState] = useState<UserState>({
         income: 20000,
         members: { main: 1, adult: 0, child: 0 },
-        persona: null
+        persona: null,
+        filters: {
+            location: 'Any',
+            mustHaves: []
+        }
     });
 
     // 1. Hydrate from Local Storage
@@ -32,7 +41,9 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             const saved = localStorage.getItem('healthos_profile');
             if (saved) {
                 try {
-                    setState(JSON.parse(saved));
+                    const parsed = JSON.parse(saved);
+                    // Merge with default to ensure new fields (filters) exist if legacy data is found
+                    setState(prev => ({ ...prev, ...parsed, filters: parsed.filters || prev.filters }));
                 } catch (e) {
                     console.error("Failed to parse profile", e);
                 }
@@ -52,13 +63,20 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     const setMembers = useCallback((val: { main: number; adult: number; child: number }) => setState(prev => ({ ...prev, members: val })), []);
     const setPersona = useCallback((slug: string) => setState(prev => ({ ...prev, persona: slug })), []);
 
-    // 3. Derive the Active Path (The "Return to Workbench" Link)
+    // New: Generic Filter Setter
+    const setFilter = useCallback((key: keyof UserState['filters'], value: any) => {
+        setState(prev => ({
+            ...prev,
+            filters: { ...prev.filters, [key]: value }
+        }));
+    }, []);
+
     const activePersonaPath = state.persona
         ? `/personas/${state.persona}?income=${state.income}`
         : '/';
 
     return (
-        <PersonaContext.Provider value={{ state, setIncome, setMembers, setPersona, activePersonaPath }}>
+        <PersonaContext.Provider value={{ state, setIncome, setMembers, setPersona, setFilter, activePersonaPath }}>
             {children}
         </PersonaContext.Provider>
     );

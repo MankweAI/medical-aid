@@ -148,7 +148,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                         <h3 className="font-bold text-slate-900 text-xl">{plan.name}</h3>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-2xl font-black text-slate-900">
+                                        <div className="text-2xl font-black text-slate-900" suppressHydrationWarning>
                                             {new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(plan.financials.monthlyPremium)}
                                         </div>
                                         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">per month</div>
@@ -158,7 +158,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                 {/* Risk/Benefit Pills */}
                                 <div className="flex flex-wrap gap-2">
                                     {plan.financials.savings.isPooled && (
-                                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-medium text-slate-600">
+                                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-medium text-slate-600" suppressHydrationWarning>
                                             <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                                             Savings: R{plan.financials.savings.annualAllocation.toLocaleString()}
                                         </div>
@@ -193,13 +193,13 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                         <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-6">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-sm font-bold text-slate-500 uppercase">Monthly Premium</span>
-                                <span className="text-2xl font-black text-slate-900">
+                                <span className="text-2xl font-black text-slate-900" suppressHydrationWarning>
                                     {new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(selectedPlan.financials.monthlyPremium)}
                                 </span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-sm font-bold text-slate-500 uppercase">Annual Savings</span>
-                                <span className="text-lg font-bold text-emerald-600">
+                                <span className="text-lg font-bold text-emerald-600" suppressHydrationWarning>
                                     R{selectedPlan.financials.savings.annualAllocation.toLocaleString()}
                                 </span>
                             </div>

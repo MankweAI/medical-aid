@@ -2,84 +2,84 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export interface SelectedPlan {
+// Define a flexible Plan type
+export interface Plan {
     id: string;
     name: string;
     scheme: string;
-    price?: number; // Added for the Saved View
+    price: number;
+    network_restriction?: string;
+    savings_annual: number;
+    chronic_limit?: string;
+    verdictType?: 'good' | 'warning' | 'neutral';
+    red_flag?: string;
 }
 
 interface CompareContextType {
-    selectedPlans: SelectedPlan[];
-    savedPlans: SelectedPlan[]; // NEW: The Vault
-    togglePlan: (plan: SelectedPlan) => void;
-    toggleSave: (plan: SelectedPlan) => void; // NEW: Bookmark Action
-    clearSelection: () => void;
-    isOpen: boolean;
-    setIsOpen: (v: boolean) => void;
+    activePin: Plan | null;      // The "Reference" card stuck to the top
+    pinnedHistory: Plan[];       // The "Collection" for the Dock
+    setPin: (plan: Plan) => void; // Sets active pin & adds to history
+    clearPin: () => void;
+    removeFromHistory: (id: string) => void;
 }
 
 const CompareContext = createContext<CompareContextType | undefined>(undefined);
 
 export function CompareProvider({ children }: { children: React.ReactNode }) {
-    const [selectedPlans, setSelectedPlans] = useState<SelectedPlan[]>([]);
-    const [savedPlans, setSavedPlans] = useState<SelectedPlan[]>([]);
-    const [isOpen, setIsOpen] = useState(false);
+    const [activePin, setActivePin] = useState<Plan | null>(null);
+    const [pinnedHistory, setPinnedHistory] = useState<Plan[]>([]);
 
-    // 1. Hydrate from Local Storage
+    // 1. Hydrate
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const compareSaved = localStorage.getItem('healthos_compare');
-            const vaultSaved = localStorage.getItem('healthos_vault'); // Load Bookmarks
+            const savedHistory = localStorage.getItem('healthos_pin_history');
+            const savedActive = localStorage.getItem('healthos_active_pin');
 
-            if (compareSaved) setSelectedPlans(JSON.parse(compareSaved));
-            if (vaultSaved) setSavedPlans(JSON.parse(vaultSaved));
+            if (savedHistory) setPinnedHistory(JSON.parse(savedHistory));
+            if (savedActive) setActivePin(JSON.parse(savedActive));
         }
     }, []);
 
-    // 2. Persist to Local Storage
+    // 2. Persist
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            localStorage.setItem('healthos_compare', JSON.stringify(selectedPlans));
-            localStorage.setItem('healthos_vault', JSON.stringify(savedPlans)); // Save Bookmarks
+            localStorage.setItem('healthos_pin_history', JSON.stringify(pinnedHistory));
+            if (activePin) {
+                localStorage.setItem('healthos_active_pin', JSON.stringify(activePin));
+            } else {
+                localStorage.removeItem('healthos_active_pin');
+            }
         }
-    }, [selectedPlans, savedPlans]);
+    }, [pinnedHistory, activePin]);
 
-    // 3. Compare Logic (Max 2)
-    const togglePlan = (plan: SelectedPlan) => {
-        setSelectedPlans(prev => {
-            const exists = prev.find(p => p.id === plan.id);
-            if (exists) return prev.filter(p => p.id !== plan.id);
-            if (prev.length >= 2) return prev; // Limit to 2
-            return [...prev, plan];
-        });
-        setIsOpen(true);
-    };
-
-    // 4. Bookmark Logic (Unlimited)
-    const toggleSave = (plan: SelectedPlan) => {
-        setSavedPlans(prev => {
-            const exists = prev.find(p => p.id === plan.id);
-            if (exists) return prev.filter(p => p.id !== plan.id); // Remove
-            return [...prev, plan]; // Add
+    // 3. Logic: Pinning replaces the Active Pin and adds to History
+    const setPin = (plan: Plan) => {
+        setActivePin(plan);
+        setPinnedHistory(prev => {
+            // Move to top if exists, or add new
+            const others = prev.filter(p => p.id !== plan.id);
+            return [plan, ...others];
         });
     };
 
-    const clearSelection = () => {
-        setSelectedPlans([]);
-        setIsOpen(false);
-        localStorage.removeItem('healthos_compare');
+    const clearPin = () => {
+        setActivePin(null);
+    };
+
+    const removeFromHistory = (id: string) => {
+        setPinnedHistory(prev => prev.filter(p => p.id !== id));
+        if (activePin?.id === id) {
+            setActivePin(null); // Unpin if removing the active one
+        }
     };
 
     return (
         <CompareContext.Provider value={{
-            selectedPlans,
-            savedPlans,
-            togglePlan,
-            toggleSave,
-            clearSelection,
-            isOpen,
-            setIsOpen
+            activePin,
+            pinnedHistory,
+            setPin,
+            clearPin,
+            removeFromHistory
         }}>
             {children}
         </CompareContext.Provider>
