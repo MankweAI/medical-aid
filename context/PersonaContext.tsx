@@ -11,6 +11,7 @@ interface UserState {
         chronic: 'Basic' | 'Comprehensive' | 'None' | null;
         savings: 'Yes' | 'No' | null;
         maternity: boolean;
+        priority: string | null; // Added this field
     };
 }
 
@@ -34,7 +35,8 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             network: null,
             chronic: null,
             savings: null,
-            maternity: false
+            maternity: false,
+            priority: 'budget' // Default priority
         }
     });
 
@@ -44,7 +46,12 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    setState(prev => ({ ...prev, ...parsed, filters: { ...prev.filters, ...parsed.filters } }));
+                    // Merge saved filters with default structure to ensure 'priority' exists
+                    setState(prev => ({
+                        ...prev,
+                        ...parsed,
+                        filters: { ...prev.filters, ...parsed.filters }
+                    }));
                 } catch (e) {
                     console.error("Failed to parse profile", e);
                 }

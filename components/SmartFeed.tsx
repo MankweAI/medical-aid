@@ -2,82 +2,118 @@
 
 import { useMemo, useState } from 'react';
 import { usePersona } from '@/context/PersonaContext';
-import { useCompare } from '@/context/CompareContext';
-import { Shield } from 'lucide-react';
+import { useCompare, Plan } from '@/context/CompareContext';
+import { Shield, Filter } from 'lucide-react';
 import ExpertModal from '@/components/ExpertModal';
 import PinnedHeader from '@/components/PinnedHeader';
 import FeedCard from '@/components/FeedCard';
 import clsx from 'clsx';
 
-// --- MOCK DATA ---
-const ALL_PLANS = [
+// --- MOCK DATA (Source of Truth) ---
+const MOCK_PLANS: Plan[] = [
     {
         id: 'bonstart-plus',
-        name: 'BonStart Plus',
-        scheme: 'Bonitas',
         price: 1800,
+        savings_annual: 0,
         network_restriction: 'Network',
-        savings_annual: 0,
-        chronic_limit: 'Basic CIB',
-        verdictType: 'good' as const,
-        red_flag: '',
-        benefits: [],
-        // Added flags to match Control Panel logic
-        features: {
-            maternity: true,
-            savings: false,
-            chronic: 'Basic'
-        }
-    },
-    {
-        id: 'keycare-start',
-        name: 'KeyCare Start',
-        scheme: 'Discovery',
-        price: 1400,
-        network_restriction: 'State',
-        savings_annual: 0,
-        chronic_limit: 'State Facilities',
-        red_flag: 'State Chronic Meds Only',
-        verdictType: 'warning' as const,
-        benefits: [],
-        features: {
-            maternity: false,
-            savings: false,
-            chronic: 'Basic'
+        identity: {
+            scheme_name: 'Bonitas',
+            plan_name: 'BonStart Plus',
+            plan_series: 'Edge',
+            plan_type: 'Hospital Plan'
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 0,
+            gp_network: 100
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 6,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 1
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 1600
+            }
+        },
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 2500,
+            joint_replacement: 0
         }
     },
     {
         id: 'classic-saver',
-        name: 'Classic Saver',
-        scheme: 'Discovery',
         price: 3350,
-        network_restriction: 'Any',
         savings_annual: 10452,
-        chronic_limit: 'R22,000 (DSA)',
-        verdictType: 'neutral' as const,
-        red_flag: '',
-        benefits: [],
-        features: {
-            maternity: true,
-            savings: true,
-            chronic: 'Comprehensive'
+        network_restriction: 'Any',
+        identity: {
+            scheme_name: 'Discovery',
+            plan_name: 'Classic Saver',
+            plan_series: 'Saver',
+            plan_type: 'Medical Aid'
+        },
+        coverage_rates: {
+            hospital_account: 200,
+            specialist_in_hospital: 200,
+            specialist_out_hospital: 100,
+            gp_network: 100
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 8,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 2
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 2200
+            }
+        },
+        procedure_copays: {
+            scope_in_hospital: 3500,
+            scope_out_hospital: 0,
+            mri_scan: 3250,
+            joint_replacement: 0
         }
     },
     {
         id: 'flexi-fed-1',
-        name: 'FlexiFed 1',
-        scheme: 'Fedhealth',
         price: 1750,
-        network_restriction: 'Network',
         savings_annual: 0,
-        chronic_limit: 'Basic',
-        verdictType: 'good' as const,
-        red_flag: '',
-        benefits: [],
-        features: {
-            maternity: true,
-            savings: false,
-            chronic: 'Basic'
+        network_restriction: 'Network',
+        identity: {
+            scheme_name: 'Fedhealth',
+            plan_name: 'FlexiFed 1',
+            plan_series: 'FlexiFed',
+            plan_type: 'Hospital Plan'
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 0,
+            gp_network: 100
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 4,
+                ultrasounds_2d: 1,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0
+            }
+        },
+        procedure_copays: {
+            scope_in_hospital: 2500,
+            scope_out_hospital: 0,
+            mri_scan: 2500,
+            joint_replacement: 5000
         }
     }
 ];
@@ -96,59 +132,52 @@ function EmptyState() {
 
 export default function SmartFeed({ persona, initialIncome }: { persona: string, initialIncome: number }) {
     const { state } = usePersona();
-    const { activePin } = useCompare();
+    const { activePin, showPinnedOnly, pinnedHistory } = useCompare();
     const { filters } = state;
 
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedPlanForModal, setSelectedPlanForModal] = useState('');
-
-    // --- Filtering Logic (Updated to match Context Types) ---
-    const filteredPlans = useMemo(() => {
-        return ALL_PLANS.filter(plan => {
-
-            // 1. Hospital Network Filter
-            // If user selects specific network (not 'Any'), exclude mismatches.
-            // Note: 'Any' plans usually cover 'Network' requests, but 'Network' plans don't cover 'Any'.
-            if (filters.network && filters.network !== 'Any') {
-                if (plan.network_restriction !== filters.network) return false;
-            }
-
-            // 2. Savings Filter
-            if (filters.savings === 'Yes') {
-                if (!plan.features.savings) return false;
-            }
-
-            // 3. Chronic Filter
-            if (filters.chronic === 'Comprehensive') {
-                if (plan.features.chronic !== 'Comprehensive') return false;
-            }
-
-            // 4. Maternity Filter
-            if (filters.maternity) {
-                if (!plan.features.maternity) return false;
-            }
-
-            return true;
-        });
-    }, [filters]);
 
     const handleVerify = (name: string) => {
         setSelectedPlanForModal(name);
         setModalOpen(true);
     };
 
+    const filteredPlans = useMemo(() => {
+        // 1. PINNED FILTER
+        if (showPinnedOnly) {
+            return pinnedHistory;
+        }
+
+        return MOCK_PLANS.filter(plan => {
+            // 2. NETWORK FILTER
+            if (filters.network && filters.network !== 'Any') {
+                if (plan.network_restriction !== filters.network) return false;
+            }
+
+            // 3. MATERNITY FILTER
+            if (filters.maternity) {
+                if (plan.defined_baskets.maternity.antenatal_consults === 0) return false;
+            }
+
+            // 4. SAVINGS FILTER
+            if (filters.savings === 'Yes') {
+                if (plan.savings_annual <= 0) return false;
+            }
+
+            return true;
+        });
+    }, [filters, showPinnedOnly, pinnedHistory]);
+
     return (
-        <div className={clsx("relative min-h-[500px]", activePin && "pt-32")}>
-            {/* 1. STICKY PINNED HEADER */}
+        <div className={clsx("relative min-h-[500px]", activePin && "pt-40")}>
             <PinnedHeader />
 
-            {/* 2. SCROLLABLE FEED */}
             <div className="space-y-3 pb-32 animate-in slide-in-from-bottom-8 duration-700">
-
-                {/* Feed Status */}
                 <div className="flex items-center justify-between px-2 mb-2">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        {filteredPlans.length} Strategies Found
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        {showPinnedOnly && <Filter className="w-3 h-3 text-blue-500" />}
+                        {showPinnedOnly ? "Pinned Cards Only" : `${filteredPlans.length} Strategies Found`}
                     </p>
                 </div>
 
@@ -165,7 +194,6 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
                 )}
             </div>
 
-            {/* 3. MODAL */}
             <ExpertModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}

@@ -1,8 +1,36 @@
 'use client';
 
 import { usePersona } from '@/context/PersonaContext';
-import { Users, Banknote, Building2, HeartPulse, Wallet, Baby } from 'lucide-react';
+import {
+    Users,
+    CreditCard, // Replaced Banknote
+    Building2,
+    HeartPulse,
+    Wallet,
+    Baby,
+    ShieldAlert,
+    MapPin,
+    PiggyBank
+} from 'lucide-react';
 import clsx from 'clsx';
+
+const PRIORITIES = [
+    // 1. THE FINANCIALLY CONSTRAINED
+    { id: 'budget', label: 'Budget Focus', icon: Wallet, desc: 'Lowest Premium' },
+
+    // 2. THE GROWING FAMILY
+    { id: 'maternity', label: 'Maternity', icon: Baby, desc: 'Private Birth' },
+    { id: 'family', label: 'Young Family', icon: Users, desc: 'Day-to-day GP' },
+
+    // 3. THE CLINICALLY VULNERABLE
+    { id: 'chronic', label: 'Chronic Care', icon: HeartPulse, desc: 'High Meds Limit' },
+    { id: 'comprehensive', label: 'Peace of Mind', icon: ShieldAlert, desc: 'Max Cover' },
+
+    // 4. THE STRATEGIC OPTIMIZERS
+    { id: 'location', label: 'Location Smart', icon: MapPin, desc: 'Coastal/Regional' },
+    { id: 'savings', label: 'Savings Builder', icon: PiggyBank, desc: 'High MSA' },
+    { id: 'hospital', label: 'Hospital Only', icon: Building2, desc: 'Major Events' }
+];
 
 export default function ControlPanel() {
     const { state, setIncome, setMembers, setFilter } = usePersona();
@@ -21,7 +49,7 @@ export default function ControlPanel() {
                 <div className="flex-1">
                     <div className="flex justify-between mb-2">
                         <div className="flex items-center gap-2 text-slate-500">
-                            <Banknote className="w-4 h-4" />
+                            <CreditCard className="w-4 h-4" />
                             <span className="text-xs font-bold uppercase tracking-wider">Total Income</span>
                         </div>
                         <span className="text-sm font-black text-slate-900">{formatMoney(income)}</span>
@@ -66,77 +94,35 @@ export default function ControlPanel() {
                 </div>
             </div>
 
-            {/* ROW 2: Plan Filters (Toggles) */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {/* ROW 2: Priority Selectors */}
+            <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1 mb-3">
+                    <HeartPulse className="w-3 h-3" /> Select Your Priority
+                </span>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {PRIORITIES.map((p) => {
+                        const isSelected = filters.priority === p.id;
 
-                {/* Network */}
-                <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
-                        <Building2 className="w-3 h-3" /> Hospital
-                    </span>
-                    <select
-                        value={filters.network || 'Any'}
-                        onChange={(e) => setFilter('network', e.target.value === 'Any' ? null : e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                    >
-                        <option value="Any">Any Hospital</option>
-                        <option value="Network">Network Only</option>
-                        <option value="Coastal">Coastal Only</option>
-                        <option value="State">State/Regional</option>
-                    </select>
+                        return (
+                            <button
+                                key={p.id}
+                                onClick={() => setFilter('priority', p.id)}
+                                className={clsx(
+                                    "p-2 rounded-xl text-left border transition-all flex flex-col gap-1",
+                                    isSelected
+                                        ? "bg-slate-900 border-slate-900 text-white shadow-md"
+                                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                                )}
+                            >
+                                <div className="flex justify-between w-full">
+                                    <p className="text-xs font-bold">{p.label}</p>
+                                    <p.icon className={clsx("w-3 h-3", isSelected ? "text-emerald-400" : "text-slate-400")} />
+                                </div>
+                                <p className={clsx("text-[9px]", isSelected ? "text-slate-400" : "text-slate-400")}>{p.desc}</p>
+                            </button>
+                        )
+                    })}
                 </div>
-
-                {/* Savings */}
-                <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
-                        <Wallet className="w-3 h-3" /> Savings
-                    </span>
-                    <button
-                        onClick={() => setFilter('savings', filters.savings === 'Yes' ? null : 'Yes')}
-                        className={clsx(
-                            "w-full p-2 rounded-lg text-xs font-bold border transition-colors text-left",
-                            filters.savings === 'Yes'
-                                ? "bg-emerald-50 border-emerald-200 text-emerald-700"
-                                : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                        )}
-                    >
-                        {filters.savings === 'Yes' ? 'Savings Required' : 'Optional'}
-                    </button>
-                </div>
-
-                {/* Chronic */}
-                <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
-                        <HeartPulse className="w-3 h-3" /> Chronic
-                    </span>
-                    <select
-                        value={filters.chronic || 'Basic'}
-                        onChange={(e) => setFilter('chronic', e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                    >
-                        <option value="Basic">Basic (PMB)</option>
-                        <option value="Comprehensive">Comprehensive</option>
-                    </select>
-                </div>
-
-                {/* Maternity */}
-                <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
-                        <Baby className="w-3 h-3" /> Special
-                    </span>
-                    <button
-                        onClick={() => setFilter('maternity', !filters.maternity)}
-                        className={clsx(
-                            "w-full p-2 rounded-lg text-xs font-bold border transition-colors text-left",
-                            filters.maternity
-                                ? "bg-rose-50 border-rose-200 text-rose-700"
-                                : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                        )}
-                    >
-                        {filters.maternity ? 'Maternity Cover' : 'No Extras'}
-                    </button>
-                </div>
-
             </div>
         </div>
     );

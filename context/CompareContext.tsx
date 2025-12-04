@@ -2,25 +2,57 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Define a flexible Plan type
 export interface Plan {
     id: string;
-    name: string;
-    scheme: string;
     price: number;
-    network_restriction?: string;
     savings_annual: number;
-    chronic_limit?: string;
-    verdictType?: 'good' | 'warning' | 'neutral';
+    network_restriction: string;
+
+    // Detailed Object Structure
+    identity: {
+        scheme_name: string;
+        plan_name: string;
+        plan_series: string;
+        plan_type: string;
+    };
+    coverage_rates: {
+        hospital_account: number;
+        specialist_in_hospital: number;
+        specialist_out_hospital: number;
+        gp_network: number;
+    };
+    defined_baskets: {
+        maternity: {
+            antenatal_consults: number;
+            ultrasounds_2d: number;
+            paediatrician_visits: number;
+        };
+        preventative: {
+            vaccinations: boolean;
+            contraceptives: number;
+        };
+    };
+    procedure_copays: {
+        scope_in_hospital: number;
+        scope_out_hospital: number;
+        mri_scan: number;
+        joint_replacement: number;
+    };
+
+    // UI Helpers
     red_flag?: string;
+    chronic_limit?: string; // Optional helper for compatibility
+    features?: any;         // Optional helper for compatibility
 }
 
 interface CompareContextType {
-    activePin: Plan | null;      // The "Reference" card stuck to the top
-    pinnedHistory: Plan[];       // The "Collection" for the Dock
-    setPin: (plan: Plan) => void; // Sets active pin & adds to history
+    activePin: Plan | null;
+    pinnedHistory: Plan[];
+    showPinnedOnly: boolean;
+    setPin: (plan: Plan) => void;
     clearPin: () => void;
     removeFromHistory: (id: string) => void;
+    togglePinnedView: () => void;
 }
 
 const CompareContext = createContext<CompareContextType | undefined>(undefined);
@@ -28,8 +60,8 @@ const CompareContext = createContext<CompareContextType | undefined>(undefined);
 export function CompareProvider({ children }: { children: React.ReactNode }) {
     const [activePin, setActivePin] = useState<Plan | null>(null);
     const [pinnedHistory, setPinnedHistory] = useState<Plan[]>([]);
+    const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
-    // 1. Hydrate
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const savedHistory = localStorage.getItem('healthos_pin_history');
@@ -40,7 +72,6 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    // 2. Persist
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('healthos_pin_history', JSON.stringify(pinnedHistory));
@@ -52,34 +83,32 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
         }
     }, [pinnedHistory, activePin]);
 
-    // 3. Logic: Pinning replaces the Active Pin and adds to History
     const setPin = (plan: Plan) => {
         setActivePin(plan);
         setPinnedHistory(prev => {
-            // Move to top if exists, or add new
             const others = prev.filter(p => p.id !== plan.id);
             return [plan, ...others];
         });
     };
 
-    const clearPin = () => {
-        setActivePin(null);
-    };
+    const clearPin = () => setActivePin(null);
 
     const removeFromHistory = (id: string) => {
         setPinnedHistory(prev => prev.filter(p => p.id !== id));
-        if (activePin?.id === id) {
-            setActivePin(null); // Unpin if removing the active one
-        }
+        if (activePin?.id === id) setActivePin(null);
     };
+
+    const togglePinnedView = () => setShowPinnedOnly(prev => !prev);
 
     return (
         <CompareContext.Provider value={{
             activePin,
             pinnedHistory,
+            showPinnedOnly,
             setPin,
             clearPin,
-            removeFromHistory
+            removeFromHistory,
+            togglePinnedView
         }}>
             {children}
         </CompareContext.Provider>
