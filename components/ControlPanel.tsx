@@ -52,7 +52,7 @@ export default function ControlPanel() {
                             <CreditCard className="w-4 h-4" />
                             <span className="text-xs font-bold uppercase tracking-wider">Total Income</span>
                         </div>
-                        <span className="text-sm font-black text-slate-900">{formatMoney(income)}</span>
+                        <span className="text-sm font-black text-slate-900" suppressHydrationWarning>{formatMoney(income)}</span>
                     </div>
                     <input
                         type="range"
