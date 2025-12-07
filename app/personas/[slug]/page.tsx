@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { PERSONAS } from '@/data/personas'; // Import your new data file
+import { PERSONAS } from '@/data/personas';
 import WelcomeStatement from '@/components/WelcomeStatement';
 import ControlPanel from '@/components/ControlPanel';
-import SmartFeed from '@/components/SmartFeed';
+import FocusFeed from '@/components/FocusFeed'; // Updated to new architecture
 import PinsFab from '@/components/PinsFab';
 import TrustTicker from '@/components/TrustTicker';
 
@@ -60,9 +60,9 @@ export default async function PersonaPage(props: Props) {
                 </div>
             </section>
 
-            {/* THE FEED */}
+            {/* THE FEED (Switched to FocusFeed) */}
             <section className="px-4 relative z-10">
-                <SmartFeed
+                <FocusFeed
                     persona={slug}
                     initialIncome={persona.defaults.income}
                 />

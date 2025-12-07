@@ -10,7 +10,11 @@ import {
     Shield,
     PiggyBank,
     ChevronDown,
-    Check
+    Check,
+    MapPin,
+    Building2,
+    Anchor,
+    Landmark
 } from 'lucide-react';
 import BottomSheet from '@/components/ui/BottomSheet';
 import clsx from 'clsx';
@@ -25,11 +29,18 @@ const PRIORITIES = [
     { id: 'savings', label: 'Building Savings', icon: PiggyBank, color: 'text-amber-600 bg-amber-50' },
 ];
 
+const NETWORKS = [
+    { id: 'Any', label: 'Any Hospital', icon: Building2, desc: 'Freedom of choice (Higher Premium)' },
+    { id: 'Network', label: 'Network Hospitals', icon: MapPin, desc: 'Specific list of hospitals (Save ~20%)' },
+    { id: 'Coastal', label: 'Coastal Only', icon: Anchor, desc: 'Hospitals in coastal provinces' },
+    { id: 'State', label: 'State Facilities', icon: Landmark, desc: 'Government hospitals (Lowest Cost)' },
+];
+
 export default function ControlPanel() {
     const { state, setIncome, setMembers, setFilter } = usePersona();
     const { income, members, filters } = state;
 
-    const [activeSheet, setActiveSheet] = useState<'none' | 'income' | 'family' | 'priority'>('none');
+    const [activeSheet, setActiveSheet] = useState<'none' | 'income' | 'family' | 'priority' | 'network'>('none');
 
     // --- COMPUTED LABELS ---
     const familyLabel = useMemo(() => {
@@ -41,6 +52,7 @@ export default function ControlPanel() {
     }, [members]);
 
     const priorityItem = PRIORITIES.find(p => p.id === filters.priority) || PRIORITIES[0];
+    const networkItem = NETWORKS.find(n => n.id === filters.network) || NETWORKS[0]; // Default to Any/First if null
 
     // Helper for currency
     const formatMoney = (val: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
@@ -48,9 +60,9 @@ export default function ControlPanel() {
     return (
         <>
             {/* --- THE LIVING STATEMENT CARD --- */}
-            <div className="bg-white rounded-[32px] p-6 shadow-sm border border-slate-100 mb-8 relative overflow-hidden transition-all hover:shadow-md">
+            <div className="bg-white rounded-[32px] p-6 shadow-sm border border-slate-100 mb-8 relative overflow-hidden transition-all hover:shadow-md group">
 
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900/10"></div>
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900/10 group-hover:bg-slate-900/20 transition-colors"></div>
 
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
                     Active Configuration
@@ -71,12 +83,19 @@ export default function ControlPanel() {
                     >
                         {formatMoney(income)} <ChevronDown className="w-4 h-4 opacity-50" />
                     </button>
-                    {' '}pm. My priority is{' '}
+                    {' '}pm. I prefer{' '}
+                    <button
+                        onClick={() => setActiveSheet('network')}
+                        className="inline-flex items-center gap-1 font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200 hover:bg-slate-200 transition-all mx-0.5 active:scale-95"
+                    >
+                        {networkItem.label} <ChevronDown className="w-4 h-4 opacity-50" />
+                    </button>
+                    {' '}and my priority is{' '}
                     <button
                         onClick={() => setActiveSheet('priority')}
                         className={clsx(
                             "inline-flex items-center gap-1 font-bold px-2 py-0.5 rounded-lg border transition-all mx-0.5 active:scale-95 hover:brightness-95",
-                            priorityItem.color.replace('text-', 'text-').replace('bg-', 'bg-'), // Dynamic color classes
+                            priorityItem.color.replace('text-', 'text-').replace('bg-', 'bg-'),
                             "border-black/5"
                         )}
                     >
@@ -149,7 +168,41 @@ export default function ControlPanel() {
                 </div>
             </BottomSheet>
 
-            {/* --- SHEET 3: PRIORITY --- */}
+            {/* --- SHEET 3: NETWORK (NEW) --- */}
+            <BottomSheet isOpen={activeSheet === 'network'} onClose={() => setActiveSheet('none')} title="Hospital Preference">
+                <div className="space-y-3 pb-4">
+                    {NETWORKS.map((n) => (
+                        <button
+                            key={n.id}
+                            onClick={() => { setFilter('network', n.id); setActiveSheet('none'); }}
+                            className={clsx(
+                                "w-full flex items-center justify-between p-4 rounded-2xl border transition-all text-left group",
+                                filters.network === n.id
+                                    ? "bg-slate-900 border-slate-900 text-white shadow-lg"
+                                    : "bg-white border-slate-100 text-slate-600 hover:border-blue-300"
+                            )}
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className={clsx(
+                                    "p-3 rounded-full",
+                                    filters.network === n.id ? "bg-white/10 text-white" : "bg-slate-50 text-slate-400 group-hover:text-blue-500"
+                                )}>
+                                    <n.icon className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <span className="font-bold text-sm block">{n.label}</span>
+                                    <span className={clsx("text-xs block mt-0.5", filters.network === n.id ? "text-slate-400" : "text-slate-400")}>
+                                        {n.desc}
+                                    </span>
+                                </div>
+                            </div>
+                            {filters.network === n.id && <Check className="w-5 h-5 text-emerald-400" />}
+                        </button>
+                    ))}
+                </div>
+            </BottomSheet>
+
+            {/* --- SHEET 4: PRIORITY --- */}
             <BottomSheet isOpen={activeSheet === 'priority'} onClose={() => setActiveSheet('none')} title="Primary Goal">
                 <div className="grid grid-cols-2 gap-3 pb-4">
                     {PRIORITIES.map((p) => (
@@ -157,7 +210,7 @@ export default function ControlPanel() {
                             key={p.id}
                             onClick={() => { setFilter('priority', p.id); setActiveSheet('none'); }}
                             className={clsx(
-                                "flex flex-col items-center gap-3 p-4 rounded-2xl border transition-all text-center h-32 justify-center relative overflow-hidden",
+                                "flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all text-center h-32 justify-center relative overflow-hidden",
                                 filters.priority === p.id
                                     ? "bg-slate-900 border-slate-900 text-white shadow-xl"
                                     : "bg-white border-slate-100 text-slate-600 hover:border-slate-200"
