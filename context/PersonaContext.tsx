@@ -30,7 +30,7 @@ const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
 export function PersonaProvider({ children }: { children: React.ReactNode }) {
     const [state, setState] = useState<UserState>({
         income: 20000,
-        members: { main: 1, adults: 0, children: 0 },
+        members: { main: 1, adult: 0, child: 0 },
         persona: null,
         filters: {
             network: null,

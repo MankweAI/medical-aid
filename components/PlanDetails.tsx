@@ -1,123 +1,162 @@
-import { Plan } from '@/utils/types';
+'use client';
+
+import { Plan } from '@/context/CompareContext';
 import {
-    ScrollText,
-    AlertTriangle,
-    Stethoscope,
-    Building,
-    FileText,
-    Activity
+    Shield,
+    Baby,
+    Activity,
+    Pill,
+    Scan,
+    AlertOctagon,
+    CheckCircle2,
+    XCircle,
+    Stethoscope
 } from 'lucide-react';
 import clsx from 'clsx';
 
-interface PlanDetailsProps {
-    plan: Plan;
-}
+export default function PlanDetails({ plan }: { plan: Plan }) {
+    if (!plan) return null;
 
-export default function PlanDetails({ plan }: PlanDetailsProps) {
-    // Safe accessors
-    const copays = plan.risk_exposure?.co_payments || {};
-    const rules = plan.network_rules || {};
-    const maternity = plan.defined_baskets?.maternity || {};
+    // Helper for currency
+    const fmt = (val: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
 
     return (
-        <div className="bg-slate-50 rounded-lg border border-slate-200 overflow-hidden text-left">
+        <div className="space-y-8">
 
-            {/* 1. TECHNICAL HEADER */}
-            <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 flex justify-between items-center">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                    <FileText className="w-3 h-3" /> Policy Rules & Exclusions
+            {/* 1. THE CLINICAL SCANNER (Traffic Light System) */}
+            <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Shield className="w-4 h-4 text-slate-400" />
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hospital</span>
+                    </div>
+                    <div className="text-2xl font-black text-slate-900">
+                        {plan.coverage_rates.hospital_account}%
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">Scheme Rate Coverage</p>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Stethoscope className="w-4 h-4 text-slate-400" />
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Specialist</span>
+                    </div>
+                    <div className="text-2xl font-black text-slate-900">
+                        {plan.coverage_rates.specialist_in_hospital}%
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">In-Hospital Rate</p>
+                </div>
+            </div>
+
+            {/* 2. THE MATERNITY BASKET */}
+            <div>
+                <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 mb-4">
+                    <Baby className="w-4 h-4 text-blue-600" />
+                    Maternity Basket (Risk Funded)
+                </h5>
+                <div className="bg-blue-50/50 rounded-2xl p-4 border border-blue-100 space-y-3">
+                    <Row
+                        label="Antenatal Consults"
+                        value={plan.defined_baskets.maternity.antenatal_consults > 0 ? `${plan.defined_baskets.maternity.antenatal_consults} Visits` : 'Paid from Savings'}
+                        isGood={plan.defined_baskets.maternity.antenatal_consults > 0}
+                    />
+                    <Row
+                        label="2D Ultrasounds"
+                        value={plan.defined_baskets.maternity.ultrasounds_2d > 0 ? `${plan.defined_baskets.maternity.ultrasounds_2d} Scans` : 'Paid from Savings'}
+                        isGood={plan.defined_baskets.maternity.ultrasounds_2d > 0}
+                    />
+                    <Row
+                        label="Paediatrician"
+                        value={plan.defined_baskets.maternity.paediatrician_visits > 0 ? `${plan.defined_baskets.maternity.paediatrician_visits} Visits` : 'No Benefit'}
+                        isGood={plan.defined_baskets.maternity.paediatrician_visits > 0}
+                    />
+                </div>
+            </div>
+
+            {/* 3. THE CO-PAY MONITOR (The "Nasty" List) */}
+            <div>
+                <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 mb-4">
+                    <AlertOctagon className="w-4 h-4 text-rose-600" />
+                    Co-pay Monitor
+                </h5>
+                <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden divide-y divide-slate-50">
+                    <CoPayRow
+                        icon={Scan}
+                        label="MRI & CT Scans"
+                        amount={plan.procedure_copays.mri_scan}
+                    />
+                    <CoPayRow
+                        icon={Activity}
+                        label="Scopes (In-Hospital)"
+                        amount={plan.procedure_copays.scope_in_hospital}
+                    />
+                    <CoPayRow
+                        icon={Shield}
+                        label="Joint Replacement"
+                        amount={plan.procedure_copays.joint_replacement}
+                        isCritical={true}
+                    />
+                </div>
+            </div>
+
+            {/* 4. CHRONIC & MEDS */}
+            <div>
+                <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 mb-4">
+                    <Pill className="w-4 h-4 text-emerald-600" />
+                    Medicine Strategy
+                </h5>
+                <div className="flex gap-2">
+                    <Badge label="Network Provider" value={plan.network_restriction === 'Network' ? 'Restricted' : 'Any'} type={plan.network_restriction === 'Network' ? 'warning' : 'neutral'} />
+                    <Badge label="Contraceptives" value={`R${plan.defined_baskets.preventative.contraceptives}`} type="good" />
+                </div>
+            </div>
+
+        </div>
+    );
+}
+
+// --- SUB COMPONENTS ---
+
+function Row({ label, value, isGood }: { label: string, value: string, isGood: boolean }) {
+    return (
+        <div className="flex justify-between items-center text-sm">
+            <span className="text-slate-600 font-medium">{label}</span>
+            <span className={clsx("font-bold", isGood ? "text-slate-900" : "text-slate-400")}>{value}</span>
+        </div>
+    );
+}
+
+function CoPayRow({ icon: Icon, label, amount, isCritical }: { icon: any, label: string, amount: number, isCritical?: boolean }) {
+    const hasCopay = amount > 0;
+    return (
+        <div className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
+            <div className="flex items-center gap-3">
+                <div className={clsx("p-2 rounded-full", hasCopay ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600")}>
+                    <Icon className="w-4 h-4" />
+                </div>
+                <span className="text-sm font-bold text-slate-700">{label}</span>
+            </div>
+            <div className="text-right">
+                <span className={clsx("block font-black text-sm", hasCopay ? "text-rose-600" : "text-emerald-600")}>
+                    {hasCopay ? `R${amount}` : 'Covered'}
                 </span>
-                <span className="text-[9px] text-slate-400 font-mono">ID: {plan.id}</span>
+                {hasCopay && <span className="text-[10px] text-rose-400 font-bold uppercase">You Pay</span>}
             </div>
+        </div>
+    );
+}
 
-            <div className="p-4 space-y-6">
+function Badge({ label, value, type }: { label: string, value: string, type: 'good' | 'warning' | 'neutral' }) {
+    const styles = {
+        good: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+        warning: 'bg-amber-50 text-amber-700 border-amber-100',
+        neutral: 'bg-slate-50 text-slate-700 border-slate-100'
+    };
 
-                {/* 2. NETWORK & PENALTIES (The Scary Part) */}
-                <section>
-                    <h4 className="text-xs font-bold text-slate-900 uppercase mb-2 flex items-center gap-2">
-                        <Building className="w-3.5 h-3.5 text-slate-500" /> Hospital Protocols
-                    </h4>
-                    <div className="bg-white border border-slate-200 rounded-md divide-y divide-slate-100">
-                        <div className="p-2 flex justify-between items-start">
-                            <span className="text-[10px] text-slate-500 font-medium">Provider Network</span>
-                            <span className="text-[10px] font-bold text-slate-900 text-right max-w-[150px]">
-                                {rules.hospital_provider}
-                            </span>
-                        </div>
-                        <div className="p-2 flex justify-between items-start">
-                            <span className="text-[10px] text-slate-500 font-medium">Voluntary Admission Penalty</span>
-                            <span className={clsx("text-[10px] font-bold text-right", copays.admission_penalty_non_network > 0 ? "text-rose-600" : "text-slate-900")}>
-                                {copays.admission_penalty_non_network > 0
-                                    ? `Member liable for R${copays.admission_penalty_non_network.toLocaleString()}`
-                                    : 'None'}
-                            </span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 3. CLINICAL RISK (Co-payments) */}
-                <section>
-                    <h4 className="text-xs font-bold text-slate-900 uppercase mb-2 flex items-center gap-2">
-                        <AlertTriangle className="w-3.5 h-3.5 text-slate-500" /> Member Liability (Co-payments)
-                    </h4>
-                    <div className="bg-white border border-slate-200 rounded-md divide-y divide-slate-100">
-                        <div className="p-2 flex justify-between">
-                            <span className="text-[10px] text-slate-500 font-medium">Diagnostic Imaging (MRI/CT)</span>
-                            <span className="text-[10px] font-bold text-slate-900">
-                                {copays.mri_scan > 0 ? `R${copays.mri_scan.toLocaleString()} Deductible` : 'Scheme Risk (100%)'}
-                            </span>
-                        </div>
-                        <div className="p-2 flex justify-between">
-                            <span className="text-[10px] text-slate-500 font-medium">Endoscopic Procedures</span>
-                            <span className="text-[10px] font-bold text-slate-900">
-                                {copays.scope_in_hospital > 0 ? `R${copays.scope_in_hospital.toLocaleString()} (In-Hospital)` : 'No Co-payment'}
-                            </span>
-                        </div>
-                        <div className="p-2 flex justify-between">
-                            <span className="text-[10px] text-slate-500 font-medium">Specialist Rate Coverage</span>
-                            <span className="text-[10px] font-bold text-slate-900">
-                                {plan.coverage_rates?.specialist_in_hospital}% of Scheme Tariff
-                            </span>
-                        </div>
-                    </div>
-                    {plan.coverage_rates?.specialist_in_hospital === 100 && (
-                        <p className="text-[9px] text-amber-700 mt-1 pl-1">
-                            * Warning: Specialists charging above 100% tariff will result in shortfall.
-                        </p>
-                    )}
-                </section>
-
-                {/* 4. CHRONIC & DAY-TO-DAY */}
-                <section>
-                    <h4 className="text-xs font-bold text-slate-900 uppercase mb-2 flex items-center gap-2">
-                        <Stethoscope className="w-3.5 h-3.5 text-slate-500" /> Out-of-Hospital Management
-                    </h4>
-                    <div className="bg-white border border-slate-200 rounded-md divide-y divide-slate-100">
-                        <div className="p-2 flex justify-between">
-                            <span className="text-[10px] text-slate-500 font-medium">Chronic Provider (DSP)</span>
-                            <span className="text-[10px] font-bold text-slate-900">{rules.chronic_provider}</span>
-                        </div>
-                        <div className="p-2 flex justify-between">
-                            <span className="text-[10px] text-slate-500 font-medium">Maternity Protocol</span>
-                            <span className="text-[10px] font-bold text-slate-900">
-                                {maternity.antenatal_consults}x Consults & {maternity.ultrasounds_2d}x Scans
-                            </span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 5. RED FLAG (The Closer) */}
-                {plan.risk_exposure?.red_flag && (
-                    <div className="bg-rose-50 border border-rose-100 p-3 rounded-md">
-                        <h5 className="text-[9px] font-black text-rose-800 uppercase mb-1 flex items-center gap-1">
-                            <ScrollText className="w-3 h-3" /> Specific Exclusion Detected
-                        </h5>
-                        <p className="text-[10px] text-rose-700 leading-relaxed font-medium">
-                            {plan.risk_exposure.red_flag}
-                        </p>
-                    </div>
-                )}
-            </div>
+    return (
+        <div className={clsx("flex-1 px-3 py-2 rounded-xl border flex flex-col justify-center items-center text-center", styles[type])}>
+            <span className="text-[9px] font-bold uppercase opacity-70 mb-0.5">{label}</span>
+            <span className="text-xs font-black">{value}</span>
         </div>
     );
 }

@@ -10,6 +10,16 @@ import BottomSheet from '@/components/ui/BottomSheet';
 import PlanDetails from '@/components/PlanDetails';
 import clsx from 'clsx';
 
+// Extend Plan to include calculated fields for the dashboard state
+type RankedPlan = Plan & {
+    risks: Risk[];
+    financials: {
+        monthlyPremium: number;
+        savings: { isPooled: boolean; annualAllocation: number };
+    };
+    tier: string;
+};
+
 export default function PersonaDashboard({ persona, plans }: { persona: Persona, plans: Plan[] }) {
 
     // --- STATE: The "Living" Variables ---
@@ -18,12 +28,15 @@ export default function PersonaDashboard({ persona, plans }: { persona: Persona,
     const [showConfig, setShowConfig] = useState(false);
 
     // --- STATE: Bottom Sheet ---
-    const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
+    const [selectedPlan, setSelectedPlan] = useState<RankedPlan | null>(null);
 
     // --- LOGIC: Filter & Rank Plans ---
     const rankedPlans = plans.map(plan => {
         const risks = validatePlan(plan, persona);
-        const financials = PricingEngine.calculateProfile(plan, members, income);
+
+        // FIX: Pass the first contribution object, not the plan itself
+        const contribution = plan.contributions[0];
+        const financials = PricingEngine.calculateProfile(contribution, members, income);
 
         // Traffic Light Logic
         let tier = 'GREEN';
@@ -54,7 +67,7 @@ export default function PersonaDashboard({ persona, plans }: { persona: Persona,
                         onClick={() => setShowConfig(!showConfig)}
                         className="inline-flex items-center mx-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-xl border border-blue-100 active-press font-bold align-middle"
                     >
-                        {members.main + members.adults + members.children} <ChevronDown className="w-4 h-4 ml-1" />
+                        {members.main + members.adult + members.child} <ChevronDown className="w-4 h-4 ml-1" />
                     </button>
                     earning
                     <button
@@ -77,8 +90,8 @@ export default function PersonaDashboard({ persona, plans }: { persona: Persona,
                             <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
                                 {[
                                     { label: 'Main', key: 'main' as const },
-                                    { label: 'Adult', key: 'adults' as const },
-                                    { label: 'Child', key: 'children' as const }
+                                    { label: 'Adult', key: 'adult' as const }, // FIX: Key matches FamilyComposition
+                                    { label: 'Child', key: 'child' as const }  // FIX: Key matches FamilyComposition
                                 ].map((type) => (
                                     <div key={type.key} className="flex flex-col items-center bg-slate-50 p-3 rounded-2xl min-w-[80px]">
                                         <span className="text-[10px] uppercase font-bold text-slate-400 mb-2">{type.label}</span>
@@ -119,7 +132,8 @@ export default function PersonaDashboard({ persona, plans }: { persona: Persona,
                                     Virtual Actuary Insight
                                 </h4>
                                 <p className="text-xs text-blue-700 leading-relaxed">
-                                    {persona.actuarial_logic.mathematical_basis}
+                                    {/* FIX: Safe access to optional actuarial logic */}
+                                    {persona.actuarial_logic?.mathematical_basis || "Optimized for your profile."}
                                 </p>
                             </div>
                         </div>
@@ -191,7 +205,7 @@ export default function PersonaDashboard({ persona, plans }: { persona: Persona,
             <BottomSheet
                 isOpen={!!selectedPlan}
                 onClose={() => setSelectedPlan(null)}
-                title={selectedPlan?.identity?.plan_name || 'Plan Details'}
+                title={selectedPlan?.identity.plan_name || 'Plan Details'}
             >
                 {selectedPlan && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -229,7 +243,7 @@ export default function PersonaDashboard({ persona, plans }: { persona: Persona,
                             </div>
                         )}
 
-                        {/* Full Details Component */}
+                        {/* Full Details Component: FIX - Passed 'plan' prop */}
                         <PlanDetails plan={selectedPlan} />
 
                         {/* CTA */}

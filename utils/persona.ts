@@ -1,27 +1,32 @@
-import { Plan, FamilyComposition } from './types';
+import { Plan } from './types';
 
 export type PersonaSlug = string;
 
-export interface Persona {
+// Renamed from UserProfile to Persona to match architecture
+export interface UserProfile {
     slug: PersonaSlug;
     code: string;
+
     meta: {
         title: string;
         description: string;
         category: string;
     };
+
     defaults: {
         income: number;
-        family_composition: FamilyComposition;
+        family_composition: { main: number; adult: number; child: number };
     };
+
     search_profile: {
-        network_tolerance: 'Any' | 'Network' | 'Coastal' | 'State';
+        network_tolerance: 'Any' | 'Network' | 'Coastal' | 'State' | null;
         min_savings_allocation: number;
-        chronic_needs: 'None' | 'Basic' | 'Comprehensive';
+        chronic_needs: 'None' | 'Basic' | 'Comprehensive' | 'Specialized' | null;
         required_benefits: string[];
-        priority_tag: string;
+        priority_tag: string | null;
     };
-    actuarial_logic: {
+
+    actuarial_logic?: {
         target_plan_id: string;
         mathematical_basis: string;
         primary_risk_warning: string;
@@ -38,49 +43,97 @@ export interface Risk {
     details: string;
 }
 
-// 3. Validation Logic (Client/Server Shared)
+export type Persona = UserProfile;
+
+export interface Risk {
+    level: 'HIGH' | 'MEDIUM' | 'LOW';
+    warning: string;
+    details: string;
+}
+
+
+
+/**
+ * THE ACTUARIAL JUDGE
+ * Compares a Plan (Supply) against a Persona (Demand)
+ * Returns a list of risks/warnings.
+ */
 export const validatePlan = (plan: Plan, persona: Persona): Risk[] => {
     const risks: Risk[] = [];
+    if (!persona.search_profile) return risks;
+    const { network_tolerance, min_savings_allocation, chronic_needs, required_benefits } = persona.search_profile;
 
-    // Guard against missing data during hydration/loading
-    if (!plan || !persona) return risks;
-
-    const { network_tolerance, chronic_needs } = persona.search_profile;
-    const planNetwork = plan.network_rules.restriction_level;
-
-    // Logic A: Network Mismatch
-    // If user needs 'Any' but plan is 'Network' or 'State'
-    if (network_tolerance === 'Any' && (planNetwork.includes('Network') || planNetwork.includes('State'))) {
+    // 1. NETWORK MISMATCH
+    if (network_tolerance === 'Any' && plan.network_restriction !== 'Any') {
         risks.push({
             level: 'MEDIUM',
-            warning: 'Restricted Network',
-            details: `This plan limits you to ${planNetwork} hospitals. Non-network use has penalties.`
+            warning: 'Network Restriction',
+            details: `You requested 'Any Hospital' access, but this plan restricts you to the ${plan.network_restriction} list.`
         });
     }
-
-    // Logic B: Chronic State Trap
-    // If user needs Comprehensive chronic but provider is State
-    if (chronic_needs === 'Comprehensive' && plan.network_rules.chronic_provider.includes('State')) {
+    // If user tolerates 'Network' but plan is 'State' (e.g. KeyCare Start Chronic)
+    if (network_tolerance !== 'State' && plan.network_restriction === 'State') {
         risks.push({
             level: 'HIGH',
-            warning: 'State Chronic Meds',
-            details: 'You must collect chronic medication from State Clinics, despite having private hospital cover.'
+            warning: 'State Facility Access',
+            details: 'Chronic medication and certain treatments are restricted to State facilities only, despite private hospital cover.'
         });
     }
 
-    // Logic C: Coastal Warning
-    // If user specifically wants Coastal but plan is generic Network (efficiency check)
-    if (network_tolerance === 'Coastal' && !planNetwork.includes('Coastal')) {
-        // Optional: Could add a 'LOW' risk or tip here if they are overpaying for 'Any' network
+    // 2. SAVINGS DEFICIT (The "Liquidity" Risk)
+    if (min_savings_allocation > 0) {
+        const annualSavings = plan.savings_annual || 0;
+        // Calculate monthly equivalent for comparison
+        const monthlySavings = annualSavings / 12;
+
+        if (monthlySavings < min_savings_allocation * 0.5) {
+            // Severe deficit (< 50% of need)
+            risks.push({
+                level: 'HIGH',
+                warning: 'Insufficient Savings',
+                details: `Your profile suggests high day-to-day needs. This plan offers R${Math.round(monthlySavings)} pm, which is likely to run out before June.`
+            });
+        } else if (monthlySavings < min_savings_allocation) {
+            // Mild deficit
+            risks.push({
+                level: 'LOW',
+                warning: 'Low Savings Buffer',
+                details: `Savings allocation (R${Math.round(monthlySavings)} pm) is lower than your target. You may face self-funding gaps late in the year.`
+            });
+        }
     }
 
-    // Logic D: Persona Specific Risk
-    // If this plan matches the "Target Plan" for the persona, highlight the specific actuarial risk
-    if (plan.id === persona.actuarial_logic.target_plan_id) {
+    // 3. CHRONIC FORMULARY GAP (The "Clinical" Risk)
+    if (chronic_needs === 'Comprehensive' || chronic_needs === 'Specialized') {
+        // Mocking logic based on plan series
+        const isBasicPlan = plan.identity.plan_type === 'Hospital Plan' || plan.identity.plan_series === 'Beat';
+
+        if (isBasicPlan) {
+            risks.push({
+                level: 'MEDIUM',
+                warning: 'Basic Chronic Cover',
+                details: 'This plan covers CDL (27 PMB conditions) only. It may not cover biological drugs or non-formulary brands required for complex conditions.'
+            });
+        }
+    }
+
+    // 4. BENEFIT BASKET CHECKS (The "Specific" Risk)
+    if (required_benefits.includes('maternity')) {
+        if (plan.defined_baskets.maternity.antenatal_consults === 0) {
+            risks.push({
+                level: 'HIGH',
+                warning: 'No Maternity Basket',
+                details: 'Pregnancy visits are not funded from risk. You will pay for all gynae visits from your own pocket or savings.'
+            });
+        }
+    }
+
+    // 5. RED FLAGS
+    if (plan.red_flag) {
         risks.push({
-            level: 'MEDIUM', // Usually a trade-off warning
-            warning: 'Strategy Trade-off',
-            details: persona.actuarial_logic.primary_risk_warning
+            level: 'MEDIUM',
+            warning: 'Plan Rule Warning',
+            details: plan.red_flag
         });
     }
 

@@ -13,8 +13,8 @@ export const PERSONAS: Persona[] = [
             income: 42000,
             family_composition: {
                 main: 1,
-                adults: 1,
-                children: 2
+                adult: 1,
+                child: 2
             }
         },
         search_profile: {
