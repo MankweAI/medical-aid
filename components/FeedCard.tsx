@@ -2,8 +2,8 @@
 
 import { useCompare, Plan } from '@/context/CompareContext';
 import {
-    ArrowRight,
     MapPin,
+    ArrowRight,
     Building2,
     Baby,
     Scan,
@@ -11,10 +11,10 @@ import {
     ShieldAlert,
     Lock,
     ChevronDown,
-    ChevronUp,
     Sparkles,
     Trophy,
-    Activity
+    Activity,
+    MessageSquare
 } from 'lucide-react';
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -41,19 +41,10 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
     const isPinned = activePin?.id === plan.id;
     const price = plan.price || 0;
 
-    // Identity Parsing
     const schemeName = plan.identity?.scheme_name || 'Scheme';
     const planName = plan.identity?.plan_name || 'Plan';
     const schemeSlug = schemeName.toLowerCase().replace(/\s+/g, '-');
     const logoPath = `/schemes-logo/${schemeSlug}.png`;
-
-    // Helper for Network Badge Color
-    const getNetworkBadge = (type?: string) => {
-        const t = type?.toLowerCase() || '';
-        if (t.includes('state')) return "bg-amber-100 text-amber-800 border-amber-200";
-        if (t.includes('network') || t.includes('coastal')) return "bg-blue-50 text-blue-700 border-blue-100";
-        return "bg-emerald-50 text-emerald-700 border-emerald-100";
-    };
 
     return (
         <div
@@ -112,9 +103,9 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     </div>
                 </div>
 
-                {/* --- ACTUARIAL VERDICT (Dynamic Logic) --- */}
+                {/* --- ACTUARIAL VERDICT --- */}
                 {verdict?.badge && (
-                    <div className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-xl flex gap-3 items-start animate-in fade-in slide-in-from-top-2">
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-xl flex gap-3 items-start">
                         <div className="bg-white p-1.5 rounded-full shadow-sm shrink-0">
                             <Trophy className="w-4 h-4 text-blue-600" />
                         </div>
@@ -125,7 +116,7 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     </div>
                 )}
 
-                {/* --- RISK SCANNER (The "Red Flag") --- */}
+                {/* --- RISK SCANNER --- */}
                 {verdict?.warning && (
                     <div className="mb-4 p-3 bg-amber-50 border border-amber-100 rounded-xl flex gap-3 items-start">
                         <div className="bg-white p-1.5 rounded-full shadow-sm shrink-0">
@@ -138,23 +129,20 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     </div>
                 )}
 
-                {/* --- KEY METRICS GRID --- */}
+                {/* --- KEY METRICS --- */}
                 <div className="grid grid-cols-3 gap-2 mb-4">
-                    {/* Savings */}
                     <div className="bg-slate-50 rounded-xl p-2 text-center border border-slate-100">
                         <span className="block text-[10px] text-slate-400 font-bold uppercase mb-1">Savings</span>
                         <span className={clsx("block text-sm font-black", plan.savings_annual > 0 ? "text-emerald-600" : "text-slate-300")}>
                             {plan.savings_annual > 0 ? `R${(plan.savings_annual / 12).toFixed(0)}` : 'R0'}
                         </span>
                     </div>
-                    {/* Hospital */}
                     <div className="bg-slate-50 rounded-xl p-2 text-center border border-slate-100">
                         <span className="block text-[10px] text-slate-400 font-bold uppercase mb-1">Rate</span>
                         <span className="block text-sm font-black text-slate-900">
                             {plan.coverage_rates.hospital_account}%
                         </span>
                     </div>
-                    {/* Maternity */}
                     <div className="bg-slate-50 rounded-xl p-2 text-center border border-slate-100">
                         <span className="block text-[10px] text-slate-400 font-bold uppercase mb-1">Baby</span>
                         <span className={clsx("block text-sm font-black", plan.defined_baskets.maternity.antenatal_consults > 0 ? "text-blue-600" : "text-slate-300")}>
@@ -163,57 +151,68 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     </div>
                 </div>
 
-                {/* --- AI SIMULATOR TOGGLE --- */}
+                {/* --- AI SIMULATOR TOGGLE (Restored & Upgraded) --- */}
                 <button
-                    onClick={() => setShowAI(!showAI)}
-                    className="w-full flex items-center justify-between px-4 py-3 bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all group"
+                    onClick={(e) => { e.stopPropagation(); setShowAI(!showAI); }}
+                    className={clsx(
+                        "w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group mb-2 border",
+                        showAI
+                            ? "bg-slate-900 text-white border-slate-900 shadow-xl"
+                            : "bg-gradient-to-r from-slate-50 to-white border-slate-200 text-slate-700 hover:border-blue-300"
+                    )}
                 >
                     <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-amber-400 fill-current animate-pulse" />
+                        <Sparkles className={clsx("w-4 h-4", showAI ? "text-amber-400 fill-current animate-pulse" : "text-slate-400")} />
                         <span className="text-xs font-bold">Will it pay? Ask AI</span>
                     </div>
-                    <ChevronDown className={clsx("w-4 h-4 text-slate-400 transition-transform", showAI && "rotate-180")} />
+                    <ChevronDown className={clsx("w-4 h-4 transition-transform", showAI ? "rotate-180 text-slate-400" : "text-slate-400")} />
                 </button>
 
                 {/* --- AI SIMULATOR CONTENT --- */}
                 <div className={clsx(
-                    "overflow-hidden transition-all duration-500 ease-in-out bg-slate-50 border-x border-b border-slate-100 rounded-b-xl mx-1",
-                    showAI ? "max-h-[300px] opacity-100 p-4" : "max-h-0 opacity-0"
+                    "overflow-hidden transition-all duration-500 ease-in-out bg-slate-900 text-white rounded-xl relative",
+                    showAI ? "max-h-[300px] mb-4 shadow-inner" : "max-h-0"
                 )}>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Scenario Simulation</p>
+                    <div className="p-4 space-y-3">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scenario Simulator</p>
 
-                    <div className="space-y-2">
-                        <button className="w-full text-left bg-white p-3 rounded-lg border border-slate-200 text-xs text-slate-600 hover:border-blue-400 hover:text-blue-700 transition-colors flex justify-between items-center group">
-                            <span>🏥 Knee Replacement Surgery (R150k)</span>
-                            <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-                        <button className="w-full text-left bg-white p-3 rounded-lg border border-slate-200 text-xs text-slate-600 hover:border-blue-400 hover:text-blue-700 transition-colors flex justify-between items-center group">
-                            <span>🤰 Emergency C-Section</span>
-                            <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-                        <div className="relative mt-2">
+                        {/* Preset Scenarios */}
+                        <div className="space-y-2">
+                            <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-lg border border-white/5 text-xs text-slate-200 transition-colors flex justify-between items-center group">
+                                <span>🏥 Knee Replacement (R150k)</span>
+                                <ArrowRight className="w-3 h-3 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </button>
+                            <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-lg border border-white/5 text-xs text-slate-200 transition-colors flex justify-between items-center group">
+                                <span>🤰 Emergency C-Section</span>
+                                <ArrowRight className="w-3 h-3 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </button>
+                        </div>
+
+                        {/* Custom Input */}
+                        <div className="relative pt-2">
                             <input
                                 type="text"
-                                placeholder="Type a procedure..."
-                                className="w-full bg-white border border-slate-200 rounded-lg py-2 pl-3 pr-8 text-xs focus:outline-none focus:border-slate-400"
+                                placeholder="Type e.g. 'Wisdom Teeth'..."
+                                className="w-full bg-black/30 border border-white/10 rounded-lg py-2.5 pl-3 pr-9 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                             />
-                            <Activity className="absolute right-2.5 top-2 w-3.5 h-3.5 text-slate-400" />
+                            <button className="absolute right-1 top-3 p-1.5 bg-blue-600 hover:bg-blue-500 rounded-md text-white transition-colors">
+                                <MessageSquare className="w-3 h-3" />
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 {/* --- DETAILS EXPANDER --- */}
                 <button
-                    onClick={() => setShowDetails(!showDetails)}
-                    className="w-full flex items-center justify-center gap-1.5 py-3 mt-1 text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                    onClick={(e) => { e.stopPropagation(); setShowDetails(!showDetails); }}
+                    className="w-full flex items-center justify-center gap-1.5 py-3 text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors border-t border-dashed border-slate-100"
                 >
                     {showDetails ? "Hide Clinical Rules" : "View Co-pays & Limits"}
                     <ChevronDown className={clsx("w-3 h-3 transition-transform", showDetails && "rotate-180")} />
                 </button>
 
-                {/* --- DETAILED RULES --- */}
                 {showDetails && (
-                    <div className="pt-2 border-t border-dashed border-slate-200 animate-in slide-in-from-top-2">
+                    <div className="pt-2 animate-in slide-in-from-top-2">
                         <div className="space-y-2">
                             <div className="flex justify-between items-center text-xs">
                                 <span className="text-slate-500 flex items-center gap-1.5"><Scan className="w-3 h-3" /> MRI Scans</span>
@@ -234,9 +233,17 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                                 </span>
                             </div>
                         </div>
+
+                        {/* THE HARD LEAD CAPTURE (Inside Details) */}
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onVerify(plan.identity.plan_name); }}
+                            className="w-full mt-4 py-3 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2"
+                        >
+                            Verify Network with Expert
+                            <ArrowRight className="w-3 h-3" />
+                        </button>
                     </div>
                 )}
-
             </div>
         </div>
     );

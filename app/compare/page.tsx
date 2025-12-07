@@ -1,42 +1,13 @@
 'use client';
 
-// 1. Import `use` from react
 import { useState, use } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Shield, Baby, Pill, Zap, PlusCircle } from 'lucide-react';
 import clsx from 'clsx';
-import { usePersona } from '@/context/PersonaContext'; // Import Context
+import { usePersona } from '@/context/PersonaContext';
 import ReviewToast from '@/components/ReviewToast';
-
-// --- MOCK DATA ---
-const PLANS: Record<string, any> = {
-    'bonstart-plus': {
-        id: 'bonstart-plus',
-        name: 'BonStart Plus',
-        premium: 1800,
-        savings: 0,
-        risk: 5000,
-        features: {
-            hospital: { val: 'Private Network', status: 'good' },
-            maternity: { val: 'Unlimited', status: 'good' },
-            chronic: { val: 'Basic Formulary', status: 'neutral' },
-            specialist: { val: 'Referral Needed', status: 'warning' }
-        }
-    },
-    'classic-saver': {
-        id: 'classic-saver',
-        name: 'Classic Saver',
-        premium: 3350,
-        savings: 10452,
-        risk: 2000,
-        features: {
-            hospital: { val: 'Any Private', status: 'good' },
-            maternity: { val: 'Unlimited', status: 'good' },
-            chronic: { val: 'R22k Limit', status: 'good' },
-            specialist: { val: 'Direct Access', status: 'good' }
-        }
-    }
-};
+import { PLANS } from '@/data/plans';
+import { Plan } from '@/utils/types';
 
 const SCENARIOS = [
     { id: 'general', label: 'General Overview', icon: Shield },
@@ -44,35 +15,20 @@ const SCENARIOS = [
     { id: 'chronic', label: 'Chronic Illness', icon: Pill },
 ];
 
-// 2. Update Props Type to Promise
 export default function ComparePage({ searchParams }: { searchParams: Promise<{ plans?: string }> }) {
-    // 3. Unwrap the promise using `use()`
     const { plans } = use(searchParams);
-    const { activePersonaPath } = usePersona(); // Consume Context
+    const { activePersonaPath } = usePersona();
 
-    // 4. Use the unwrapped value
     const planIds = plans?.split(',') || [];
 
-    // Safety: Ensure we have valid plans (Fallback to Mock if IDs missing)
-    let planA = PLANS[planIds[0]];
-    let planB = PLANS[planIds[1]];
-
-    // 1. Resolve Plan A
-    if (!planA) {
-        planA = PLANS['bonstart-plus'];
-    }
-
-    // 2. Resolve Plan B (Ensure it's not the same as Plan A)
-    if (!planB || planB.id === planA.id) {
-        planB = planA.id === 'classic-saver' ? PLANS['bonstart-plus'] : PLANS['classic-saver'];
-    }
+    // Safety: Find the actual plans from our data source
+    const planA = PLANS.find(p => p.id === planIds[0]);
+    const planB = PLANS.find(p => p.id === planIds[1]);
 
     const [activeScenario, setActiveScenario] = useState('general');
 
-    const getAnnualCost = (p: typeof planA) => p.premium * 12;
-
-    // --- EMPTY STATE LOGIC ---
-    if (planIds.length < 2) {
+    // --- EMPTY STATE LOGIC (If plans not found or not enough IDs) ---
+    if (!planA || !planB) {
         return (
             <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
                 <div className="w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center mb-6 animate-in zoom-in duration-300">
@@ -92,6 +48,10 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
             </main>
         );
     }
+
+    // --- DATA MAPPING HELPERS ---
+    const getAnnualCost = (p: Plan) => (p.price || 0) * 12;
+    const getRiskMetric = (p: Plan) => p.procedure_copays?.scope_in_hospital || 0; // Proxy for risk
 
     return (
         <main className="min-h-screen bg-slate-50 pb-32">
@@ -116,14 +76,15 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                     </h2>
 
                     <div className="space-y-8">
-                        {[planA, planB].map((plan: any) => {
+                        {[planA, planB].map((plan) => {
                             const annual = getAnnualCost(plan);
-                            const savingsPct = (plan.savings / annual) * 100;
+                            const savings = plan.savings_annual || 0;
+                            const savingsPct = annual > 0 ? (savings / annual) * 100 : 0;
 
                             return (
                                 <div key={plan.id}>
                                     <div className="flex justify-between items-end mb-2">
-                                        <span className="font-black text-slate-900 text-lg">{plan.name}</span>
+                                        <span className="font-black text-slate-900 text-lg">{plan.identity.plan_name}</span>
                                         <div className="text-right">
                                             <span className="block text-xs font-bold text-slate-400 uppercase">Fixed Cost</span>
                                             <span className="font-bold text-slate-900">R{formatRand(annual)}</span>
@@ -132,26 +93,27 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
 
                                     <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden flex relative">
                                         <div className="h-full bg-slate-300 w-full" />
-                                        {plan.savings > 0 && (
+                                        {savings > 0 && (
                                             <div
                                                 className="h-full bg-emerald-500 absolute left-0 top-0 opacity-80"
                                                 style={{ width: `${savingsPct}%` }}
                                             />
                                         )}
+                                        {/* Visualizing Risk as a % of Annual Cost (Abstract) */}
                                         <div
                                             className="h-full bg-rose-500 absolute right-0 top-0 opacity-40 border-l-2 border-white"
-                                            style={{ width: `15%` }}
+                                            style={{ width: `10%` }}
                                         />
                                     </div>
 
                                     <div className="flex justify-between mt-2 text-[10px] font-bold uppercase tracking-wider">
                                         <div className="flex items-center gap-1 text-emerald-600">
                                             <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                            Savings: R{formatRand(plan.savings)}
+                                            Savings: R{formatRand(savings)}
                                         </div>
                                         <div className="flex items-center gap-1 text-rose-500">
                                             <div className="w-2 h-2 rounded-full bg-rose-500 opacity-50" />
-                                            Risk Exposure
+                                            Risk Limit: R{formatRand(getRiskMetric(plan))}
                                         </div>
                                     </div>
                                 </div>
@@ -183,34 +145,34 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                 <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                     <div className="grid grid-cols-3 bg-slate-50 border-b border-slate-100 p-4">
                         <div className="col-span-1" />
-                        <div className="col-span-1 text-center font-bold text-xs text-slate-900">{planA.name}</div>
-                        <div className="col-span-1 text-center font-bold text-xs text-slate-900">{planB.name}</div>
+                        <div className="col-span-1 text-center font-bold text-xs text-slate-900">{planA.identity?.plan_name}</div>
+                        <div className="col-span-1 text-center font-bold text-xs text-slate-900">{planB.identity?.plan_name}</div>
                     </div>
 
                     <div className="divide-y divide-slate-50">
                         <Row
                             label="Hospitals"
-                            valA={planA.features.hospital.val}
-                            valB={planB.features.hospital.val}
+                            valA={planA.network_restriction === 'Any' ? 'Any Private' : planA.network_restriction}
+                            valB={planB.network_restriction === 'Any' ? 'Any Private' : planB.network_restriction}
                             highlightDiff
                         />
                         <Row
                             label="Maternity"
-                            valA={planA.features.maternity.val}
-                            valB={planB.features.maternity.val}
+                            valA={`${planA.defined_baskets.maternity.antenatal_consults} Antenatal`}
+                            valB={`${planB.defined_baskets.maternity.antenatal_consults} Antenatal`}
                         />
                         {activeScenario === 'chronic' && (
                             <Row
                                 label="Chronic Meds"
-                                valA={planA.features.chronic.val}
-                                valB={planB.features.chronic.val}
+                                valA={planA.identity.plan_type === 'Hospital Plan' ? 'CDL Only' : 'Broad Cover'}
+                                valB={planB.identity.plan_type === 'Hospital Plan' ? 'CDL Only' : 'Broad Cover'}
                                 highlightDiff
                             />
                         )}
                         <Row
                             label="Specialists"
-                            valA={planA.features.specialist.val}
-                            valB={planB.features.specialist.val}
+                            valA={`${planA.coverage_rates.specialist_in_hospital}% (In-H)`}
+                            valB={`${planB.coverage_rates.specialist_in_hospital}% (In-H)`}
                             highlightDiff
                         />
                     </div>
@@ -224,9 +186,12 @@ export default function ComparePage({ searchParams }: { searchParams: Promise<{ 
                     <div>
                         <h3 className="font-bold text-blue-900 text-sm mb-2">The Virtual Actuary Verdict</h3>
                         <p className="text-xs text-blue-800 leading-relaxed">
-                            If you can afford the extra <strong>R{formatRand(planB.premium - planA.premium)}</strong> per month,
-                            <strong> {planB.name}</strong> is the safer choice because it allows you to use
-                            any private hospital and avoids the {planA.features.specialist.val} restriction.
+                            Comparing <strong>{planA.identity.plan_name}</strong> and <strong>{planB.identity.plan_name}</strong>.
+                            {planB.price > planA.price ?
+                                ` The ${planB.identity.plan_name} costs R${formatRand(planB.price - planA.price)} more, offering ${planB.network_restriction === 'Any' ? 'unrestricted' : planB.network_restriction} access.`
+                                :
+                                ` The ${planB.identity.plan_name} is R${formatRand(planA.price - planB.price)} cheaper.`
+                            }
                         </p>
                     </div>
                 </div>
@@ -255,6 +220,5 @@ function Row({ label, valA, valB, highlightDiff }: { label: string, valA: string
 }
 
 function formatRand(amount: number) {
-    // Use en-US for consistent grouping, then replace commas with spaces for SA format
     return amount.toLocaleString('en-US').replace(/,/g, ' ');
 }

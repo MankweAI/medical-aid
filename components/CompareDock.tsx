@@ -6,7 +6,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 export default function CompareDock() {
-    const { selectedPlans, clearSelection } = useCompare();
+    const { pinnedHistory: selectedPlans, clearHistory: clearSelection } = useCompare();
 
     if (selectedPlans.length === 0) return null;
 

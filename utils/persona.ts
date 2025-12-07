@@ -105,7 +105,6 @@ export const validatePlan = (plan: Plan, persona: Persona): Risk[] => {
 
     // 3. CHRONIC FORMULARY GAP (The "Clinical" Risk)
     if (chronic_needs === 'Comprehensive' || chronic_needs === 'Specialized') {
-        // Mocking logic based on plan series
         const isBasicPlan = plan.identity.plan_type === 'Hospital Plan' || plan.identity.plan_series === 'Beat';
 
         if (isBasicPlan) {
