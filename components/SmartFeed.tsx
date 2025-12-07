@@ -2,121 +2,16 @@
 
 import { useMemo, useState } from 'react';
 import { usePersona } from '@/context/PersonaContext';
-import { useCompare, Plan } from '@/context/CompareContext';
+import { useCompare } from '@/context/CompareContext';
+import { PricingEngine } from '@/utils/engine';
+import { PLANS } from '@/data/plans';
+import { PERSONAS } from '@/data/personas';
+import { validatePlan } from '@/utils/persona';
 import { Shield, Filter } from 'lucide-react';
 import ExpertModal from '@/components/ExpertModal';
 import PinnedHeader from '@/components/PinnedHeader';
 import FeedCard from '@/components/FeedCard';
 import clsx from 'clsx';
-
-// --- MOCK DATA (Source of Truth) ---
-const MOCK_PLANS: Plan[] = [
-    {
-        id: 'bonstart-plus',
-        price: 1800,
-        savings_annual: 0,
-        network_restriction: 'Network',
-        identity: {
-            scheme_name: 'Bonitas',
-            plan_name: 'BonStart Plus',
-            plan_series: 'Edge',
-            plan_type: 'Hospital Plan'
-        },
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network: 100
-        },
-        defined_baskets: {
-            maternity: {
-                antenatal_consults: 6,
-                ultrasounds_2d: 2,
-                paediatrician_visits: 1
-            },
-            preventative: {
-                vaccinations: true,
-                contraceptives: 1600
-            }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 2500,
-            joint_replacement: 0
-        }
-    },
-    {
-        id: 'classic-saver',
-        price: 3350,
-        savings_annual: 10452,
-        network_restriction: 'Any',
-        identity: {
-            scheme_name: 'Discovery',
-            plan_name: 'Classic Saver',
-            plan_series: 'Saver',
-            plan_type: 'Medical Aid'
-        },
-        coverage_rates: {
-            hospital_account: 200,
-            specialist_in_hospital: 200,
-            specialist_out_hospital: 100,
-            gp_network: 100
-        },
-        defined_baskets: {
-            maternity: {
-                antenatal_consults: 8,
-                ultrasounds_2d: 2,
-                paediatrician_visits: 2
-            },
-            preventative: {
-                vaccinations: true,
-                contraceptives: 2200
-            }
-        },
-        procedure_copays: {
-            scope_in_hospital: 3500,
-            scope_out_hospital: 0,
-            mri_scan: 3250,
-            joint_replacement: 0
-        }
-    },
-    {
-        id: 'flexi-fed-1',
-        price: 1750,
-        savings_annual: 0,
-        network_restriction: 'Network',
-        identity: {
-            scheme_name: 'Fedhealth',
-            plan_name: 'FlexiFed 1',
-            plan_series: 'FlexiFed',
-            plan_type: 'Hospital Plan'
-        },
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network: 100
-        },
-        defined_baskets: {
-            maternity: {
-                antenatal_consults: 4,
-                ultrasounds_2d: 1,
-                paediatrician_visits: 0
-            },
-            preventative: {
-                vaccinations: true,
-                contraceptives: 0
-            }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2500,
-            scope_out_hospital: 0,
-            mri_scan: 2500,
-            joint_replacement: 5000
-        }
-    }
-];
 
 function EmptyState() {
     return (
@@ -133,7 +28,7 @@ function EmptyState() {
 export default function SmartFeed({ persona, initialIncome }: { persona: string, initialIncome: number }) {
     const { state } = usePersona();
     const { activePin, showPinnedOnly, pinnedHistory } = useCompare();
-    const { filters } = state;
+    const { filters, income, members } = state;
 
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedPlanForModal, setSelectedPlanForModal] = useState('');
@@ -143,31 +38,68 @@ export default function SmartFeed({ persona, initialIncome }: { persona: string,
         setModalOpen(true);
     };
 
+    // 1. Calculate, Enrich & Validate Plans
+    const enrichedPlans = useMemo(() => {
+        // Use context income/members if available (client-side updates), else initial (server-side)
+        const currentIncome = income || initialIncome;
+
+        // Find the active persona definition to run actuarial logic
+        const currentPersonaDef = PERSONAS.find(p => p.slug === persona);
+
+        return PLANS.map(plan => {
+            // A. Financial Calculation
+            const { monthlyPremium, savings } = PricingEngine.calculateProfile(plan, members, currentIncome);
+
+            // B. Risk Analysis (Red Flag Logic)
+            let redFlagStr = undefined;
+            if (currentPersonaDef) {
+                const risks = validatePlan(plan, currentPersonaDef);
+                if (risks.length > 0) {
+                    // Sort risks: HIGH priority first, then MEDIUM
+                    const sortedRisks = risks.sort((a, b) => {
+                        const priority: Record<string, number> = { 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
+                        return (priority[b.level] || 0) - (priority[a.level] || 0);
+                    });
+                    // Use the most severe risk details as the Red Flag
+                    redFlagStr = sortedRisks[0].details;
+                }
+            }
+
+            return {
+                ...plan,
+                price: monthlyPremium,
+                savings_annual: savings.annualAllocation,
+                network_restriction: plan.network_rules.restriction_level, // Helper for UI
+                red_flag: redFlagStr // Injected dynamically
+            };
+        });
+    }, [income, initialIncome, members, persona]);
+
     const filteredPlans = useMemo(() => {
-        // 1. PINNED FILTER
+        // 2. PINNED FILTER
         if (showPinnedOnly) {
             return pinnedHistory;
         }
 
-        return MOCK_PLANS.filter(plan => {
-            // 2. NETWORK FILTER
+        return enrichedPlans.filter(plan => {
+            // 3. NETWORK FILTER
             if (filters.network && filters.network !== 'Any') {
-                if (plan.network_restriction !== filters.network) return false;
+                if (!plan.network_rules.restriction_level.includes(filters.network)) return false;
             }
 
-            // 3. MATERNITY FILTER
+            // 4. MATERNITY FILTER
             if (filters.maternity) {
                 if (plan.defined_baskets.maternity.antenatal_consults === 0) return false;
             }
 
-            // 4. SAVINGS FILTER
+            // 5. SAVINGS FILTER
             if (filters.savings === 'Yes') {
-                if (plan.savings_annual <= 0) return false;
+                if ((plan.savings_annual || 0) <= 0) return false;
             }
 
             return true;
         });
-    }, [filters, showPinnedOnly, pinnedHistory]);
+    }, [filters, showPinnedOnly, pinnedHistory, enrichedPlans]);
 
     return (
         <div className={clsx("relative min-h-[500px]", activePin && "pt-40")}>

@@ -1,49 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Plan } from '@/utils/types';
 
-export interface Plan {
-    id: string;
-    price: number;
-    savings_annual: number;
-    network_restriction: string;
-
-    // Detailed Object Structure
-    identity: {
-        scheme_name: string;
-        plan_name: string;
-        plan_series: string;
-        plan_type: string;
-    };
-    coverage_rates: {
-        hospital_account: number;
-        specialist_in_hospital: number;
-        specialist_out_hospital: number;
-        gp_network: number;
-    };
-    defined_baskets: {
-        maternity: {
-            antenatal_consults: number;
-            ultrasounds_2d: number;
-            paediatrician_visits: number;
-        };
-        preventative: {
-            vaccinations: boolean;
-            contraceptives: number;
-        };
-    };
-    procedure_copays: {
-        scope_in_hospital: number;
-        scope_out_hospital: number;
-        mri_scan: number;
-        joint_replacement: number;
-    };
-
-    // UI Helpers
-    red_flag?: string;
-    chronic_limit?: string; // Optional helper for compatibility
-    features?: any;         // Optional helper for compatibility
-}
+// Re-export for compatibility with consumers
+export type { Plan };
 
 interface CompareContextType {
     activePin: Plan | null;
@@ -67,8 +28,20 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
             const savedHistory = localStorage.getItem('healthos_pin_history');
             const savedActive = localStorage.getItem('healthos_active_pin');
 
-            if (savedHistory) setPinnedHistory(JSON.parse(savedHistory));
-            if (savedActive) setActivePin(JSON.parse(savedActive));
+            if (savedHistory) {
+                try {
+                    setPinnedHistory(JSON.parse(savedHistory));
+                } catch (e) {
+                    console.error("Failed to load history", e);
+                }
+            }
+            if (savedActive) {
+                try {
+                    setActivePin(JSON.parse(savedActive));
+                } catch (e) {
+                    console.error("Failed to load active pin", e);
+                }
+            }
         }
     }, []);
 

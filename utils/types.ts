@@ -1,50 +1,69 @@
+// 1. FAMILY COMPOSITION (The missing piece)
+export interface FamilyComposition {
+    main: number;     // Usually 1
+    adults: number;   // Number of adult dependants
+    children: number; // Number of child dependants
+}
+
+// 2. THE PLAN INTERFACE
 export interface Plan {
     id: string;
-    name: string;
-    slug: string;
-    scheme: string;
-    type: 'Medical Aid' | 'Hospital Plan' | 'Savings Plan' | 'Hybrid';
-    network_restriction: 'Any' | 'Network' | 'Coastal' | 'Regional';
-    has_savings_account: boolean;
-    contributions: Contribution[];
-    benefits: Benefit[];
-}
-
-export interface Contribution {
-    pricing_model: 'Fixed' | 'Income_Banded';
-    pricing_matrix: PricingMatrix;
-    msa_structure?: {
-        type: 'Percentage' | 'Fixed' | 'None';
-        value: number;
+    identity: {
+        scheme_name: string;
+        plan_name: string;
+        plan_series: string;
+        plan_type: string;
     };
-}
+    pricing_engine: {
+        model: 'Fixed' | 'Income_Banded';
+        contributions: {
+            income_band?: { min: number; max: number };
+            premiums: { main: number; adult: number; child: number };
+        }[];
+        savings_component: {
+            has_savings: boolean;
+            annual_allocation_calc: string | number;
+        };
+    };
+    network_rules: {
+        restriction_level: string;
+        hospital_provider: string;
+        chronic_provider: string;
+        gp_provider: string;
+    };
+    coverage_rates: {
+        hospital_account: number;
+        specialist_in_hospital: number;
+        specialist_out_hospital: number;
+        gp_network_consults: string | number;
+    };
+    defined_baskets: {
+        maternity: {
+            antenatal_consults: number;
+            ultrasounds_2d: number;
+            paediatrician_visits: number;
+        };
+        preventative: {
+            vaccinations: boolean;
+            contraceptives_annual_limit: number;
+            wellness_screening: boolean;
+        };
+    };
+    threshold_benefits: {
+        above_threshold_benefit: string;
+        sublimits?: any;
+    };
+    risk_exposure: {
+        co_payments: {
+            scope_in_hospital: number;
+            mri_scan: number;
+            admission_penalty_non_network: number;
+        };
+        red_flag?: string;
+    };
 
-export interface Benefit {
-    category: string;
-    benefit_name: string;
-    display_text: string;
-    rule_logic: any;
-}
-
-// Union Type for JSONB columns
-export type PricingMatrix = FixedPricing | IncomeBand[];
-
-export interface FixedPricing {
-    main: number;
-    adult: number;
-    child: number;
-}
-
-export interface IncomeBand {
-    min: number;
-    max: number;
-    main: number;
-    adult: number;
-    child: number;
-}
-
-export interface FamilyComposition {
-    main: 1;
-    adults: number;
-    children: number;
+    // Optional helper fields injected by the Engine at runtime
+    price?: number;
+    savings_annual?: number;
+    network_restriction?: string;
 }

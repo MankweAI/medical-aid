@@ -1,7 +1,7 @@
 'use client';
 
 // A. The Gap Gauge (For Chronic Users)
-export const GapGauge = ({ financial }: { financial: any }) => {
+export const GapGauge = ({ financial }: { financial: { savings: { annualAllocation: number } } }) => {
     // Logic: Calculate depletion based on a simulated chronic spend of R1,500pm
     const monthlyClaim = 1500;
     const annualAllocation = financial?.savings?.annualAllocation || 0;
@@ -10,7 +10,9 @@ export const GapGauge = ({ financial }: { financial: any }) => {
         : 0;
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const depletionMonthName = months[Math.max(0, msaDepletionMonth - 1)];
+
+    // Safety check for array index
+    const depletionIndex = Math.max(0, Math.min(11, msaDepletionMonth - 1));
 
     return (
         <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm mb-6">
@@ -35,7 +37,7 @@ export const GapGauge = ({ financial }: { financial: any }) => {
             <div className="flex justify-between text-xs font-bold">
                 <span className="text-emerald-600">Jan: Covered</span>
                 <span className={msaDepletionMonth < 12 ? "text-rose-500" : "text-emerald-600"}>
-                    {msaDepletionMonth < 12 ? `Funds run out in ${months[msaDepletionMonth]}` : "Full Year Cover"}
+                    {msaDepletionMonth < 12 ? `Funds run out in ${months[depletionIndex]}` : "Full Year Cover"}
                 </span>
             </div>
         </div>
@@ -53,7 +55,7 @@ export const IncomeSlider = ({ income, setIncome }: { income: number, setIncome:
             <input
                 type="range"
                 min="0"
-                max="35000"
+                max="80000"
                 step="500"
                 value={income}
                 onChange={(e) => setIncome(Number(e.target.value))}
@@ -63,7 +65,7 @@ export const IncomeSlider = ({ income, setIncome }: { income: number, setIncome:
             <div className="mt-6 flex justify-between items-end">
                 <div>
                     <span className="text-xs text-slate-400 block mb-1">Monthly Household Income</span>
-                    <span className="text-3xl font-black text-white">R{income.toLocaleString()}</span>
+                    <span className="text-3xl font-black text-white" suppressHydrationWarning>R{income.toLocaleString()}</span>
                 </div>
             </div>
         </div>

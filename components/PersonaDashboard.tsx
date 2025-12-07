@@ -2,18 +2,19 @@
 
 import { useState } from 'react';
 import { PricingEngine } from '@/utils/engine';
-import { validatePlan, UserProfile } from '@/utils/persona';
+import { validatePlan, Persona, Risk } from '@/utils/persona';
+import { Plan, FamilyComposition } from '@/utils/types';
 import { AlertTriangle, CheckCircle, ChevronDown, Activity, ChevronRight } from 'lucide-react';
 import { GapGauge, IncomeSlider } from './HeroTools';
 import BottomSheet from '@/components/ui/BottomSheet';
 import PlanDetails from '@/components/PlanDetails';
 import clsx from 'clsx';
 
-export default function PersonaDashboard({ persona, plans, content }: { persona: string, plans: any[], content: any }) {
+export default function PersonaDashboard({ persona, plans }: { persona: Persona, plans: Plan[] }) {
 
     // --- STATE: The "Living" Variables ---
-    const [income, setIncome] = useState<number>(15000);
-    const [members, setMembers] = useState({ main: 1, adult: 0, child: 0 });
+    const [income, setIncome] = useState<number>(persona.defaults.income);
+    const [members, setMembers] = useState<FamilyComposition>(persona.defaults.family_composition);
     const [showConfig, setShowConfig] = useState(false);
 
     // --- STATE: Bottom Sheet ---
@@ -21,15 +22,8 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
 
     // --- LOGIC: Filter & Rank Plans ---
     const rankedPlans = plans.map(plan => {
-        const userProfile: UserProfile = {
-            persona: persona as any,
-            needs: content.needs,
-            title: content.title || '',
-            description: content.description || ''
-        };
-        const risks = validatePlan(plan, userProfile);
-        const contribution = plan.contributions?.[0] || {};
-        const financials = PricingEngine.calculateProfile(contribution, members, income);
+        const risks = validatePlan(plan, persona);
+        const financials = PricingEngine.calculateProfile(plan, members, income);
 
         // Traffic Light Logic
         let tier = 'GREEN';
@@ -39,6 +33,14 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
         return { ...plan, risks, financials, tier };
     }).sort((a, b) => a.financials.monthlyPremium - b.financials.monthlyPremium);
 
+    // Helper to update family members safely
+    const updateMember = (type: keyof FamilyComposition, delta: number) => {
+        setMembers(prev => ({
+            ...prev,
+            [type]: Math.max(type === 'main' ? 1 : 0, prev[type] + delta)
+        }));
+    };
+
     return (
         <div className="animate-in fade-in duration-500 pb-32">
 
@@ -47,12 +49,12 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-600"></div>
 
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-snug">
-                    Finding the right <span className="text-blue-600">{content.title.split(' ')[0]}</span> coverage for a family of
+                    Finding the right <span className="text-blue-600">{persona.meta.title.split(' ')[0]}</span> coverage for a family of
                     <button
                         onClick={() => setShowConfig(!showConfig)}
                         className="inline-flex items-center mx-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-xl border border-blue-100 active-press font-bold align-middle"
                     >
-                        {members.main + members.adult + members.child} <ChevronDown className="w-4 h-4 ml-1" />
+                        {members.main + members.adults + members.children} <ChevronDown className="w-4 h-4 ml-1" />
                     </button>
                     earning
                     <button
@@ -73,17 +75,21 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                         <div>
                             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 block">Family Composition</label>
                             <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
-                                {['Main', 'Adult', 'Child'].map((type) => (
-                                    <div key={type} className="flex flex-col items-center bg-slate-50 p-3 rounded-2xl min-w-[80px]">
-                                        <span className="text-[10px] uppercase font-bold text-slate-400 mb-2">{type}</span>
+                                {[
+                                    { label: 'Main', key: 'main' as const },
+                                    { label: 'Adult', key: 'adults' as const },
+                                    { label: 'Child', key: 'children' as const }
+                                ].map((type) => (
+                                    <div key={type.key} className="flex flex-col items-center bg-slate-50 p-3 rounded-2xl min-w-[80px]">
+                                        <span className="text-[10px] uppercase font-bold text-slate-400 mb-2">{type.label}</span>
                                         <div className="flex items-center gap-2">
                                             <button
-                                                onClick={() => setMembers(p => ({ ...p, [type.toLowerCase()]: Math.max(type === 'Main' ? 1 : 0, p[type.toLowerCase() as keyof typeof members] - 1) }))}
+                                                onClick={() => updateMember(type.key, -1)}
                                                 className="w-8 h-8 bg-white rounded-full shadow-sm text-slate-600 font-bold border border-slate-200"
                                             >-</button>
-                                            <span className="font-bold text-lg w-4 text-center">{members[type.toLowerCase() as keyof typeof members]}</span>
+                                            <span className="font-bold text-lg w-4 text-center">{members[type.key]}</span>
                                             <button
-                                                onClick={() => setMembers(p => ({ ...p, [type.toLowerCase()]: p[type.toLowerCase() as keyof typeof members] + 1 }))}
+                                                onClick={() => updateMember(type.key, 1)}
                                                 className="w-8 h-8 bg-blue-600 rounded-full shadow-lg shadow-blue-200 text-white font-bold"
                                             >+</button>
                                         </div>
@@ -100,7 +106,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                 {/* 2. THE COMPUTATIONAL AUTHORITY (Sidebar Visualizer) */}
                 <div className="lg:col-span-1">
                     <div className="lg:sticky lg:top-8">
-                        {persona === 'The Chronic Warrior' && rankedPlans.length > 0 && (
+                        {persona.search_profile.chronic_needs === 'Comprehensive' && rankedPlans.length > 0 && (
                             <GapGauge financial={rankedPlans[0].financials} />
                         )}
 
@@ -113,7 +119,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                     Virtual Actuary Insight
                                 </h4>
                                 <p className="text-xs text-blue-700 leading-relaxed">
-                                    Plans are ranked by <strong>Effective Cost</strong> (Premium - Savings). We penalized plans with high Self-Payment Gaps.
+                                    {persona.actuarial_logic.mathematical_basis}
                                 </p>
                             </div>
                         </div>
@@ -143,9 +149,9 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                         <div className="flex items-center gap-2 mb-1">
                                             {plan.tier === 'GREEN' && <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Best Match</span>}
                                             {plan.tier === 'ORANGE' && <span className="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Trade-Off</span>}
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{plan.plan_series?.schemes?.name}</span>
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{plan.identity.scheme_name}</span>
                                         </div>
-                                        <h3 className="font-bold text-slate-900 text-xl">{plan.name}</h3>
+                                        <h3 className="font-bold text-slate-900 text-xl">{plan.identity.plan_name}</h3>
                                     </div>
                                     <div className="text-right">
                                         <div className="text-2xl font-black text-slate-900" suppressHydrationWarning>
@@ -163,7 +169,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                             Savings: R{plan.financials.savings.annualAllocation.toLocaleString()}
                                         </div>
                                     )}
-                                    {plan.risks.slice(0, 2).map((risk: any, i: number) => (
+                                    {plan.risks.slice(0, 2).map((risk: Risk, i: number) => (
                                         <div key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 border border-rose-100 rounded-xl text-xs font-medium text-rose-700">
                                             <AlertTriangle className="w-3.5 h-3.5" />
                                             {risk.warning}
@@ -185,7 +191,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
             <BottomSheet
                 isOpen={!!selectedPlan}
                 onClose={() => setSelectedPlan(null)}
-                title={selectedPlan?.name || 'Plan Details'}
+                title={selectedPlan?.identity?.plan_name || 'Plan Details'}
             >
                 {selectedPlan && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -213,7 +219,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                                     Risk Analysis
                                 </h4>
                                 <div className="space-y-3">
-                                    {selectedPlan.risks.map((risk: any, i: number) => (
+                                    {selectedPlan.risks.map((risk: Risk, i: number) => (
                                         <div key={i} className="bg-rose-50 p-3 rounded-xl border border-rose-100 text-sm">
                                             <strong className="block text-rose-800 mb-1">{risk.warning}</strong>
                                             <span className="text-rose-600 leading-relaxed">{risk.details}</span>
@@ -224,7 +230,7 @@ export default function PersonaDashboard({ persona, plans, content }: { persona:
                         )}
 
                         {/* Full Details Component */}
-                        <PlanDetails benefits={selectedPlan.benefits} />
+                        <PlanDetails plan={selectedPlan} />
 
                         {/* CTA */}
                         <div className="sticky bottom-0 pt-4 pb-2 bg-white/90 backdrop-blur-sm mt-6">
