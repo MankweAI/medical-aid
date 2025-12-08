@@ -7,6 +7,7 @@ import SinglePlanHero from '@/components/SinglePlanHero'; // <--- NEW IMPORT
 import TrustTicker from '@/components/TrustTicker';
 import StrategyFooter from '@/components/StrategyFooter'; // <--- Import
 import { PLANS } from '@/data/plans';
+import AppHeader from '@/components/AppHeader';
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -41,6 +42,7 @@ export default async function PersonaPage(props: Props) {
     return (
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden">
             {/* ... Background & Hero Section ... */}
+            <AppHeader />
 
             <section className="relative z-10 pt-16 px-4 sm:px-6 pb-2">
                 <WelcomeStatement persona={persona} />

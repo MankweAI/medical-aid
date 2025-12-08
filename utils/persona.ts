@@ -8,6 +8,7 @@ export interface UserProfile {
 
     meta: {
         title: string;
+        marketing_heading: string;
         description: string;
         category: string;
     };

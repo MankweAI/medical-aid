@@ -1,31 +1,22 @@
+// data/personas.ts
 import { Persona } from '@/utils/persona';
 
 export const PERSONAS: Persona[] = [
-    // --- BESTMED BEAT 1 (The Foundation) ---
     {
         slug: "bestmed-beat1-network-student-starter-2026",
         code: "BST_B1_NET_STU",
         meta: {
             title: "The Student Starter",
-            description: "Ideal for students and young adults under 25. This plan leverages the network option to offer the most affordable private hospital cover for those with low hospitalization risk.",
+            marketing_heading: "Lowest Cost Private Hospital Cover", // <--- NEW
+            description: "Ideal for students and young adults under 25. Leverage the network discount to get private accident cover for the absolute minimum monthly premium.",
             category: "Student"
         },
-        defaults: {
-            income: 12000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 22
-        },
-        search_profile: {
-            network_tolerance: 'Network',
-            min_savings_allocation: 0,
-            chronic_needs: 'None',
-            required_benefits: [],
-            priority_tag: 'budget'
-        },
+        defaults: { income: 12000, family_composition: { main: 1, adult: 0, child: 0 }, age: 22 },
+        search_profile: { network_tolerance: 'Network', min_savings_allocation: 0, chronic_needs: 'None', required_benefits: [], priority_tag: 'budget' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat1-network-2026",
             brand_lock: "Bestmed",
-            mathematical_basis: "Optimizes the R254 monthly premium spread. For a healthy individual <25, the probability of needing a specific non-network specialist is negligible, making the R2,269 price point the 'Global Minimum' for private cover.",
+            mathematical_basis: "Optimizes the R254 monthly premium spread. For a healthy individual <25, the probability of needing a specific non-network specialist is negligible.",
             primary_risk_warning: "Out-of-hospital expenses are 100% self-funded. One GP visit will cost ~R500 out of pocket."
         }
     },
@@ -34,25 +25,16 @@ export const PERSONAS: Persona[] = [
         code: "BST_B1_STD_BIO",
         meta: {
             title: "The Biologic Exile",
-            description: "Designed for individuals without autoimmune conditions. Defined by its low R12,144 annual limit for biological medicine, making it unsuitable for chronic biologic therapy.",
+            marketing_heading: "Hospital Plan for the Healthy", // <--- NEW
+            description: "Designed for individuals with no chronic needs. You get solid hospital benefits without paying for biological medicine coverage you don't use.",
             category: "Chronic"
         },
-        defaults: {
-            income: 18000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 28
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 0,
-            chronic_needs: 'Basic',
-            required_benefits: [],
-            priority_tag: 'budget'
-        },
+        defaults: { income: 18000, family_composition: { main: 1, adult: 0, child: 0 }, age: 28 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 0, chronic_needs: 'Basic', required_benefits: [], priority_tag: 'budget' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat1-any-2026",
             brand_lock: "Bestmed",
-            mathematical_basis: "Defined by the R12,144 Biological Medicine limit. A single course of biologics (e.g. Humira) exceeds this in two months. This plan is mathematically valid only for the 'Strictly Non-Autoimmune' user.",
+            mathematical_basis: "Defined by the R12,144 Biological Medicine limit. Mathematically valid only for the 'Strictly Non-Autoimmune' user who avoids subsidizing high-cost pools.",
             primary_risk_warning: "Biological medicine limit is insufficient for chronic biologic therapy. Do not select if you have autoimmune conditions."
         }
     },
@@ -61,50 +43,30 @@ export const PERSONAS: Persona[] = [
         code: "BST_B1_STD_FAM",
         meta: {
             title: "The Large Family Bootstrapper",
-            description: "Leverages the Bestmed 3-child cap to provide affordable hospital cover for large families. Offers a low per-person cost by covering additional children at no extra charge.",
+            marketing_heading: "Free Cover for Your 4th Child", // <--- NEW
+            description: "Leverages the unique 3-child price cap to provide affordable hospital cover for large families. Pay for 3 children, cover all of them.",
             category: "Family"
         },
-        defaults: {
-            income: 35000,
-            family_composition: { main: 1, adult: 1, child: 4 },
-            age: 40
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 0,
-            chronic_needs: 'None',
-            required_benefits: [],
-            priority_tag: 'family'
-        },
+        defaults: { income: 35000, family_composition: { main: 1, adult: 1, child: 4 }, age: 40 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 0, chronic_needs: 'None', required_benefits: [], priority_tag: 'family' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat1-any-2026",
             brand_lock: "Bestmed",
-            mathematical_basis: "Exploits the 3-Child Cap. A family with 4 children pays for 3, achieving hospital cover for 6 people at ~R1,277 per head—a highly efficient ratio for large families.",
+            mathematical_basis: "Exploits the 3-Child Cap. A family with 4 children pays for 3, achieving hospital cover for 6 people at ~R1,277 per head.",
             primary_risk_warning: "Zero day-to-day cover means a sick family could face crippling pharmacy bills in winter."
         }
     },
-
-    // --- BESTMED BEAT 2 (The Savings Buffer) ---
     {
         slug: "bestmed-beat2-network-savings-tactician-2026",
         code: "BST_B2_NET_SAV",
         meta: {
             title: "The Savings Buffer Tactician",
-            description: "Perfect for those needing a day-to-day buffer. Optimizes the R5,328 annual savings for occasional GP visits, avoiding the out-of-pocket costs of a pure hospital plan.",
+            marketing_heading: "Entry-Level Savings Account", // <--- NEW
+            description: "Perfect if you need a small day-to-day buffer. Optimizes the R5,328 annual savings for occasional GP visits, avoiding immediate out-of-pocket costs.",
             category: "Savings"
         },
-        defaults: {
-            income: 25000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 30
-        },
-        search_profile: {
-            network_tolerance: 'Network',
-            min_savings_allocation: 400,
-            chronic_needs: 'Basic',
-            required_benefits: ['savings'],
-            priority_tag: 'savings'
-        },
+        defaults: { income: 25000, family_composition: { main: 1, adult: 0, child: 0 }, age: 30 },
+        search_profile: { network_tolerance: 'Network', min_savings_allocation: 400, chronic_needs: 'Basic', required_benefits: ['savings'], priority_tag: 'savings' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat2-network-2026",
             brand_lock: "Bestmed",
@@ -117,21 +79,12 @@ export const PERSONAS: Persona[] = [
         code: "BST_B2_STD_DENT",
         meta: {
             title: "The Dental Preserver",
-            description: "Maximizes preventative dentistry benefits. Features twice-yearly scaling and polishing paid from scheme benefits, offering value for families prioritizing dental health.",
+            marketing_heading: "Family Dental & Savings", // <--- NEW
+            description: "Maximizes preventative dentistry benefits. Get twice-yearly scaling and polishing paid from scheme benefits, keeping your savings for other needs.",
             category: "Family"
         },
-        defaults: {
-            income: 45000,
-            family_composition: { main: 1, adult: 1, child: 2 },
-            age: 35
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 400,
-            chronic_needs: 'Basic',
-            required_benefits: ['dentistry'],
-            priority_tag: 'family'
-        },
+        defaults: { income: 45000, family_composition: { main: 1, adult: 1, child: 2 }, age: 35 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 400, chronic_needs: 'Basic', required_benefits: ['dentistry'], priority_tag: 'family' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat2-any-2026",
             brand_lock: "Bestmed",
@@ -144,21 +97,12 @@ export const PERSONAS: Persona[] = [
         code: "BST_B2_NET_ORTH",
         meta: {
             title: "The Orthopaedic Risk Exile",
-            description: "Strictly for members under 50 without joint issues. The plan's hard exclusion on elective joint replacement makes it a catastrophic risk for older individuals.",
+            marketing_heading: "Budget Savings (Under 50s)", // <--- NEW
+            description: "Strictly for members under 50 without joint issues. You get savings and hospital cover, but accept a hard exclusion on joint replacements to keep premiums low.",
             category: "Chronic"
         },
-        defaults: {
-            income: 30000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 28
-        },
-        search_profile: {
-            network_tolerance: 'Network',
-            min_savings_allocation: 400,
-            chronic_needs: 'None',
-            required_benefits: [],
-            priority_tag: 'budget'
-        },
+        defaults: { income: 30000, family_composition: { main: 1, adult: 0, child: 0 }, age: 28 },
+        search_profile: { network_tolerance: 'Network', min_savings_allocation: 400, chronic_needs: 'None', required_benefits: [], priority_tag: 'budget' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat2-network-2026",
             brand_lock: "Bestmed",
@@ -166,32 +110,21 @@ export const PERSONAS: Persona[] = [
             primary_risk_warning: "NO BENEFIT for elective joint replacements. Do not join if you anticipate hip or knee surgery."
         }
     },
-
-    // --- BESTMED BEAT 3 (The Family Pivot) ---
     {
         slug: "bestmed-beat3-network-maternity-planner-2026",
         code: "BST_B3_NET_MAT",
         meta: {
             title: "The Maternity Planner",
-            description: "Essential for expectant families. Preserves the savings account by funding comprehensive maternity care from scheme risk, keeping funds available for the baby.",
+            marketing_heading: "Comprehensive Maternity Cover", // <--- NEW
+            description: "Essential for expectant families. We chose this because it funds your pregnancy visits from 'Risk', keeping your savings intact for the baby.",
             category: "Maternity"
         },
-        defaults: {
-            income: 55000,
-            family_composition: { main: 1, adult: 1, child: 0 },
-            age: 29
-        },
-        search_profile: {
-            network_tolerance: 'Network',
-            min_savings_allocation: 600,
-            chronic_needs: 'Basic',
-            required_benefits: ['maternity'],
-            priority_tag: 'maternity'
-        },
+        defaults: { income: 55000, family_composition: { main: 1, adult: 1, child: 0 }, age: 29 },
+        search_profile: { network_tolerance: 'Network', min_savings_allocation: 600, chronic_needs: 'Basic', required_benefits: ['maternity'], priority_tag: 'maternity' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat3-network-2026",
             brand_lock: "Bestmed",
-            mathematical_basis: "Beat 3's Maternity Benefit is funded by Scheme Risk. On Beat 2, pregnancy bankrupts savings; on Beat 3, savings remain intact for the infant. Users intending to conceive must migrate here.",
+            mathematical_basis: "Beat 3's Maternity Benefit is funded by Scheme Risk. On Beat 2, pregnancy bankrupts savings; on Beat 3, savings remain intact for the infant.",
             primary_risk_warning: "Maternity supplements limited to R145/month; expect out-of-pocket costs for premium vitamins."
         }
     },
@@ -200,21 +133,12 @@ export const PERSONAS: Persona[] = [
         code: "BST_B3_STD_CHR",
         meta: {
             title: "The Chronic Climber",
-            description: "For families managing non-CDL chronic conditions like ADHD. Offers a risk-subsidized benefit of R4,358 for medications not covered on lower tiers.",
+            marketing_heading: "Cover for ADHD & Allergic Rhinitis", // <--- NEW
+            description: "The first plan in the series to offer risk funding for non-PMB conditions like ADHD. Don't pay for chronic meds from your savings.",
             category: "Chronic"
         },
-        defaults: {
-            income: 60000,
-            family_composition: { main: 1, adult: 1, child: 1 },
-            age: 38
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 600,
-            chronic_needs: 'Comprehensive',
-            required_benefits: ['chronic'],
-            priority_tag: 'chronic'
-        },
+        defaults: { income: 60000, family_composition: { main: 1, adult: 1, child: 1 }, age: 38 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 600, chronic_needs: 'Comprehensive', required_benefits: ['chronic'], priority_tag: 'chronic' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat3-any-2026",
             brand_lock: "Bestmed",
@@ -222,32 +146,21 @@ export const PERSONAS: Persona[] = [
             primary_risk_warning: "Non-CDL limit (R4,358) covers only ~5 months of branded ADHD medication. Co-payments apply thereafter."
         }
     },
-
-    // --- BESTMED BEAT 3 PLUS (The Cash Flow King) ---
     {
         slug: "bestmed-beat3-plus-discretionary-spender-2026",
         code: "BST_B3P_DISC",
         meta: {
             title: "The Discretionary Spender",
-            description: "Ideal for high-utilization users. Offers a superior savings ratio, effectively allowing members to buy R1.10 of savings for every R1.00 of premium increase.",
+            marketing_heading: "Maximum Medical Savings", // <--- NEW
+            description: "Ideal for high-utilization users. This plan offers a superior 25% savings ratio, giving you maximum liquidity for day-to-day control.",
             category: "Savings"
         },
-        defaults: {
-            income: 70000,
-            family_composition: { main: 1, adult: 1, child: 2 },
-            age: 45
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 1200,
-            chronic_needs: 'Basic',
-            required_benefits: ['savings'],
-            priority_tag: 'savings'
-        },
+        defaults: { income: 70000, family_composition: { main: 1, adult: 1, child: 2 }, age: 45 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 1200, chronic_needs: 'Basic', required_benefits: ['savings'], priority_tag: 'savings' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat3-plus-2026",
             brand_lock: "Bestmed",
-            mathematical_basis: "Principal Annual Savings is R15,132 vs Beat 3's R8,124. You pay R528 more per month to get R584 more in savings—a positive expected value arbitrage for high utilizers.",
+            mathematical_basis: "Principal Annual Savings is R15,132 vs Beat 3's R8,124. You pay R528 more per month to get R584 more in savings—a positive expected value arbitrage.",
             primary_risk_warning: "High total monthly cost (R5,042) requires liquidity; value is lost if savings are not utilized."
         }
     },
@@ -256,21 +169,12 @@ export const PERSONAS: Persona[] = [
         code: "BST_B3P_OPT",
         meta: {
             title: "The Optical Cyclist",
-            description: "Tailored for regular eyewear updates. Insulates users from high optical costs by providing a specific optometry benefit that refreshes every 24 months.",
+            marketing_heading: "High Savings & Optical Cover", // <--- NEW
+            description: "Tailored for regular eyewear updates. Insulates you from high optical costs by providing a specific optometry benefit that refreshes every 24 months.",
             category: "Savings"
         },
-        defaults: {
-            income: 65000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 33
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 1200,
-            chronic_needs: 'Basic',
-            required_benefits: ['optometry'],
-            priority_tag: 'savings'
-        },
+        defaults: { income: 65000, family_composition: { main: 1, adult: 0, child: 0 }, age: 33 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 1200, chronic_needs: 'Basic', required_benefits: ['optometry'], priority_tag: 'savings' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat3-plus-2026",
             brand_lock: "Bestmed",
@@ -278,28 +182,17 @@ export const PERSONAS: Persona[] = [
             primary_risk_warning: "Benefit available only every 24 months. Timing of claims is critical."
         }
     },
-
-    // --- BESTMED BEAT 4 (The Safety Net) ---
     {
         slug: "bestmed-beat4-senior-joint-replacer-2026",
         code: "BST_B4_SNR_JOINT",
         meta: {
             title: "The Senior Joint Replacer",
-            description: "The only plan in the series covering elective joint replacement. Designed for the 55+ demographic to cover major surgeries like hip or knee replacements.",
+            marketing_heading: "Full Joint Replacement Cover", // <--- NEW
+            description: "The only plan in the series covering elective joint replacement. Essential for the 55+ demographic to avoid the R180k self-payment on lower plans.",
             category: "Senior"
         },
-        defaults: {
-            income: 85000,
-            family_composition: { main: 1, adult: 1, child: 0 },
-            age: 62
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 1000,
-            chronic_needs: 'Comprehensive',
-            required_benefits: ['joint_replacement'],
-            priority_tag: 'comprehensive'
-        },
+        defaults: { income: 85000, family_composition: { main: 1, adult: 1, child: 0 }, age: 62 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 1000, chronic_needs: 'Comprehensive', required_benefits: ['joint_replacement'], priority_tag: 'comprehensive' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat4-2026",
             brand_lock: "Bestmed",
@@ -312,21 +205,12 @@ export const PERSONAS: Persona[] = [
         code: "BST_B4_BIO",
         meta: {
             title: "The High-Cost Biologic User",
-            description: "For conditions like Rheumatoid Arthritis. Offers a R30,357 limit for biologicals, providing a bridge for intermittent or lower-cost biosimilar therapies.",
+            marketing_heading: "Specialized Biological Therapy", // <--- NEW
+            description: "For conditions like Rheumatoid Arthritis. Offers a significantly higher limit for biologicals, providing a bridge for intermittent or lower-cost biosimilar therapies.",
             category: "Chronic"
         },
-        defaults: {
-            income: 90000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 45
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 1000,
-            chronic_needs: 'Specialized',
-            required_benefits: ['biologics'],
-            priority_tag: 'chronic'
-        },
+        defaults: { income: 90000, family_composition: { main: 1, adult: 0, child: 0 }, age: 45 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 1000, chronic_needs: 'Specialized', required_benefits: ['biologics'], priority_tag: 'chronic' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat4-2026",
             brand_lock: "Bestmed",
@@ -339,21 +223,12 @@ export const PERSONAS: Persona[] = [
         code: "BST_B4_CMPLX",
         meta: {
             title: "The Comprehensive Chronic Manager",
-            description: "Crucial for conditions like Major Depression or GORD. Provides risk funding (R9,571 limit) for 9 Non-CDL conditions excluded on lower tiers.",
+            marketing_heading: "Depression & GORD Cover", // <--- NEW
+            description: "Crucial for conditions like Major Depression. Provides risk funding for 9 Non-CDL conditions that are strictly excluded on lower-tier plans.",
             category: "Chronic"
         },
-        defaults: {
-            income: 75000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 38
-        },
-        search_profile: {
-            network_tolerance: 'Any',
-            min_savings_allocation: 1000,
-            chronic_needs: 'Specialized',
-            required_benefits: ['chronic'],
-            priority_tag: 'chronic'
-        },
+        defaults: { income: 75000, family_composition: { main: 1, adult: 0, child: 0 }, age: 38 },
+        search_profile: { network_tolerance: 'Any', min_savings_allocation: 1000, chronic_needs: 'Specialized', required_benefits: ['chronic'], priority_tag: 'chronic' },
         actuarial_logic: {
             target_plan_id: "bestmed-beat4-2026",
             brand_lock: "Bestmed",
