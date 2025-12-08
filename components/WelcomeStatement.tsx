@@ -26,7 +26,7 @@ export default function WelcomeStatement({ persona }: Props) {
     }, [persona, setPersona, setIncome, setMembers, setFilter]);
 
     return (
-        <div className="mb-8 animate-in slide-in-from-top-2 fade-in duration-500">
+        <div className="mb-4 animate-in slide-in-from-top-2 fade-in duration-500">
 
             {/* 1. SEO & Trust Badge */}
             <div className="flex items-center gap-2 mb-4">

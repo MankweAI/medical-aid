@@ -18,7 +18,7 @@ export default function ControlPanel() {
     const familyCount = members.main + members.adult + members.child;
 
     return (
-        <div className="mb-8">
+        <div className="mb-4">
             {/* COMPACT CONTEXT BAR */}
             <div className="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-2">
 
@@ -55,7 +55,8 @@ export default function ControlPanel() {
                         </div>
                         <div className="text-left">
                             <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Household Income</span>
-                            <span className="block text-sm font-bold text-slate-900">
+                            {/* FIX: Added suppressHydrationWarning to ignore server/client locale mismatch */}
+                            <span className="block text-sm font-bold text-slate-900" suppressHydrationWarning>
                                 {formatMoney(income)} <span className="text-slate-400 font-normal">pm</span>
                             </span>
                         </div>
@@ -106,7 +107,7 @@ export default function ControlPanel() {
             <BottomSheet isOpen={activeSheet === 'income'} onClose={() => setActiveSheet('none')} title="Gross Income">
                 <div className="space-y-8">
                     <div className="text-center pt-4">
-                        <span className="text-5xl font-black text-slate-900 tracking-tight">
+                        <span className="text-5xl font-black text-slate-900 tracking-tight" suppressHydrationWarning>
                             {formatMoney(income)}
                         </span>
                         <p className="text-sm text-slate-500 mt-2 font-medium">Monthly Household Total</p>

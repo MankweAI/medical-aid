@@ -5,6 +5,8 @@ import WelcomeStatement from '@/components/WelcomeStatement';
 import ControlPanel from '@/components/ControlPanel';
 import SinglePlanHero from '@/components/SinglePlanHero'; // <--- NEW IMPORT
 import TrustTicker from '@/components/TrustTicker';
+import StrategyFooter from '@/components/StrategyFooter'; // <--- Import
+import { PLANS } from '@/data/plans';
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -27,40 +29,37 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function PersonaPage(props: Props) {
     const params = await props.params;
     const { slug } = params;
-
-    // Lookup Data
     const persona = PERSONAS.find(p => p.slug === slug);
 
-    // 404 if not found
-    if (!persona) {
-        notFound();
-    }
+    if (!persona) notFound();
+
+    // SERVER-SIDE LOOKUP for the footer
+    const plan = PLANS.find(p => p.id === persona.actuarial_logic?.target_plan_id);
 
     const TICKER_DATA = ["Loading 2026 Rules...", "Verifying Income Bands...", "Applying Actuarial Logic..."];
 
     return (
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden">
-            {/* BACKGROUND */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] animate-float" />
-                <div className="absolute bottom-[20%] right-[-20%] w-[400px] h-[400px] bg-emerald-400/10 rounded-full blur-[100px] animate-float-delayed" />
-            </div>
+            {/* ... Background & Hero Section ... */}
 
-            {/* HERO SECTION */}
-            <section className="relative z-10 pt-24 px-4 sm:px-6 pb-4">
+            <section className="relative z-10 pt-16 px-4 sm:px-6 pb-2">
                 <WelcomeStatement persona={persona} />
-
-                {/* Control Panel allows user to adjust income/family to see accurate price */}
                 <ControlPanel />
-
-                <div className="mt-4 flex justify-center">
+                {/* <div className="mt-4 flex justify-center">
                     <TrustTicker messages={TICKER_DATA} />
-                </div>
+                </div> */}
             </section>
 
             {/* THE ONE TRUE ANSWER */}
             <section className="relative z-10 max-w-2xl mx-auto">
                 <SinglePlanHero persona={slug} />
+
+                {/* THE ACTUARIAL FOOTNOTES (Bottom 30%) */}
+                {plan && (
+                    <div className="px-4 pb-12">
+                        <StrategyFooter plan={plan} persona={persona} />
+                    </div>
+                )}
             </section>
         </main>
     );
