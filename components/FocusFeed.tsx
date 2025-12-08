@@ -1,159 +1,145 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { usePersona } from '@/context/PersonaContext';
 import { useCompare } from '@/context/CompareContext';
-import { Plan } from '@/utils/types';
-import { PERSONAS } from '@/data/personas';
 import { PLANS } from '@/data/plans';
-import { PricingEngine, FinancialProfile } from '@/utils/engine';
-import { validatePlan, Risk } from '@/utils/persona';
-import StageCard from '@/components/StageCard';
-import DeltaCard from '@/components/DeltaCard';
-import ExpertModal from '@/components/ExpertModal';
+import { PERSONAS } from '@/data/personas';
+import { PricingEngine } from '@/utils/engine';
+import { validatePlan, Risk } from '@/utils/persona'; // Import Risk
+import { X, Trophy, Lock, RefreshCw, Undo2 } from 'lucide-react';
 import PinnedHeader from '@/components/PinnedHeader';
+import FeedCard from '@/components/FeedCard';
 import FeedSkeleton from '@/components/skeletons/FeedSkeleton';
-import { Filter, RefreshCw } from 'lucide-react';
+import ExpertModal from '@/components/ExpertModal';
+import { Plan } from '@/utils/types'; // Import Base Plan
+import clsx from 'clsx';
 
-// Extended type for internal logic
-export type RankedPlan = Plan & {
-    risks: Risk[];
-    financials: FinancialProfile;
+// 1. DEFINE THE EXTENDED TYPE
+type FeedItem = Plan & {
     tier: 'WINNER' | 'CONTENDER' | 'RISK';
-    verdict: {
-        badge: string;
-        warning: string;
-    };
-    isAnchor: boolean;
-    visualTheme: 'emerald' | 'amber' | 'blue' | 'rose' | 'slate';
+    badge: string;
+    risks: Risk[];
+    // We override price/savings with the calculated values
+    price: number;
+    savings_annual: number;
 };
 
 export default function FocusFeed({ persona: slug }: { persona: string, initialIncome: number }) {
     const { state } = usePersona();
-    const { showPinnedOnly } = useCompare();
-    const [focusedPlanId, setFocusedPlanId] = useState<string>('');
+    const { showPinnedOnly, pinnedHistory } = useCompare();
+
+    const [excludedIds, setExcludedIds] = useState<string[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedPlanName, setSelectedPlanName] = useState('');
+    const [selectedPlanForModal, setSelectedPlanForModal] = useState('');
 
-    // 1. INITIALIZE FOCUS
-    const anchorId = useMemo(() => {
-        const p = PERSONAS.find(per => per.slug === slug);
-        return p?.actuarial_logic?.target_plan_id || PLANS[0].id;
-    }, [slug]);
+    const currentPersona = useMemo(() =>
+        PERSONAS.find(p => p.slug === slug),
+        [slug]);
 
-    useEffect(() => {
-        if (!focusedPlanId) setFocusedPlanId(anchorId);
-    }, [anchorId, focusedPlanId]);
+    // 2. USE THE TYPE IN USEMEMO
+    const feedItems = useMemo(() => {
+        if (!currentPersona) return [];
+        // If showing pinned, we need to adapt them to FeedItem type
+        if (showPinnedOnly) {
+            return pinnedHistory.map(p => ({
+                ...p,
+                tier: 'CONTENDER',
+                badge: 'Pinned',
+                risks: [],
+                // Use defaults or recalculate if needed
+            })) as FeedItem[];
+        }
 
-    // 2. LIVE CALCULATION ENGINE
-    const rankedPlans: RankedPlan[] = useMemo(() => {
-        if (showPinnedOnly) return [];
+        const relevantPlans = PricingEngine.selectConsiderationSet(PLANS, currentPersona, excludedIds);
 
-        const calculated = PLANS.map(plan => {
+        return relevantPlans.map(plan => {
             const contribution = plan.contributions[0];
             const financials = PricingEngine.calculateProfile(contribution, state.members, state.income);
-            const risks = validatePlan(plan, PERSONAS.find(p => p.slug === slug)!);
+            const risks = validatePlan(plan, currentPersona);
 
-            let score = 50;
-            let badge = '';
-            let warning = plan.red_flag || '';
-            let tier: 'WINNER' | 'CONTENDER' | 'RISK' = 'CONTENDER';
+            const isWinner = plan.id === currentPersona.actuarial_logic?.target_plan_id;
 
-            // Determine Visual Theme
-            let visualTheme: RankedPlan['visualTheme'] = 'slate';
-
-            // Affordability Logic
-            if (financials.monthlyPremium > state.income * 0.25) {
-                score -= 50;
-                tier = 'RISK';
-                warning = `Cost is ${Math.round((financials.monthlyPremium / state.income) * 100)}% of income`;
-                visualTheme = 'rose';
-            } else if (financials.monthlyPremium < state.income * 0.15) {
-                score += 20;
-                visualTheme = 'amber'; // Cheaper options are Yellow
-            }
-
-            // Anchor Logic
-            const isAnchor = plan.id === anchorId;
-            if (isAnchor) {
-                score += 10;
-                badge = 'Your Search Baseline';
-                if (tier !== 'RISK') visualTheme = 'blue';
-            }
-
-            // Winner Logic overrides others
-            if (score > 70 && tier !== 'RISK') {
-                tier = 'WINNER';
-                badge = 'Smart Upgrade';
-                visualTheme = 'emerald';
-            }
-
+            // 3. RETURN OBJECT MATCHING FeedItem
             return {
                 ...plan,
+                price: financials.monthlyPremium,
+                savings_annual: financials.savings.annualAllocation,
                 risks,
-                financials,
-                tier,
-                verdict: { badge, warning },
-                isAnchor,
-                visualTheme,
-                _score: score
+                tier: isWinner ? 'WINNER' : 'CONTENDER',
+                badge: isWinner ? 'Actuary Choice' : ''
             };
-        });
+        }) as FeedItem[]; // <--- EXPLICIT CAST FIXES THE ERROR
+    }, [state, currentPersona, excludedIds, showPinnedOnly, pinnedHistory]);
 
-        return calculated.sort((a, b) => b._score - a._score);
-    }, [state, slug, anchorId, showPinnedOnly]);
+    const handleRemove = (id: string) => setExcludedIds(prev => [...prev, id]);
+    const handleUndo = () => setExcludedIds([]);
 
-    // 3. SPLIT FEED
-    const focusedPlan = rankedPlans.find(p => p.id === focusedPlanId) || rankedPlans[0];
-    const deckPlans = rankedPlans.filter(p => p.id !== focusedPlanId);
+    if (!currentPersona) return <FeedSkeleton />;
 
-    if (!focusedPlan) return <FeedSkeleton />;
+    const brandLock = currentPersona.actuarial_logic?.brand_lock;
 
     return (
-        <div className="relative min-h-[600px] pb-24">
+        <div className="relative min-h-[600px] pb-32">
             <PinnedHeader />
 
-            {/* HEADER */}
-            <div className="flex items-center justify-between px-4 mb-4">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <RefreshCw className="w-3 h-3 text-emerald-500 animate-spin-slow" />
-                    Live Analysis • {state.members.main + state.members.adult + state.members.child} Members
-                </p>
-            </div>
-
-            {/* --- THE STAGE (Main Card) --- */}
-            <div className="px-2 mb-6 animate-in zoom-in-95 duration-300">
-                <StageCard
-                    plan={focusedPlan}
-                    onVerify={(name) => { setSelectedPlanName(name); setModalOpen(true); }}
-                />
-            </div>
-
-            {/* --- THE DELTA DECK (Compact Alternatives) --- */}
-            <div className="pl-4">
-                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
-                    Compare Alternatives ({deckPlans.length})
-                </h3>
-
-                {/* Horizontal Scroll Container */}
-                <div className="flex gap-3 overflow-x-auto pb-8 pr-4 snap-x no-scrollbar">
-                    {deckPlans.map(plan => (
-                        <div key={plan.id} className="snap-start shrink-0">
-                            <DeltaCard
-                                basePlan={focusedPlan}
-                                targetPlan={plan}
-                                onClick={() => setFocusedPlanId(plan.id)}
-                            />
+            <div className="flex items-center justify-between px-4 mb-6">
+                <div className="flex flex-col gap-1">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        <RefreshCw className="w-3 h-3 text-emerald-500 animate-spin-slow" />
+                        Live Analysis • {state.members.main + state.members.adult + state.members.child} Members
+                    </p>
+                    {brandLock && (
+                        <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-blue-50 border border-blue-100 rounded-md self-start">
+                            <Lock className="w-2.5 h-2.5 text-blue-500" />
+                            <span className="text-[9px] font-bold text-blue-600 uppercase tracking-wider">
+                                {brandLock} Plans Only
+                            </span>
                         </div>
-                    ))}
+                    )}
                 </div>
+                {excludedIds.length > 0 && (
+                    <button onClick={handleUndo} className="text-[10px] font-bold text-slate-400 flex items-center gap-1 hover:text-slate-600">
+                        <Undo2 className="w-3 h-3" /> Undo Hides
+                    </button>
+                )}
+            </div>
+
+            <div className="px-4 space-y-6">
+                {feedItems.map((plan, index) => (
+                    <div key={plan.id} className="relative animate-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: `${index * 100}ms` }}>
+
+                        {!showPinnedOnly && (
+                            <button onClick={() => handleRemove(plan.id)} className="absolute -top-2 -right-2 z-30 p-1.5 bg-slate-200 text-slate-500 rounded-full hover:bg-rose-500 hover:text-white transition-all shadow-sm border border-white">
+                                <X className="w-3 h-3" />
+                            </button>
+                        )}
+
+                        {plan.tier === 'WINNER' && !showPinnedOnly && (
+                            <div className="absolute -top-3 left-4 z-20 flex items-center gap-1.5 bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-slate-900/20">
+                                <Trophy className="w-3 h-3 text-amber-400 fill-current" />
+                                Top Recommendation
+                            </div>
+                        )}
+
+                        <FeedCard
+                            plan={plan}
+                            onVerify={(name) => { setSelectedPlanForModal(name); setModalOpen(true); }}
+                            verdict={{
+                                tier: plan.tier, // No 'as any' needed now
+                                badge: plan.badge, // Works because plan is FeedItem
+                                warning: plan.red_flag || ''
+                            }}
+                        />
+                    </div>
+                ))}
             </div>
 
             <ExpertModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
-                planName={selectedPlanName}
-                context={`Comparing against ${focusedPlan.identity.plan_name}`}
+                planName={selectedPlanForModal}
+                context={`Strategy: ${currentPersona.meta.title}`}
             />
         </div>
     );

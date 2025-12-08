@@ -3,15 +3,14 @@ import { notFound } from 'next/navigation';
 import { PERSONAS } from '@/data/personas';
 import WelcomeStatement from '@/components/WelcomeStatement';
 import ControlPanel from '@/components/ControlPanel';
-import FocusFeed from '@/components/FocusFeed'; // Updated to new architecture
-import PinsFab from '@/components/PinsFab';
+import SinglePlanHero from '@/components/SinglePlanHero'; // <--- NEW IMPORT
 import TrustTicker from '@/components/TrustTicker';
 
 type Props = {
     params: Promise<{ slug: string }>;
 };
 
-// 1. DYNAMIC METADATA
+// 1. DYNAMIC METADATA (Crucial for SEO)
 export async function generateMetadata(props: Props): Promise<Metadata> {
     const params = await props.params;
     const persona = PERSONAS.find(p => p.slug === params.slug);
@@ -19,7 +18,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     if (!persona) return { title: 'Not Found | HealthOS' };
 
     return {
-        title: `${persona.meta.title} | HealthOS`,
+        title: `${persona.meta.title} | 2026 Strategy`,
         description: persona.meta.description,
     };
 }
@@ -37,7 +36,7 @@ export default async function PersonaPage(props: Props) {
         notFound();
     }
 
-    const TICKER_DATA = ["Validating 2026 Rules...", "Checking Income Bands...", "Verifying Network..."];
+    const TICKER_DATA = ["Loading 2026 Rules...", "Verifying Income Bands...", "Applying Actuarial Logic..."];
 
     return (
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden">
@@ -48,11 +47,10 @@ export default async function PersonaPage(props: Props) {
             </div>
 
             {/* HERO SECTION */}
-            <section className="relative z-10 pt-24 px-4 sm:px-6 pb-8">
-                {/* Pass full object to WelcomeStatement */}
+            <section className="relative z-10 pt-24 px-4 sm:px-6 pb-4">
                 <WelcomeStatement persona={persona} />
 
-                {/* ControlPanel reads from Context, which WelcomeStatement just updated */}
+                {/* Control Panel allows user to adjust income/family to see accurate price */}
                 <ControlPanel />
 
                 <div className="mt-4 flex justify-center">
@@ -60,16 +58,10 @@ export default async function PersonaPage(props: Props) {
                 </div>
             </section>
 
-            {/* THE FEED (Switched to FocusFeed) */}
-            <section className="px-4 relative z-10">
-                <FocusFeed
-                    persona={slug}
-                    initialIncome={persona.defaults.income}
-                />
+            {/* THE ONE TRUE ANSWER */}
+            <section className="relative z-10 max-w-2xl mx-auto">
+                <SinglePlanHero persona={slug} />
             </section>
-
-            {/* GLOBAL FAB */}
-            <PinsFab />
         </main>
     );
 }

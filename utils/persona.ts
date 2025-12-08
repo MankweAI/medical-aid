@@ -2,7 +2,6 @@ import { Plan } from './types';
 
 export type PersonaSlug = string;
 
-// Renamed from UserProfile to Persona to match architecture
 export interface UserProfile {
     slug: PersonaSlug;
     code: string;
@@ -16,6 +15,7 @@ export interface UserProfile {
     defaults: {
         income: number;
         family_composition: { main: number; adult: number; child: number };
+        age?: number; // Added for contextual risk
     };
 
     search_profile: {
@@ -28,12 +28,9 @@ export interface UserProfile {
 
     actuarial_logic?: {
         target_plan_id: string;
+        brand_lock?: 'Bestmed' | 'Discovery' | 'Bonitas' | 'Medihelp' | 'Momentum'; // <--- NEW
         mathematical_basis: string;
         primary_risk_warning: string;
-        ranking_weight_penalties?: {
-            out_of_network_usage?: number;
-            savings_deficit?: number;
-        };
     };
 }
 
@@ -44,6 +41,8 @@ export interface Risk {
 }
 
 export type Persona = UserProfile;
+
+
 
 export interface Risk {
     level: 'HIGH' | 'MEDIUM' | 'LOW';
