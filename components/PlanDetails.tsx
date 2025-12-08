@@ -126,21 +126,23 @@ function Row({ label, value, isGood }: { label: string, value: string, isGood: b
     );
 }
 
-function CoPayRow({ icon: Icon, label, amount, isCritical }: { icon: any, label: string, amount: number, isCritical?: boolean }) {
-    const hasCopay = amount > 0;
+function CoPayRow({ icon: Icon, label, amount, isCritical }: { icon: any, label: string, amount: number | string, isCritical?: boolean }) {
+    const isExcluded = amount === 'excluded';
+    const hasCopay = (typeof amount === 'number' && amount > 0);
+
     return (
         <div className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
             <div className="flex items-center gap-3">
-                <div className={clsx("p-2 rounded-full", hasCopay ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600")}>
+                <div className={clsx("p-2 rounded-full", (hasCopay || isExcluded) ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600")}>
                     <Icon className="w-4 h-4" />
                 </div>
                 <span className="text-sm font-bold text-slate-700">{label}</span>
             </div>
             <div className="text-right">
-                <span className={clsx("block font-black text-sm", hasCopay ? "text-rose-600" : "text-emerald-600")}>
-                    {hasCopay ? `R${amount}` : 'Covered'}
+                <span className={clsx("block font-black text-sm", (hasCopay || isExcluded) ? "text-rose-600" : "text-emerald-600")}>
+                    {isExcluded ? 'Excluded' : hasCopay ? `R${amount}` : 'Covered'}
                 </span>
-                {hasCopay && <span className="text-[10px] text-rose-400 font-bold uppercase">You Pay</span>}
+                {(hasCopay || isExcluded) && <span className="text-[10px] text-rose-400 font-bold uppercase">{isExcluded ? 'No Benefit' : 'You Pay'}</span>}
             </div>
         </div>
     );

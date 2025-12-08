@@ -51,10 +51,18 @@ export const PricingEngine = {
         if (hasSavings && contribution.msa_structure) {
             if (contribution.msa_structure.type === 'Percentage') {
                 // Standard: (Premium * %) * 12 months
-                annualAllocation = (monthlyPremium * (contribution.msa_structure.value / 100)) * 12;
+                const val = typeof contribution.msa_structure.value === 'number' ? contribution.msa_structure.value : parseFloat(contribution.msa_structure.value.toString());
+                annualAllocation = (monthlyPremium * (val / 100)) * 12;
             } else if (contribution.msa_structure.type === 'Fixed') {
-                // Fixed amount (Simplified: usually varies by family size, using flat for now)
-                annualAllocation = contribution.msa_structure.value;
+                // Fixed amount
+                if (typeof contribution.msa_structure.value === 'number') {
+                    annualAllocation = contribution.msa_structure.value;
+                } else {
+                    // It's a string description (e.g. BonSave), we can't easily calc a single number.
+                    // For now, default to 0 or try to extract 'Main' value if simple.
+                    // Risk: This might show 0 savings on the card for complex strings.
+                    annualAllocation = 0;
+                }
             }
         }
 

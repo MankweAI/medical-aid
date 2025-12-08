@@ -1,7 +1,7 @@
 'use client';
 
 import { RankedPlan } from './FocusFeed';
-import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, CheckCircle2, AlertTriangle } from 'lucide-react';
 import clsx from 'clsx';
 
 interface DeltaCardProps {
@@ -12,57 +12,62 @@ interface DeltaCardProps {
 
 export default function DeltaCard({ basePlan, targetPlan, onClick }: DeltaCardProps) {
 
-    // CALCULATE DELTAS
     const priceDiff = targetPlan.financials.monthlyPremium - basePlan.financials.monthlyPremium;
-    const savingsDiff = targetPlan.financials.savings.annualAllocation - basePlan.financials.savings.annualAllocation;
-
     const isCheaper = priceDiff < 0;
-    const isBetterSavings = savingsDiff > 0;
+
+    // Theme Styles
+    const themes = {
+        emerald: "bg-emerald-50 border-emerald-200 hover:border-emerald-400",
+        amber: "bg-amber-50 border-amber-200 hover:border-amber-400", // Yellow for cheaper
+        rose: "bg-rose-50 border-rose-200 hover:border-rose-400",
+        blue: "bg-blue-50 border-blue-200 hover:border-blue-400",
+        slate: "bg-white border-slate-200 hover:border-slate-300"
+    };
+
+    const textColors = {
+        emerald: "text-emerald-700",
+        amber: "text-amber-800",
+        rose: "text-rose-700",
+        blue: "text-blue-700",
+        slate: "text-slate-700"
+    };
+
+    const activeTheme = themes[targetPlan.visualTheme];
+    const activeText = textColors[targetPlan.visualTheme];
 
     return (
         <button
             onClick={onClick}
-            className="w-full bg-white p-4 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all text-left group h-full flex flex-col justify-between"
+            className={clsx(
+                "w-[200px] p-4 rounded-2xl border-2 transition-all text-left h-full flex flex-col justify-between active:scale-95",
+                activeTheme
+            )}
         >
-            {/* HEADLINE */}
-            <div className="mb-4">
-                <span className={clsx(
-                    "text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md mb-2 inline-block",
-                    targetPlan.tier === 'WINNER' ? "bg-emerald-100 text-emerald-700" :
-                        isCheaper ? "bg-slate-100 text-slate-600" : "bg-blue-50 text-blue-600"
-                )}>
-                    {targetPlan.tier === 'WINNER' ? 'Smart Upgrade' : isCheaper ? 'Save Money' : 'Alternative'}
+            {/* Header */}
+            <div className="mb-3">
+                <span className={clsx("text-[9px] font-black uppercase tracking-wider block mb-1 opacity-70", activeText)}>
+                    {targetPlan.tier === 'WINNER' ? 'Recommended' : isCheaper ? 'Save Money' : 'Alternative'}
                 </span>
-                <h4 className="font-bold text-slate-900 text-lg leading-tight group-hover:text-blue-700 transition-colors">
+                <h4 className={clsx("font-bold text-sm leading-tight", activeText)}>
                     {targetPlan.identity.plan_name}
                 </h4>
             </div>
 
-            {/* MATH DELTAS */}
-            <div className="space-y-2">
-
-                {/* Price Delta */}
+            {/* The Math Delta */}
+            <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-slate-400">Premium</span>
+                    <span className={clsx("font-medium opacity-60", activeText)}>Diff</span>
                     <div className={clsx("flex items-center font-black", isCheaper ? "text-emerald-600" : "text-rose-600")}>
                         {isCheaper ? <ArrowDownRight className="w-3 h-3 mr-1" /> : <ArrowUpRight className="w-3 h-3 mr-1" />}
                         {isCheaper ? '-' : '+'} R{Math.abs(priceDiff).toLocaleString()}
                     </div>
                 </div>
 
-                {/* Savings Delta */}
-                <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-slate-400">Annual Savings</span>
-                    <div className={clsx("flex items-center font-bold", isBetterSavings ? "text-emerald-600" : "text-slate-400")}>
-                        {isBetterSavings ? '+' : ''} R{Math.abs(savingsDiff).toLocaleString()}
-                    </div>
+                {/* Visual Cue */}
+                <div className="pt-2 flex justify-end">
+                    {targetPlan.visualTheme === 'emerald' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+                    {targetPlan.visualTheme === 'rose' && <AlertTriangle className="w-4 h-4 text-rose-500" />}
                 </div>
-
-            </div>
-
-            {/* CTA HINT */}
-            <div className="mt-4 pt-3 border-t border-slate-50 text-[10px] font-bold text-slate-400 text-center uppercase tracking-wider group-hover:text-blue-500 transition-colors">
-                Tap to Compare
             </div>
         </button>
     );

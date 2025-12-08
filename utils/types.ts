@@ -20,8 +20,8 @@ export interface Contribution {
     pricing_model: 'Fixed' | 'Income_Banded';
     pricing_matrix: PricingMatrix;
     msa_structure?: {
-        type: 'Percentage' | 'Fixed' | 'None';
-        value: number;
+        type: 'Percentage' | 'Fixed' | 'None' | string;
+        value: number | string;
     };
 }
 
@@ -72,8 +72,8 @@ export interface Plan {
         scope_in_hospital: number;
         scope_out_hospital: number;
         mri_scan: number;
-        joint_replacement: number;
-        admission_penalty_non_network?: number;
+        joint_replacement: number | string;
+        admission_penalty_non_network?: number | string;
     };
 
     red_flag?: string;

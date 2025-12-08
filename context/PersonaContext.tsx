@@ -51,8 +51,8 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
                     // Handle migration from old 'child'/'adult' keys to 'children'/'adults'
                     const sanitizedMembers = {
                         main: parsed.members?.main || 1,
-                        adults: parsed.members?.adults ?? parsed.members?.adult ?? 0,
-                        children: parsed.members?.children ?? parsed.members?.child ?? 0
+                        adult: parsed.members?.adults ?? parsed.members?.adult ?? 0,
+                        child: parsed.members?.children ?? parsed.members?.child ?? 0
                     };
 
                     setState(prev => ({
