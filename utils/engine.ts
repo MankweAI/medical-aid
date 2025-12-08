@@ -1,58 +1,114 @@
-import { Plan, FamilyComposition, IncomeBand, FixedPricing, Contribution } from './types';
+import { Plan, Contribution, IncomeBand, FixedPricing } from './types';
+import { Persona } from './persona'; // Ensure this import exists
 
-// --- Existing Logic ---
-
-export function calculateMonthlyPremium(
-    plan: Plan,
-    income: number,
-    family: FamilyComposition
-): number {
-    const contribution = plan.contributions[0];
-    if (!contribution) return 0;
-
-    // Delegate to the new Engine logic for consistency
-    // Fix: Map FamilyComposition (plural) to PricingEngine (singular)
-    const profile = PricingEngine.calculateProfile(
-        contribution,
-        {
-            main: family.main,
-            adult: family.adults,
-            child: family.children
-        },
-        income
-    );
-    return profile.monthlyPremium;
+export interface FinancialProfile {
+    monthlyPremium: number;
+    savings: {
+        isPooled: boolean;
+        annualAllocation: number;
+    };
 }
 
-export function getVerdict(plan: Plan, need: string, income: number): { text: string; type: 'good' | 'warning' | 'neutral' } {
-    const premium = calculateMonthlyPremium(plan, income, { main: 1, adults: 0, children: 0 });
+export const PricingEngine = {
 
-    // 1. Budget Check
-    if (premium > (income * 0.15)) {
-        return { text: 'Exceeds recommended 15% of income', type: 'warning' };
-    }
+    // 1. Existing Calculator
+    calculateProfile: (
+        contribution: Contribution,
+        members: { main: number; adult: number; child: number },
+        income: number
+    ): FinancialProfile => {
+        let rates = { main: 0, adult: 0, child: 0 };
 
-    // 2. Scenario Matching
-    if (need === 'maternity') {
-        if (plan.type === 'Hospital Plan' && !plan.has_savings_account) {
-            return { text: 'No day-to-day cover for gynae visits', type: 'warning' };
+        if (contribution.pricing_model === 'Fixed') {
+            rates = contribution.pricing_matrix as FixedPricing;
+        } else if (contribution.pricing_model === 'Income_Banded') {
+            const bands = contribution.pricing_matrix as IncomeBand[];
+            const activeBand = bands.find((band) =>
+                income >= band.min && (band.max === 0 || income <= band.max)
+            ) || bands[bands.length - 1];
+            rates = activeBand;
         }
-        return { text: 'Good Hospital Cover for Birth', type: 'good' };
-    }
 
-    if (need === 'chronic') {
-        if (plan.network_restriction === 'Regional') { // Assuming 'State' mapped to Regional or similar restrictions
-            return { text: 'Restricted Provider Network', type: 'warning' };
+        const monthlyPremium =
+            (members.main * rates.main) +
+            (members.adult * rates.adult) +
+            (members.child * rates.child);
+
+        const hasSavings = !!(contribution.msa_structure && contribution.msa_structure.type !== 'None');
+        let annualAllocation = 0;
+
+        if (hasSavings && contribution.msa_structure) {
+            if (contribution.msa_structure.type === 'Percentage') {
+                const val = typeof contribution.msa_structure.value === 'number' ? contribution.msa_structure.value : parseFloat(contribution.msa_structure.value.toString());
+                annualAllocation = (monthlyPremium * (val / 100)) * 12;
+            } else if (contribution.msa_structure.type === 'Fixed') {
+                if (typeof contribution.msa_structure.value === 'number') {
+                    annualAllocation = contribution.msa_structure.value;
+                }
+            }
         }
-        return { text: 'Includes Chronic Medication Benefit', type: 'good' };
-    }
 
-    if (plan.network_restriction === 'Network') {
-        return { text: 'Network Hospitals Only', type: 'neutral' };
-    }
+        return {
+            monthlyPremium,
+            savings: { isPooled: hasSavings, annualAllocation }
+        };
+    },
 
-    return { text: 'Comprehensive Cover', type: 'good' };
-}
+    // 2. NEW: The Consideration Set Selector
+    selectConsiderationSet: (
+        allPlans: Plan[],
+        persona: Persona,
+        excludedIds: string[] = []
+    ): Plan[] => {
+        if (!persona.actuarial_logic) return [];
+
+        const { target_plan_id, brand_lock } = persona.actuarial_logic;
+
+        // A. DETERMINISTIC BRAND LOCKING
+        // If persona says "Discovery", we ONLY show Discovery.
+        let allowedScheme = brand_lock;
+
+        // Fallback: sniff the slug if explicit lock is missing
+        if (!allowedScheme) {
+            const slug = persona.slug.toLowerCase();
+            if (slug.includes('discovery')) allowedScheme = 'Discovery';
+            else if (slug.includes('bestmed')) allowedScheme = 'Bestmed';
+            else if (slug.includes('bonitas')) allowedScheme = 'Bonitas';
+        }
+
+        // B. FILTER UNIVERSE
+        let candidates = allPlans.filter(p => {
+            // 1. Exclude removed items
+            if (excludedIds.includes(p.id)) return false;
+
+            // 2. Apply Brand Lock
+            if (allowedScheme) {
+                // Fuzzy match scheme name
+                return p.identity.scheme_name.toLowerCase().includes(allowedScheme.toLowerCase());
+            }
+            return true;
+        });
+
+        // C. IDENTIFY ANCHOR (The "Perfect Match")
+        const anchorPlan = candidates.find(p => p.id === target_plan_id);
+
+        // If anchor was removed by user, we need a new "Best Alternative"
+        // We'll just sort the remaining candidates by price similarity to the ORIGINAL target
+        // to find the next closest sibling.
+        const originalTarget = allPlans.find(p => p.id === target_plan_id);
+        const referencePrice = originalTarget ? originalTarget.price : 2000; // Default fallback
+
+        // Sort by proximity to the reference price (The "Cluster" Strategy)
+        candidates.sort((a, b) =>
+            Math.abs(a.price - referencePrice) - Math.abs(b.price - referencePrice)
+        );
+
+        // D. RETURN TOP 3
+        // If anchor exists and wasn't filtered, allow it to float to top. 
+        // Our sort above puts closest priced items first, so anchor (diff=0) is naturally first.
+        return candidates.slice(0, 3);
+    }
+};
 
 export const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
@@ -60,52 +116,4 @@ export const formatCurrency = (amount: number) => {
         currency: 'ZAR',
         maximumFractionDigits: 0,
     }).format(amount);
-};
-
-// --- NEW: PricingEngine for Dashboard ---
-
-export const PricingEngine = {
-    calculateProfile: (
-        contribution: Contribution,
-        members: { main: number; adult: number; child: number },
-        income: number
-    ) => {
-        let rates = { main: 0, adult: 0, child: 0 };
-
-        // 1. Determine Rates
-        if (contribution.pricing_model === 'Fixed') {
-            rates = contribution.pricing_matrix as FixedPricing;
-        } else if (contribution.pricing_model === 'Income_Banded') {
-            const bands = contribution.pricing_matrix as IncomeBand[];
-            const activeBand = bands.find((band) => income >= band.min && income <= band.max) || bands[bands.length - 1];
-            rates = activeBand;
-        }
-
-        // 2. Calculate Premium
-        const monthlyPremium =
-            (members.main * rates.main) +
-            (members.adult * rates.adult) +
-            (members.child * rates.child);
-
-        // 3. Calculate Savings (MSA)
-        let annualAllocation = 0;
-        const isPooled = !!(contribution.msa_structure && contribution.msa_structure.type !== 'None');
-
-        if (contribution.msa_structure?.type === 'Percentage') {
-            // Usually 25% of premium x 12
-            annualAllocation = (monthlyPremium * (contribution.msa_structure.value / 100)) * 12;
-        } else if (contribution.msa_structure?.type === 'Fixed') {
-            // Fixed amount logic would depend on member size, simplified here to raw value
-            // In reality, fixed MSA is often per member type. Assuming flat value for MVP if simplified.
-            annualAllocation = contribution.msa_structure.value;
-        }
-
-        return {
-            monthlyPremium,
-            savings: {
-                isPooled,
-                annualAllocation
-            }
-        };
-    }
 };

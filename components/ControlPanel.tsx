@@ -1,146 +1,169 @@
 'use client';
 
+import { useState } from 'react';
 import { usePersona } from '@/context/PersonaContext';
-import {
-    Users,
-    CreditCard,
-    Building2,
-    HeartPulse,
-    Wallet,
-    Baby,
-    ShieldAlert,
-    MapPin,
-    PiggyBank,
-    SlidersHorizontal
-} from 'lucide-react';
+import { Users, Banknote, ChevronDown, Minus, Plus } from 'lucide-react';
+import BottomSheet from '@/components/ui/BottomSheet';
 import clsx from 'clsx';
 
-const PRIORITIES = [
-    // 1. THE FINANCIALLY CONSTRAINED
-    { id: 'budget', label: 'Budget', icon: Wallet },
-
-    // 2. THE GROWING FAMILY
-    { id: 'maternity', label: 'Maternity', icon: Baby },
-    { id: 'family', label: 'Family', icon: Users },
-
-    // 3. THE CLINICALLY VULNERABLE
-    { id: 'chronic', label: 'Chronic', icon: HeartPulse },
-    { id: 'comprehensive', label: 'Max Cover', icon: ShieldAlert },
-
-    // 4. THE STRATEGIC OPTIMIZERS
-    { id: 'location', label: 'Location', icon: MapPin },
-    { id: 'savings', label: 'Savings', icon: PiggyBank },
-    { id: 'hospital', label: 'Hospital', icon: Building2 }
-];
-
 export default function ControlPanel() {
-    const { state, setIncome, setMembers, setFilter } = usePersona();
-    const { income, members, filters } = state;
+    const { state, setIncome, setMembers } = usePersona();
+    const { income, members } = state;
+    const [activeSheet, setActiveSheet] = useState<'none' | 'income' | 'family'>('none');
 
-    // Helper for formatting currency
-    const formatMoney = (val: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
+    // Helper for display
+    const formatMoney = (val: number) =>
+        new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
+
+    const familyCount = members.main + members.adult + members.child;
 
     return (
-        <div className="bg-slate-100/50 backdrop-blur-sm rounded-[32px] p-2 mb-8 border border-slate-200/50">
+        <div className="mb-4">
+            {/* COMPACT CONTEXT BAR */}
+            <div className="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-2">
 
-            <div className="bg-white/40 rounded-[24px] p-6 border border-white/50 shadow-sm">
-
-                {/* HEADER LABEL */}
-                <div className="flex items-center gap-2 mb-6 opacity-50">
-                    <SlidersHorizontal className="w-4 h-4 text-slate-900" />
-                    <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Configuration</span>
-                </div>
-
-                {/* ROW 1: INPUT SLOTS */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-
-                    {/* SLOT 1: INCOME */}
-                    <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-                        <div className="flex justify-between items-center mb-3">
-                            <div className="flex items-center gap-2 text-slate-400">
-                                <CreditCard className="w-4 h-4" />
-                                <span className="text-[10px] font-bold uppercase tracking-wider">Gross Income</span>
-                            </div>
-                            <span className="text-sm font-black text-slate-900 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100" suppressHydrationWarning>
-                                {formatMoney(income)}
+                {/* 1. Family Trigger */}
+                <button
+                    onClick={() => setActiveSheet('family')}
+                    className="flex-1 flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group active:scale-[0.98]"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-white rounded-full shadow-sm text-blue-600 group-hover:text-blue-700">
+                            <Users className="w-4 h-4" />
+                        </div>
+                        <div className="text-left">
+                            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Covering</span>
+                            <span className="block text-sm font-bold text-slate-900">
+                                {familyCount === 1 ? 'Just Me' : `${familyCount} People`}
                             </span>
                         </div>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
+                </button>
+
+                {/* Divider (Desktop) */}
+                <div className="hidden sm:block w-px bg-slate-200 my-2" />
+
+                {/* 2. Income Trigger */}
+                <button
+                    onClick={() => setActiveSheet('income')}
+                    className="flex-1 flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group active:scale-[0.98]"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-white rounded-full shadow-sm text-emerald-600 group-hover:text-emerald-700">
+                            <Banknote className="w-4 h-4" />
+                        </div>
+                        <div className="text-left">
+                            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Household Income</span>
+                            {/* FIX: Added suppressHydrationWarning to ignore server/client locale mismatch */}
+                            <span className="block text-sm font-bold text-slate-900" suppressHydrationWarning>
+                                {formatMoney(income)} <span className="text-slate-400 font-normal">pm</span>
+                            </span>
+                        </div>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
+                </button>
+            </div>
+
+            {/* --- SHEET 1: FAMILY CONFIG --- */}
+            <BottomSheet isOpen={activeSheet === 'family'} onClose={() => setActiveSheet('none')} title="Who needs cover?">
+                <div className="space-y-4">
+                    <p className="text-sm text-slate-500 -mt-4 mb-6">
+                        Adjusting this updates the monthly premium shown on the card.
+                    </p>
+
+                    {/* Main Member (Fixed) */}
+                    <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl opacity-60">
+                        <span className="font-bold text-slate-700">Main Member</span>
+                        <span className="font-black text-xl text-slate-900 px-4">1</span>
+                    </div>
+
+                    {/* Adult Dependants */}
+                    <MemberCounter
+                        label="Adult Dependants"
+                        subLabel="Spouse or parents"
+                        count={members.adult}
+                        onChange={(val) => setMembers({ ...members, adult: val })}
+                    />
+
+                    {/* Child Dependants */}
+                    <MemberCounter
+                        label="Child Dependants"
+                        subLabel="Under 21 years"
+                        count={members.child}
+                        onChange={(val) => setMembers({ ...members, child: val })}
+                    />
+
+                    <button
+                        onClick={() => setActiveSheet('none')}
+                        className="w-full py-4 mt-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg active:scale-95 transition-all"
+                    >
+                        Update Premium
+                    </button>
+                </div>
+            </BottomSheet>
+
+            {/* --- SHEET 2: INCOME CONFIG --- */}
+            <BottomSheet isOpen={activeSheet === 'income'} onClose={() => setActiveSheet('none')} title="Gross Income">
+                <div className="space-y-8">
+                    <div className="text-center pt-4">
+                        <span className="text-5xl font-black text-slate-900 tracking-tight" suppressHydrationWarning>
+                            {formatMoney(income)}
+                        </span>
+                        <p className="text-sm text-slate-500 mt-2 font-medium">Monthly Household Total</p>
+                    </div>
+
+                    <div className="px-2">
                         <input
                             type="range"
                             min="5000"
-                            max="80000"
+                            max="100000"
                             step="1000"
                             value={income}
                             onChange={(e) => setIncome(Number(e.target.value))}
-                            className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-slate-900"
+                            className="w-full h-4 bg-slate-100 rounded-full appearance-none cursor-pointer accent-emerald-600"
                         />
-                    </div>
-
-                    {/* SLOT 2: FAMILY COMPOSITION */}
-                    <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center">
-                        <div className="flex items-center gap-2 text-slate-400 mb-3">
-                            <Users className="w-4 h-4" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">Dependants</span>
-                        </div>
-                        <div className="flex justify-between gap-2">
-                            {[
-                                { label: 'Main', val: members.main, key: 'main' },
-                                { label: 'Adult', val: members.adult, key: 'adult' },
-                                { label: 'Child', val: members.child, key: 'child' }
-                            ].map((m) => (
-                                <div key={m.label} className="flex-1 flex items-center justify-between bg-slate-50 px-2 py-1.5 rounded-xl border border-slate-100">
-                                    <span className="text-[9px] text-slate-400 uppercase font-bold">{m.label}</span>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => setMembers({ ...members, [m.key]: Math.max(0, members[m.key as keyof typeof members] - 1) })}
-                                            className="w-5 h-5 flex items-center justify-center bg-white border border-slate-200 rounded-full text-slate-400 hover:text-slate-900 shadow-sm text-xs"
-                                        >-</button>
-                                        <span className="text-xs font-black text-slate-900 w-3 text-center">{m.val}</span>
-                                        <button
-                                            onClick={() => setMembers({ ...members, [m.key]: members[m.key as keyof typeof members] + 1 })}
-                                            className="w-5 h-5 flex items-center justify-center bg-slate-900 border border-slate-900 rounded-full text-white shadow-sm text-xs active:scale-90 transition-transform"
-                                        >+</button>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mt-4">
+                            <span>R5k</span>
+                            <span>R50k</span>
+                            <span>R100k+</span>
                         </div>
                     </div>
+
+                    <button
+                        onClick={() => setActiveSheet('none')}
+                        className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg active:scale-95 transition-all"
+                    >
+                        Save & Recalculate
+                    </button>
                 </div>
+            </BottomSheet>
+        </div>
+    );
+}
 
-                {/* ROW 2: PRIORITY SELECTOR (Segmented Control Style) */}
-                <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-2 mb-3 px-1">
-                        <HeartPulse className="w-3 h-3" />
-                        Primary Goal
-                    </span>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        {PRIORITIES.map((p) => {
-                            const isSelected = filters.priority === p.id;
-
-                            return (
-                                <button
-                                    key={p.id}
-                                    onClick={() => setFilter('priority', p.id)}
-                                    className={clsx(
-                                        "flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-200",
-                                        isSelected
-                                            ? "bg-white text-slate-900 shadow-sm ring-1 ring-black/5 font-bold"
-                                            : "bg-transparent text-slate-500 hover:bg-white/50 font-medium"
-                                    )}
-                                >
-                                    <div className={clsx(
-                                        "p-1.5 rounded-lg",
-                                        isSelected ? "bg-slate-100 text-slate-900" : "bg-white/50 text-slate-400"
-                                    )}>
-                                        <p.icon className="w-3.5 h-3.5" />
-                                    </div>
-                                    <span className="text-[10px] uppercase tracking-wide truncate">{p.label}</span>
-                                </button>
-                            )
-                        })}
-                    </div>
-                </div>
-
+// Sub-component for the counters
+function MemberCounter({ label, subLabel, count, onChange }: { label: string, subLabel: string, count: number, onChange: (n: number) => void }) {
+    return (
+        <div className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <div>
+                <span className="block font-bold text-slate-900">{label}</span>
+                <span className="block text-xs text-slate-400">{subLabel}</span>
+            </div>
+            <div className="flex items-center gap-4">
+                <button
+                    onClick={() => onChange(Math.max(0, count - 1))}
+                    className="w-10 h-10 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-full text-slate-600 hover:bg-slate-100 active:scale-90 transition-all"
+                >
+                    <Minus className="w-4 h-4" />
+                </button>
+                <span className="font-black text-xl text-slate-900 w-4 text-center">{count}</span>
+                <button
+                    onClick={() => onChange(count + 1)}
+                    className="w-10 h-10 flex items-center justify-center bg-blue-50 border border-blue-100 rounded-full text-blue-600 hover:bg-blue-100 active:scale-90 transition-all"
+                >
+                    <Plus className="w-4 h-4" />
+                </button>
             </div>
         </div>
     );

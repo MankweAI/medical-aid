@@ -1,49 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Plan } from '@/utils/types';
 
-export interface Plan {
-    id: string;
-    price: number;
-    savings_annual: number;
-    network_restriction: string;
-
-    // Detailed Object Structure
-    identity: {
-        scheme_name: string;
-        plan_name: string;
-        plan_series: string;
-        plan_type: string;
-    };
-    coverage_rates: {
-        hospital_account: number;
-        specialist_in_hospital: number;
-        specialist_out_hospital: number;
-        gp_network: number;
-    };
-    defined_baskets: {
-        maternity: {
-            antenatal_consults: number;
-            ultrasounds_2d: number;
-            paediatrician_visits: number;
-        };
-        preventative: {
-            vaccinations: boolean;
-            contraceptives: number;
-        };
-    };
-    procedure_copays: {
-        scope_in_hospital: number;
-        scope_out_hospital: number;
-        mri_scan: number;
-        joint_replacement: number;
-    };
-
-    // UI Helpers
-    red_flag?: string;
-    chronic_limit?: string; // Optional helper for compatibility
-    features?: any;         // Optional helper for compatibility
-}
+// Re-export for compatibility with consumers
+export type { Plan };
 
 interface CompareContextType {
     activePin: Plan | null;
@@ -52,6 +13,7 @@ interface CompareContextType {
     setPin: (plan: Plan) => void;
     clearPin: () => void;
     removeFromHistory: (id: string) => void;
+    clearHistory: () => void;
     togglePinnedView: () => void;
 }
 
@@ -64,11 +26,35 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const savedHistory = localStorage.getItem('healthos_pin_history');
-            const savedActive = localStorage.getItem('healthos_active_pin');
+            try {
+                const savedHistory = localStorage.getItem('healthos_pin_history');
+                const savedActive = localStorage.getItem('healthos_active_pin');
 
-            if (savedHistory) setPinnedHistory(JSON.parse(savedHistory));
-            if (savedActive) setActivePin(JSON.parse(savedActive));
+                if (savedHistory) {
+                    const parsed = JSON.parse(savedHistory);
+                    // Simple check: does the first item have the new 'identity' structure?
+                    if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].identity) {
+                        setPinnedHistory(parsed);
+                    } else {
+                        // Data is stale/incompatible, clear it
+                        localStorage.removeItem('healthos_pin_history');
+                    }
+                }
+
+                if (savedActive) {
+                    const parsed = JSON.parse(savedActive);
+                    if (parsed && parsed.identity) {
+                        setActivePin(parsed);
+                    } else {
+                        localStorage.removeItem('healthos_active_pin');
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to hydrate comparison context:", e);
+                // Fail safe: clear corrupted storage
+                localStorage.removeItem('healthos_pin_history');
+                localStorage.removeItem('healthos_active_pin');
+            }
         }
     }, []);
 
@@ -98,6 +84,11 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
         if (activePin?.id === id) setActivePin(null);
     };
 
+    const clearHistory = () => {
+        setPinnedHistory([]);
+        setActivePin(null);
+    };
+
     const togglePinnedView = () => setShowPinnedOnly(prev => !prev);
 
     return (
@@ -108,6 +99,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
             setPin,
             clearPin,
             removeFromHistory,
+            clearHistory,
             togglePinnedView
         }}>
             {children}

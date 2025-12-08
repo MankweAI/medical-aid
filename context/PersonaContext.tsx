@@ -1,24 +1,25 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { FamilyComposition } from '@/utils/types';
 
 interface UserState {
     income: number;
-    members: { main: number; adult: number; child: number };
-    persona: string | null;
+    members: FamilyComposition;
+    persona: string | null; // Stores the persona slug
     filters: {
         network: 'Any' | 'Coastal' | 'Network' | 'State' | null;
-        chronic: 'Basic' | 'Comprehensive' | 'None' | null;
+        chronic: 'None' | 'Basic' | 'Comprehensive' | null;
         savings: 'Yes' | 'No' | null;
         maternity: boolean;
-        priority: string | null; // Added this field
+        priority: string | null;
     };
 }
 
 interface PersonaContextType {
     state: UserState;
     setIncome: (val: number) => void;
-    setMembers: (val: { main: number; adult: number; child: number }) => void;
+    setMembers: (val: FamilyComposition) => void;
     setPersona: (slug: string) => void;
     setFilter: (key: keyof UserState['filters'], value: any) => void;
     activePersonaPath: string;
@@ -36,20 +37,28 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             chronic: null,
             savings: null,
             maternity: false,
-            priority: 'budget' // Default priority
+            priority: 'budget'
         }
     });
 
+    // Hydrate from LocalStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('healthos_profile');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    // Merge saved filters with default structure to ensure 'priority' exists
+                    // Handle migration from old 'child'/'adult' keys to 'children'/'adults'
+                    const sanitizedMembers = {
+                        main: parsed.members?.main || 1,
+                        adult: parsed.members?.adults ?? parsed.members?.adult ?? 0,
+                        child: parsed.members?.children ?? parsed.members?.child ?? 0
+                    };
+
                     setState(prev => ({
                         ...prev,
                         ...parsed,
+                        members: sanitizedMembers,
                         filters: { ...prev.filters, ...parsed.filters }
                     }));
                 } catch (e) {
@@ -59,6 +68,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    // Persist to LocalStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('healthos_profile', JSON.stringify(state));
@@ -66,7 +76,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     }, [state]);
 
     const setIncome = useCallback((val: number) => setState(prev => ({ ...prev, income: val })), []);
-    const setMembers = useCallback((val: { main: number; adult: number; child: number }) => setState(prev => ({ ...prev, members: val })), []);
+    const setMembers = useCallback((val: FamilyComposition) => setState(prev => ({ ...prev, members: val })), []);
     const setPersona = useCallback((slug: string) => setState(prev => ({ ...prev, persona: slug })), []);
 
     const setFilter = useCallback((key: keyof UserState['filters'], value: any) => {

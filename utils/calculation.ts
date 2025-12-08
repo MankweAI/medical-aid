@@ -30,8 +30,8 @@ export function calculateMonthlyPremium(
     // Calculate Total
     const total =
         (family.main * rates.main) +
-        (family.adults * rates.adult) +
-        (family.children * rates.child);
+        (family.adult * rates.adult) +
+        (family.child * rates.child);
 
     return total;
 }
