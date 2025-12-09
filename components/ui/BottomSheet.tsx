@@ -60,7 +60,7 @@ export default function BottomSheet({ isOpen, onClose, title, children }: Bottom
                 </div>
 
                 {/* Scrollable Content */}
-                <div className="overflow-y-auto no-scrollbar max-h-[70vh] pb-20">
+                <div className="overflow-y-auto no-scrollbar max-h-[70vh] pb-20 safe-bottom">
                     {children}
                 </div>
             </div>

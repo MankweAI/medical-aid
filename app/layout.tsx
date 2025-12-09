@@ -3,9 +3,10 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CompareProvider } from "@/context/CompareContext";
-import { PersonaProvider } from "@/context/PersonaContext"; // 1. Import
+import { PersonaProvider } from "@/context/PersonaContext";
 import ActionDock from "@/components/PinsFab";
 import TrustFooter from "@/components/TrustFooter";
+import SplashScreen from "@/components/SplashScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,18 +39,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div id="app-frame">
-          {/* 2. Wrap Everything in PersonaProvider */}
-          <PersonaProvider>
-            <CompareProvider>
-              {children}
-              <TrustFooter />
-              <React.Suspense fallback={null}>
-                <ActionDock />
-              </React.Suspense>
-            </CompareProvider>
-          </PersonaProvider>
-        </div>
+        <SplashScreen>
+          <div id="app-frame">
+            <PersonaProvider>
+              <CompareProvider>
+                {children}
+                <TrustFooter />
+                <React.Suspense fallback={null}>
+                  <ActionDock />
+                </React.Suspense>
+              </CompareProvider>
+            </PersonaProvider>
+          </div>
+        </SplashScreen>
       </body>
     </html>
   );

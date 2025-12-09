@@ -40,7 +40,7 @@ export default async function PersonaPage(props: Props) {
     const TICKER_DATA = ["Loading 2026 Rules...", "Verifying Income Bands...", "Applying Actuarial Logic..."];
 
     return (
-        <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden">
+        <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden animate-page-enter">
             {/* ... Background & Hero Section ... */}
             <AppHeader />
 

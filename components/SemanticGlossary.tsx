@@ -21,7 +21,7 @@ export default function SemanticGlossary({ terms }: { terms: Term[] }) {
                 {terms.map((item, i) => (
                     <div key={i} className="relative pl-4 border-l-2 border-slate-100">
                         <dt className="text-sm font-bold text-slate-900 mb-1">{item.term}</dt>
-                        <dd className="text-sm text-slate-600 leading-relaxed">
+                        <dd className="text-sm text-slate-600 leading-relaxed" suppressHydrationWarning>
                             {item.definition}
                         </dd>
                     </div>

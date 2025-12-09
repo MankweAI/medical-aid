@@ -35,7 +35,7 @@ export default function AppHome() {
   ];
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-slate-50/50">
+    <main className="min-h-screen relative overflow-hidden bg-slate-50/50 animate-page-enter">
 
       {/* BACKGROUND: Neural Network Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

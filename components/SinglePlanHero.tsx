@@ -125,7 +125,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
             </div>
 
             {/* FLOATING CHAT TRIGGER */}
-            <div className="fixed bottom-6 right-6 z-50">
+            <div className="fixed bottom-6 right-6 z-50 safe-margin-bottom">
                 {!chatOpen && (
                     <button
                         onClick={() => setChatOpen(true)}
