@@ -131,7 +131,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                         onClick={() => setChatOpen(true)}
                         className={clsx(
                             "flex items-center gap-3 px-5 py-3 text-white rounded-full shadow-2xl transition-all active:scale-95 animate-in slide-in-from-bottom-4 group",
-                            financialAnalysis?.toxicity === 'CRITICAL' ? "bg-rose-600 hover:bg-rose-700 shadow-rose-900/30" : "bg-slate-900 hover:bg-slate-800 shadow-slate-900/40"
+                            financialAnalysis?.toxicity === 'CRITICAL' ? "bg-rose-600 hover:bg-rose-700 shadow-rose-900/30" : "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-900/30"
                         )}
                     >
                         <Sparkles className={clsx("w-4 h-4", financialAnalysis?.toxicity === 'CRITICAL' ? "text-white" : "text-amber-400")} />

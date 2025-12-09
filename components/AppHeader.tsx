@@ -10,8 +10,8 @@ export default function AppHeader() {
     const isHome = pathname === '/';
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-6">
-            <div className="max-w-3xl mx-auto flex justify-between items-center bg-gradient-to-r from-emerald-600 to-emerald-500 backdrop-blur-xl border border-emerald-400/30 shadow-lg shadow-emerald-900/20 rounded-2xl p-2 px-4 transition-all">
+        <header className="fixed top-0 left-0 right-0 z-50">
+            <div className="w-full flex justify-between items-center bg-gradient-to-r from-emerald-600 to-emerald-500 backdrop-blur-xl border-b border-emerald-400/30 shadow-lg shadow-emerald-900/20 p-3 px-5 transition-all">
 
                 {/* BRAND / BACK BUTTON */}
                 <div className="flex items-center gap-3">
