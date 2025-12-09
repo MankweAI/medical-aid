@@ -3,11 +3,18 @@
 import { Zap, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import { usePersona } from '@/context/PersonaContext';
 
 export default function AppHeader() {
     const router = useRouter();
     const pathname = usePathname();
     const isHome = pathname === '/';
+
+    // Subscribe to chat state
+    const { isChatOpen } = usePersona();
+
+    // Hide header entirely when chat is open
+    if (isChatOpen) return null;
 
     return (
         <header className="fixed top-0 left-0 right-0 z-50">

@@ -13,9 +13,13 @@ import ChatWidget from '@/components/ChatWidget';
 import clsx from 'clsx';
 
 export default function SinglePlanHero({ persona: slug }: { persona: string }) {
-    const { state } = usePersona();
+    // UPDATED: Destructure global chat state
+    const { state, isChatOpen, setIsChatOpen } = usePersona();
+
     const [modalOpen, setModalOpen] = useState(false);
-    const [chatOpen, setChatOpen] = useState(false);
+
+    // REMOVED: Local chat state
+    // const [chatOpen, setChatOpen] = useState(false);
 
     // 1. LOOKUP DATA
     const currentPersona = useMemo(() => PERSONAS.find(p => p.slug === slug), [slug]);
@@ -46,7 +50,6 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
         if (!displayPlan || state.income === 0) return null;
 
         const ratio = displayPlan.price / state.income;
-        // The "Safe" threshold is 15% of gross income
         const recommendedMinIncome = displayPlan.price / 0.15;
 
         let toxicity = 'SAFE';
@@ -80,7 +83,6 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                         </span>
                     </div>
 
-                    {/* Minimum Income Tag */}
                     {financialAnalysis && (
                         <div className="flex items-center gap-1.5 opacity-60">
                             <Info className="w-3 h-3 text-slate-500" />
@@ -126,9 +128,9 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
 
             {/* FLOATING CHAT TRIGGER */}
             <div className="fixed bottom-6 right-6 z-50 safe-margin-bottom">
-                {!chatOpen && (
+                {!isChatOpen && (
                     <button
-                        onClick={() => setChatOpen(true)}
+                        onClick={() => setIsChatOpen(true)}
                         className={clsx(
                             "flex items-center gap-3 px-5 py-3 text-white rounded-full shadow-2xl transition-all active:scale-95 animate-in slide-in-from-bottom-4 group",
                             financialAnalysis?.toxicity === 'CRITICAL' ? "bg-rose-600 hover:bg-rose-700 shadow-rose-900/30" : "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-900/30"
@@ -142,11 +144,11 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                 )}
             </div>
 
-            {chatOpen && (
+            {isChatOpen && (
                 <ChatWidget
                     contextPlan={displayPlan}
                     financialContext={financialAnalysis}
-                    onClose={() => setChatOpen(false)}
+                    onClose={() => setIsChatOpen(false)}
                     onVerify={() => setModalOpen(true)}
                 />
             )}

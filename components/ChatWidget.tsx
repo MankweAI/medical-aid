@@ -75,7 +75,8 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
     };
 
     return (
-        <div className="fixed inset-0 w-full h-full bg-white flex flex-col z-50 overflow-hidden animate-in fade-in font-sans">
+        // UPDATE: Changed z-50 to z-[60] to overlay the AppHeader (z-50)
+        <div className="fixed inset-0 w-full h-full bg-white flex flex-col z-[60] overflow-hidden animate-in fade-in font-sans">
 
             {/* HEADER - Green Theme */}
             <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 p-5 flex justify-between items-center text-white shrink-0">

@@ -6,7 +6,7 @@ import { FamilyComposition } from '@/utils/types';
 interface UserState {
     income: number;
     members: FamilyComposition;
-    persona: string | null; // Stores the persona slug
+    persona: string | null;
     filters: {
         network: 'Any' | 'Coastal' | 'Network' | 'State' | null;
         chronic: 'None' | 'Basic' | 'Comprehensive' | null;
@@ -23,6 +23,9 @@ interface PersonaContextType {
     setPersona: (slug: string) => void;
     setFilter: (key: keyof UserState['filters'], value: any) => void;
     activePersonaPath: string;
+    // New Global UI State
+    isChatOpen: boolean;
+    setIsChatOpen: (isOpen: boolean) => void;
 }
 
 const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
@@ -41,6 +44,9 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         }
     });
 
+    // New: Chat State
+    const [isChatOpen, setIsChatOpen] = useState(false);
+
     // Hydrate from LocalStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -48,7 +54,6 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    // Handle migration from old 'child'/'adult' keys to 'children'/'adults'
                     const sanitizedMembers = {
                         main: parsed.members?.main || 1,
                         adult: parsed.members?.adults ?? parsed.members?.adult ?? 0,
@@ -68,7 +73,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    // Persist to LocalStorage
+    // Persist to LocalStorage (User Data only, not UI state)
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('healthos_profile', JSON.stringify(state));
@@ -91,7 +96,16 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         : '/';
 
     return (
-        <PersonaContext.Provider value={{ state, setIncome, setMembers, setPersona, setFilter, activePersonaPath }}>
+        <PersonaContext.Provider value={{
+            state,
+            setIncome,
+            setMembers,
+            setPersona,
+            setFilter,
+            activePersonaPath,
+            isChatOpen,
+            setIsChatOpen
+        }}>
             {children}
         </PersonaContext.Provider>
     );
