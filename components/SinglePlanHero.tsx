@@ -147,6 +147,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                     contextPlan={displayPlan}
                     financialContext={financialAnalysis}
                     onClose={() => setChatOpen(false)}
+                    onVerify={() => setModalOpen(true)}
                 />
             )}
 

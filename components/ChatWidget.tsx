@@ -1,72 +1,86 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { X, Send, Bot, ArrowRight, ChevronRight, Sparkles } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { useChat } from 'ai/react';
+import { X, Send, Bot, Sparkles, ChevronRight, ShieldAlert, Baby, Coins, User } from 'lucide-react';
 import { Plan } from '@/utils/types';
 import clsx from 'clsx';
-
-// --- HARDCODED SCENARIOS ---
-const QUICK_QUESTIONS = [
-    "Does this cover pregnancy? 🤰",
-    "What are the waiting periods? ⏳",
-    "Is there a co-payment for surgery? 🏥",
-    "Can I use any GP? 👨‍⚕️",
-    "Does it pay for chronic meds? 💊",
-    "Is dentistry covered? 🦷"
-];
 
 interface ChatWidgetProps {
     contextPlan: Plan;
     onClose: () => void;
+    /** * Callback to open the ExpertModal. 
+     * You need to wire this up in the parent component (SinglePlanHero).
+     */
+    onVerify: () => void;
     financialContext?: {
         ratio: number;
         toxicity: string;
     } | null;
 }
 
-export default function ChatWidget({ contextPlan, onClose, financialContext }: ChatWidgetProps) {
+export default function ChatWidget({ contextPlan, onClose, onVerify, financialContext }: ChatWidgetProps) {
 
-    // 1. SMART WELCOME MESSAGE
-    const getWelcomeMessage = () => {
-        if (financialContext?.toxicity === 'CRITICAL') {
-            return `⚠️ **Caution:** This plan consumes ${Math.round(financialContext.ratio * 100)}% of your declared income. I strongly suggest looking at the **${contextPlan.identity.plan_series}** lower tiers. \n\nOtherwise, what would you like to know?`;
-        }
-        return `Hello! I have the 2026 rules loaded for **${contextPlan.identity.plan_name}**. \n\nSelect a topic below or ask me a specific question.`;
-    };
+    // 1. Vercel AI SDK Hook
+    const { messages, input, handleInputChange, handleSubmit, isLoading, setInput, append } = useChat({
+        api: '/api/chat',
+        body: { contextPlan }, // Pass the active plan to the backend
+        initialMessages: [
+            {
+                id: 'welcome',
+                role: 'system',
+                content: `Hello! I have the 2026 financial rules loaded for **${contextPlan.identity.plan_name}**. \n\nI can calculate costs, savings, and co-pays. For clinical advice, I'll connect you with an expert.`
+            }
+        ],
+    });
 
-    const [messages, setMessages] = useState([
-        { role: 'system', content: getWelcomeMessage() }
-    ]);
-    const [input, setInput] = useState('');
-    const [loading, setLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Auto-scroll
+    // 2. Auto-Scroll to bottom
     useEffect(() => {
-        if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }, [messages, loading]);
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages]);
 
-    // 2. SEND HANDLER
-    const handleSend = async (text: string) => {
-        if (!text.trim()) return;
+    // 3. LEAD TRIGGER DETECTION (The "Funnel")
+    // We watch the last message. If it contains the token, we trigger the modal.
+    useEffect(() => {
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage?.role === 'assistant' && lastMessage.content.includes('[TRIGGER_LEAD_FORM]')) {
+            onVerify();
+        }
+    }, [messages, onVerify]);
 
-        // Optimistic Update
-        setMessages(prev => [...prev, { role: 'user', content: text }]);
-        setLoading(true);
-        setInput('');
+    // 4. PRE-DEFINED "DATA CHIPS" (Guided Inquisitiveness)
+    const SUGGESTIONS = [
+        {
+            label: "Check Co-pays",
+            icon: Coins,
+            prompt: "What are the co-payments for procedures on this plan?",
+            color: "text-amber-600 bg-amber-50 border-amber-100"
+        },
+        {
+            label: "Maternity Benefits",
+            icon: Baby,
+            prompt: "Does this plan fund maternity visits from Risk or Savings?",
+            color: "text-blue-600 bg-blue-50 border-blue-100"
+        },
+        {
+            label: "Reveal Red Flags",
+            icon: ShieldAlert,
+            prompt: "Are there any specific exclusions, red flags, or high-risk warnings I should know about?",
+            color: "text-rose-600 bg-rose-50 border-rose-100"
+        }
+    ];
 
-        // SIMULATED RAG RESPONSE (Replace with real API)
-        setTimeout(() => {
-            let response = "I'm checking the brochure...";
+    const handleChipClick = (prompt: string) => {
+        append({ role: 'user', content: prompt });
+    };
 
-            if (text.includes("pregnancy")) response = `Yes, **${contextPlan.identity.plan_name}** includes a Maternity Basket funded from Risk. You get ${contextPlan.defined_baskets.maternity.antenatal_consults} antenatal visits and 2 ultrasounds.`;
-            else if (text.includes("waiting")) response = "Standard waiting periods apply: 3 months general, 12 months for pre-existing conditions.";
-            else if (text.includes("GP")) response = contextPlan.network_restriction === 'Network' ? "No, you must use a Network GP to avoid co-payments." : "Yes, you can use any GP.";
-            else response = "That's a specific detail. Based on the 2026 rules, this benefit is subject to the overall annual limit. Would you like to see the detailed table?";
-
-            setMessages(prev => [...prev, { role: 'system', content: response }]);
-            setLoading(false);
-        }, 1200);
+    // Helper to clean the message text (remove the trigger token from display)
+    const cleanContent = (text: string) => {
+        return text.replace(/\[TRIGGER_LEAD_FORM\]/g, '').trim();
     };
 
     return (
@@ -79,9 +93,10 @@ export default function ChatWidget({ contextPlan, onClose, financialContext }: C
                         <Bot className="w-6 h-6 text-emerald-400" />
                     </div>
                     <div>
-                        <h4 className="font-bold text-sm">Virtual Actuary</h4>
-                        <p className="text-[10px] text-slate-400 font-medium">
-                            Context: {contextPlan.identity.plan_name}
+                        <h4 className="font-bold text-sm">HealthOS Analyst</h4>
+                        <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            {contextPlan.identity.plan_name} Active
                         </p>
                     </div>
                 </div>
@@ -92,68 +107,90 @@ export default function ChatWidget({ contextPlan, onClose, financialContext }: C
 
             {/* CHAT AREA */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
-                {messages.map((m, i) => (
-                    <div key={i} className={`flex gap-3 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        {m.role === 'system' && (
-                            <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-1">
-                                <Bot className="w-4 h-4 text-emerald-600" />
-                            </div>
-                        )}
-                        <div className={clsx(
-                            "max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-wrap",
-                            m.role === 'user'
-                                ? "bg-slate-900 text-white rounded-br-none"
-                                : "bg-white border border-slate-200 text-slate-700 rounded-bl-none"
-                        )}>
-                            {m.content}
-                        </div>
-                    </div>
-                ))}
+                {messages.map((m) => {
+                    const isUser = m.role === 'user';
+                    // Don't render system messages other than the welcome one if needed, 
+                    // but here we only have the initial welcome as 'system'.
+                    if (m.role === 'system' && m.id !== 'welcome') return null;
 
-                {/* QUICK QUESTIONS (Vertical Menu) */}
-                {messages.length === 1 && !loading && (
-                    <div className="mt-6 space-y-2 animate-in slide-in-from-bottom-4 fade-in duration-500 pl-11">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                            Suggested Topics
-                        </p>
-                        {QUICK_QUESTIONS.map((q, i) => (
-                            <button
-                                key={i}
-                                onClick={() => handleSend(q)}
-                                className="w-full text-left p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md hover:bg-blue-50/30 transition-all group flex items-center justify-between active:scale-[0.98]"
-                            >
-                                <span className="text-xs font-bold text-slate-600 group-hover:text-blue-700">{q}</span>
-                                <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-blue-400" />
-                            </button>
-                        ))}
+                    return (
+                        <div key={m.id} className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
+                            {!isUser && (
+                                <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-1">
+                                    <Bot className="w-4 h-4 text-emerald-600" />
+                                </div>
+                            )}
+
+                            <div className={clsx(
+                                "max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-wrap",
+                                isUser
+                                    ? "bg-slate-900 text-white rounded-br-none"
+                                    : "bg-white border border-slate-200 text-slate-700 rounded-bl-none"
+                            )}>
+                                {cleanContent(m.content)}
+                            </div>
+
+                            {isUser && (
+                                <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center shrink-0 shadow-sm mt-1">
+                                    <User className="w-4 h-4 text-slate-500" />
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+
+                {/* LOADING INDICATOR */}
+                {isLoading && (
+                    <div className="flex gap-2 items-center text-slate-400 text-xs ml-12 animate-in fade-in">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce delay-100" />
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce delay-200" />
+                        Calculating...
                     </div>
                 )}
 
-                {loading && (
-                    <div className="flex gap-2 items-center text-slate-400 text-xs ml-12 animate-pulse">
-                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce delay-100" />
-                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce delay-200" />
+                {/* SUGGESTION CHIPS (Show only when idle) */}
+                {!isLoading && messages.length < 3 && (
+                    <div className="mt-4 space-y-2 pl-11 pr-4 animate-in slide-in-from-bottom-4 fade-in duration-500">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+                            Suggested Queries
+                        </p>
+                        {SUGGESTIONS.map((s, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handleChipClick(s.prompt)}
+                                className={clsx(
+                                    "w-full text-left p-3 rounded-xl border transition-all group flex items-center justify-between active:scale-[0.98] hover:shadow-md",
+                                    s.color
+                                )}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <s.icon className="w-4 h-4 opacity-70" />
+                                    <span className="text-xs font-bold opacity-90">{s.label}</span>
+                                </div>
+                                <ChevronRight className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </button>
+                        ))}
                     </div>
                 )}
             </div>
 
             {/* INPUT AREA */}
             <form
-                onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
+                onSubmit={handleSubmit}
                 className="p-3 bg-white border-t border-slate-100 shrink-0 pb-5"
             >
                 <div className="relative flex items-center gap-2">
                     <input
                         type="text"
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Type your question..."
+                        onChange={handleInputChange}
+                        placeholder={financialContext?.toxicity === 'CRITICAL' ? "Ask about affordability..." : "Type your question..."}
                         className="flex-1 bg-slate-100 border-transparent focus:bg-white border-2 focus:border-emerald-500 rounded-xl py-3.5 pl-4 pr-4 text-sm transition-all outline-none text-slate-900 placeholder:text-slate-400"
                     />
                     <button
                         type="submit"
-                        disabled={!input.trim() || loading}
+                        disabled={!input.trim() || isLoading}
                         className="p-3.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-slate-900/20 active:scale-95"
                     >
                         {input.trim() ? <Send className="w-5 h-5" /> : <Sparkles className="w-5 h-5 text-amber-400" />}
