@@ -39,17 +39,17 @@ export default function AppHome() {
 
       {/* BACKGROUND: Neural Network Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-[10%] right-[-20%] w-[400px] h-[400px] bg-emerald-400/10 rounded-full blur-[100px] animate-float-delayed" />
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-400/15 rounded-full blur-[120px] animate-float" />
+        <div className="absolute bottom-[10%] right-[-20%] w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[100px] animate-float-delayed" />
       </div>
 
       {/* HEADER */}
       <header className="relative z-10 px-6 pt-12 pb-4 flex justify-between items-center max-w-3xl mx-auto w-full">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-lg shadow-slate-900/20">
+          <div className="w-8 h-8 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-900/20">
             <Zap className="w-4 h-4 fill-current" />
           </div>
-          <span className="font-black text-slate-900 tracking-tight text-lg">HealthOS</span>
+          <span className="font-black text-emerald-900 tracking-tight text-lg">HealthOS</span>
         </div>
         <button className="p-2 bg-white/60 backdrop-blur rounded-full border border-white/50 shadow-sm active:scale-95 transition-transform">
           <Bell className="w-5 h-5 text-slate-600" />

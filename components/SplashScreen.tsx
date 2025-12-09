@@ -8,7 +8,6 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
     const [isExiting, setIsExiting] = useState(false);
 
     useEffect(() => {
-        // Check if splash was already shown this session
         const hasSeenSplash = sessionStorage.getItem('healthos-splash-seen');
 
         if (hasSeenSplash) {
@@ -16,19 +15,17 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
             return;
         }
 
-        // Auto-dismiss after 1.5 seconds
         const timer = setTimeout(() => {
             setIsExiting(true);
             setTimeout(() => {
                 setShowSplash(false);
                 sessionStorage.setItem('healthos-splash-seen', 'true');
-            }, 500); // Match animation duration
+            }, 500);
         }, 1500);
 
         return () => clearTimeout(timer);
     }, []);
 
-    // Allow tap to dismiss
     const handleDismiss = () => {
         if (!isExiting) {
             setIsExiting(true);
@@ -43,33 +40,29 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
 
     return (
         <>
-            {/* Splash Overlay */}
+            {/* Splash Overlay - Emerald Green Theme */}
             <div
                 onClick={handleDismiss}
-                className={`fixed inset-0 z-[99999] bg-slate-900 flex flex-col items-center justify-center cursor-pointer ${isExiting ? 'animate-splash-exit' : ''}`}
+                className={`fixed inset-0 z-[99999] bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 flex flex-col items-center justify-center cursor-pointer ${isExiting ? 'animate-splash-exit' : ''}`}
             >
-                {/* Logo Container */}
                 <div className="animate-splash-pulse">
-                    <div className="w-24 h-24 bg-white rounded-[28px] flex items-center justify-center shadow-2xl shadow-white/20">
-                        <Zap className="w-12 h-12 text-slate-900 fill-current" />
+                    <div className="w-24 h-24 bg-white rounded-[28px] flex items-center justify-center shadow-2xl shadow-emerald-900/30">
+                        <Zap className="w-12 h-12 text-emerald-600 fill-current" />
                     </div>
                 </div>
 
-                {/* Brand Name */}
                 <h1 className="mt-8 text-3xl font-black text-white tracking-tight">
                     HealthOS
                 </h1>
-                <p className="mt-2 text-sm font-medium text-slate-400 tracking-widest uppercase">
+                <p className="mt-2 text-sm font-medium text-emerald-100/80 tracking-widest uppercase">
                     Virtual Actuary
                 </p>
 
-                {/* Subtle hint */}
-                <p className="absolute bottom-12 text-xs text-slate-500 font-medium">
+                <p className="absolute bottom-12 text-xs text-emerald-200/60 font-medium">
                     Tap to continue
                 </p>
             </div>
 
-            {/* Content hidden behind splash */}
             <div className="opacity-0">{children}</div>
         </>
     );

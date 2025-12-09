@@ -28,8 +28,8 @@ export default function WelcomeStatement({ persona }: Props) {
 
             {/* 1. STRATEGY BADGE (The "System Name") */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-slate-900/20">
-                    <Target className="w-3 h-3 text-emerald-400" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-emerald-900/20">
+                    <Target className="w-3 h-3 text-emerald-100" />
                     Strategy: {persona.meta.title}
                 </div>
                 <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 uppercase tracking-wider px-2">

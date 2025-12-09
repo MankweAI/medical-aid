@@ -1,11 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --desktop-bg: #F1F5F9;
-  --app-bg: #FFFFFF;
+  /* Green Theme Base */
+  --desktop-bg: #ECFDF5;
+  --app-bg: #F0FDF4;
   --foreground: #0F172A;
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+
+  /* Emerald Accent Palette */
+  --accent-primary: #059669;
+  --accent-secondary: #10B981;
+  --accent-light: #D1FAE5;
+  --accent-dark: #047857;
 }
 
 @theme inline {
@@ -153,10 +160,13 @@ body {
 
 /* --- SPLASH SCREEN --- */
 @keyframes splash-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 0.9;
@@ -167,6 +177,7 @@ body {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     visibility: hidden;
@@ -187,6 +198,7 @@ body {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
