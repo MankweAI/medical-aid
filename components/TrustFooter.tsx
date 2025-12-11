@@ -5,7 +5,7 @@ import { ShieldCheck } from 'lucide-react';
 
 export default function TrustFooter() {
     return (
-        <footer className="px-6 py-12 bg-slate-50 border-t border-slate-100 mb-24">
+        <footer className="px-6 py-12 bg-slate-50 border-t border-slate-100 mt-24">
             <div className="flex flex-col gap-6">
 
                 {/* Authority Signal */}

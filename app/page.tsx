@@ -1,117 +1,102 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { usePersona } from '@/context/PersonaContext';
-import MagicSearch from '@/components/MagicSearch';
-import TrustTicker from '@/components/TrustTicker';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import HomeHero from '@/components/home/HomeHero';
 import DailyInsight from '@/components/DailyInsight';
 import PinsFab from '@/components/PinsFab';
-import { Zap, Bell, Activity, ShieldAlert } from 'lucide-react';
+import AppHeader from '@/components/AppHeader';
+import { PERSONAS } from '@/data/personas';
+import { ArrowRight, BookOpen, Database, LayoutGrid } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'HealthOS | Medical Strategy Console',
+  description: 'Access the 2026 Virtual Actuary engine. Calculate risk, compare premiums, and verify benefits.',
+};
 
 export default function AppHome() {
-  const { state } = usePersona();
-  const router = useRouter();
-  const [view, setView] = useState<'input' | 'processing'>('input');
-
-  const handleDiagnosisStart = () => {
-    setView('processing');
-
-    // Simulate Actuarial Calculation Time (2.5s)
-    setTimeout(() => {
-      // Route to the Persona Result page
-      // Default to a specific persona if none matches exactly yet
-      const targetSlug = state.persona || 'bestmed-beat2-savings-starter-2026';
-      router.push(`/personas/${targetSlug}?income=${state.income}`);
-    }, 2500);
-  };
-
-  const TICKER_MESSAGES = [
-    "Analyzing 2026 Scheme Rules...",
-    "Calculating Income Cliff Risks...",
-    "Verifying Network Geofences...",
-    "Checking Oncology Sub-limits...",
-    "Optimizing Savings Efficiency..."
-  ];
+  // Use the data source to build the directory
+  const directory = PERSONAS;
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-slate-50/50 animate-page-enter">
+    <main className="min-h-screen relative bg-slate-50/50 pb-20">
+      <AppHeader />
 
-      {/* BACKGROUND: Neural Network Effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-400/15 rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-[10%] right-[-20%] w-[400px] h-[400px] bg-teal-400/15 rounded-full blur-[100px] animate-float-delayed" />
+      {/* BACKGROUND EFFECTS */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-emerald-100/40 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-100/40 rounded-full blur-[100px]" />
       </div>
 
-      {/* HEADER */}
-      <header className="relative z-10 px-6 pt-12 pb-4 flex justify-between items-center max-w-3xl mx-auto w-full">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-900/20">
-            <Zap className="w-4 h-4 fill-current" />
+      <div className="pt-32 px-6 container mx-auto max-w-5xl">
+
+        {/* 1. THE UTILITY (Hero) */}
+        <HomeHero />
+
+        {/* 2. THE DIRECTORY (Cluster Strategy) */}
+        {/* This serves users who know what they want and Google bots needing links */}
+        <section className="mt-24 border-t border-slate-200 pt-12">
+          <div className="flex items-center gap-2 mb-8">
+            <LayoutGrid className="w-4 h-4 text-slate-400" />
+            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+              Strategy Index
+            </h2>
           </div>
-          <span className="font-black text-emerald-900 tracking-tight text-lg">HealthOS</span>
-        </div>
-        <button className="p-2 bg-white/60 backdrop-blur rounded-full border border-white/50 shadow-sm active:scale-95 transition-transform">
-          <Bell className="w-5 h-5 text-slate-600" />
-        </button>
-      </header>
 
-      {/* CORE INTERFACE */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-[65vh] px-4 max-w-3xl mx-auto w-full">
-
-        {view === 'input' ? (
-          <div className="w-full animate-in fade-in zoom-in duration-500">
-            {/* THE NARRATIVE INPUT (Mad Libs) */}
-            {/* FIX: Passed the onAnalyze prop here */}
-            {/* <MagicSearch onAnalyze={handleDiagnosisStart} /> */}
-
-            {/* Social Proof / Trust Indicators */}
-            <div className="mt-12 flex justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                <ShieldAlert className="w-4 h-4" /> 2026 Rules Engine
-              </div>
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                <Activity className="w-4 h-4" /> Actuary Validated
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {directory.map((persona) => (
+              <Link
+                key={persona.slug}
+                href={`/personas/${persona.slug}`}
+                className="group block bg-white hover:bg-emerald-50/50 p-5 rounded-xl border border-slate-200 hover:border-emerald-200 transition-all shadow-sm hover:shadow-md"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded uppercase tracking-wider">
+                    {persona.meta.category}
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-transform group-hover:translate-x-1" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-sm leading-snug mb-1 group-hover:text-emerald-900">
+                  {persona.meta.marketing_heading}
+                </h3>
+                <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
+                  {persona.meta.description}
+                </p>
+              </Link>
+            ))}
           </div>
-        ) : (
-          /* PROCESSING STATE */
-          <div className="w-full max-w-md text-center animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <div className="w-24 h-24 bg-white rounded-[2rem] shadow-2xl shadow-blue-900/10 mx-auto mb-8 flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-blue-50/50 animate-pulse" />
-              <Zap className="w-10 h-10 text-blue-600 relative z-10 animate-[bounce_1s_infinite]" />
-            </div>
-
-            <h2 className="text-2xl font-black text-slate-900 mb-2">Running Diagnosis...</h2>
-
-            {/* <div className="h-8 mb-8">
-              <TrustTicker messages={TICKER_MESSAGES} />
-            </div> */}
-
-            {/* Progress Bar */}
-            <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-emerald-500 w-1/2 animate-[translateX_1.5s_ease-in-out_infinite]" />
-            </div>
-            <p className="text-xs text-slate-400 mt-6 font-medium">Applying Mathematical Uniqueness Principle...</p>
-          </div>
-        )}
-
-      </div>
-
-      {/* FOOTER: SEO Anchor (Hidden during processing to reduce noise) */}
-      {/* {view === 'input' && (
-        <section className="px-6 pb-32 relative z-10 max-w-3xl mx-auto w-full animate-in slide-in-from-bottom-4 delay-300">
-          <DailyInsight
-            term="The Income Cliff"
-            definition="A specific threshold in scheme rules (e.g. R9,000 pm) where a R1 salary increase triggers a disproportionate premium hike."
-            source="HealthOS Actuarial Database"
-          />
         </section>
-      )} */}
 
-      {/* <PinsFab /> */}
+        {/* 3. THE KNOWLEDGE BASE (Authority Signals) */}
+        <section className="mt-16 grid md:grid-cols-2 gap-8">
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <BookOpen className="w-4 h-4 text-slate-400" />
+              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+                Latest Insight
+              </h3>
+            </div>
+            <DailyInsight />
+          </div>
 
-    </main >
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <Database className="w-4 h-4 text-slate-400" />
+              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+                System Status
+              </h3>
+            </div>
+            <div className="bg-slate-900 text-slate-400 p-6 rounded-3xl text-xs font-mono leading-relaxed shadow-lg">
+              <p className="mb-2"><span className="text-emerald-400">✓</span> 2026 Pricing Loaded</p>
+              <p className="mb-2"><span className="text-emerald-400">✓</span> Network Lists Verified</p>
+              <p className="mb-2"><span className="text-emerald-400">✓</span> Co-payment Tables Active</p>
+              <div className="mt-4 pt-4 border-t border-slate-800 text-slate-500">
+                Last Index Update: {new Date().toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+      <PinsFab />
+    </main>
   );
 }
