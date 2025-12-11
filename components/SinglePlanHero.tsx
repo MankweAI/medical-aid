@@ -24,9 +24,14 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
 
     // 1. LOOKUP DATA
     const currentPersona = useMemo(() => PERSONAS.find(p => p.slug === slug), [slug]);
+
     const anchorPlan = useMemo(() => {
-        if (!currentPersona?.actuarial_logic) return null;
-        return PLANS.find(p => p.id === currentPersona.actuarial_logic.target_plan_id);
+        // Fix: Assign to a variable so TypeScript can confirm it is not undefined
+        const logic = currentPersona?.actuarial_logic;
+
+        if (!logic) return null;
+
+        return PLANS.find(p => p.id === logic.target_plan_id);
     }, [currentPersona]);
 
     // 2. LIVE CALCULATIONS

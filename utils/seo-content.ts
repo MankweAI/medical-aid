@@ -27,6 +27,9 @@ export const ContentGenerator = {
     },
 
     generateFAQ: (plan: Plan, persona: Persona) => {
+        if (plan.faq && plan.faq.length > 0) {
+            return plan.faq;
+        }
         return [
             { question: `Why is ${plan.identity.plan_name} recommended for ${persona.meta.category}?`, answer: persona.actuarial_logic?.mathematical_basis || `This plan offers the optimal balance of benefits vs premium for the ${persona.meta.category} profile.` },
             { question: "What happens if I use a non-network hospital?", answer: plan.network_restriction === 'Any' ? "Nothing. This plan allows you to use any private hospital in South Africa without penalty." : `You will be liable for a co-payment (typically R${plan.procedure_copays.admission_penalty_non_network || '15,000'}) unless it is a life-threatening emergency.` },
