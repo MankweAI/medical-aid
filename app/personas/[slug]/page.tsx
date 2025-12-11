@@ -23,6 +23,24 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     return {
         title: `${persona.meta.title} | 2026 Strategy`,
         description: persona.meta.description,
+        alternates: {
+            canonical: `https://healthos.co.za/personas/${params.slug}`, // Blueprint Phase 4 requirement
+        },
+        other: {
+            // Blueprint Phase 1: The "Flag"
+            'script:ld+json': JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'FinanceApplication',
+                'name': `HealthOS Calculator: ${persona.meta.title}`,
+                'applicationCategory': 'Finance',
+                'operatingSystem': 'Web',
+                'offers': {
+                    '@type': 'Offer',
+                    'price': '0',
+                    'priceCurrency': 'ZAR'
+                }
+            })
+        }
     };
 }
 

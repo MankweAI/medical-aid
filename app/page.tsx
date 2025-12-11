@@ -63,7 +63,7 @@ export default function AppHome() {
           <div className="w-full animate-in fade-in zoom-in duration-500">
             {/* THE NARRATIVE INPUT (Mad Libs) */}
             {/* FIX: Passed the onAnalyze prop here */}
-            <MagicSearch onAnalyze={handleDiagnosisStart} />
+            {/* <MagicSearch onAnalyze={handleDiagnosisStart} /> */}
 
             {/* Social Proof / Trust Indicators */}
             <div className="mt-12 flex justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
@@ -85,9 +85,9 @@ export default function AppHome() {
 
             <h2 className="text-2xl font-black text-slate-900 mb-2">Running Diagnosis...</h2>
 
-            <div className="h-8 mb-8">
+            {/* <div className="h-8 mb-8">
               <TrustTicker messages={TICKER_MESSAGES} />
-            </div>
+            </div> */}
 
             {/* Progress Bar */}
             <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden relative">
@@ -100,7 +100,7 @@ export default function AppHome() {
       </div>
 
       {/* FOOTER: SEO Anchor (Hidden during processing to reduce noise) */}
-      {view === 'input' && (
+      {/* {view === 'input' && (
         <section className="px-6 pb-32 relative z-10 max-w-3xl mx-auto w-full animate-in slide-in-from-bottom-4 delay-300">
           <DailyInsight
             term="The Income Cliff"
@@ -108,9 +108,9 @@ export default function AppHome() {
             source="HealthOS Actuarial Database"
           />
         </section>
-      )}
+      )} */}
 
-      <PinsFab />
+      {/* <PinsFab /> */}
 
     </main >
   );

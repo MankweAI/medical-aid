@@ -1,36 +1,46 @@
 'use client';
 
 import { useState } from 'react';
-import { X, ShieldCheck, Phone, Loader2 } from 'lucide-react';
+import { ShieldCheck, Phone, Loader2, Check } from 'lucide-react';
 import BottomSheet from '@/components/ui/BottomSheet';
 import clsx from 'clsx';
+// 1. Import the Server Action
+import { submitLead } from '@/app/actions';
 
 interface ExpertModalProps {
     isOpen: boolean;
     onClose: () => void;
     planName: string;
-    context: string; // e.g., "R20k Maternity Strategy"
+    context: string;
 }
 
 export default function ExpertModal({ isOpen, onClose, planName, context }: ExpertModalProps) {
     const [phone, setPhone] = useState('');
-    const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('submitting');
 
-        // Simulate API Call (Replace with Supabase/Resend logic)
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // 2. Prepare the data
+        const formData = new FormData();
+        formData.append('phone', phone);
 
-        setStatus('success');
-        // In production: Send data to 'leads' table in Supabase
+        // 3. Call the Server Action
+        const result = await submitLead(formData, { planName, persona: context });
+
+        if (result.success) {
+            setStatus('success');
+        } else {
+            setStatus('error');
+            // Optional: Handle error UI
+        }
     };
 
     return (
         <BottomSheet isOpen={isOpen} onClose={onClose} title="Verify Strategy">
+            {/* ... Rest of your JSX remains exactly the same ... */}
             <div className="space-y-6">
-
                 {/* 1. Context Card */}
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex gap-4 items-start">
                     <div className="bg-white p-2 rounded-full border border-slate-200 shadow-sm">
@@ -106,13 +116,11 @@ export default function ExpertModal({ isOpen, onClose, planName, context }: Expe
         </BottomSheet>
     );
 }
-
 // Helper Icon
-function Check({ className }: { className?: string }) {
-    return (
-        <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-    );
-}
-
+// function Check({ className }: { className?: string }) {
+//     return (
+//         <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+//             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+//         </svg>
+//     );
+// }
