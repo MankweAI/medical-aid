@@ -1,13 +1,17 @@
 'use client';
 
 import { Plan } from '@/utils/types';
-import { Phone, FileText, ChevronRight } from 'lucide-react';
+import { Phone, FileText } from 'lucide-react';
 import PlanDetails from '@/components/PlanDetails';
 import clsx from 'clsx';
 
 export default function BenefitsCard({ plan, onVerify }: { plan: Plan; onVerify: () => void }) {
     return (
-        <div className="h-full bg-white rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/40 overflow-hidden flex flex-col relative w-full">
+        <div className={clsx(
+            "h-full bg-white rounded-3xl overflow-hidden flex flex-col relative w-full transition-all",
+            // EXACT REPLICA of Card 1 "Winner" Style:
+            "border border-emerald-200 shadow-xl shadow-emerald-200/60 border-l-4 border-l-emerald-500"
+        )}>
             {/* Header */}
             <div className="px-5 pt-5 pb-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
                 <div className="flex items-center gap-2">
