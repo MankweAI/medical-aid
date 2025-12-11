@@ -1,61 +1,18 @@
 'use client';
 
 import { Plan } from '@/utils/types';
-import {
-    Shield,
-    Baby,
-    Activity,
-    Pill,
-    Scan,
-    AlertOctagon,
-    Zap,
-    Stethoscope,
-    HeartPulse,
-    AlertTriangle
-} from 'lucide-react';
+import { Shield, AlertTriangle } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function PlanDetails({ plan }: { plan: Plan }) {
     if (!plan) return null;
 
-    // Helper for currency
-    const fmt = (val: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
-
-    // Guard against legacy data (backward compatibility)
-    const limits = plan.limits || { oncology: { status: 'Unknown', value: 0 }, casualty: { status: 'Unknown', value: 0 }, internal_prosthesis: { sublimit: 0 } };
     const net = plan.network_details || { hospitals: 'Unknown', gps: 'Unknown', specialists: 'Unknown' };
 
     return (
         <div className="space-y-6">
 
-            {/* 1. CRITICAL LIMITS GRID */}
-            <div className="grid grid-cols-2 gap-3">
-                {/* Oncology */}
-                <div className={clsx("p-3 rounded-xl border flex flex-col justify-between",
-                    limits.oncology.status === 'PMB Only' ? "bg-amber-50 border-amber-100" : "bg-emerald-50 border-emerald-100")}>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Activity className={clsx("w-4 h-4", limits.oncology.status === 'PMB Only' ? "text-amber-600" : "text-emerald-600")} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">Oncology</span>
-                    </div>
-                    <div className="text-sm font-black">
-                        {limits.oncology.status === 'Unlimited' ? 'Unlimited' : limits.oncology.value > 0 ? fmt(limits.oncology.value) : 'PMB Only'}
-                    </div>
-                </div>
-
-                {/* Casualty */}
-                <div className={clsx("p-3 rounded-xl border flex flex-col justify-between",
-                    limits.casualty.status === 'No Benefit' ? "bg-rose-50 border-rose-100" : "bg-blue-50 border-blue-100")}>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Zap className={clsx("w-4 h-4", limits.casualty.status === 'No Benefit' ? "text-rose-600" : "text-blue-600")} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">Casualty</span>
-                    </div>
-                    <div className="text-sm font-black">
-                        {limits.casualty.status === 'No Benefit' ? 'No Benefit' : limits.casualty.value > 0 ? `R${limits.casualty.value} Limit` : 'Savings'}
-                    </div>
-                </div>
-            </div>
-
-            {/* 2. THE NETWORK MATRIX */}
+            {/* 1. THE NETWORK MATRIX (Detailed Rules) */}
             <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
                 <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-slate-500" />
@@ -68,7 +25,7 @@ export default function PlanDetails({ plan }: { plan: Plan }) {
                 </div>
             </div>
 
-            {/* 3. THE GAP COVER RATING */}
+            {/* 2. THE GAP COVER RATING */}
             <div className={clsx("rounded-2xl p-4 border flex items-center gap-4",
                 plan.gap_cover_rating === 'Mandatory' ? "bg-rose-50 border-rose-100" : "bg-blue-50 border-blue-100"
             )}>
@@ -85,7 +42,7 @@ export default function PlanDetails({ plan }: { plan: Plan }) {
                 </div>
             </div>
 
-            {/* 4. CLINICAL BASKETS */}
+            {/* 3. CLINICAL BASKETS (Maternity, etc) */}
             <div className="space-y-2">
                 <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Risk Benefits</h5>
                 <div className="bg-white border border-slate-100 rounded-2xl p-4 space-y-3">
@@ -103,7 +60,7 @@ function Row({ label, value, isBold }: { label: string, value: string, isBold?: 
     return (
         <div className="flex justify-between items-center py-2 px-4">
             <span className="text-xs font-medium text-slate-500">{label}</span>
-            <span className={clsx("text-xs text-slate-900 text-right", isBold ? "font-bold" : "font-medium")}>{value}</span>
+            <span className={clsx("text-xs text-slate-900 text-right max-w-[60%] truncate", isBold ? "font-bold" : "font-medium")}>{value}</span>
         </div>
     );
 }

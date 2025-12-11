@@ -1,14 +1,14 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { usePersona } from '@/context/PersonaContext';
 import { PLANS } from '@/data/plans';
 import { PERSONAS } from '@/data/personas';
 import { PricingEngine } from '@/utils/engine';
 import { validatePlan } from '@/utils/persona';
-import { ShieldCheck, Sparkles, TrendingDown, Info, ChevronDown, Lock } from 'lucide-react';
+import { ShieldCheck, Sparkles, TrendingDown, Info } from 'lucide-react';
 import FeedCard from '@/components/FeedCard';
-import PlanDetails from '@/components/PlanDetails';
+import BenefitsCard from '@/components/BenefitsCard'; // <--- NEW IMPORT
 import ExpertModal from '@/components/ExpertModal';
 import ChatWidget from '@/components/ChatWidget';
 import FeedSkeleton from '@/components/skeletons/FeedSkeleton';
@@ -18,10 +18,12 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
     const { state, isChatOpen, setIsChatOpen } = usePersona();
     const [modalOpen, setModalOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);
-    const [showAnalysis, setShowAnalysis] = useState(false); // <--- PROGRESSIVE STATE
+    const [activeCard, setActiveCard] = useState(0); // Track which card is visible
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => { setIsClient(true); }, []);
 
+    // ... (Data Lookups & Calculations remain the same) ...
     const currentPersona = useMemo(() => PERSONAS.find(p => p.slug === slug), [slug]);
     const anchorPlan = useMemo(() => {
         const logic = currentPersona?.actuarial_logic;
@@ -65,6 +67,15 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
         return { ratio, toxicity, message, recommendedMinIncome };
     }, [displayPlan, state.income]);
 
+    // Scroll Handler to update dots
+    const handleScroll = () => {
+        if (!scrollRef.current) return;
+        const scrollLeft = scrollRef.current.scrollLeft;
+        const width = scrollRef.current.offsetWidth;
+        const index = Math.round(scrollLeft / width);
+        setActiveCard(index);
+    };
+
     if (!isClient || !displayPlan || !currentPersona) {
         return (
             <div className="px-4 py-8">
@@ -78,7 +89,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
 
     return (
         <div className="relative pb-16 animate-in fade-in zoom-in duration-500">
-            {/* 1. SEO CONTEXT */}
+            {/* 1. SEO CONTEXT & ALERTS */}
             <div className="mb-4 px-4 pt-4 flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-100 rounded-full">
@@ -97,7 +108,6 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                     )}
                 </div>
 
-                {/* 2. AFFORDABILITY ALERT (Always Visible) */}
                 {financialAnalysis && financialAnalysis.toxicity !== 'SAFE' && (
                     <div className={clsx(
                         "p-3 rounded-xl flex items-start gap-3 border",
@@ -114,52 +124,45 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                 )}
             </div>
 
-            {/* 3. HERO CARD (The Hook) */}
-            <div className="px-4 relative transform transition-all duration-500 hover:scale-[1.005] z-10">
-                <FeedCard
-                    plan={displayPlan}
-                    onVerify={() => setModalOpen(true)}
-                    verdict={{
-                        tier: 'WINNER',
-                        badge: currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
-                        warning: displayPlan.red_flag || ''
-                    }}
-                />
+            {/* 2. THE SWIPE DECK (Carousel) */}
+            <div
+                ref={scrollRef}
+                onScroll={handleScroll}
+                className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-4 pb-4 no-scrollbar items-start"
+            >
+                {/* CARD 1: PRIMARY FEED */}
+                <div className="w-full min-w-[100%] snap-center">
+                    <FeedCard
+                        plan={displayPlan}
+                        onVerify={() => setModalOpen(true)}
+                        verdict={{
+                            tier: 'WINNER',
+                            badge: currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
+                            warning: displayPlan.red_flag || ''
+                        }}
+                    />
+                </div>
+
+                {/* CARD 2: FULL BENEFITS */}
+                <div className="w-full min-w-[100%] snap-center h-full">
+                    <BenefitsCard
+                        plan={displayPlan}
+                        onVerify={() => setModalOpen(true)}
+                    />
+                </div>
             </div>
 
-            {/* 4. THE PROGRESSIVE REVEAL (The "Meat") */}
-            <div className="px-4 mt-6">
-                {!showAnalysis ? (
-                    <button
-                        onClick={() => setShowAnalysis(true)}
-                        className="w-full py-4 bg-slate-50 hover:bg-slate-100 border border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center gap-2 group transition-all"
-                    >
-                        <div className="flex items-center gap-2">
-                            <div className="p-2 bg-white rounded-full shadow-sm text-blue-500 group-hover:scale-110 transition-transform">
-                                <Info className="w-5 h-5" />
-                            </div>
-                            <span className="text-sm font-bold text-slate-700 uppercase tracking-wider group-hover:text-blue-700">
-                                View Full Benefits
-                            </span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 font-medium">
-                            Clinical Baskets • Oncology • Casualty • Limits
-                        </span>
-                        <ChevronDown className="w-4 h-4 text-slate-300 mt-1 animate-bounce" />
-                    </button>
-                ) : (
-                    <div className="animate-in slide-in-from-top-4 duration-500 fade-in">
-                        <PlanDetails plan={displayPlan} />
-
-                        <button
-                            onClick={() => setShowAnalysis(false)}
-                            className="w-full mt-6 py-3 text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest flex items-center justify-center gap-2"
-                        >
-                            Collapse Analysis
-                        </button>
-                    </div>
-                )}
+            {/* 3. PAGINATION DOTS */}
+            <div className="flex justify-center gap-2 mb-2">
+                <div className={clsx("w-2 h-2 rounded-full transition-colors duration-300", activeCard === 0 ? "bg-emerald-600" : "bg-slate-300")} />
+                <div className={clsx("w-2 h-2 rounded-full transition-colors duration-300", activeCard === 1 ? "bg-emerald-600" : "bg-slate-300")} />
             </div>
+
+            {activeCard === 0 && (
+                <p className="text-center text-[10px] text-slate-400 font-medium animate-pulse">
+                    Swipe for Breakdown →
+                </p>
+            )}
 
             {/* CHAT & MODAL */}
             <div className="fixed bottom-6 right-6 z-50 safe-margin-bottom">

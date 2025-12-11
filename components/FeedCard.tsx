@@ -7,7 +7,9 @@ import {
     CheckCircle2,
     ShieldAlert,
     Wallet,
-    Phone
+    Phone,
+    Activity, // New icon
+    Zap       // New icon
 } from 'lucide-react';
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -35,14 +37,17 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
     // Helper
     const fmt = (val: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
 
+    // Data Safety Guards
+    const limits = plan.limits || { oncology: { status: 'Unknown', value: 0 }, casualty: { status: 'Unknown', value: 0 } };
+
     return (
         <div className={clsx(
-            "relative bg-white rounded-3xl overflow-hidden transition-all",
+            "relative bg-white rounded-3xl overflow-hidden transition-all h-full flex flex-col",
             isWinner
                 ? "border border-emerald-200 shadow-xl shadow-emerald-200/60 border-l-4 border-l-emerald-500"
                 : "border border-slate-200 shadow-lg shadow-slate-200/40"
         )}>
-            {/* 1. HEADER: Scheme Identity */}
+            {/* 1. HEADER */}
             <div className="px-5 pt-5 pb-4">
                 <div className="flex items-center gap-3 mb-4">
                     <div className={clsx(
@@ -69,7 +74,7 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     </div>
                 </div>
 
-                {/* 2. PRICE BLOCK */}
+                {/* 2. PRICE */}
                 <div className="flex items-end justify-between gap-4 pb-4 border-b border-slate-100">
                     <div>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Monthly Premium</span>
@@ -91,7 +96,7 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                 </div>
             </div>
 
-            {/* 3. INSIGHT ENGINE (Why this plan?) */}
+            {/* 3. VERDICT */}
             {verdict?.badge && (
                 <div className="mx-5 mb-4 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-2xl p-4 border border-emerald-100/80 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-200/30 rounded-full blur-2xl" />
@@ -107,31 +112,54 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                 </div>
             )}
 
-            {/* 4. QUICK STATS */}
+            {/* 4. EXPANDED QUICK STATS (2x2 Grid) */}
             <div className="grid grid-cols-2 gap-2 mx-5 mb-4">
-                <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <Building2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                    <div className="min-w-0">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Hospital</span>
-                        <span className="text-xs font-bold text-slate-900">{plan.coverage_rates.hospital_account}%</span>
+                {/* Hospital Rate */}
+                <div className="flex flex-col justify-center px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-1.5 mb-1">
+                        <Building2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Hospital</span>
                     </div>
+                    <span className="text-xs font-bold text-slate-900">{plan.coverage_rates.hospital_account}%</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <Wallet className="w-4 h-4 text-emerald-500 shrink-0" />
-                    <div className="min-w-0">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Network</span>
-                        <span className="text-xs font-bold text-slate-900 truncate block">{plan.network_restriction}</span>
+
+                {/* Oncology */}
+                <div className="flex flex-col justify-center px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-1.5 mb-1">
+                        <Activity className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Cancer</span>
                     </div>
+                    <span className="text-xs font-bold text-slate-900 truncate">
+                        {limits.oncology.status === 'Unlimited' ? 'Unlimited' : limits.oncology.value > 0 ? fmt(limits.oncology.value) : 'PMB Only'}
+                    </span>
+                </div>
+
+                {/* Network */}
+                <div className="flex flex-col justify-center px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-1.5 mb-1">
+                        <Wallet className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Network</span>
+                    </div>
+                    <span className="text-xs font-bold text-slate-900 truncate">{plan.network_restriction}</span>
+                </div>
+
+                {/* Casualty */}
+                <div className="flex flex-col justify-center px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-1.5 mb-1">
+                        <Zap className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Casualty</span>
+                    </div>
+                    <span className={clsx("text-xs font-bold truncate", limits.casualty.status === 'No Benefit' ? "text-rose-600" : "text-slate-900")}>
+                        {limits.casualty.status === 'No Benefit' ? 'No Benefit' : limits.casualty.value > 0 ? `R${limits.casualty.value}` : 'Savings'}
+                    </span>
                 </div>
             </div>
 
-            {/* 5. TRADE-OFF WARNING */}
+            {/* 5. RISK WARNING */}
             {verdict?.warning && (
-                <div className="mx-5 mb-4">
+                <div className="mx-5 mb-auto">
                     <div className="p-3 bg-amber-50/80 border border-amber-100 rounded-xl flex gap-2.5 items-start">
-                        <div className="bg-white p-1 rounded-full shadow-sm shrink-0 mt-0.5">
-                            <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
-                        </div>
+                        <ShieldAlert className="w-3.5 h-3.5 text-amber-600 mt-0.5" />
                         <div className="min-w-0">
                             <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mb-0.5">Risk Warning</p>
                             <p className="text-xs font-medium text-amber-900 leading-snug">{verdict.warning}</p>
@@ -140,8 +168,8 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                 </div>
             )}
 
-            {/* 6. STATIC ACTION FOOTER (Merged from Expandable) */}
-            <div className="border-t border-slate-100 bg-slate-50/50 p-4">
+            {/* 6. STATIC ACTION */}
+            <div className="border-t border-slate-100 bg-slate-50/50 p-4 mt-4">
                 <button
                     onClick={onVerify}
                     className="w-full py-3 bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
