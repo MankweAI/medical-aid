@@ -2,6 +2,7 @@ import { Plan } from '@/utils/types';
 import { Persona } from '@/utils/persona';
 import { PLANS } from '@/data/plans';
 import { PERSONAS } from '@/data/personas';
+import { PricingEngine } from '@/utils/engine'; // Import Engine for accurate pricing
 
 // COMPATIBILITY MATRIX (Who can talk to whom?)
 const COMPATIBILITY_MAP: Record<string, string[]> = {
@@ -33,18 +34,11 @@ export const ContentGenerator = {
         ];
     },
 
-    // 3. CROSS-SCHEME SMART PIVOT
+    // 3. CROSS-SCHEME SMART PIVOT (ROBUST VERSION)
     getSmartPivot: (currentPlan: Plan, currentPersona: Persona) => {
-        // A. Sort ALL plans by price (The "Market Ladder")
-        const marketLadder = PLANS.sort((a, b) => a.price - b.price);
 
-        const currentIndex = marketLadder.findIndex(p => p.id === currentPlan.id);
-
-        // Find immediate neighbors in the market
-        const cheaperPlan = currentIndex > 0 ? marketLadder[currentIndex - 1] : null;
-        const richerPlan = currentIndex < marketLadder.length - 1 ? marketLadder[currentIndex + 1] : null;
-
-        // B. The Matchmaker (Finds the best persona for the new plan)
+        // HELPER: Find the best persona for a plan ID
+        // This logic is now reused to validate candidates
         const findBestPersona = (targetPlanId: string) => {
             const candidates = PERSONAS.filter(p => p.actuarial_logic?.target_plan_id === targetPlanId);
 
@@ -57,13 +51,57 @@ export const ContentGenerator = {
             const compatible = candidates.find(p => allowedCategories.includes(p.meta.category));
             if (compatible) return compatible;
 
-            // 3. No Match
-            return null;
+            // 3. Any Match (Fallback for sparse data)
+            return candidates.length > 0 ? candidates[0] : null;
         };
 
+        // A. CALCULATE REAL-WORLD COST
+        // We must calculate the actual premium for the user's income/family
+        // to ensure the sort order is actuarially correct.
+        const calculatedLadder = PLANS.map(p => {
+            const financials = PricingEngine.calculateProfile(
+                p.contributions[0],
+                currentPersona.defaults.family_composition,
+                currentPersona.defaults.income
+            );
+            return {
+                plan: p,
+                realCost: financials.monthlyPremium,
+                linkedPersona: findBestPersona(p.id) // Pre-fetch persona to check validity
+            };
+        });
+
+        // B. FILTER INVALID CANDIDATES
+        // 1. Remove the current plan itself
+        // 2. Remove plans that don't have a linked Persona (we can't route to them)
+        const validLadder = calculatedLadder.filter(item =>
+            item.plan.id !== currentPlan.id &&
+            item.linkedPersona !== null
+        );
+
+        // C. SORT BY PRICE (Low to High)
+        validLadder.sort((a, b) => a.realCost - b.realCost);
+
+        // D. FIND PIVOT POINTS
+        // We look for the current plan's price point in this new valid ladder
+        // Note: currentPlan isn't in validLadder, so we find the insertion index
+        const currentCost = PricingEngine.calculateProfile(
+            currentPlan.contributions[0],
+            currentPersona.defaults.family_composition,
+            currentPersona.defaults.income
+        ).monthlyPremium;
+
+        // Find the index where the current plan *would* fit
+        let insertionIndex = validLadder.findIndex(item => item.realCost >= currentCost);
+        if (insertionIndex === -1) insertionIndex = validLadder.length; // It's the most expensive
+
+        // E. SELECT NEIGHBORS
+        const cheaperOption = insertionIndex > 0 ? validLadder[insertionIndex - 1] : null;
+        const richerOption = insertionIndex < validLadder.length ? validLadder[insertionIndex] : null;
+
         return {
-            cheaper: cheaperPlan ? { plan: cheaperPlan, persona: findBestPersona(cheaperPlan.id) } : null,
-            richer: richerPlan ? { plan: richerPlan, persona: findBestPersona(richerPlan.id) } : null
+            cheaper: cheaperOption ? { plan: cheaperOption.plan, persona: cheaperOption.linkedPersona! } : null,
+            richer: richerOption ? { plan: richerOption.plan, persona: richerOption.linkedPersona! } : null
         };
     }
 };

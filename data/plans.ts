@@ -1,403 +1,121 @@
+// data/plans.ts
 import { Plan } from '@/utils/types';
 
 export const PLANS: Plan[] = [
-    // --- BESTMED PLANS ---
-
-    // 1. RHYTHM 1 (The Income Sensitive Plan)
+    // 1. BESTMED BEAT 1 NETWORK (The Student Starter)
     {
-        id: "bestmed-rhythm1-network-2026",
-        price: 1736,
+        id: 'bestmed-beat1-network-2026',
+        price: 2269,
         savings_annual: 0,
         identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Rhythm 1",
-            plan_series: "Rhythm",
-            plan_type: "Network Comprehensive"
+            scheme_name: 'Bestmed',
+            plan_name: 'Beat1',
+            plan_series: 'Beat Series',
+            plan_type: 'Hospital Plan'
         },
         contributions: [
             {
-                pricing_model: "Income_Banded",
-                pricing_matrix: [
-                    { min: 0, max: 9000, main: 1736, adult: 1736, child: 715 },
-                    { min: 9001, max: 14000, main: 2024, adult: 2024, child: 860 },
-                    { min: 14001, max: 0, main: 3615, adult: 3615, child: 1873 }
-                ],
-                msa_structure: { type: "None", value: 0 }
+                pricing_model: 'Fixed',
+                pricing_matrix: {
+                    main: 2269,
+                    adult: 1764,
+                    child: 956
+                },
+                msa_structure: {
+                    type: 'None',
+                    value: 0
+                }
             }
         ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: "Unlimited"
+        network_restriction: 'Network',
+        network_details: {
+            hospitals: 'Network',
+            gps: 'Any',
+            specialists: 'Any'
         },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2092, wellness_screening: true }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 0,
-            joint_replacement: 0,
-            admission_penalty_non_network: 15025
-        },
-        red_flag: "Strict income verification. Voluntary use of non-DSP hospital triggers R15,025 co-payment."
-    },
-    // 2. BEAT 1 (The Network Saver)
-    {
-        id: "bestmed-beat1-network-2026",
-        price: 1959,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Beat 1 Network",
-            plan_series: "Beat",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 1959, adult: 1523, child: 818 },
-                msa_structure: { type: "None", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
         coverage_rates: {
             hospital_account: 100,
             specialist_in_hospital: 100,
             specialist_out_hospital: 0,
             gp_network_consults: 0
         },
-        defined_baskets: {
-            maternity: { antenatal_consults: 0, ultrasounds_2d: 0, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 0 }
+        limits: {
+            oncology: {
+                status: 'Limited',
+                value: 9999999,
+                copay_percentage: 0
+            },
+            casualty: {
+                status: 'No Benefit',
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 99764
+            }
         },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 6,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 2092,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 27,
         procedure_copays: {
             scope_in_hospital: 2000,
             scope_out_hospital: 0,
             mri_scan: 2600,
-            joint_replacement: "excluded",
+            joint_replacement: 'Excluded',
             admission_penalty_non_network: 15025
         },
-        red_flag: "Joint replacements excluded (PMBs only)."
-    },
-    // 3. BEAT 2 (The Savings Starter)
-    {
-        id: "bestmed-beat2-network-2026",
-        price: 2775,
-        savings_annual: 5328,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Beat 2 Network",
-            plan_series: "Beat",
-            plan_type: "Savings"
-        },
-        contributions: [
+        gap_cover_rating: 'Mandatory',
+        red_flag: 'No out-of-hospital benefits - GP visits and acute medicine for member\'s account',
+        faq: [
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 2775, adult: 2156, child: 1167 },
-                msa_structure: { type: "Percentage", value: 16 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2400 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2000,
-            scope_out_hospital: 0,
-            mri_scan: 2500,
-            joint_replacement: "excluded",
-            admission_penalty_non_network: 15025
-        },
-        red_flag: "Savings account is small (16%); likely to deplete with chronic use."
-    },
-    // 4. BEAT 3 (The Maternity Choice)
-    {
-        id: "bestmed-beat3-network-2026",
-        price: 4062,
-        savings_annual: 7308,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Beat 3 Network",
-            plan_series: "Beat",
-            plan_type: "Savings"
-        },
-        contributions: [
+                question: 'Will I have to pay upfront if I need a colonoscopy or gastroscopy?',
+                answer: 'Yes, there is a R2,000 co-payment for each scope procedure (colonoscopy, gastroscopy, cystoscopy, hysteroscopy, sigmoidoscopy). This co-payment does not apply if the procedure is for a Prescribed Minimum Benefit (PMB) condition.'
+            },
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 4062, adult: 2898, child: 1434 },
-                msa_structure: { type: "Percentage", value: 15 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2510 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2000,
-            scope_out_hospital: 0,
-            mri_scan: 2000,
-            joint_replacement: "excluded",
-            admission_penalty_non_network: 15025
-        },
-        red_flag: "Savings (15%) is lower than Beat 2, but Maternity basket is Risk-funded."
-    },
-    // 5. BEAT 3 Plus
-    {
-        id: "bestmed-beat3-plus-2026",
-        price: 5042,
-        savings_annual: 15126,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Beat 3 Plus",
-            plan_series: "Beat",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
+                question: 'What happens if I go to a hospital that\'s not in the network?',
+                answer: 'If you voluntarily choose a non-network hospital on the Beat1 Network option, you will incur a maximum co-payment of R15,025. You can avoid this by selecting the standard (non-network) option at R2,523 per month instead of R2,269.'
+            },
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 5042, adult: 3746, child: 1902 },
-                msa_structure: { type: "Percentage", value: 25 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2510 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2000,
-            scope_out_hospital: 0,
-            mri_scan: 2000,
-            joint_replacement: "excluded",
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Joint replacements excluded (PMBs only). Hospital plan with 25% MSA allocation."
-    },
-    // 6. BEAT 4 (The Premium Savings)
-    {
-        id: "bestmed-beat4-2026",
-        price: 7365,
-        savings_annual: 12373,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Beat 4",
-            plan_series: "Beat",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
+                question: 'Will my depression or anxiety medication be covered?',
+                answer: 'Only if your condition is listed on the Chronic Disease List (CDL). Beat1 covers only CDL and PMB chronic conditions. Non-CDL chronic medicine has no benefit and must be paid out-of-pocket.'
+            },
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 7365, adult: 6082, child: 1821 },
-                msa_structure: { type: "Percentage", value: 14 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Limited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2801, wellness_screening: true }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2000,
-            scope_out_hospital: 0,
-            mri_scan: 2000,
-            joint_replacement: "excluded",
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Joint replacements excluded (PMBs only)."
-    },
-    // 7. PACE 1 (The Safety Net)
-    {
-        id: "bestmed-pace1-2026",
-        price: 5934,
-        savings_annual: 13524,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Pace 1",
-            plan_series: "Pace",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
+                question: 'If I need an MRI or CT scan, will I have to pay extra?',
+                answer: 'Yes, there is a R2,600 co-payment per scan for MRI, CT, and nuclear/isotope studies. The co-payment does not apply to confirmed PMB conditions. There is also a family annual limit of R20,920 for all specialised imaging combined.'
+            },
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 5934, adult: 4289, child: 1541 },
-                msa_structure: { type: "Percentage", value: 19 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Limited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 1 },
-            preventative: { vaccinations: true, contraceptives: 2800 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 2000,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Internal Prosthesis limit R114k may require co-payment for spinal surgery."
-    },
-    // 8. PACE 2
-    {
-        id: "bestmed-pace2-2026",
-        price: 7306,
-        savings_annual: 12274,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Pace 2",
-            plan_series: "Pace",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
+                question: 'Can I go to my GP for a flu or regular checkup without paying?',
+                answer: 'No. Beat1 is a hospital plan - general out-of-hospital GP visits are for your own account. The only GP visits covered are the 6 antenatal consultations during pregnancy, and preventative screenings like Pap smears or PSA tests where the consultation is paid from available benefits.'
+            },
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 7306, adult: 7077, child: 1705 },
-                msa_structure: { type: "Percentage", value: 14 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2510 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 1000,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "None. Comprehensive plan with unlimited above-threshold benefits."
-    },
-    // 9. PACE 4 (The Flagship)
-    {
-        id: "bestmed-pace4-2026",
-        price: 12572,
-        savings_annual: 4524,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Pace 4",
-            plan_series: "Pace",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
+                question: 'Do I need to pay anything extra if I have cancer treatment?',
+                answer: 'Oncology is covered at 100% Scheme tariff with no annual limit, but Essential ICON protocols apply, meaning you must use designated or preferred oncology providers. If you go outside the ICON network, you may face significant out-of-pocket costs.'
+            },
             {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 12572, adult: 12572, child: 2945 },
-                msa_structure: { type: "Percentage", value: 3 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 1 },
-            preventative: { vaccinations: true, contraceptives: 2801 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 1500,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Extremely high premium with low savings. Day procedure co-payment R2872."
-    },
-    // 10. RHYTHM 2
-    {
-        id: "bestmed-rhythm2-network-2026",
-        price: 3516,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bestmed",
-            plan_name: "Rhythm 2 (Network)",
-            plan_series: "Rhythm",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
+                question: 'If I need a knee or hip replacement, how much will I pay?',
+                answer: 'Joint replacement surgery is excluded except for PMB conditions. If it qualifies as a PMB, coverage is limited to R51,686 for knee/shoulder and R41,918 for hip/major joints, subject to the overall prosthesis limit of R99,764 per family per year.'
+            },
             {
-                pricing_model: "Income_Banded",
-                pricing_matrix: [
-                    { min: 0, max: 5500, main: 2747, adult: 2610, child: 1653 },
-                    { min: 5501, max: 8500, main: 3300, adult: 3000, child: 1759 },
-                    { min: 8501, max: 0, main: 3516, adult: 3165, child: 1759 }
-                ],
-                msa_structure: { type: "None", value: 0 }
+                question: 'What if I get injured and go to casualty but I\'m not admitted to hospital?',
+                answer: 'There is no casualty facility benefit on Beat1. This is a pure hospital plan, so you are only covered if you are admitted to hospital. If you are treated and discharged from the emergency room without admission, the costs are for your own account.'
             }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 9, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 2301 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2000,
-            scope_out_hospital: 0,
-            mri_scan: 2600,
-            joint_replacement: "excluded",
-            admission_penalty_non_network: 15025
-        },
-        red_flag: "Joint replacements excluded (PMBs only). Income-banded network plan with unlimited GP visits."
-    },
+        ]
+    }
+    ,
 
-    // --- BONITAS PLANS ---
-
-    // BonCap
+    // 2. BONITAS BONCAP (The Income Banded Starter)
     {
         id: "bonitas-boncap-network-2026",
-        price: 4177,
+        price: 1730, // Income Band 1 Rate
         savings_annual: 0,
         identity: {
             scheme_name: "Bonitas",
@@ -411,429 +129,55 @@ export const PLANS: Plan[] = [
                 pricing_matrix: [
                     { min: 0, max: 11930, main: 1730, adult: 1730, child: 815 },
                     { min: 11931, max: 19350, main: 2111, adult: 2111, child: 971 },
-                    { min: 19351, max: 25170, main: 3404, adult: 3404, child: 1288 },
-                    { min: 25171, max: 0, main: 4177, adult: 4177, child: 1585 }
+                    { min: 19351, max: 0, main: 4177, adult: 4177, child: 1585 }
                 ],
                 msa_structure: { type: "None", value: 0 }
             }
         ],
-        network_restriction: "Network",
+        network_restriction: "Strict Network",
+        network_details: {
+            hospitals: "BonCap Network",
+            gps: "BonCap Network",
+            specialists: "Network (Referral Required)"
+        },
         coverage_rates: {
             hospital_account: 100,
             specialist_in_hospital: 100,
             specialist_out_hospital: 0,
-            gp_network_consults: "Unlimited"
+            gp_network_consults: "Unlimited (Subject to Protocol)"
+        },
+        limits: {
+            oncology: { status: "PMB Only", value: 0 },
+            casualty: { status: "No Benefit", value: 0 },
+            internal_prosthesis: { sublimit: 0 } // Excluded
         },
         defined_baskets: {
-            maternity: { antenatal_consults: 0, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 1330 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 1230,
-            joint_replacement: "Excluded",
-            admission_penalty_non_network: "30%"
-        },
-        red_flag: "Joint replacement surgery excluded; Back/neck surgery excluded; Caesarean sections for non-medical reasons excluded. Strict network restriction applies."
-    },
-
-    // BonClassic
-    {
-        id: "bonitas-bonclassic-network-2026",
-        price: 8238,
-        savings_annual: 14832,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonClassic",
-            plan_series: "BonClassic",
-            plan_type: "Savings"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 8238, adult: 7071, child: 2034 },
-                msa_structure: { type: "Fixed", value: 14832 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 3 },
-            preventative: { vaccinations: true, contraceptives: 2050 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 2800,
-            joint_replacement: 0,
-            admission_penalty_non_network: "30%"
-        },
-        red_flag: "High co-payments for non-network usage (30%). Out-of-hospital specialist cover is paid exclusively from savings."
-    },
-
-    // BonComprehensive
-    {
-        id: "bonitas-boncomprehensive-any-2026",
-        price: 12509,
-        savings_annual: 22512,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonComprehensive",
-            plan_series: "Bon",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 12509, adult: 11796, child: 2548 },
-                msa_structure: { type: "Fixed", value: 22512 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 150,
-            specialist_out_hospital: 0,
-            gp_network_consults: "Paid from Savings/ATB"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 3 },
-            preventative: { vaccinations: true, contraceptives: 2050 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 2800,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "30% co-payment for non-formulary chronic medicine."
-    },
-
-    // BonCore
-    {
-        id: "bonitas-boncore-network-2026",
-        price: 1275,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonCore (Network)",
-            plan_series: "BonCore",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 1275, adult: 1275, child: 1275 },
-                msa_structure: { type: "None", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 70,
-            gp_network_consults: 3
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 0, ultrasounds_2d: 0, paediatrician_visits: 0 },
+            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 0 },
             preventative: { vaccinations: true, contraceptives: 0 }
         },
-        procedure_copays: {
-            scope_in_hospital: 5550,
-            scope_out_hospital: 0,
-            mri_scan: 0,
-            joint_replacement: "Not covered",
-            admission_penalty_non_network: 14680
-        },
-        red_flag: "Extensive list of surgical procedures not covered, including back and neck surgery, joint replacement surgery, hernia repair."
-    },
-
-    // BonPrime
-    {
-        id: "bonitas-bonprime-any-2026",
-        price: 3255,
-        savings_annual: 6252,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonPrime",
-            plan_series: "BonPrime",
-            plan_type: "Saver"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 3255, adult: 2546, child: 1035 },
-                msa_structure: { type: "Percentage", value: 16 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 1970 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2020,
-            scope_out_hospital: 0,
-            mri_scan: 2240,
-            joint_replacement: 0,
-            admission_penalty_non_network: 8400
-        },
-        red_flag: "Multiple fixed co-payments on scoped procedures; 30% co-payments for using non-network hospitals."
-    },
-
-    // BonSave
-    {
-        id: "bonitas-bonsave-2026",
-        price: 4047,
-        savings_annual: 12144,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonSave",
-            plan_series: "BonSave",
-            plan_type: "Saver"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 4047, adult: 3059, child: 1211 },
-                msa_structure: { type: "Fixed", value: "Main 12144; Adult 9180; Child 3636" }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: "2 per family"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 1970 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2020,
-            scope_out_hospital: 0,
-            mri_scan: 1860,
-            joint_replacement: "Excluded except PMB",
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Joint replacement surgery excluded except for PMB; internal prostheses subject to strict limits."
-    },
-
-    // BonStart
-    {
-        id: "bonitas-bonstart-network-2026",
-        price: 1603,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonStart",
-            plan_series: "BonStart",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 1603, adult: 1603, child: 1603 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 0, ultrasounds_2d: 0, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 1270 }
-        },
+        chronic_conditions: 28,
         procedure_copays: {
             scope_in_hospital: 0,
             scope_out_hospital: 0,
-            mri_scan: 2800,
-            joint_replacement: "Not Covered",
-            admission_penalty_non_network: 12680
-        },
-        red_flag: "Major exclusions apply: Back/neck surgery, joint replacements, gastroscopies, colonoscopies not covered."
-    },
-
-    // BonEssential
-    {
-        id: "bonitas-bonessential-any-2026",
-        price: 2747,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "BonEssential",
-            plan_series: "BonEssential",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 2747, adult: 2030, child: 888 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 1580 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2020,
-            scope_out_hospital: 0,
-            mri_scan: 2800,
-            joint_replacement: 0,
-            admission_penalty_non_network: "30%"
-        },
-        red_flag: "30% co-payments apply for using non-network hospitals. Major exclusions apply."
-    },
-    // Bonitas Hospital Standard
-    {
-        id: "bonitas-hospital-standard-2026",
-        price: 3561,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "Hospital Standard",
-            plan_series: "Hospital Standard",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 3561, adult: 2999, child: 1353 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 0,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 1580 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2020,
-            scope_out_hospital: 0,
-            mri_scan: 2800,
+            mri_scan: 2000,
             joint_replacement: "Excluded",
             admission_penalty_non_network: "30%"
         },
-        red_flag: "Joint replacements excluded (except PMB); Back/neck surgery excluded (except PMB); 30% co-payment for non-network hospital use."
-    },
-    // Bonitas Primary
-    {
-        id: "bonitas-primary-network-2026",
-        price: 3588,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "Primary",
-            plan_series: "Primary",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 3588, adult: 2807, child: 1141 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: 100
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 6, ultrasounds_2d: 2, paediatrician_visits: 0 },
-            preventative: { vaccinations: true, contraceptives: 1970 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 2020,
-            scope_out_hospital: 0,
-            mri_scan: 2240,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Internal and external prostheses limited to PMB only; 30% co-payment for non-network hospital admissions; 40% co-payment for non-network contraceptives"
-    },
-    // Bonitas Standard
-    {
-        id: "bonitas-standard-any-2026",
-        price: 5929,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas",
-            plan_name: "Standard",
-            plan_series: "Standard",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 5929, adult: 5139, child: 1740 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Subject to Day-to-Day Limit"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 2050 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 1860,
-            joint_replacement: 38560,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "R38 560 co-payment for Joint Replacements if non-DSP used; R7 420 co-payment for Cataracts if non-DSP used."
+        gap_cover_rating: "Mandatory",
+        red_flag: "Strict Network: You must use specific BonCap GPs and Hospitals. 30% co-payment for non-compliance.",
+        faq: [
+            { question: "Can I go to any GP?", answer: "No, you must use a GP on the BonCap network. Visits to non-network GPs are for your own account." },
+            { question: "Is cancer covered?", answer: "Only Prescribed Minimum Benefit (PMB) cancers are covered, and you must use State facilities or the designated network." }
+        ]
     },
 
-    // --- DISCOVERY PLANS ---
-
-    // Classic Saver
+    // 3. DISCOVERY CLASSIC SAVER (The Savings Optimised)
     {
         id: "discovery-classic-saver-any-2026",
         price: 4850,
         savings_annual: 11640,
         identity: {
-            scheme_name: "Discovery Health Medical Scheme",
+            scheme_name: "Discovery Health",
             plan_name: "Classic Saver",
             plan_series: "Saver Series",
             plan_type: "Saver"
@@ -846,368 +190,94 @@ export const PLANS: Plan[] = [
             }
         ],
         network_restriction: "Any",
+        network_details: {
+            hospitals: "Any Private Hospital",
+            gps: "Any",
+            specialists: "Any"
+        },
         coverage_rates: {
             hospital_account: 100,
             specialist_in_hospital: 200,
             specialist_out_hospital: 100,
-            gp_network_consults: "3 consultations (post-MSA)"
+            gp_network_consults: "Paid from Savings"
+        },
+        limits: {
+            oncology: { status: "Unlimited", value: 9999999, copay_percentage: 20 },
+            casualty: { status: "Savings", value: 0 },
+            internal_prosthesis: { sublimit: 0 }
         },
         defined_baskets: {
             maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
             preventative: { vaccinations: true, contraceptives: 0 }
         },
+        chronic_conditions: 27,
         procedure_copays: {
-            scope_in_hospital: 8000,
+            scope_in_hospital: 6500, // Day surgery deductible
             scope_out_hospital: 0,
-            mri_scan: 4000,
+            mri_scan: 3500,
             joint_replacement: 0,
             admission_penalty_non_network: 0
         },
-        red_flag: "Upfront payment of R7,250 for day surgery procedures outside of the Day Surgery Network"
+        gap_cover_rating: "Recommended",
+        red_flag: "Day Surgery Deductible: R6,500 upfront if you use a hospital instead of a Day Clinic for scopes.",
+        faq: [
+            { question: "Does my savings account expire?", answer: "No, unused savings carry over to the next year." },
+            { question: "Are specialists covered in full?", answer: "Only up to 200% of the scheme rate. Many specialists charge 300%+, so Gap Cover is recommended." }
+        ]
     },
-    // Classic Priority
+
+    // 4. FEDHEALTH FLEXIFED SAVVY (The Digital Youth Plan)
     {
-        id: "discovery-classic-priority-2026",
-        price: 6198,
-        savings_annual: 18594,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Classic Priority",
-            plan_series: "Priority",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 6198, adult: 4889, child: 2478 },
-                msa_structure: { type: "Percentage", value: 25 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 200,
-            specialist_out_hospital: 100,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 0 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 7500,
-            scope_out_hospital: 0,
-            mri_scan: 4000,
-            joint_replacement: 23700,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Upfront payments: R23,700 for Joint replacements/Spinal surgery; R11,500 for Hysterectomy; R7,250 for Day Surgery outside network. MRI first R4,000 paid from savings."
-    },
-    // Classic Core
-    {
-        id: "discovery-classic-core-any-2026",
-        price: 3905,
+        id: "fedhealth-flexifedsavvy-hospital-2026",
+        price: 1155,
         savings_annual: 0,
         identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Classic Core",
-            plan_series: "Core Series",
+            scheme_name: "Fedhealth",
+            plan_name: "flexiFED Savvy",
+            plan_series: "flexiFED",
             plan_type: "Hospital Plan"
         },
         contributions: [
             {
                 pricing_model: "Fixed",
-                pricing_matrix: { main: 3905, adult: 3083, child: 1562 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 200,
-            specialist_out_hospital: 0,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 0 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 8000,
-            scope_out_hospital: 0,
-            mri_scan: 0,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Day Surgery Network deductible of R7,250 applies if procedure performed outside network."
-    },
-    // Classic Comprehensive
-    {
-        id: "discovery-classic-comprehensive-any-2026",
-        price: 10037,
-        savings_annual: 30111,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Classic Comprehensive",
-            plan_series: "Comprehensive",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 10037, adult: 9492, child: 2002 },
-                msa_structure: { type: "Percentage", value: 25 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 200,
-            specialist_out_hospital: 100,
-            gp_network_consults: 0
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 0, wellness_screening: true }
-        },
-        procedure_copays: {
-            scope_in_hospital: 7250,
-            scope_out_hospital: 0,
-            mri_scan: 4000,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Upfront payment of R7,250 for scopes performed outside the Day Surgery Network"
-    },
-    // Classic Smart
-    {
-        id: "discovery-classic-smart-2026",
-        price: 2822,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Classic Smart",
-            plan_series: "Smart Series",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 2822, adult: 2227, child: 1127 },
-                msa_structure: { type: "Percentage", value: 0 }
+                pricing_matrix: { main: 1155, adult: 1155, child: 495 },
+                msa_structure: { type: "None", value: 0 }
             }
         ],
         network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 200,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Unlimited"
+        network_details: {
+            hospitals: "Fedhealth Network",
+            gps: "Unlimited Virtual / 3 Physical",
+            specialists: "Network"
         },
-        defined_baskets: {
-            maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 0 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 4650,
-            scope_out_hospital: 0,
-            mri_scan: 4000,
-            joint_replacement: 0,
-            admission_penalty_non_network: 12650
-        },
-        red_flag: "Day surgery network applies; Upfront payments for out-of-network admissions"
-    },
-    // Classic Smart Saver
-    {
-        id: "discovery-classic-smart-saver-network-2026",
-        price: 3350,
-        savings_annual: 2814,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Classic Smart Saver",
-            plan_series: "Smart Saver",
-            plan_type: "Saver"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 3350, adult: 2840, child: 1400 },
-                msa_structure: { type: "Percentage", value: 7 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 200,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 2600 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 8000,
-            scope_out_hospital: 0,
-            mri_scan: 4000,
-            joint_replacement: 0,
-            admission_penalty_non_network: 12650
-        },
-        red_flag: "None"
-    },
-    // Essential Core
-    {
-        id: "discovery-essential-core-any-2026",
-        price: 3356,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Essential Core",
-            plan_series: "Core Series",
-            plan_type: "Hospital Plan"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 3356, adult: 2517, child: 1347 },
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Any",
         coverage_rates: {
             hospital_account: 100,
             specialist_in_hospital: 100,
             specialist_out_hospital: 0,
-            gp_network_consults: 0
+            gp_network_consults: "Unlimited Virtual"
+        },
+        limits: {
+            oncology: { status: "PMB Only", value: 0 },
+            casualty: { status: "Trauma Only", value: 3000 },
+            internal_prosthesis: { sublimit: 0 }
         },
         defined_baskets: {
-            maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
+            maternity: { antenatal_consults: 0, ultrasounds_2d: 0, paediatrician_visits: 0 },
             preventative: { vaccinations: true, contraceptives: 0 }
         },
-        procedure_copays: {
-            scope_in_hospital: 8000,
-            scope_out_hospital: 0,
-            mri_scan: 0,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Day Surgery Network deductible of R7,250 applies if procedure performed outside network."
-    },
-    // KeyCare Plus
-    {
-        id: "discovery-keycare-plus-2026",
-        price: 3980,
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "KeyCare Plus",
-            plan_series: "KeyCare",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Income_Banded",
-                pricing_matrix: [
-                    { min: 0, max: 10250, main: 1961, adult: 1961, child: 713 },
-                    { min: 10251, max: 16600, main: 2695, adult: 2695, child: 760 },
-                    { min: 16601, max: 0, main: 3980, adult: 3980, child: 1064 }
-                ],
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Network",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 8, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 0 }
-        },
+        chronic_conditions: 27,
         procedure_copays: {
             scope_in_hospital: 0,
             scope_out_hospital: 0,
             mri_scan: 0,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
+            joint_replacement: "Excluded",
+            admission_penalty_non_network: "40%"
         },
-        red_flag: "Full cover only in KeyCare Network. Hospital penalty is full account if non-network used."
-    },
-    // Executive
-    {
-        id: "discovery-executive-2026",
-        price: 12338,
-        savings_annual: 37014,
-        identity: {
-            scheme_name: "Discovery Health Medical Scheme",
-            plan_name: "Executive Plan",
-            plan_series: "Executive",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 12338, adult: 12338, child: 2358 },
-                msa_structure: { type: "Percentage", value: 25 }
-            }
-        ],
-        network_restriction: "Any",
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 300,
-            specialist_out_hospital: 300,
-            gp_network_consults: "Unlimited"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 0 }
-        },
-        procedure_copays: {
-            scope_in_hospital: 6800,
-            scope_out_hospital: 0,
-            mri_scan: 0,
-            joint_replacement: 0,
-            admission_penalty_non_network: 0
-        },
-        red_flag: "Cosmetic procedures excluded; Frail care excluded; Infertility treatment limited to ART benefit limits"
-    },
-    {
-        id: "standard-select-2026",
-        price: 5431, // Based on your persona description (R5929 - R498)
-        savings_annual: 0,
-        identity: {
-            scheme_name: "Bonitas", // Assuming Bonitas based on context ("Standard Select" is a Bonitas plan)
-            plan_name: "Standard Select",
-            plan_series: "Standard",
-            plan_type: "Comprehensive"
-        },
-        contributions: [
-            {
-                pricing_model: "Fixed",
-                pricing_matrix: { main: 5431, adult: 4700, child: 1595 }, // Estimated based on typical ratios
-                msa_structure: { type: "Percentage", value: 0 }
-            }
-        ],
-        network_restriction: "Network", // "Select" implies network
-        coverage_rates: {
-            hospital_account: 100,
-            specialist_in_hospital: 100,
-            specialist_out_hospital: 100,
-            gp_network_consults: "Subject to Day-to-Day Limit"
-        },
-        defined_baskets: {
-            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 2 },
-            preventative: { vaccinations: true, contraceptives: 2050, wellness_screening: true }
-        },
-        procedure_copays: {
-            scope_in_hospital: 0,
-            scope_out_hospital: 0,
-            mri_scan: 1860,
-            joint_replacement: 38560,
-            admission_penalty_non_network: "30%"
-        },
-        red_flag: "Using a non-network hospital results in a 30% co-payment. Non-nominated GPs limited to 2 visits per family."
+        gap_cover_rating: "Mandatory",
+        red_flag: "Age Restricted (Under 35). Elective C-Section Copay R9,330. Strict Network.",
+        faq: [
+            { question: "Can I see a doctor in person?", answer: "Yes, but you are limited to 3 face-to-face visits per year. You have unlimited virtual (video) consultations." },
+            { question: "What happens when I turn 35?", answer: "You will be migrated to a standard flexiFED plan, which will likely have a higher premium." }
+        ]
     }
 ];

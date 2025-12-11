@@ -1,31 +1,10 @@
 // utils/types.ts
-
-export interface FixedPricing {
-    main: number;
-    adult: number;
-    child: number;
-}
-
-export interface IncomeBand {
-    min: number;
-    max: number;
-    main: number;
-    adult: number;
-    child: number;
-}
-
-export type PricingMatrix = FixedPricing | IncomeBand[];
-
 export interface Contribution {
     pricing_model: 'Fixed' | 'Income_Banded';
-    pricing_matrix: PricingMatrix;
-    msa_structure?: {
-        type: 'Percentage' | 'Fixed' | 'None' | string;
-        value: number | string;
-    };
+    pricing_matrix: { main: number; adult: number; child: number } | Array<{ min: number; max: number; main: number; adult: number; child: number }>;
+    msa_structure?: { type: string; value: number | string };
 }
 
-// FIX: Added FamilyComposition export to standardize usage across app
 export interface FamilyComposition {
     main: number;
     adult: number;
@@ -48,6 +27,13 @@ export interface Plan {
 
     network_restriction: string;
 
+    // --- NEW SUPER SCHEMA FIELDS ---
+    network_details: {
+        hospitals: string;
+        gps: string;
+        specialists: string;
+    };
+
     coverage_rates: {
         hospital_account: number;
         specialist_in_hospital: number;
@@ -55,18 +41,18 @@ export interface Plan {
         gp_network_consults: number | string;
     };
 
-    defined_baskets: {
-        maternity: {
-            antenatal_consults: number;
-            ultrasounds_2d: number;
-            paediatrician_visits: number;
-        };
-        preventative: {
-            vaccinations: boolean;
-            contraceptives: number;
-            wellness_screening?: boolean;
-        };
+    limits: {
+        oncology: { status: string; value: number; copay_percentage?: number };
+        casualty: { status: string; value: number };
+        internal_prosthesis: { sublimit: number };
     };
+
+    defined_baskets: {
+        maternity: { antenatal_consults: number; ultrasounds_2d: number; paediatrician_visits: number };
+        preventative: { vaccinations: boolean; contraceptives: number; wellness_screening?: boolean };
+    };
+
+    chronic_conditions: number;
 
     procedure_copays: {
         scope_in_hospital: number;
@@ -76,8 +62,8 @@ export interface Plan {
         admission_penalty_non_network?: number | string;
     };
 
+    gap_cover_rating: string;
     red_flag?: string;
 
-    features?: any;
-    benefits?: any[];
+    faq?: { question: string; answer: string }[];
 }
