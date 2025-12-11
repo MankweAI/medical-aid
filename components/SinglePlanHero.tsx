@@ -6,9 +6,9 @@ import { PLANS } from '@/data/plans';
 import { PERSONAS } from '@/data/personas';
 import { PricingEngine } from '@/utils/engine';
 import { validatePlan } from '@/utils/persona';
-import { ShieldCheck, Sparkles, AlertTriangle, TrendingDown, Info } from 'lucide-react';
+import { ShieldCheck, Sparkles, TrendingDown, Info, ChevronDown, Lock } from 'lucide-react';
 import FeedCard from '@/components/FeedCard';
-import PlanDetails from '@/components/PlanDetails'; // Ensure this is imported
+import PlanDetails from '@/components/PlanDetails';
 import ExpertModal from '@/components/ExpertModal';
 import ChatWidget from '@/components/ChatWidget';
 import FeedSkeleton from '@/components/skeletons/FeedSkeleton';
@@ -18,23 +18,17 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
     const { state, isChatOpen, setIsChatOpen } = usePersona();
     const [modalOpen, setModalOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);
+    const [showAnalysis, setShowAnalysis] = useState(false); // <--- PROGRESSIVE STATE
 
-    // Hydration fix
     useEffect(() => { setIsClient(true); }, []);
 
-    // 1. LOOKUP DATA
     const currentPersona = useMemo(() => PERSONAS.find(p => p.slug === slug), [slug]);
-
     const anchorPlan = useMemo(() => {
-        // Fix: Assign to a variable so TypeScript can confirm it is not undefined
         const logic = currentPersona?.actuarial_logic;
-
         if (!logic) return null;
-
         return PLANS.find(p => p.id === logic.target_plan_id);
     }, [currentPersona]);
 
-    // 2. LIVE CALCULATIONS
     const displayPlan = useMemo(() => {
         if (!anchorPlan || !currentPersona) return null;
         try {
@@ -54,7 +48,6 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
         }
     }, [state, anchorPlan, currentPersona]);
 
-    // 3. FINANCIAL TOXICITY ENGINE
     const financialAnalysis = useMemo(() => {
         if (!displayPlan || state.income === 0) return null;
         const ratio = displayPlan.price / state.income;
@@ -72,7 +65,6 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
         return { ratio, toxicity, message, recommendedMinIncome };
     }, [displayPlan, state.income]);
 
-    // --- LOADING STATE (Replaces Blank Page) ---
     if (!isClient || !displayPlan || !currentPersona) {
         return (
             <div className="px-4 py-8">
@@ -86,7 +78,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
 
     return (
         <div className="relative pb-16 animate-in fade-in zoom-in duration-500">
-            {/* SEO CONTEXT & ALERTS */}
+            {/* 1. SEO CONTEXT */}
             <div className="mb-4 px-4 pt-4 flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-100 rounded-full">
@@ -105,6 +97,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                     )}
                 </div>
 
+                {/* 2. AFFORDABILITY ALERT (Always Visible) */}
                 {financialAnalysis && financialAnalysis.toxicity !== 'SAFE' && (
                     <div className={clsx(
                         "p-3 rounded-xl flex items-start gap-3 border",
@@ -121,7 +114,7 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                 )}
             </div>
 
-            {/* THE HERO CARD */}
+            {/* 3. HERO CARD (The Hook) */}
             <div className="px-4 relative transform transition-all duration-500 hover:scale-[1.005] z-10">
                 <FeedCard
                     plan={displayPlan}
@@ -134,9 +127,38 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
                 />
             </div>
 
-            {/* THE NEW SUPER-DETAILED BREAKDOWN */}
+            {/* 4. THE PROGRESSIVE REVEAL (The "Meat") */}
             <div className="px-4 mt-6">
-                <PlanDetails plan={displayPlan} />
+                {!showAnalysis ? (
+                    <button
+                        onClick={() => setShowAnalysis(true)}
+                        className="w-full py-4 bg-slate-50 hover:bg-slate-100 border border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center gap-2 group transition-all"
+                    >
+                        <div className="flex items-center gap-2">
+                            <div className="p-2 bg-white rounded-full shadow-sm text-blue-500 group-hover:scale-110 transition-transform">
+                                <Info className="w-5 h-5" />
+                            </div>
+                            <span className="text-sm font-bold text-slate-700 uppercase tracking-wider group-hover:text-blue-700">
+                                View Full Benefits
+                            </span>
+                        </div>
+                        <span className="text-[10px] text-slate-400 font-medium">
+                            Clinical Baskets • Oncology • Casualty • Limits
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-slate-300 mt-1 animate-bounce" />
+                    </button>
+                ) : (
+                    <div className="animate-in slide-in-from-top-4 duration-500 fade-in">
+                        <PlanDetails plan={displayPlan} />
+
+                        <button
+                            onClick={() => setShowAnalysis(false)}
+                            className="w-full mt-6 py-3 text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest flex items-center justify-center gap-2"
+                        >
+                            Collapse Analysis
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* CHAT & MODAL */}

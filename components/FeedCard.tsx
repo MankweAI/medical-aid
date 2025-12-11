@@ -3,23 +3,19 @@
 import { Plan } from '@/utils/types';
 import {
     Building2,
-    Baby,
-    Scan,
-    Pill,
-    ShieldAlert,
-    ChevronDown,
     Sparkles,
     CheckCircle2,
-    Info,
-    Wallet
+    ShieldAlert,
+    Wallet,
+    Phone
 } from 'lucide-react';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useState } from 'react';
 
 interface FeedCardProps {
-    plan: Plan & { price: number; savings_annual: number };
-    onVerify: (name: string) => void;
+    plan: Plan;
+    onVerify: () => void;
     verdict?: {
         tier: 'WINNER' | 'CONTENDER' | 'RISK';
         badge: string;
@@ -28,7 +24,6 @@ interface FeedCardProps {
 }
 
 export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
-    const [showDetails, setShowDetails] = useState(false);
     const [imgError, setImgError] = useState(false);
 
     if (!plan) return null;
@@ -37,7 +32,7 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
     const logoPath = `/schemes-logo/${schemeSlug}.png`;
     const isWinner = verdict?.tier === 'WINNER';
 
-    // Helpers
+    // Helper
     const fmt = (val: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(val);
 
     return (
@@ -50,7 +45,6 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
             {/* 1. HEADER: Scheme Identity */}
             <div className="px-5 pt-5 pb-4">
                 <div className="flex items-center gap-3 mb-4">
-                    {/* Logo */}
                     <div className={clsx(
                         "w-11 h-11 rounded-xl flex items-center justify-center p-1.5 shrink-0",
                         isWinner ? "bg-emerald-50 border border-emerald-100" : "bg-slate-50 border border-slate-100"
@@ -61,14 +55,13 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                             <span className="text-slate-900 font-black text-[10px] uppercase">{plan.identity.scheme_name.substring(0, 3)}</span>
                         )}
                     </div>
-                    {/* Name & Series */}
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                             <h2 className="text-lg font-black text-slate-900 leading-tight truncate">{plan.identity.plan_name}</h2>
                             {isWinner && (
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-bold rounded-full uppercase tracking-wider shrink-0">
                                     <CheckCircle2 className="w-3 h-3" />
-                                    Recommended
+                                    Best Match
                                 </span>
                             )}
                         </div>
@@ -105,7 +98,7 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     <div className="relative z-10">
                         <div className="flex items-center gap-1.5 mb-2">
                             <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-current" />
-                            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Why this plan?</span>
+                            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Actuarial Verdict</span>
                         </div>
                         <p className="text-[13px] text-slate-700 leading-relaxed font-medium">
                             {verdict.badge}
@@ -120,14 +113,14 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                     <Building2 className="w-4 h-4 text-emerald-500 shrink-0" />
                     <div className="min-w-0">
                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Hospital</span>
-                        <span className="text-sm font-bold text-slate-900">{plan.coverage_rates.hospital_account}%</span>
+                        <span className="text-xs font-bold text-slate-900">{plan.coverage_rates.hospital_account}%</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-100">
                     <Wallet className="w-4 h-4 text-emerald-500 shrink-0" />
                     <div className="min-w-0">
                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Network</span>
-                        <span className="text-sm font-bold text-slate-900 truncate block">{plan.network_restriction}</span>
+                        <span className="text-xs font-bold text-slate-900 truncate block">{plan.network_restriction}</span>
                     </div>
                 </div>
             </div>
@@ -140,75 +133,23 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                             <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mb-0.5">Trade-off</p>
+                            <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mb-0.5">Risk Warning</p>
                             <p className="text-xs font-medium text-amber-900 leading-snug">{verdict.warning}</p>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* 6. EXPANDABLE DETAILS */}
-            <div className="border-t border-slate-100 bg-slate-50/50">
+            {/* 6. STATIC ACTION FOOTER (Merged from Expandable) */}
+            <div className="border-t border-slate-100 bg-slate-50/50 p-4">
                 <button
-                    onClick={() => setShowDetails(!showDetails)}
-                    className="w-full flex items-center justify-between px-5 py-3 text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors active:bg-slate-100"
+                    onClick={onVerify}
+                    className="w-full py-3 bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
                 >
-                    <span className="flex items-center gap-2">
-                        <Info className="w-3.5 h-3.5" />
-                        {showDetails ? "Hide Details" : "View Benefits"}
-                    </span>
-                    <ChevronDown className={clsx("w-4 h-4 transition-transform duration-200", showDetails && "rotate-180")} />
+                    <Phone className="w-3.5 h-3.5" />
+                    Verify with Specialist
                 </button>
-
-                {showDetails && (
-                    <div className="px-5 pb-5 animate-in slide-in-from-top-2 duration-200 space-y-2.5">
-                        <BenefitRow
-                            icon={Baby}
-                            label="Maternity"
-                            value={plan.defined_baskets.maternity.antenatal_consults > 0
-                                ? `${plan.defined_baskets.maternity.antenatal_consults} Consults`
-                                : 'No Benefit'}
-                            isPositive={plan.defined_baskets.maternity.antenatal_consults > 0}
-                        />
-                        <BenefitRow
-                            icon={Pill}
-                            label="Chronic Meds"
-                            value={plan.network_restriction === 'Network' ? 'Network Only' : 'Any Provider'}
-                            isPositive={plan.network_restriction !== 'Network'}
-                        />
-                        <BenefitRow
-                            icon={Scan}
-                            label="MRI/CT Scans"
-                            value={plan.procedure_copays.mri_scan > 0 ? `R${plan.procedure_copays.mri_scan} Co-pay` : 'Covered'}
-                            isPositive={plan.procedure_copays.mri_scan === 0}
-                        />
-
-                        <div className="pt-3 mt-2 border-t border-slate-200/60">
-                            <button
-                                onClick={() => onVerify(plan.identity.plan_name)}
-                                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
-                            >
-                                <CheckCircle2 className="w-4 h-4" />
-                                Speak to Advisor
-                            </button>
-                        </div>
-                    </div>
-                )}
             </div>
-        </div>
-    );
-}
-
-function BenefitRow({ icon: Icon, label, value, isPositive }: { icon: any, label: string, value: string, isPositive: boolean }) {
-    return (
-        <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-slate-100">
-            <div className="flex items-center gap-2 text-slate-600">
-                <Icon className="w-3.5 h-3.5" />
-                <span className="text-xs font-medium">{label}</span>
-            </div>
-            <span className={clsx("text-xs font-bold", isPositive ? "text-emerald-700" : "text-slate-400")}>
-                {value}
-            </span>
         </div>
     );
 }
