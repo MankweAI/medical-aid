@@ -1,4 +1,4 @@
-import { Contribution, FamilyComposition, IncomeBand, PricingMatrix } from './types';
+import { Contribution, FamilyComposition, IncomeBand } from './types';
 
 export function calculateMonthlyPremium(
     contribution: Contribution,

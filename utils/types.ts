@@ -1,8 +1,30 @@
 // utils/types.ts
+
+// 1. Defined Pricing Types (These were missing/inlined previously)
+export interface FixedPricing {
+    main: number;
+    adult: number;
+    child: number;
+}
+
+export interface IncomeBand {
+    min: number;
+    max: number;
+    main: number;
+    adult: number;
+    child: number;
+}
+
+export type PricingMatrix = FixedPricing | IncomeBand[];
+
+// 2. Contribution Interface using the types above
 export interface Contribution {
     pricing_model: 'Fixed' | 'Income_Banded';
-    pricing_matrix: { main: number; adult: number; child: number } | Array<{ min: number; max: number; main: number; adult: number; child: number }>;
-    msa_structure?: { type: string; value: number | string };
+    pricing_matrix: PricingMatrix;
+    msa_structure?: {
+        type: 'Percentage' | 'Fixed' | 'None' | string;
+        value: number | string;
+    };
 }
 
 export interface FamilyComposition {
@@ -11,6 +33,7 @@ export interface FamilyComposition {
     child: number;
 }
 
+// 3. The Super Schema Plan Interface
 export interface Plan {
     id: string;
     price: number;
@@ -27,7 +50,6 @@ export interface Plan {
 
     network_restriction: string;
 
-    // --- NEW SUPER SCHEMA FIELDS ---
     network_details: {
         hospitals: string;
         gps: string;
@@ -42,14 +64,31 @@ export interface Plan {
     };
 
     limits: {
-        oncology: { status: string; value: number; copay_percentage?: number };
-        casualty: { status: string; value: number };
-        internal_prosthesis: { sublimit: number };
+        oncology: {
+            status: 'PMB Only' | 'Limited' | 'Unlimited' | string;
+            value: number;
+            copay_percentage?: number;
+        };
+        casualty: {
+            status: 'Savings' | 'Risk' | 'No Benefit' | string;
+            value: number;
+        };
+        internal_prosthesis: {
+            sublimit: number;
+        };
     };
 
     defined_baskets: {
-        maternity: { antenatal_consults: number; ultrasounds_2d: number; paediatrician_visits: number };
-        preventative: { vaccinations: boolean; contraceptives: number; wellness_screening?: boolean };
+        maternity: {
+            antenatal_consults: number;
+            ultrasounds_2d: number;
+            paediatrician_visits: number;
+        };
+        preventative: {
+            vaccinations: boolean;
+            contraceptives: number;
+            wellness_screening?: boolean;
+        };
     };
 
     chronic_conditions: number;
@@ -62,8 +101,15 @@ export interface Plan {
         admission_penalty_non_network?: number | string;
     };
 
-    gap_cover_rating: string;
+    gap_cover_rating: 'Mandatory' | 'Recommended' | 'Optional' | string;
     red_flag?: string;
 
-    faq?: { question: string; answer: string }[];
+    faq?: {
+        question: string;
+        answer: string;
+    }[];
+
+    // Optional/Legacy fields
+    features?: any;
+    benefits?: any[];
 }
