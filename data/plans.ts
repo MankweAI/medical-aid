@@ -1172,5 +1172,42 @@ export const PLANS: Plan[] = [
             admission_penalty_non_network: 0
         },
         red_flag: "Cosmetic procedures excluded; Frail care excluded; Infertility treatment limited to ART benefit limits"
+    },
+    {
+        id: "standard-select-2026",
+        price: 5431, // Based on your persona description (R5929 - R498)
+        savings_annual: 0,
+        identity: {
+            scheme_name: "Bonitas", // Assuming Bonitas based on context ("Standard Select" is a Bonitas plan)
+            plan_name: "Standard Select",
+            plan_series: "Standard",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: { main: 5431, adult: 4700, child: 1595 }, // Estimated based on typical ratios
+                msa_structure: { type: "Percentage", value: 0 }
+            }
+        ],
+        network_restriction: "Network", // "Select" implies network
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Subject to Day-to-Day Limit"
+        },
+        defined_baskets: {
+            maternity: { antenatal_consults: 12, ultrasounds_2d: 2, paediatrician_visits: 2 },
+            preventative: { vaccinations: true, contraceptives: 2050, wellness_screening: true }
+        },
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 1860,
+            joint_replacement: 38560,
+            admission_penalty_non_network: "30%"
+        },
+        red_flag: "Using a non-network hospital results in a 30% co-payment. Non-nominated GPs limited to 2 visits per family."
     }
 ];

@@ -37,48 +37,9 @@ export const PERSONAS: Persona[] = [
             },
             inflection_risks: {
                 income_cliff_sensitivity: false,
-                deductible_trigger_event: "Voluntary admission to Non-Network Hospital (R15,025 penalty)."
+                deductible_trigger_event: "Voluntary admission to Non-Network Hospital (R15,025 penalty),."
             }
         }
     },
-    {
-        slug: "standardselect-network-price-arbitrageur-2026",
-        code: "STS_NET_ARB",
-        meta: {
-            title: "The Network Saver",
-            marketing_heading: "High Cover at a Lower Price by Using Networks",
-            description: "This plan offers nearly all the same benefits as the highest plan, but costs R498 less per month because you agree to use network hospitals and nominated GPs.",
-            category: "Savings / Network",
-            strategic_intent: "Network_Compliance_Arbitrage"
-        },
-        defaults: {
-            income: 90000,
-            family_composition: { main: 1, adult: 0, child: 0 },
-            age: 40,
-            location_zone: "Select Network Area"
-        },
-        search_profile: {
-            network_tolerance: "Strict Network for Hospital/GP",
-            min_savings_allocation: 16,
-            chronic_needs: "45 Conditions",
-            required_benefits: ["Maximum Cover, Low Cost"],
-            priority_tag: "network_compliant_value"
-        },
-        actuarial_logic: {
-            target_plan_id: "standard-select-2026",
-            brand_lock: "Standard Select",
-            mathematical_basis: "The persona capitalizes on the R498 monthly saving (R5,929 vs R5,431) for accepting network constraints (nominated GPs and network hospitals), while retaining the high R280,100 cancer benefit and R51,900 mental health limit.",
-            primary_risk_warning: "Using a non-network hospital results in a 30% co-payment, and non-nominated GPs are limited to 2 visits per family per year.",
-            utilization_assumptions: {
-                gp_visits_frequency: "High (compliance with nominated GP required)",
-                chronic_script_consistency: 12,
-                break_even_point: "The R498 saving must justify the loss of full hospital choice."
-            },
-            inflection_risks: {
-                income_cliff_sensitivity: false,
-                deductible_trigger_event: "Non-emergency use of a non-network hospital (30% co-payment)."
-            }
-        }
-    },
-
 ]
+    ;
