@@ -8174,6 +8174,208 @@ export const PLANS: Plan[] = [
         gap_cover_rating: "Mandatory",
         red_flag: "Must use EDO Network Hospitals. R5,000 co-payment on back/neck surgery.",
         faq: []
+    },
+    {
+        id: "momentum-evolve-any-2026",
+        price: 2029,
+        savings_annual: 0,
+        identity: {
+            scheme_name: "Momentum",
+            plan_name: "Evolve Option",
+            plan_series: "Evolve",
+            plan_type: "Hospital Plan"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 2029,
+                    adult: 2029,
+                    child: 2029
+                },
+                msa_structure: {
+                    type: "None",
+                    value: 0
+                }
+            }
+        ],
+        network_restriction: "Evolve Network Hospitals + State Chronic",
+        network_details: {
+            hospitals: "Evolve Network",
+            gps: "Virtual (Hello Doctor)",
+            specialists: "Associated Specialists"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 0,
+            gp_network_consults: "2 Virtual Consultations Only"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 200000,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "No Benefit",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 43900
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 2
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 26,
+        procedure_copays: {
+            scope_in_hospital: 7500,
+            scope_out_hospital: 2000,
+            mri_scan: 3850,
+            joint_replacement: "State Facility Only",
+            admission_penalty_non_network: "30% + R2000"
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Chronic cover is State Facility Only. Joint replacements are State Only. High co-payments (R2,000 admission + R5,500 procedure).",
+        faq: [
+            {
+                question: "Can I use a private doctor for my chronic diabetes or blood pressure?",
+                answer: "No. On the Evolve Option, chronic benefits are available from State facilities only. You must use State doctors, scripts, and medication for the 26 covered conditions."
+            },
+            {
+                question: "Do I have to pay every time I go to the hospital?",
+                answer: "Yes, there is a standard co-payment of R2,000 per authorisation for all hospital admissions, unless it is for a motor vehicle accident, maternity, or emergency."
+            },
+            {
+                question: "What if I need a hip or knee replacement?",
+                answer: "Joint replacements (hip and knee) are limited to Prescribed Minimum Benefits (PMB) at State facilities only. There is no private hospital benefit for these surgeries."
+            },
+            {
+                question: "Is there a limit on cancer treatment?",
+                answer: "Yes, oncology is covered up to R200,000 per beneficiary per year. Thereafter, a 20% co-payment applies. You must use the Evolve Network of Oncologists."
+            },
+            {
+                question: "Do I get day-to-day GP visits?",
+                answer: "You get 2 virtual GP consultations via the Hello Doctor app. For physical GP visits, there is no benefit unless you have funds in your optional HealthSaver account."
+            },
+            {
+                question: "Are MRI and CT scans covered?",
+                answer: "Yes, there is no annual limit for scans in or out of hospital, but a co-payment of R3,850 applies per scan."
+            },
+            {
+                question: "What happens if I need a gastroscopy?",
+                answer: "You will pay a R2,000 co-payment if done in a day hospital. If done in an acute hospital, the co-payment increases to R7,500 (R2,000 standard + R5,500 penalty)."
+            },
+            {
+                question: "Is dentistry covered?",
+                answer: "There is a preventative dental care benefit of R500 per beneficiary per year. Major dentistry is not covered."
+            }
+        ]
+    },
+    {
+        id: "fedhealth-maxima-plus-any-2026",
+        price: 19393,
+        savings_annual: 7728, // Plus R10,630 OHEB (Total Day-to-Day: R18,358)
+        identity: {
+            scheme_name: "Fedhealth",
+            plan_name: "maxima PLUS",
+            plan_series: "Executive Plans",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 19393,
+                    adult: 16739,
+                    child: 5992
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 7728
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Any",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 300,
+            specialist_out_hospital: 300,
+            gp_network_consults: "Unlimited (paid from Risk after OHEB)"
+        },
+        limits: {
+            oncology: {
+                status: "Unlimited",
+                value: 9999999,
+                copay_percentage: 0
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 0
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 1
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 85,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 3050,
+            joint_replacement: 36330,
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Optional",
+        red_flag: "MRI/CT scans attract a R3,050 co-payment. Use of non-contracted providers for joint replacements attracts a R36,330 co-payment.",
+        faq: [
+            {
+                question: "Does this plan have a limit on cancer treatment?",
+                answer: "No, oncology is covered unlimited at a preferred provider (ICON). If you use a non-preferred provider, you are covered up to the Fedhealth Rate."
+            },
+            {
+                question: "How many chronic conditions are covered?",
+                answer: "You are covered for 85 chronic conditions (27 CDL + 58 additional conditions)."
+            },
+            {
+                question: "What happens if I use a non-network hospital?",
+                answer: "You can use any private hospital. There is no specific network restriction for general admissions."
+            },
+            {
+                question: "Is there a co-payment for MRI scans?",
+                answer: "Yes, a co-payment of R3,050 applies to non-PMB MRI and CT scans."
+            },
+            {
+                question: "Do I have an Out-of-Hospital Expenses Benefit (OHEB)?",
+                answer: "Yes, in addition to your Savings (R7,728), you have an OHEB of R10,630 per year for day-to-day expenses."
+            }
+        ]
     }
 
 

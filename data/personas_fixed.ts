@@ -4781,7 +4781,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "comprehensive"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-maximaplus-2026",
+            target_plan_id: "fedhealth-maxima-plus-any-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Single R19,393/month. UNIQUE 3-POOL STRUCTURE: (1) OHEB R10,630 pays for network GP/specialists/pathology FIRST, (2) After OHEB depletes, unlimited network GP from RISK, (3) Savings R7,728 for other day-to-day, (4) Claims accumulate, threshold R23,400 unlocks unlimited refund with NO CO-PAYMENT. Total pre-threshold funding: R10,630 + R7,728 + R5,042 self-pay gap = R23,400.",
             primary_risk_warning: "58 additional chronic conditions covered BUT capped at R17,220 per beneficiary / R31,960 per family, then unlimited only for CDL. Comprehensive formulary with 40% co-payment for voluntary non-formulary use (not refundable from savings). Any pharmacy allowed. No network hospital restriction but network specialists covered in full.",
@@ -4831,7 +4831,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-maximaplus-2026",
+            target_plan_id: "fedhealth-maxima-plus-any-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Couple R19,393(M) + R16,739(A) = R36,132/month. 85 total chronic conditions (27 CDL unlimited + 58 additional capped at R17,220 per beneficiary, R31,960 family cap, then unlimited for CDL only). Key additional conditions: Osteoarthritis, GAD, OCD, PTSD, Endometriosis, GERD, Benign Prostatic Hyperplasia, Angina, Ankylosing Spondylitis. Any pharmacy, comprehensive formulary.",
             primary_risk_warning: "Two-tier chronic structure creates complexity: CDL conditions unlimited from R1, additional 58 conditions capped. If member has osteoarthritis (additional) + hypertension (CDL), osteoarthritis meds count toward R17,220 cap while hypertension unlimited. 40% co-payment for non-formulary = significant penalty on specialized medications.",
@@ -4880,7 +4880,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "executive"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-maximaexec-2026",
+            target_plan_id: "fedhealth-maxima-exec-any-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Single R12,273/month (saves R7,120/month vs maxima PLUS). Savings R12,528, self-pay gap R9,332, threshold R21,860. After threshold: unlimited benefits with CONSISTENT 10% CO-PAYMENT. 72 total chronic conditions (27 CDL + 45 additional), cap R8,130 per beneficiary / R14,950 family then CDL unlimited. Mental health R20,000 family limit includes psychiatrist, psychologist, physical therapy combined.",
             primary_risk_warning: "10% co-payment applies to ALL threshold benefits including GP, specialists, pathology, radiology, basic dentistry, acute medicine, optical, appliances. Lower chronic cap (R8,130 vs R17,220 PLUS) increases risk of cap breach. Psychiatric hospitalisation only R36,910 family vs R46,500 PLUS. Non-network specialists do NOT accumulate to threshold (paid from savings only).",
@@ -4929,7 +4929,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-maximaexec-2026",
+            target_plan_id: "fedhealth-maxima-exec-any-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Family R12,273(M) + R10,653(A) + R3,792(C) + R3,792(C) = R30,510/month vs R42,123 on maxima PLUS (saves R139,356/year). Oncology R643,340 limit with ICON Core protocols (more restrictive than Enhanced). Bone marrow transplant R643,340 (vs unlimited PLUS), renal dialysis R643,340 at cost at PMB (vs unlimited PLUS). R200,630 specialized drugs limit (vs R402,500 PLUS).",
             primary_risk_warning: "Core protocols more restrictive than Enhanced: limited chemotherapy options, biologic access constrained. R643,340 oncology limit can be exhausted in 8-12 months of aggressive treatment. 25% DSP non-use co-payment on oncology medications creates formulary lock-in. Specialized drugs R200k limit restricts immunotherapy/targeted therapy access. Bone marrow transplant R643k may be insufficient (typical cost R800k-1.2M).",
@@ -6061,7 +6061,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Value is maximised when admissions occur in the Compact Hospital Network (unlimited hospitalisation) and day-to-day utilisation stays materially below the family day-to-day limit of R4 700, avoiding out-of-pocket once sub-limits are depleted. [file:1]",
             primary_risk_warning: "If hospital admission is at a non-network hospital, an upfront co-payment applies; if day-to-day spending exceeds R4 700 per family per annum, additional out-of-hospital costs become member-paid. [file:1]",
@@ -6108,7 +6108,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Family cost control hinges on staying within the R4 700 per family day-to-day limit and using the relevant GP network (GP visits are capped by family-size category M0/M1/M2 and non-network behaviour escalates costs). [file:1]",
             primary_risk_warning: "High GP + acute medicine utilisation can deplete the day-to-day limit quickly, shifting remaining care to member out-of-pocket within the benefit year. [file:1]",
@@ -6249,7 +6249,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "IUD/alternatives are available by application and pre-authorisation, with limits by device type (e.g., Mirena/Kyleena every 5 years; Implanon every 3 years; copper device every 2 years), and are only applicable if no contraceptive medication is used. [file:1]",
             primary_risk_warning: "If pre-authorisation is missed or the service path is taken outside required protocols, the member can face out-of-pocket costs despite the theoretical availability of the benefit. [file:1]",
@@ -6296,7 +6296,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Maternity benefits include defined antenatal consult counts and scan counts per pregnancy, with confinement being unlimited when using a Compact Network Hospital (and a non-network hospital attracting an upfront co-payment); the co-payment schedule also lists a voluntary caesarean upfront co-payment. [file:1]",
             primary_risk_warning: "A voluntary caesarean or non-network hospital choice can introduce large immediate co-payments that are not constrained by the day-to-day limit. [file:1]",
@@ -6343,7 +6343,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Chronic medicine is PMB-only on this option and requires registration/authorisation with use of the Medshield Pharmacy Network from rand one; out-of-formulary or non-DSP usage triggers an upfront co-payment. [file:1]",
             primary_risk_warning: "Non-formulary choices or non-DSP dispensing can create recurring co-payments across monthly scripts, compounding annually. [file:1]",
@@ -6390,7 +6390,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Mental health benefits are positioned as PMB-only, require pre-authorisation, and non-network mental health hospital use is associated with an upfront co-payment per the co-payment schedule; mental health medicine has a defined beneficiary limit and can trigger co-payments if out-of-formulary or non-DSP is used. [file:1]",
             primary_risk_warning: "If treatment falls outside PMB level-of-care framing or is accessed via non-network pathways, the member can face significant co-payments and/or funding gaps. [file:1]",
@@ -6437,7 +6437,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Oncology requires registration and treatment-plan submission under the oncology management programme (ICON protocols), and using a non-DSP attracts a 40% upfront co-payment; PET/PET-CT scans are limited to 1 per family per annum with a co-payment if a non-DSP is used. [file:1]",
             primary_risk_warning: "A single decision to use a non-DSP oncology provider can create catastrophic out-of-pocket exposure through a large percentage co-payment on high-cost claims. [file:1]",
@@ -6484,7 +6484,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "UNRESOLVED_MEDSHIELD_MEDIPHILA_2026",
+            target_plan_id: "medshield-mediphila-network-2026",
             brand_lock: "Medshield",
             mathematical_basis: "Dental benefits include a basic dentistry family limit and a specialised dentistry family limit, and the co-payment schedule specifies fixed upfront co-payments for wisdom teeth/impacted teeth events depending on setting (e.g., day clinic vs in-hospital). [file:1]",
             primary_risk_warning: "Poor routing (wrong facility level, missed authorisation where required) can turn a capped dentistry benefit into a large immediate cash payment due to fixed co-payments. [file:1]",
@@ -6578,7 +6578,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_INGWE_2026",
+            target_plan_id: "momentum-ingwe-ingwe-network-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "This persona treats the option as a protocol-governed primary-care system: GP utilisation is effectively uncapped but becomes admin-constrained after a threshold (pre-authorisation after the 10th visit).",
             primary_risk_warning: "If high GP frequency spills outside the network rules, benefits can compress sharply (authorisation/co-pay exposure).",
@@ -6625,7 +6625,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_INGWE_2026",
+            target_plan_id: "momentum-ingwe-ingwe-network-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "The optimisation is behavioural: choose the Any-hospital lever, then execute primary-care and chronic care exactly inside the required networks to avoid 30% event co-pay dynamics.",
             primary_risk_warning: "Out-of-network hospital use (relative to the chosen network rules) can trigger a 30% co-payment on the hospital account; pre-authorisation failure also triggers 30%.",
@@ -6672,7 +6672,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_EVOLVE_2026",
+            target_plan_id: "momentum-evolve-any-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "Value comes from accepting tight provider controls: Evolve Network for hospitalisation plus State facilities for chronic management, in exchange for lower-price positioning.",
             primary_risk_warning: "Major Medical events typically carry a standard co-payment per authorisation (with stated exceptions), so frequent admissions/procedures can be cost-volatile.",
@@ -6719,7 +6719,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_EVOLVE_2026",
+            target_plan_id: "momentum-evolve-any-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "The strategy is to treat maternity as the dominant expected large claim and align usage with the plan’s stated exception set for the standard co-payment.",
             primary_risk_warning: "Non-maternity Major Medical usage still faces the standard co-payment mechanics and strict provider rules.",
@@ -6766,7 +6766,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_INCENTIVE_2026",
+            target_plan_id: "momentum-incentive-associated-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "The optimisation is to accept provider steering (Associated hospitals + Associated chronic routing) to reduce contributions, while enforcing behavioural compliance to avoid explicit co-payment penalties.",
             primary_risk_warning: "Hospital use outside Associated hospitals (when selected) triggers a 30% co-payment on the hospital account; lack of pre-authorisation triggers a 30% event co-payment.",
@@ -6812,7 +6812,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_INCENTIVE_2026",
+            target_plan_id: "momentum-incentive-associated-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "This persona treats oncology as the dominant tail risk and plans around a defined annual oncology limit plus a percentage co-payment thereafter.",
             primary_risk_warning: "Once the oncology limit is exceeded, a percentage co-payment applies; provider-routing constraints may also apply depending on chosen chronic provider settings.",
@@ -6859,7 +6859,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_EXTENDER_2026",
+            target_plan_id: "momentum-extender-any-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "Optimisation is to intentionally cross the Threshold so that additional day-to-day claims shift from self-funding gap into Extended Cover, while managing sub-limits that apply before/after Threshold.",
             primary_risk_warning: "If Savings is exhausted early, a self-funding gap exists until Threshold is met; non-compliant GP usage can introduce additional co-payment mechanics depending on chronic provider choice.",
@@ -6905,7 +6905,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_EXTENDER_2026",
+            target_plan_id: "momentum-extender-any-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "Because the Threshold’s child component is capped at three children, marginal children beyond three do not increase the Threshold, improving the probability of reaching Extended Cover earlier relative to household utilisation.",
             primary_risk_warning: "This leverage only holds if utilisation remains within covered service categories/sub-limits and the family can survive any self-funding gap until Threshold is reached.",
@@ -6951,7 +6951,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_EXTENDER_2026",
+            target_plan_id: "momentum-extender-any-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "The optimisation is to prevent leakage: non-Associated GP usage under Associated chronic can cause only partial accumulation to Threshold and introduce a co-payment dynamic once in Extended Cover.",
             primary_risk_warning: "Behavioural non-compliance (wrong GP) can reduce Threshold progress and introduce avoidable co-pay exposure.",
@@ -6998,7 +6998,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "quality"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_SUMMIT_2026",
+            target_plan_id: "momentum-summit-any-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "This persona values tariff headroom and provider freedom; day-to-day is risk-funded but constrained by an overall per-beneficiary day-to-day limit that also absorbs additional chronic conditions.",
             primary_risk_warning: "Day-to-day and certain additional chronic benefits share a single overall per-beneficiary limit, so heavy utilisation can crowd out later-year claims.",
@@ -7045,7 +7045,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "MISSING_PLAN_ID__MMS_CUSTOM_2026",
+            target_plan_id: "momentum-custom-associated-state-2026",
             brand_lock: "Momentum Medical Scheme",
             mathematical_basis: "This persona treats provider selection as a financial control: pick Associated hospitals, then never deviate, because deviation stacks a 30% hospital-account co-payment on top of the standard option co-payment.",
             primary_risk_warning: "A single non-Associated admission (after selecting Associated hospitals) can materially worsen out-of-pocket due to stacking co-payment layers.",
@@ -7276,7 +7276,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-access-saver-2026",
+            target_plan_id: "sizwe-hosmed-access-saver-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Treat the MSA as a ring-fenced \"wallet\": allocate GP + basic meds + imaging to MSA, preserve risk benefits for true PMB events.",
             primary_risk_warning: "Once MSA is depleted, day-to-day access compresses sharply; hospital cover is DSP-restricted.",
@@ -7322,7 +7322,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-access-saver-2026",
+            target_plan_id: "sizwe-hosmed-access-saver-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Optimise by \"pacing\": convert high-frequency low-severity claims into cash/self-pay to preserve MSA for predictable high-value items.",
             primary_risk_warning: "MSA depletion converts the plan into near-hospital-only cover except tightly limited additional consults.",
@@ -7368,7 +7368,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-access-saver-2026",
+            target_plan_id: "sizwe-hosmed-access-saver-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Savings preservation \"strategy\": route eligible optical/dental spend through DSP to keep MSA for GP/specialist/imaging.",
             primary_risk_warning: "Using non-DSP providers shifts optical/dental cost into MSA, accelerating depletion.",
@@ -7414,7 +7414,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-access-saver-2026",
+            target_plan_id: "sizwe-hosmed-access-saver-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Minimise member liability by aligning procedure setting with the plan’s day-procedure payment rules and facility exclusions.",
             primary_risk_warning: "Certain procedures are not covered if performed in acute facilities; deductible rules apply to defined procedures.",
@@ -7828,7 +7828,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-titanium-executive-2026",
+            target_plan_id: "sizwe-hosmed-titanium-executive-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Optimisation assumes high chronic script persistence and frequent specialist interactions; value is maximised when care is registered/managed under scheme protocols.",
             primary_risk_warning: "Non-adherence to managed-care protocols and formularies can produce non-payment or co-pay outcomes despite high headline cover.",
@@ -7874,7 +7874,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-titanium-executive-2026",
+            target_plan_id: "sizwe-hosmed-titanium-executive-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Key 'constraint': biologic funding is limited per beneficiary per year; strategy is to keep regimen within cap and avoid non-formulary drift.",
             primary_risk_warning: "Annual cap on non-cancer specialised drugs can create a mid-year funding cliff if therapy cost exceeds the stated limit.",
@@ -7920,7 +7920,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-titanium-executive-2026",
+            target_plan_id: "sizwe-hosmed-titanium-executive-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Timing \"optimisation\": prioritise orthodontic start and completion within the eligible age bracket to avoid losing benefit eligibility.",
             primary_risk_warning: "Starting orthodontics outside the age rule can shift the full cost to member funding.",
@@ -7966,7 +7966,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-titanium-executive-2026",
+            target_plan_id: "sizwe-hosmed-titanium-executive-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Optimisation is protocol \"adherence\": ensure AMD treatment is authorised and clinically justified to preserve payment at tariff and avoid reductions.",
             primary_risk_warning: "Non-authorised or non-protocol advanced diagnostics can trigger co-pays or re-pricing even on high-end cover.",
@@ -8012,7 +8012,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-titanium-executive-2026",
+            target_plan_id: "sizwe-hosmed-titanium-executive-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Optimisation by 'sequencing': prioritise the highest severity/utility device event first and avoid simultaneous multi-device claims that breach annual family limits.",
             primary_risk_warning: "Annual family prosthesis limit and one-joint-per-year constraints can create a high out-of-pocket tail if multiple events occur.",
