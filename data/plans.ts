@@ -7040,6 +7040,452 @@ export const PLANS: Plan[] = [
             }
         ]
     },
+    // --- APPEND THESE TO data/plans.ts ---
+
+    {
+        id: "bonitas-bonclassic-network-2026",
+        price: 8238,
+        savings_annual: 14832,
+        identity: {
+            scheme_name: "Bonitas",
+            plan_name: "BonClassic",
+            plan_series: "Classic",
+            plan_type: "Saver"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 8238,
+                    adult: 7071,
+                    child: 2034
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 14832
+                }
+            }
+        ],
+        network_restriction: "Network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Any",
+            specialists: "Network"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Unlimited"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 336100,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 2
+            },
+            internal_prosthesis: {
+                sublimit: 67640
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 2050,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 46,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 2800,
+            joint_replacement: 38560,
+            admission_penalty_non_network: 5440
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Heavy co-payments on joint replacements (R38,560) and non-network hospitals (30%).",
+        faq: []
+    },
+    {
+        id: "fedhealth-flexifed-3-any-2026",
+        price: 4946,
+        savings_annual: 780,
+        identity: {
+            scheme_name: "Fedhealth Medical Scheme",
+            plan_name: "flexiFED 3 Hospital Plan",
+            plan_series: "flexiFED 3",
+            plan_type: "Hospital Plan"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 4946,
+                    adult: 4531,
+                    child: 1753
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 780
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Nominated",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Unlimited post-threshold"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 360850,
+                copay_percentage: 25
+            },
+            casualty: {
+                status: "Risk",
+                value: 880
+            },
+            internal_prosthesis: {
+                sublimit: 28760
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 1
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 27,
+        procedure_copays: {
+            scope_in_hospital: 5540,
+            scope_out_hospital: 0,
+            mri_scan: 3050,
+            joint_replacement: "Covered",
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "R15 950 excess on planned admissions unless specified otherwise",
+        faq: []
+    },
+    {
+        id: "fedhealth-flexifed-4-any-2026",
+        price: 6620,
+        savings_annual: 348,
+        identity: {
+            scheme_name: "Fedhealth Medical Scheme",
+            plan_name: "flexiFED 4",
+            plan_series: "flexiFED Series",
+            plan_type: "Hospital Plan"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 6620,
+                    adult: 6042,
+                    child: 1991
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 348
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Network",
+            specialists: "Referral Required"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 0,
+            gp_network_consults: "Unlimited"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 514570,
+                copay_percentage: 25
+            },
+            casualty: {
+                status: "Risk",
+                value: 880
+            },
+            internal_prosthesis: {
+                sublimit: 28760
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 1
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 45,
+        procedure_copays: {
+            scope_in_hospital: 3230,
+            scope_out_hospital: 0,
+            mri_scan: 3050,
+            joint_replacement: 36330,
+            admission_penalty_non_network: 2710
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Voluntary use of non-network hospitals triggers 30% co-payment.",
+        faq: []
+    },
+    {
+        id: "fedhealth-maxima-exec-any-2026",
+        price: 12273,
+        savings_annual: 12528,
+        identity: {
+            scheme_name: "Fedhealth",
+            plan_name: "maxima EXEC",
+            plan_series: "Executive Plans",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 12273,
+                    adult: 10653,
+                    child: 3792
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 12528
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Nominated",
+            specialists: "Referral Required"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 200,
+            specialist_out_hospital: 0,
+            gp_network_consults: "Unlimited"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 643340,
+                copay_percentage: 25
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 67530
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 1
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 72,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 3050,
+            joint_replacement: 36330,
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Oncology is limited to R643,340 (not unlimited) with core protocols.",
+        faq: []
+    },
+    {
+        id: "sizwe-hosmed-access-core-network-2026",
+        price: 3161,
+        savings_annual: 0,
+        identity: {
+            scheme_name: "Sizwe Hosmed Medical Scheme",
+            plan_name: "Access Core",
+            plan_series: "Access",
+            plan_type: "Hospital Plan"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 3161,
+                    adult: 2726,
+                    child: 636
+                },
+                msa_structure: {
+                    type: "None",
+                    value: 0
+                }
+            }
+        ],
+        network_restriction: "DSP network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Network",
+            specialists: "Referral Required"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 0,
+            gp_network_consults: 0
+        },
+        limits: {
+            oncology: {
+                status: "PMB Only",
+                value: 0,
+                copay_percentage: 0
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 39048
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 0,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 0,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 26,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 0,
+            joint_replacement: "Excluded",
+            admission_penalty_non_network: "30%"
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "30% co-payment for voluntary use of non-DSP hospitals.",
+        faq: []
+    },
+    {
+        id: "sizwe-hosmed-titanium-executive-any-2026",
+        price: 11737,
+        savings_annual: 29295,
+        identity: {
+            scheme_name: "Sizwe Hosmed",
+            plan_name: "Titanium Executive",
+            plan_series: "Titanium Executive",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 11737,
+                    adult: 10385,
+                    child: 2399
+                },
+                msa_structure: {
+                    type: "Percentage",
+                    value: 20.8
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Any",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Unlimited"
+        },
+        limits: {
+            oncology: {
+                status: "Unlimited",
+                value: 9999999,
+                copay_percentage: 0
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 98822
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 10,
+                ultrasounds_2d: 3,
+                paediatrician_visits: 2
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 3671,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 62,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 0,
+            joint_replacement: 0,
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Optional",
+        red_flag: "None",
+        faq: []
+    }
 
 
 

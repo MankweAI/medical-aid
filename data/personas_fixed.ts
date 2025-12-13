@@ -1822,7 +1822,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonclassic-2026",
+            target_plan_id: "bonitas-bonclassic-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Adult dependant savings = R12,732. Chronic benefit = R15,370 per beneficiary + R31,770 per family. Covers 46 conditions including PTSD, panic disorder, osteoporosis, GORD. After limit, 27 PMB still covered.",
             primary_risk_warning: "30% co-payment for non-network pharmacy or non-formulary. Chronic benefit limit can deplete mid-year.",
@@ -1869,7 +1869,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "senior"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonclassic-2026",
+            target_plan_id: "bonitas-bonclassic-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Main member savings = R14,832. Hip/knee replacement: avoid R38,560 co-payment by using DSP. Hip/Knee Replacement Programme includes pre-surgery evaluation, multi-disciplinary team. Cochlear implants = R376,600 per family.",
             primary_risk_warning: "R38,560 co-payment if non-DSP used for joint replacement",
@@ -2105,7 +2105,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "preventative"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonclassic-2026",
+            target_plan_id: "bonitas-bonclassic-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R2,050 per family for women aged up to 50. Must use Bonitas Network Pharmacy or Pharmacy Direct DSP. 40% co-payment if non-network/non-DSP. Main member savings = R14,832.",
             primary_risk_warning: "40% co-payment for non-network contraceptives (vs 30% on chronic meds)",
@@ -2246,7 +2246,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonclassic-2026",
+            target_plan_id: "bonitas-bonclassic-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Immunizations according to Private Vaccination Schedule (vs Expanded Programme on other plans). Hearing screening for newborns up to 8 weeks. Babyline 24/7 for children under 3 years. Milestone reminders. Online screenings for infant/toddler health. 2 vision screening tests for premature newborns.",
             primary_risk_warning: "Private vaccination schedule more comprehensive than public EPI, but child must be under 12.",
