@@ -7485,6 +7485,695 @@ export const PLANS: Plan[] = [
         gap_cover_rating: "Optional",
         red_flag: "None",
         faq: []
+    },
+    {
+        id: "bonitas-boncomplete-2026",
+        price: 6614,
+        savings_annual: 11880,
+        identity: {
+            scheme_name: "Bonitas",
+            plan_name: "BonComplete",
+            plan_series: "Classic",
+            plan_type: "Saver"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 6614,
+                    adult: 5298,
+                    child: 1794
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 11880
+                }
+            }
+        ],
+        network_restriction: "Specific Private Hospital Network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Any",
+            specialists: "Network"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Unlimited"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 280100,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 2
+            },
+            internal_prosthesis: {
+                sublimit: 57630
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 6,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 1
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 2050,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 32,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 2800,
+            joint_replacement: 38560,
+            admission_penalty_non_network: 5440
+        },
+        gap_cover_rating: "Recommended",
+        red_flag: "R280,100 oncology limit (non-PMB) and R38,560 joint replacement co-payment if non-DSP.",
+        faq: [
+            {
+                question: "What is the 2026 monthly contribution for BonComplete?",
+                answer: "The main member contribution is R6,614 per month[cite: 14]."
+            },
+            {
+                question: "How much savings do I get?",
+                answer: "The main member gets R11,880 in annual savings[cite: 36]. [cite_start]There is also a self-payment gap of R2,350 before the Above Threshold Benefit kicks in[cite: 42]."
+            },
+            {
+                question: "Is there a Benefit Booster on this plan?",
+                answer: "Yes, you can unlock R2,070 in extra out-of-hospital benefits by completing a wellness screening and mental health assessment[cite: 341]."
+            },
+            {
+                question: "Do I have to use a specific hospital?",
+                answer: "Yes, BonComplete uses a list of Specific Private Hospitals. [cite_start]Using a non-network hospital may attract a 30% co-payment[cite: 16, 531]."
+            },
+            {
+                question: "What is the limit for cancer treatment?",
+                answer: "Non-PMB cancer treatment is limited to R280,100 per family per year. [cite_start]Once this limit is reached, cover continues at 80% if you use a DSP[cite: 644]."
+            },
+            {
+                question: "Is there a co-payment for joint replacements?",
+                answer: "Yes, a R38,560 co-payment applies to hip and knee replacements if you do not use a Designated Service Provider (DSP)[cite: 644]."
+            },
+            {
+                question: "Are MRI and CT scans covered?",
+                answer: "Yes, but there is a R2,800 co-payment per scan event unless it is for a PMB condition[cite: 66]."
+            },
+            {
+                question: "How many chronic conditions are covered?",
+                answer: "The plan covers 32 chronic conditions (27 PMB + 5 additional)[cite: 301]."
+            },
+            {
+                question: "Is dentistry covered?",
+                answer: "Basic dentistry is covered. [cite_start]Specialised dentistry (like crowns) is limited to 1 crown per family per year[cite: 234]."
+            },
+            {
+                question: "Do I have access to an Above Threshold Benefit?",
+                answer: "Yes, once you have passed the self-payment gap, you have access to an Above Threshold Benefit, which is limited (e.g., R6,250 for main member)[cite: 49]."
+            }
+        ]
+    },
+    {
+        id: "bonitas-bonfit-2026",
+        price: 2698,
+        savings_annual: 4848,
+        identity: {
+            scheme_name: "Bonitas",
+            plan_name: "BonFit",
+            plan_series: "BonSave",
+            plan_type: "Saver"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 2698,
+                    adult: 2021,
+                    child: 908
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 4848
+                }
+            }
+        ],
+        network_restriction: "Specific Private Hospital Network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Any",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 0,
+            gp_network_consults: "Paid from Savings"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 168100,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 2
+            },
+            internal_prosthesis: {
+                sublimit: 0
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 6,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 2
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 1580,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 28,
+        procedure_copays: {
+            scope_in_hospital: 2020,
+            scope_out_hospital: 0,
+            mri_scan: 2800,
+            joint_replacement: "No Benefit",
+            admission_penalty_non_network: "30%"
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Joint replacements have NO BENEFIT. 30% co-payment for non-network hospitals.",
+        faq: [
+            {
+                question: "Is there a limit on cancer treatment?",
+                answer: "Yes, non-PMB cancer treatment is limited to R168,100 per family. You must use a DSP to avoid a 20% co-payment."
+            },
+            {
+                question: "Do I have cover for hip or knee replacements?",
+                answer: "No. BonFit explicitly excludes joint replacement surgery (hip, knee, shoulder) unless it qualifies as a PMB."
+            },
+            {
+                question: "What happens if I use a non-network hospital?",
+                answer: "You will pay a 30% co-payment on the hospital account if you voluntarily use a hospital outside the BonFit network."
+            },
+            {
+                question: "Are MRI scans covered?",
+                answer: "Yes, but there is a R2,800 co-payment per scan and a family limit of R15,960."
+            },
+            {
+                question: "How much savings do I get?",
+                answer: "The main member gets R4,848 per year (R404/month) for day-to-day expenses."
+            }
+        ]
+    },
+    {
+        id: "bonitas-standard-select-2026",
+        price: 5431,
+        savings_annual: 0,
+        identity: {
+            scheme_name: "Bonitas",
+            plan_name: "Standard Select",
+            plan_series: "Traditional",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 5431,
+                    adult: 4700,
+                    child: 1590
+                },
+                msa_structure: {
+                    type: "None",
+                    value: 0
+                }
+            }
+        ],
+        network_restriction: "Specific Private Hospital Network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Nominated",
+            specialists: "Referral Required"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Subject to Day-to-Day Limit (Nominated GP)"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 280100,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 57630
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 12,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 2
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 2050,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 45,
+        procedure_copays: {
+            scope_in_hospital: 5440,
+            scope_out_hospital: 0,
+            mri_scan: 1860,
+            joint_replacement: 38560,
+            admission_penalty_non_network: "30%"
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Must use Nominated GP and Network Hospitals to avoid 30% penalties. High joint replacement co-pay (R38,560) if non-DSP.",
+        faq: [
+            {
+                question: "Do I have to use a specific GP?",
+                answer: "Yes, on Standard Select you must nominate 2 GPs on the Bonitas network for each beneficiary. Non-nominated network GP visits are limited to 2 per year."
+            },
+            {
+                question: "What happens if I use a non-network hospital?",
+                answer: "You will face a 30% co-payment on the hospital account. You must use a hospital on the Standard Select network."
+            },
+            {
+                question: "Is there a limit on my day-to-day benefits?",
+                answer: "Yes, you have an overall day-to-day limit (e.g., R13,980 for main member) which covers GP, specialist, and medicine costs."
+            },
+            {
+                question: "Are joint replacements covered?",
+                answer: "Yes, but you must use a Designated Service Provider (DSP) to avoid a R38,560 co-payment."
+            },
+            {
+                question: "What is the limit for cancer treatment?",
+                answer: "Non-PMB cancer treatment is limited to R280,100 per family. PMB cancer is unlimited at a DSP."
+            }
+        ]
+    },
+    // --- MEDIHELP PLANS ---
+    {
+        id: "medihelp-medprime-any-2026",
+        price: 5790,
+        savings_annual: 6984,
+        identity: {
+            scheme_name: "Medihelp",
+            plan_name: "MedPrime",
+            plan_series: "MedPrime",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 5790,
+                    adult: 4896,
+                    child: 1692
+                },
+                msa_structure: {
+                    type: "Fixed",
+                    value: 6984
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any Private Hospital",
+            gps: "Any",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Paid from Savings"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 336000,
+                copay_percentage: 0
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 81200
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 10,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 2
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 2835,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 297,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 0,
+            joint_replacement: 0,
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Recommended",
+        red_flag: "None",
+        faq: [
+            {
+                question: "What is the difference between MedPrime and MedPrime Elect?",
+                answer: "MedPrime allows you to use ANY private hospital, whereas MedPrime Elect restricts you to a network of quality private hospitals for a 18% lower premium."
+            },
+            {
+                question: "How does the savings account work?",
+                answer: "You get a 10% savings account (R6,984 for a single member) upfront. Unused savings carry over to the next year and earn interest."
+            }
+        ]
+    },
+
+    // --- SIZWE HOSMED VALUE PLATINUM PLANS ---
+    {
+        id: "sizwehosmed-value-platinum-any-2026",
+        price: 6696,
+        savings_annual: 15266,
+        identity: {
+            scheme_name: "Sizwe Hosmed",
+            plan_name: "Value Platinum",
+            plan_series: "Value Platinum",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 6696,
+                    adult: 6287,
+                    child: 1834
+                },
+                msa_structure: {
+                    type: "Percentage",
+                    value: 19
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Any",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Paid from MSA"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 632063,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 59865
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 10,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 3672,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 26,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 1736,
+            joint_replacement: 0,
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "20% co-payment on oncology if limit exceeded.",
+        faq: []
+    },
+    {
+        id: "sizwehosmed-value-platinum-core-network-2026",
+        price: 6363,
+        savings_annual: 14507,
+        identity: {
+            scheme_name: "Sizwe Hosmed",
+            plan_name: "Value Platinum Core",
+            plan_series: "Value Platinum",
+            plan_type: "Comprehensive"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 6363,
+                    adult: 6094,
+                    child: 1624
+                },
+                msa_structure: {
+                    type: "Percentage",
+                    value: 19
+                }
+            }
+        ],
+        network_restriction: "Network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Network",
+            specialists: "Network"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Paid from MSA"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 632063,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 59865
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 10,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 3672,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 26,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 1736,
+            joint_replacement: 0,
+            admission_penalty_non_network: "Full Cost"
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Must use Scheme Network hospitals. Voluntary use of non-network hospital = 100% member liability.",
+        faq: []
+    },
+
+    // --- SIZWE HOSMED GOLD ASCEND PLANS ---
+    {
+        id: "sizwehosmed-gold-ascend-any-2026",
+        price: 4468,
+        savings_annual: 0,
+        identity: {
+            scheme_name: "Sizwe Hosmed",
+            plan_name: "Gold Ascend",
+            plan_series: "Gold Ascend",
+            plan_type: "Hospital Plan"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 4468,
+                    adult: 4291,
+                    child: 1234
+                },
+                msa_structure: {
+                    type: "None",
+                    value: 0
+                }
+            }
+        ],
+        network_restriction: "Any",
+        network_details: {
+            hospitals: "Any",
+            gps: "Any",
+            specialists: "Any"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Day-to-day limit"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 252825,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 35935
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 10,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 3672,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 26,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 1653,
+            joint_replacement: 0,
+            admission_penalty_non_network: 0
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "R5,000 co-payment on back/neck surgery. R1,653 co-pay on MRI/CT scans.",
+        faq: []
+    },
+    {
+        id: "sizwehosmed-gold-ascend-edo-network-2026",
+        price: 4249,
+        savings_annual: 0,
+        identity: {
+            scheme_name: "Sizwe Hosmed",
+            plan_name: "Gold Ascend EDO",
+            plan_series: "Gold Ascend",
+            plan_type: "Hospital Plan"
+        },
+        contributions: [
+            {
+                pricing_model: "Fixed",
+                pricing_matrix: {
+                    main: 4249,
+                    adult: 4077,
+                    child: 1171
+                },
+                msa_structure: {
+                    type: "None",
+                    value: 0
+                }
+            }
+        ],
+        network_restriction: "Network",
+        network_details: {
+            hospitals: "Network",
+            gps: "Network",
+            specialists: "Network"
+        },
+        coverage_rates: {
+            hospital_account: 100,
+            specialist_in_hospital: 100,
+            specialist_out_hospital: 100,
+            gp_network_consults: "Day-to-day limit"
+        },
+        limits: {
+            oncology: {
+                status: "Limited",
+                value: 252825,
+                copay_percentage: 20
+            },
+            casualty: {
+                status: "Risk",
+                value: 0
+            },
+            internal_prosthesis: {
+                sublimit: 35935
+            }
+        },
+        defined_baskets: {
+            maternity: {
+                antenatal_consults: 10,
+                ultrasounds_2d: 2,
+                paediatrician_visits: 0
+            },
+            preventative: {
+                vaccinations: true,
+                contraceptives: 3672,
+                wellness_screening: true
+            }
+        },
+        chronic_conditions: 26,
+        procedure_copays: {
+            scope_in_hospital: 0,
+            scope_out_hospital: 0,
+            mri_scan: 1653,
+            joint_replacement: 0,
+            admission_penalty_non_network: "Full Cost"
+        },
+        gap_cover_rating: "Mandatory",
+        red_flag: "Must use EDO Network Hospitals. R5,000 co-payment on back/neck surgery.",
+        faq: []
     }
 
 

@@ -2671,7 +2671,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-standard-any-2026",
+            target_plan_id: "bonitas-standard-select-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R5,431 (main) + R4,700 (adult) + R1,590*2 (children) = R13,311/month. Overall day-to-day limit = R23,310. Must nominate 2 GPs per beneficiary. 2 non-nominated network GP visits allowed per family per year. Non-network GPs limited to PMBs only.",
             primary_risk_warning: "30% co-payment for non-network hospital. Strict GP nomination requirement limits flexibility.",
@@ -5404,7 +5404,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Maximise expected utility for a 2-child family by valuing unrestricted hospital access (no overall annual limit stated) and predictable maternity/paediatric preventive items, while treating savings as the first-loss layer. [file:1]",
             primary_risk_warning: "If savings are depleted early, day-to-day claim patterns must align to the insured day-to-day categories and provider rules to avoid gaps. [file:1]",
@@ -5592,7 +5592,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "certainty"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Pregnancy pathway optimisation: convert a high-frequency, time-bounded utilisation pattern into funded benefits by aligning provider types and visit counts to the defined maternity basket. [file:1]",
             primary_risk_warning: "Out-of-basket maternity utilisation (extra scans/visits or non-aligned provider billing) may shift costs into savings or member out-of-pocket exposure. [file:1]",
@@ -5639,7 +5639,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Early-childhood utilisation is bursty and GP/pharmacy heavy; this persona optimises benefit capture by reserving the under-2 specialist-type consults for high-value events and using routine care efficiently. [file:1]",
             primary_risk_warning: "Frequent minor claims can drain savings quickly, pushing the household into insured day-to-day rules earlier than planned. [file:1]",
@@ -5686,7 +5686,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Convert tail-risk psychiatric admission cost and structured outpatient depression management into a defined-benefit framework by maintaining programme registration and utilising eligible provider types. [file:1]",
             primary_risk_warning: "Defined annual limits create a hard ceiling; sustained high utilisation may revert to self-funding once limits are reached. [file:1]",
@@ -5733,7 +5733,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Tail-risk transfer: shift high-cost oncology exposure into the plan’s defined cancer funding envelope and related hospital/radiology structures. [file:1]",
             primary_risk_warning: "Cancer benefit is capped at a stated family limit, so extreme-cost cases can still generate residual exposure beyond the sub-limit. [file:1]",
@@ -5780,7 +5780,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Optimisation for legally protected/defined pathways (PMB/CDL) to reduce catastrophic variance from chronic and life-threatening conditions through plan risk pooling. [file:1]",
             primary_risk_warning: "Non-PMB/non-CDL chronic needs may not align to the most protective benefit pathways and could create day-to-day cost pressure via savings depletion. [file:1]",
@@ -5827,7 +5827,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Maximise benefit capture by synchronising planned optical and dental events to the plan’s stated benefit cycles and by using the specified provider networks to avoid benefit leakage. [file:1]",
             primary_risk_warning: "Going outside the specified optical/dental networks can reduce payable amounts or shift costs into savings/out-of-pocket depending on the rule set. [file:1]",
@@ -5873,7 +5873,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "One-off elective procedure optimisation: claim value concentrates in a single event, so timing within the eligible age band and within the family limit dominates expected value. [file:1]",
             primary_risk_warning: "The refractive surgery benefit is limited (family limit) and age-gated, so ineligible timing leads to full self-funding. [file:1]",
@@ -5920,7 +5920,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Risk-transfer optimisation with a constraint: keep broad hospital/trauma cover while recognising that certain high-cost elective/degenerative joint pathways may not be funded unless they qualify under PMB or acute injury rules. [file:1]",
             primary_risk_warning: "Degenerative joint replacement demand can generate significant self-funding exposure if it does not qualify under PMB and is not linked to an acute injury. [file:1]",
@@ -5967,7 +5967,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "control"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-network-2026",
+            target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Liquidity-first: minimise year-to-year leakage by preserving savings (rollover + interest) and shifting only truly necessary spend into savings, while relying on insured day-to-day only when savings are intentionally exhausted. [file:1]",
             primary_risk_warning: "Over-preserving savings can cause under-utilisation of valuable insured benefits and may increase out-of-pocket if services fall outside insured day-to-day rules. [file:1]",
@@ -7091,7 +7091,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-access-core-2026",
+            target_plan_id: "sizwehosmed-value-platinum-core-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Value comes from accepting DSP-only PMB coverage and avoiding voluntary non-DSP usage penalties.",
             primary_risk_warning: "Day-to-day benefits are highly constrained (PMB-focused); non-DSP use triggers material co-pay exposure.",
@@ -7460,7 +7460,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Value lever is family \"pooling\": spread fixed contributions across higher expected utilisation without converting claims into co-pay-heavy leakage.",
             primary_risk_warning: "Non-PMB back surgery co-pay exposure and oncology/radiology limits can create tail-cost events.",
@@ -7506,7 +7506,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Expected oncology shortfall = max(0, oncology_cost - annual_limit) * 20% (non-PMB usage above limit).",
             primary_risk_warning: "Above-limit oncology utilisation triggers a 20% co-payment; non-cancer specialised drugs show no benefit on this option.",
@@ -7552,7 +7552,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Imaging expected cost includes plan limit-sharing plus an additional non-PMB MRI/CT co-pay percentage where applicable.",
             primary_risk_warning: "Non-PMB MRI/CT scans can trigger co-payment even within the combined in/out-of-hospital radiology limit structure.",
@@ -7644,7 +7644,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-value-platinum-2026",
+            target_plan_id: "sizwehosmed-value-platinum-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Split-funding \"model\": routine claims funded from MSA; catastrophic/PMB funded from risk, with defined co-pay events (e.g., advanced radiology).",
             primary_risk_warning: "Advanced imaging and oncology have explicit co-pay triggers; poor planning converts claims into recurring member liability.",
@@ -7690,7 +7690,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-value-platinum-core-2026",
+            target_plan_id: "sizwehosmed-value-platinum-core-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Arbitrage is maximised when elective admissions are routed into network hospitals and day-to-day is paced through the MSA envelope.",
             primary_risk_warning: "Network non-compliance undermines the Core variant’s intended value and may introduce payment shortfalls.",
@@ -7736,7 +7736,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-value-platinum-2026",
+            target_plan_id: "sizwehosmed-value-platinum-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Expected annual imaging cost = contributions + scan_count * event_copay + probability(exceed_limit) * out_of_pocket.",
             primary_risk_warning: "Each scan event can trigger a fixed co-pay except PMBs, creating predictable but non-trivial leakage for frequent imaging.",
@@ -7782,7 +7782,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-value-platinum-2026",
+            target_plan_id: "sizwehosmed-value-platinum-any-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Tail risk is explicitly \"shared\": member pays 20% of oncology spend beyond the annual per-beneficiary limit.",
             primary_risk_warning: "Exceeding the oncology limit triggers a 20% co-payment; planning must include reserve liquidity for tail events.",
