@@ -1,4 +1,3 @@
-// data/personas.ts
 import { Persona } from '@/utils/persona';
 
 export const PERSONAS: Persona[] = [
@@ -284,7 +283,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "bestmed-beat1-network-budget-starter-2026",
         code: "BMBEAT1_NET_STARTER",
@@ -408,7 +406,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "flexibility"
         },
         actuarial_logic: {
-            target_plan_id: "bestmed-beat1-fullchoice-2026",
+            target_plan_id: "bestmed-beat1-network-2026",
             brand_lock: "Bestmed",
             mathematical_basis: "R2,523/month buys full hospital choice. Joint replacement excluded except PMBs: Hip/major joints R41,918, Knee/shoulder R51,686. Biological medicine during hospitalisation R12,144/family/annum. CDL chronic unlimited.",
             primary_risk_warning: "Elective joint replacement NOT covered. PMB joint surgery subject to prosthesis sub-limits. No savings account for GP/specialist consultations.",
@@ -641,7 +639,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "flexibility"
         },
         actuarial_logic: {
-            target_plan_id: "bestmed-beat2-fullchoice-2026",
+            target_plan_id: "bestmed-beat2-network-2026",
             brand_lock: "Bestmed",
             mathematical_basis: "R3,084/month total (R2,591 risk + R493 savings). Full hospital choice (no network penalty). Joint replacement excluded except PMBs: Hip/major R41,918, Knee/shoulder R51,686. Biological medicine R18,215/family/annum. Specialised diagnostic imaging R23,012/family/annum (R2,100 co-pay per scan).",
             primary_risk_warning: "Elective joint replacement NOT covered unless meets PMB criteria. Savings insufficient for frequent specialist consultations. No non-CDL chronic medicine.",
@@ -1043,7 +1041,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "bestmed-rhythm1-network-entry-level-2026",
         code: "BMRHYTHM1_ENTRY",
@@ -1075,7 +1072,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bestmed-rhythm1-2026",
+            target_plan_id: "bestmed-rhythm1-network-2026",
             brand_lock: "Bestmed",
             mathematical_basis: "The R1,736/month premium is mathematically optimal for incomes <R9,000. It provides unlimited GP visits (subject to protocols) which would otherwise cost ~R500/visit cash. The 'break-even' is extremely low due to the subsidized rate.",
             primary_risk_warning: "Strict adherence to Rhythm Network providers is mandatory. Voluntary use of non-DSP hospitals triggers a R15,025 co-payment.",
@@ -1306,7 +1303,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bestmed-rhythm1-2026",
+            target_plan_id: "bestmed-rhythm1-network-2026",
             brand_lock: "Bestmed",
             mathematical_basis: "Low Income Band: R1,736 + R1,736 + (3 * R715) = R5,617 total for a family of 6+. The zero marginal cost for the 4th child leverages the capitation model.",
             primary_risk_warning: "Specialist limit is per family (R2,670), which is extremely low for a large family. Almost all care must be managed by the GP.",
@@ -1321,7 +1318,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "boncap-network-income-band-1-single-starter-2026",
         code: "BONCAP_IB1_SINGLE",
@@ -1354,7 +1350,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncap-2026",
+            target_plan_id: "bonitas-boncap-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Income verification triggers R1,730 premium for main member in lowest bracket. Unlimited network GP visits with approval from 8th visit creates volume arbitrage for frequent users.",
             primary_risk_warning: "30% co-payment for non-network hospital use. Specialist benefit capped at R4,060 per beneficiary.",
@@ -1401,7 +1397,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncap-2026",
+            target_plan_id: "bonitas-boncap-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "You only pay for a maximum of three children. 4th+ child contributes zero marginal cost. Premium = R2,111 (main) + R2,111 (adult) + R971*3 (children) = R7,135 for 6-person family.",
             primary_risk_warning: "Income band cliff at R19,350 triggers 61% premium increase",
@@ -1448,7 +1444,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "maternity"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncap-2026",
+            target_plan_id: "bonitas-boncap-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Antenatal consultations covered under GP and specialist benefits (max 5 visits/R6,030 per family). Maternity programme adds baby bag, lactation support, 24/7 advice. R3,404*2 = R6,808 monthly premium.",
             primary_risk_warning: "Specialist visits capped at 5 per family per year. Must use network for scans.",
@@ -1495,7 +1491,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncap-2026",
+            target_plan_id: "bonitas-boncap-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "28 chronic conditions covered (27 PMB + Depression at R165/month). Must nominate network GP for chronic management. Unlimited network GP visits critical for chronic script refills.",
             primary_risk_warning: "30% co-payment if not using Marara Pharmacy or BonCap formulary",
@@ -1542,7 +1538,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncore-2026",
+            target_plan_id: "bonitas-boncore-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R1,275 flat rate per beneficiary (main/adult/child identical). R14,680 co-payment for non-network hospital creates extreme network lock-in. 3 GP visits per beneficiary + unlimited virtual GP.",
             primary_risk_warning: "R5,500 co-payment per network hospital admission. No day-to-day benefits except 3 GP visits and R1,000 Benefit Booster (requires wellness screening).",
@@ -1589,7 +1585,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncore-2026",
+            target_plan_id: "bonitas-boncore-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "You only pay for maximum of three children. 7-person family pays R1,275*5 = R6,375/month. Maternity natural birth covered with no co-payment for motor vehicle accidents or PMB emergency.",
             primary_risk_warning: "R5,500 co-payment per admission for all non-emergency hospital events",
@@ -1636,7 +1632,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "balanced"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonessential-2026",
+            target_plan_id: "bonitas-bonessential-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R2,747/month premium. Benefit Booster of R1,160 per family unlocked via mental health assessment + wellness screening. Pays for GP visits, OTC medicine, X-rays, blood tests before depleting.",
             primary_risk_warning: "30% co-payment for non-network hospital. Day-to-day limited to Benefit Booster + 2 emergency room visits.",
@@ -1683,7 +1679,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonessential-select-2026",
+            target_plan_id: "bonitas-bonessential-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R2,345 (main) + R1,718 (adult) + R774*3 (children) = R6,385/month for 5-person family. Only pay for max 3 children. R1,160 Benefit Booster via wellness screening.",
             primary_risk_warning: "R7,100 co-payment for non-network day hospital. Higher procedure co-payments than BonEssential.",
@@ -1921,7 +1917,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "premium"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncomprehensive-2026",
+            target_plan_id: "bonitas-boncomprehensive-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Main member savings = R22,512 (no threshold/gap). Chronic benefit = R18,760/beneficiary + R37,360/family. 61 conditions including narcolepsy, myasthenia gravis, cystic fibrosis. Non-cancer biologics = R257,300/family. Refractive surgery = R26,520/family.",
             primary_risk_warning: "High premium: R12,509 main + R11,796 adult = R24,305/month. Chronic limit can deplete.",
@@ -1968,7 +1964,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "dental"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncomprehensive-2026",
+            target_plan_id: "bonitas-boncomprehensive-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "2 implants per beneficiary every 5 years. Cost of implant components limited to R3,710 per implant. 3 crowns per family per year (vs 1 on BonComplete/BonClassic). Orthodontics funded at 100% of Bonitas Dental Tariff (vs 65% on BonComplete).",
             primary_risk_warning: "Implant benefit is component cost only; does not cover full procedure cost. Must be paid from savings.",
@@ -2015,7 +2011,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "cancer"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncomprehensive-2026",
+            target_plan_id: "bonitas-boncomprehensive-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Non-PMB cancer treatment = R448,200/family (paid 80% at DSP, no cover at non-DSP once depleted). Sublimit of R448,200 for specialized drugs including biologics within cancer limit. Non-cancer biologics = R257,300/family. 2 PET scans/family/year (vs 0 on BonComplete/1 on BonClassic).",
             primary_risk_warning: "Non-PMB cancer limit can deplete. 30% co-payment for non-DSP cancer treatment.",
@@ -2156,7 +2152,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncap-2026",
+            target_plan_id: "bonitas-boncap-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R1,330 per family for women aged up to 50. Must use DSP. 40% co-payment if non-DSP. Contraceptives for women aged <26 mentioned in preventative benefits (HPV vaccines 9-26 years).",
             primary_risk_warning: "40% co-payment for non-DSP contraceptives. Income verification required.",
@@ -2203,7 +2199,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "dental"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncomprehensive-2026",
+            target_plan_id: "bonitas-boncomprehensive-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Orthodontics granted once per beneficiary per lifetime. Funding up to 100% of Bonitas Dental Tariff (vs 65% on BonComplete). Needs analysis determines allocation. Ages 9-18 for fixed comprehensive treatment. Only 1 family member may begin treatment per calendar year.",
             primary_risk_warning: "Only granted where function is impaired (not cosmetic). 1 family member limit per year.",
@@ -2297,7 +2293,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-boncomprehensive-2026",
+            target_plan_id: "bonitas-boncomprehensive-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "3 paediatrician or GP consultations per child under 1 year. 2 paediatrician or GP consultations per child ages 1-2. 2 GP consultations per child ages 2-12. Paid from savings. BonComplete offers 2/1/1 (lower allocation).",
             primary_risk_warning: "Paid from savings; can deplete savings allocation quickly with multiple children",
@@ -2312,7 +2308,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "bonsave-network-savings-single-msa-max-2026",
         code: "BONSAVE_SINGLE_MSA",
@@ -2345,7 +2340,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "savings"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonsave-2026",
+            target_plan_id: "bonitas-bonsave-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R4,047/month premium. Main member savings = R12,144. Unlock R5,000 Benefit Booster via wellness screening + mental health assessment. Low utilizers can bank savings for multi-year rollover.",
             primary_risk_warning: "30% co-payment for non-network hospital. R5,200 co-payment for removal of impacted teeth.",
@@ -2392,7 +2387,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonsave-2026",
+            target_plan_id: "bonitas-bonsave-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "Adult dependant savings = R9,180, Child savings = R3,636. Orthodontics funded at 100% of Bonitas Dental Tariff where function is impaired. Only 1 family member may begin orthodontic treatment per year. Fixed comprehensive treatment ages 9-18.",
             primary_risk_warning: "Orthodontic needs analysis required. Benefit granted for impaired function, not cosmetic.",
@@ -2487,7 +2482,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "maternity"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonprime-2026",
+            target_plan_id: "bonitas-bonprime-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R3,255 (main) + R2,546 (adult) = R5,801/month. Main member savings = R6,252. Maternity: 6 antenatal consultations, R1,100 antenatal classes, 2 2D ultrasounds, 1 amniocentesis, 4 midwife consultations post-delivery.",
             primary_risk_warning: "30% co-payment for non-network hospital. PMB only for dental general anaesthetic.",
@@ -2534,7 +2529,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonprime-2026",
+            target_plan_id: "bonitas-bonprime-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R3,255/month premium. 28 chronic conditions (27 PMB + Depression R165/month). Must use Marara Pharmacy DSP. Savings = R6,252 for day-to-day expenses.",
             primary_risk_warning: "30% co-payment if not using Marara Pharmacy or non-formulary chronic medication",
@@ -2581,7 +2576,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "balanced"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-primary-2026",
+            target_plan_id: "bonitas-primary-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R3,588 (main) + R2,807 (adult) + R1,141*2 (children) = R8,677/month. Overall day-to-day limit = R11,080 with sublimits: GP/Specialist R5,240, Acute Medicine R3,500, X-rays/Blood R3,500, Auxiliary R3,500.",
             primary_risk_warning: "30% co-payment for non-network hospital. R6,500 co-payment for non-network day surgery.",
@@ -2629,7 +2624,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-standard-2026",
+            target_plan_id: "bonitas-standard-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R5,929 (main) + R5,139 (adult) + R1,740*2 (children) = R14,548/month. Overall day-to-day limit = R23,310. Chronic benefit = R13,030/beneficiary + R26,150/family. 45 conditions including ADD, GORD, depression, anxiety, PTSD, OCD, panic disorder.",
             primary_risk_warning: "Chronic benefit limit can deplete mid-year. After depletion, 27 PMB still covered via DSP or network pharmacy with 30% co-pay for non-compliance.",
@@ -2676,7 +2671,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-standard-select-2026",
+            target_plan_id: "bonitas-standard-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R5,431 (main) + R4,700 (adult) + R1,590*2 (children) = R13,311/month. Overall day-to-day limit = R23,310. Must nominate 2 GPs per beneficiary. 2 non-nominated network GP visits allowed per family per year. Non-network GPs limited to PMBs only.",
             primary_risk_warning: "30% co-payment for non-network hospital. Strict GP nomination requirement limits flexibility.",
@@ -2724,7 +2719,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "senior"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-standard-2026",
+            target_plan_id: "bonitas-standard-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R5,929 (main) + R5,139 (adult) = R11,068/month. Hip/Knee Replacement Programme uses multi-disciplinary team with pre-surgery evaluation. Avoid R38,560 co-payment by using DSP. Internal/external prostheses = R57,630/family.",
             primary_risk_warning: "R38,560 co-payment if non-DSP used for joint replacement",
@@ -2772,7 +2767,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-standard-2026",
+            target_plan_id: "bonitas-standard-any-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R5,929 (main) + R5,139 (adult) + R1,740 (child) = R12,808/month. Insulin pump benefit: 1 pump R65,000/family every 5 years. 1 continuous glucose monitor R28,000/family per year. Consumables limited to R93,000/family per year. Only for Type 1 diabetics younger than 18.",
             primary_risk_warning: "Age restriction: Type 1 diabetic must be under 18. Pump replacement only every 5 years.",
@@ -2819,7 +2814,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-hospital-standard-2026",
+            target_plan_id: "bonitas-hospital-standard-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R3,561/month premium. 2 emergency consultations per family at casualty ward. No day-to-day benefits except PMB out-of-hospital. 28 chronic conditions via Pharmacy Direct DSP with 30% co-pay for non-compliance.",
             primary_risk_warning: "30% co-payment for non-network hospital. No joint replacement or back/neck surgery except PMB. No day-to-day benefits.",
@@ -2867,7 +2862,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "maternity"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-hospital-standard-2026",
+            target_plan_id: "bonitas-hospital-standard-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R3,561 (main) + R2,999 (adult) + R1,353 (child) = R7,913/month for 3-person family. Emergency approved C-sections only. Managed Care protocols apply. 6 antenatal consultations with GP/gynaecologist/midwife, 2 2D ultrasounds, 1 amniocentesis.",
             primary_risk_warning: "Only emergency C-sections covered. Elective C-sections not covered. Natural birth covered as PMB hospital admission.",
@@ -2914,7 +2909,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonstart-2026",
+            target_plan_id: "bonitas-bonstart-plus-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R1,603/month flat rate (main/adult/child identical). Unlimited network GP with R130 co-payment per visit. Authorization required after 6th visit. Unlimited network virtual GP and nurse consultations. GP-referred acute medicine, X-rays, blood tests limited to R1,850/family.",
             primary_risk_warning: "R12,680 co-payment for non-network hospital. R1,850 admission co-payment per network hospital admission. No cover for joint replacement, back/neck surgery, varicose veins, gastroscopies, colonoscopies.",
@@ -2962,7 +2957,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "maternity"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonstart-plus-2026",
+            target_plan_id: "bonitas-bonstart-plus-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R2,040 (main) + R1,940 (adult) = R3,980/month. Unlimited network GP with R75 co-payment (vs R130 on BonStart). Authorization required after 10th visit (vs 6th on BonStart). GP-referred acute medicine limit R3,450/family (vs R1,850 on BonStart). 6 antenatal consultations, 2 2D ultrasounds, 1 amniocentesis, 4 midwife consultations post-delivery.",
             primary_risk_warning: "R12,680 co-payment for non-network hospital. R1,240 admission co-payment per network hospital admission (vs R1,850 on BonStart).",
@@ -3009,7 +3004,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "bonitas-bonstart-plus-2026",
+            target_plan_id: "bonitas-bonstart-plus-network-2026",
             brand_lock: "Bonitas",
             mathematical_basis: "R2,040 (main) + R1,940 (adult) + R899*3 (children) = R6,677/month for 5-person family. No child capping on BonStart Plus (unlike other Bonitas plans). 4 physiotherapy consultations per beneficiary for sport-related injuries with R75 co-payment. Must get referral from network GP or medical specialist.",
             primary_risk_warning: "R12,680 co-payment for non-network hospital. No child capping benefit (all children charged full rate).",
@@ -3024,7 +3019,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "discovery-smart-saver-classic-msa-hybrid-2026",
         code: "DH_SMART_SAVER_CLASSIC",
@@ -3058,7 +3052,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "smart_msa_rich_day2day"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-smart-saver-2026",
+            target_plan_id: "discovery-classic-smart-saver-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Classic Smart Saver combines a modest MSA, unlimited Smart‑network GP consultations with a small co‑payment, defined OTC and acute medicine limits and a relatively high Personal Health Fund ceiling, within the Smart Hospital Network.",
             primary_risk_warning: "Planned admissions at non‑Smart hospitals trigger a sizeable upfront payment; intensive non‑Smart specialist or dental use can exhaust MSA and PHF quickly.",
@@ -3106,7 +3100,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget_smart_msa"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-essential-smart-saver-2026",
+            target_plan_id: "discovery-classic-smart-saver-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Essential Smart Saver mirrors Classic Smart Saver’s structure but with higher GP and dental co‑payments, smaller OTC and contraceptive limits, a lower Personal Health Fund ceiling and additional exclusions for high‑cost procedures.",
             primary_risk_warning: "Exclusions for many elective orthopaedic, spinal and ENT procedures leave members exposed to large self‑funded hospital bills if these events occur.",
@@ -3313,7 +3307,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "discovery-saver-classic-msa-high-day2day-2026",
         code: "DH_SAVER_CLASSIC_MSA",
@@ -3395,7 +3388,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "network_discount"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-delta-saver-2026",
+            target_plan_id: "discovery-classic-saver-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Classic Delta Saver reduces contributions versus Classic Saver by restricting planned hospital admissions and Day Surgery procedures to a Delta network; members pay R11,100 upfront for non‑network planned admissions.",
             primary_risk_warning: "Using a non‑Delta hospital for planned admissions triggers an R11,100 upfront payment; geography must align to Delta network availability.",
@@ -3443,7 +3436,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-essential-saver-2026",
+            target_plan_id: "discovery-classic-saver-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Essential Saver cuts contributions by lowering MSA allocation to 15%, capping Personal Health Fund at R6,000 base (R12,000 boosted), reducing hospital specialists to 100% tariff and limiting the Day‑to‑day Extender Benefit to two consultations (four for families).",
             primary_risk_warning: "Smaller MSA and lower Extender Benefit leave members exposed to large self‑payment periods; no Above Threshold Benefit for catastrophic day‑to‑day costs.",
@@ -3491,7 +3484,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "geo_discount"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-coastal-saver-2026",
+            target_plan_id: "discovery-classic-saver-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Coastal Saver reduces contributions below national Essential Saver by limiting full hospital benefits to approved coastal facilities and paying only 70% tariff at non‑coastal hospitals.",
             primary_risk_warning: "Relocation inland or frequent planned admissions at non‑coastal hospitals significantly reduces value due to reduced reimbursement ratios.",
@@ -3539,7 +3532,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "income_banded"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-keycare-plus-2026",
+            target_plan_id: "discovery-keycare-plus-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "KeyCare Plus uses income‑banded contributions verified by the scheme, providing unlimited network GP consultations, acute medicine and defined day‑to‑day benefits, with full chronic medicine cover on formulary at network pharmacies.",
             primary_risk_warning: "Strict income verification; using non‑KeyCare providers triggers large co‑payments or non‑coverage; no Medical Savings Account or Above Threshold Benefit.",
@@ -3587,7 +3580,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget_network"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-keycare-start-2026",
+            target_plan_id: "discovery-keycare-plus-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "KeyCare Start dramatically reduces contributions by requiring members to choose a single KeyCare Start hospital in their region and use only that facility for planned admissions; non‑network hospital use for planned care results in 100% member liability.",
             primary_risk_warning: "Planned admissions at non‑network hospitals are not funded at all; members pay the entire bill out‑of‑pocket.",
@@ -3635,7 +3628,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "digital_network"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-keycare-start-regional-2026",
+            target_plan_id: "discovery-keycare-plus-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "KeyCare Start Regional achieves the lowest Discovery premiums by limiting access to defined regional towns (Gauteng, Limpopo, Mpumalanga, Western Cape, etc.) and mandating the KeyCare Online Practice for GP consultations and referrals.",
             primary_risk_warning: "Member must use the KeyCare Online Practice for all primary care; non‑network hospital use for planned care results in 100% member liability; geography is highly restricted.",
@@ -3683,7 +3676,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "limited_atb"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-priority-2026",
+            target_plan_id: "discovery-classic-priority-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Classic Priority allocates 25% of contributions to MSA, provides an Annual Threshold around R27,000 per adult and a limited Above Threshold Benefit of approximately R20,000 per adult, beyond which members pay all day‑to‑day claims out‑of‑pocket.",
             primary_risk_warning: "Above Threshold Benefit is capped; once MSA, Personal Health Fund and ATB are exhausted, members face full out‑of‑pocket costs for the rest of the year.",
@@ -3731,7 +3724,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget_atb"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-essential-priority-2026",
+            target_plan_id: "discovery-classic-priority-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Essential Priority reduces MSA to 15%, sets the same Annual Threshold as Classic but with a limited ATB of approximately R14,000 per adult, and reduces hospital specialists to 100% tariff to lower contributions.",
             primary_risk_warning: "Smaller MSA and lower ATB cap leave members exposed to large out‑of‑pocket costs if day‑to‑day utilisation is high.",
@@ -3746,7 +3739,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "discovery-executive-multi-chronic-atb-unlimited-2026",
         code: "DH_EXEC_MULTI_CHRONIC",
@@ -3780,7 +3772,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "heavy_user"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-executive-2026",
+            target_plan_id: "discovery-executive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Very high monthly contributions buy a Medical Savings Account of over R34,000 per adult per year, plus an unlimited Above Threshold Benefit and a Personal Health Fund that can reach R24,000 per policy through Personal Health Pathways engagement.",
             primary_risk_warning: "High fixed premium commitment; benefit efficiency drops sharply if chronic and day‑to‑day utilisation is low.",
@@ -3828,7 +3820,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "oncology"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-executive-2026",
+            target_plan_id: "discovery-executive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "The plan covers the first large tranche of oncology spend in full each 12‑month cycle, then 80% thereafter, with additional innovation and extended oncology benefits that fund selected high‑cost therapies beyond the base oncology limit.",
             primary_risk_warning: "Oncology innovation benefits are subject to strict clinical entry criteria and member co‑payments; members using non‑DSP oncology providers face additional co‑payments.",
@@ -3875,7 +3867,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "travel"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-executive-2026",
+            target_plan_id: "discovery-executive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Each overseas journey is backed by a very high US dollar emergency medical limit for up to 90 days per trip, plus a separate overseas treatment benefit for defined procedures not available locally, both with member co‑payments on some components.",
             primary_risk_warning: "Pre‑existing conditions are excluded from the international travel benefit; a 20% co‑payment applies to overseas treatment and certain evacuation services.",
@@ -3922,7 +3914,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "dental_allied"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-executive-2026",
+            target_plan_id: "discovery-executive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Executive offers large annual limits for allied and psychology services, dental appliances and orthodontics, optical benefits and external medical items, all of which continue to reimburse once the Annual Threshold is reached thanks to the unlimited Above Threshold Benefit.",
             primary_risk_warning: "Dental appliances and orthodontics are funded from day‑to‑day benefits and subject to yearly sub‑limits and clinical rules; heavy use without reaching the Threshold can leave value unused.",
@@ -3969,7 +3961,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-core-2026",
+            target_plan_id: "discovery-classic-delta-core-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Contributions are materially lower than comprehensive and Executive plans while providing unlimited hospital cover at up to 200% of the Discovery Health Rate and a Personal Health Fund that can reach several thousand rand through engagement.",
             primary_risk_warning: "No Medical Savings Account or Above Threshold Benefit; all routine GP, specialist and acute medicine costs must be funded from the Personal Health Fund or out of pocket.",
@@ -4016,7 +4008,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "network_discount"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-delta-core-2026",
+            target_plan_id: "discovery-classic-delta-core-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Delta variants reduce contributions substantially relative to Classic Core by restricting planned admissions to a defined Delta Hospital Network and imposing an upfront payment in excess of R11,000 for non‑network admissions.",
             primary_risk_warning: "Incorrect hospital choice for planned admissions triggers very large upfront co‑payments; geography and provider patterns must align to the Delta network.",
@@ -4063,7 +4055,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "geo_discount"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-coastal-core-2026",
+            target_plan_id: "discovery-classic-delta-core-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Coastal Core trims contributions versus national Classic options by limiting full hospital benefits to approved coastal facilities and paying only a portion of tariff at non‑network hospitals inland.",
             primary_risk_warning: "Relocation inland or frequent planned admissions at non‑coastal hospitals significantly reduces value due to reduced reimbursement ratios.",
@@ -4110,7 +4102,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "oncology"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-essential-core-2026",
+            target_plan_id: "discovery-classic-delta-core-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "All Core plans share an oncology benefit that funds the first substantial portion of approved cancer treatment per 12‑month cycle in full, then 80% of tariff thereafter, provided designated oncology networks and dispensaries are used.",
             primary_risk_warning: "Oncology cover is finite; high‑cost, long‑duration regimens can exceed the R250,000 cover level within a year and leave 20% of further costs for the member.",
@@ -4158,7 +4150,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-comprehensive-2026",
+            target_plan_id: "discovery-classic-comprehensive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Contributions include a sizeable Medical Savings Account allocation per adult and child, an Annual Threshold and a limited Above Threshold Benefit, together with a Personal Health Fund that can meaningfully supplement day‑to‑day cover if members complete Personal Health Pathway actions.",
             primary_risk_warning: "Once the Above Threshold Benefit is exhausted, members revert to full out‑of‑pocket funding for day‑to‑day claims until the next year.",
@@ -4205,7 +4197,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "network_smart"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-smart-comprehensive-2026",
+            target_plan_id: "discovery-classic-smart-network-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Classic Smart Comprehensive uses a Smart hospital and GP network plus an R75 co‑payment per GP consultation to lower contributions, while still offering MSA, an Annual Threshold and a limited Above Threshold Benefit.",
             primary_risk_warning: "Planned admissions or GP use outside the Smart networks trigger large upfront payments and higher out‑of‑pocket costs.",
@@ -4253,7 +4245,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-comprehensive-2026",
+            target_plan_id: "discovery-classic-comprehensive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Classic Comprehensive funds chronic medicines for a broad Additional Disease List, including major depression, anxiety disorders and several autoimmune conditions, alongside defined mental health care programmes and sizeable allied and psychology limits.",
             primary_risk_warning: "ADL medicines are funded only up to Chronic Drug Amount ceilings; non‑preferred products or non‑DSP pharmacies can leave significant co‑payments.",
@@ -4300,7 +4292,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "oncology"
         },
         actuarial_logic: {
-            target_plan_id: "discovery-classic-comprehensive-2026",
+            target_plan_id: "discovery-classic-comprehensive-any-2026",
             brand_lock: "Discovery Health",
             mathematical_basis: "Classic Comprehensive offers a higher oncology cover level per 12‑month cycle than the Smart variant, plus innovation and extended oncology benefits that can fund selected regimens after the base limit is reached, at a lower contribution than the Executive Plan.",
             primary_risk_warning: "Member still carries 20% of oncology costs beyond the base limit and at least 50% of the cost of defined innovative drugs, so affordability must be stress‑tested.",
@@ -4315,7 +4307,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "fedhealth-flexifed3-d2d-plus-health-risk-assessment-savings-unlock-2026",
         code: "FH_F3_D2DPLUS_15",
@@ -4449,7 +4440,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed3elect-savings-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Single R4,550/month saves R1,235/month vs standard flexiFED 3 (R5,785). Annual savings: R14,892 single, R28,488 couple, R33,756 M+A+C. IDENTICAL benefits: savings R10,416, threshold R10,416, D2D+ R4,000, unlimited nominated network GP after threshold with 20% co-payment. CRITICAL DIFFERENCE: R15,950 FIXED EXCESS on ALL PLANNED hospital admissions (surgery, procedures, elective admissions). Emergencies ALWAYS nearest private hospital with NO excess. Any hospital choice (vs GRID restriction).",
             primary_risk_warning: "R15,950 excess wipes out 14 months of premium savings on FIRST planned admission. 'Planned' definition critical: routine surgery (hernia, gallbladder, tonsillectomy), childbirth (excluding emergency C-section), joint procedures, back surgery, diagnostic admissions all trigger excess. Excess applies PER ADMISSION not per year. Multiple planned admissions = R15,950 × admissions. Backup savings activation R14,472(M) + R13,284(A) + R5,148(C) highest among flexiFED 3 variants.",
@@ -4498,7 +4489,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "hospital"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed3-hospital-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Hospital plan R4,946/month includes nominal savings R348. Backup savings R14,400 can be activated in R600 increments ANYTIME, adding R50/month per R600 activated. Full R14,400 activation adds R1,200/month spread over 12 months = R5,785 total (matches savings plan). STRATEGIC ADVANTAGE: Start hospital plan, self-fund nominated GP visits to accumulate to threshold R10,416 at cost, then activate backup savings ONLY if unexpected expenses arise. D2D+ R4,000 available via HRA + app registration. Threshold unlocks unlimited nominated network GP with 20% co-payment + basic dental (2 consults/year, x-rays, scaling, polishing, fillings, extractions at contracted dentists).",
             primary_risk_warning: "Self-funding threshold race requires R10,416 cash flow before unlimited GP benefit unlocks. D2D+ claims don't accumulate to threshold, creating perverse incentive to NOT use HRA benefit until post-threshold. Backup savings activation is PERMANENT for calendar year - cannot be reversed once activated. Nominal savings R348 creates confusion (cannot be used for most services). Threshold co-payment 20% on nominated GP applies even after R10,416 accumulation (not truly 'unlimited free').",
@@ -4547,7 +4538,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "income-banded"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-myfed-2026",
+            target_plan_id: "fedhealth-myfed-individual-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "INCOME-BANDED PLAN with 4 tiers. Band 1 (R1-R11,063 household income): R1,719(M) / R1,719(A) / R779(C). UNIQUE BENEFIT: Unlimited nominated myFED contracted GP subject to protocols and utilization monitoring AFTER 10 visits per beneficiary per year. Each beneficiary nominates up to 2 myFED contracted GPs. 2 mental health consultations per beneficiary at nominated GP. Up to 2 non-nominated myFED GP consults per beneficiary per year. Non-contracted GP: up to 2 consults per beneficiary per year. Specialist: 2 consultations + treatment up to R2,220 per FAMILY per year (must be referred by contracted GP, 40% co-payment if no referral). Network hospital requirement: myFED hospital network, 30% co-payment on voluntary non-network use.",
             primary_risk_warning: "Utilization monitoring after 10 GP visits per year creates uncertainty - unclear if visits 11+ denied or subject to review. Specialist benefit R2,220 per FAMILY (not per beneficiary) insufficient for most specialist series (gastroenterologist, neurologist typically R1,500-2,000 per visit). Non-network GP/specialist limit: R2,730 per FAMILY per year for ALL non-network consultations (GP + specialist combined). 30% hospital co-payment on non-network use. Chronic meds: 25% DSP non-use co-payment (Clicks/Dis-Chem/Pharmacy Direct Courier mandatory). Elective C-section R15,950 co-payment. Cataract surgery R7,750 co-payment voluntary non-contracted provider.",
@@ -4596,7 +4587,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "income-banded"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-myfed-2026",
+            target_plan_id: "fedhealth-myfed-individual-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Band 4 (R21,652+ household income): R4,052(M) / R4,052(A) / R1,281(C). Family M+A+C = R9,385/month. SAME restricted benefits as Band 1: unlimited nominated GP (utilization monitoring after 10 visits), specialist R2,220 per FAMILY, non-network GP/specialist R2,730 per FAMILY, myFED network hospitals (30% co-payment non-network), specialist must be referred by contracted GP (40% co-payment if no referral), DSP pharmacy mandatory (25% co-payment), elective C-section R15,950, cataract R7,750 voluntary non-contracted provider.",
             primary_risk_warning: "INCOME CLIFF TRAP: Household income R21,651 = Band 3 R2,453 (family M+A+C = R5,872). Income R21,652 = Band 4 R4,052 (family M+A+C = R9,385). R1 income increase triggers R3,513/month premium increase (R42,156/year). Band 4 premium R4,052 approaches flexiFED 3GRID R4,410 but with FAR inferior benefits (flexiFED 3GRID has savings R10,416, threshold, D2D+ R4,000, any hospital, no specialist family limit). Specialist R2,220 family limit creates severe access constraint for families (1 consult per member = R2,220 exhausted). Non-network cap R2,730 family means ANY non-network use (GP, specialist, non-nominated GP) counts toward same pool.",
@@ -4645,7 +4636,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "gp-dispensing"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-myfed-2026",
+            target_plan_id: "fedhealth-myfed-individual-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Band 2 (R11,064-R15,617 household income): R1,971(M) / R1,971(A) / R931(C). Single parent + 2 kids = R3,833/month. UNIQUE BENEFIT: Unlimited acute medicine at dispensing nominated contracted GP. Non-dispensing medical practitioners (Fedhealth Network Specialists, GPs, Dentists): unlimited acute medicine subject to acute formulary. Creates integrated care model where GP consultation + medication dispensing in single visit. Avoids R880 casualty co-payment for minor acute conditions (UTI, bronchitis, gastroenteritis). Each beneficiary nominates up to 2 myFED contracted GPs - strategy is to nominate 1 dispensing + 1 non-dispensing for flexibility.",
             primary_risk_warning: "Acute formulary restrictions: limited medication options, may not include preferred brands or newer medications. Dispensing GP availability limited (not all myFED GPs dispense). Utilization monitoring after 10 GP visits per beneficiary per year may flag frequent acute med collection as 'overutilization'. Unlimited acute meds does NOT cover over-the-counter (no benefit). Chronic meds: DSP pharmacy mandatory (Clicks/Dis-Chem/Pharmacy Direct Courier), 25% co-payment non-DSP - cannot be dispensed by GP. Specialist R2,220 family limit means complex acute conditions requiring specialist consultation exhaust benefit quickly.",
@@ -4660,7 +4651,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "fedhealth-flexifedsavvy-hospital-under35-virtual-gp-maximizer-2026",
         code: "FH_SAVVY_H_VIRTUAL_09",
@@ -4694,7 +4684,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifedsavvy-hospital-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Single R1,155/month. UNIQUE BENEFIT: Unlimited virtual GP consultations + 3 face-to-face network GP visits paid from RISK (R0 cost). Non-network: 2 consults per FAMILY (not per beneficiary) subject to 3-visit cap. Can activate R6,528 backup savings in R600 increments via USSD only if needed. Age-restricted to under-35.",
             primary_risk_warning: "Strict network hospital requirement: 30% co-payment on voluntary non-network hospital use, R2,710 co-payment on non-network day surgery. Non-network GP/Specialist consults LIMITED to R2,580 per FAMILY per year. Must use Clicks/Dis-Chem/Pharmacy Direct Courier for chronic meds (25% penalty). R9,330 co-payment on elective C-sections.",
@@ -4742,7 +4732,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "maternity"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifedsavvy-savings-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Couple pays R1,604(M) + R1,155(A) = R2,759/month. Savings R5,388 for ALL family types (flat rate regardless of size). Baby Programme includes doula R3,600 + lactation consult. CRITICAL: R9,330 co-payment on elective C-sections. Natural birth/emergency C-section covered at PMB level. Network hospital mandatory or 30% co-payment.",
             primary_risk_warning: "R9,330 elective C-section co-payment wipes out 40% of annual savings. Non-network GP/Specialist limit R2,580 per FAMILY creates severe access constraint for couples. Age restriction under-35 means forced exit if pregnancy occurs at age 34+. No child immunisations, no infant hearing screening, no HPV vaccine covered.",
@@ -4954,7 +4944,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "fedhealth-flexifed1-savings-budget-starter-single-2026",
         code: "FH_F1S_STARTER_01",
@@ -4987,7 +4976,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed1-savings-2026",
+            target_plan_id: "fedhealth-flexifed1-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Principal member contribution R2,630/month with R5,508 threshold. Optimizes for members who self-fund day-to-day and only activate savings incrementally in R600 blocks when needed.",
             primary_risk_warning: "No maternity benefits. Threshold requires R5,508 out-of-pocket before unlimited GP unlocks.",
@@ -5033,7 +5022,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed1-elect-2026",
+            target_plan_id: "fedhealth-flexifed1-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Contribution R2,051/month (saves R579/month vs standard). R15,950 excess only applies to planned admissions, NOT emergencies. Gap cover essential for risk mitigation.",
             primary_risk_warning: "Excess equals 7.8 months of savings. Single planned surgery wipes out annual benefit.",
@@ -5080,7 +5069,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "chronic"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed1-savings-2026",
+            target_plan_id: "fedhealth-flexifed1-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Activate full R7,488 savings (R624/month). Claims accumulate at COST. Depression meds R2,400/year. At R5,508 threshold, unlimited nominated network GP unlocks with 20% copay + preventative dental (2 annual consults).",
             primary_risk_warning: "Must use Scriptpharm DSP for chronic meds or face 30% co-payment. Threshold dental limited to contracted dentists and approved procedures only.",
@@ -5129,7 +5118,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "maternity"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed2-savings-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Couple pays R4,845(M) + R4,312(A) = R9,157/month. Savings R8,724(M) + R7,764(A) = R16,488. Maternity benefits: 8 ante/postnatal consults, 2x2D scans, amniocentesis, R3,600 doula, infant hearing screening. Can upgrade within 30 days of pregnancy confirmation.",
             primary_risk_warning: "No private ward cover for delivery. Must use Scriptpharm DSP for chronic meds (30% penalty). Paediatric consult only up to age 1.",
@@ -5177,7 +5166,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed2-grid-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Family contribution R4,420(M) + R3,940(A) + R1,306(C) = R9,666/month vs R10,094 standard (saves R428/month). Total savings R8,724 + R7,764 + R2,580 = R19,068. After savings depletion + R0 gap, threshold reached immediately at R8,724(M) + R7,764(A) + R2,580(C) = R19,068. Unlocks unlimited nominated GP (20% copay) + basic dental (x-rays, scaling, fillings, extractions).",
             primary_risk_warning: "30% co-payment if voluntarily use non-GRID hospital for planned procedure. Emergency always covered at nearest hospital.",
@@ -5225,7 +5214,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "comprehensive"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed4-savings-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Family pays R7,941(M) + R7,248(A) + R2,388(C1) + R2,388(C2) = R19,965/month. Savings pool R16,200 + R14,784 + R4,872 + R4,872 = R40,728. UNIQUE BENEFIT: Network GP consults paid from RISK from Rand 1, do NOT deplete savings. After R40,728 savings + R11,524 self-pay gap, threshold R22,308(M) + R20,364(A) + R6,708(C) + R6,708(C) = R56,088 unlocks comprehensive unlimited threshold with 20% copay.",
             primary_risk_warning: "Claims accumulate at SCHEME RATE not cost. Mental health: only 2 in-network GP consults paid from risk pre/post threshold. 18 additional chronic conditions include ADHD (ages 6-18), acne (up to 21), anxiety, OCD, PTSD.",
@@ -5273,7 +5262,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed4-grid-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Pays for ONLY 3 children despite having 4+. GRID discount: R5,905(M) + R5,400(A) + R1,780(C1) + R1,780(C2) + R1,780(C3) + R0(C4) = R16,645/month vs R18,493 standard (saves R22,176/year). 4th child FREE. All children charged child rate until age 27. Savings R16,200(M) + R14,784(A) + R4,872(C) + R4,872(C) + R4,872(C) + R0(C4) = R45,600 but pays for 3 kids only.",
             primary_risk_warning: "GRID constraint with 4 children requires proximity to quality GRID hospital with paediatric facilities. Must nominate network GP on GRID/Elect variants. 30% co-payment on voluntary non-GRID hospital use.",
@@ -5321,7 +5310,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "fedhealth-flexifed4-elect-2026",
+            target_plan_id: "fedhealth-flexifedsavvy-network-2026",
             brand_lock: "Fedhealth",
             mathematical_basis: "Elect saves 25%: R4,935(M) + R4,600(A) + R1,515(C) = R11,050/month vs R14,791 standard (saves R44,892/year family). Contraceptives covered from RISK for women up to 55: oral, injectable, patches, rings, implants, IUDs (1 every 2 years). Can upgrade within 30 days of pregnancy. Savings R16,200 + R14,784 + R4,872 = R35,856.",
             primary_risk_warning: "R15,950 excess on planned admissions. Contraceptive must be prescribed by doctor/gynae, NOT for acne treatment. Scriptpharm DSP required for chronic meds (30% penalty).",
@@ -5336,7 +5325,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "medihelp-medprime-elect-network-single-starter-2026",
         code: "MH-MP-ELECT-NS-2026",
@@ -5369,7 +5357,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Contribution minimisation subject to a hard constraint: all predictable claims must route through the Elect network set (hospital + key day-to-day categories) to preserve the pricing advantage. [file:1]",
             primary_risk_warning: "Out-of-network utilisation can convert a low-contribution strategy into a high out-of-pocket strategy if network rules apply to the service category used. [file:1]",
@@ -5416,7 +5404,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Maximise expected utility for a 2-child family by valuing unrestricted hospital access (no overall annual limit stated) and predictable maternity/paediatric preventive items, while treating savings as the first-loss layer. [file:1]",
             primary_risk_warning: "If savings are depleted early, day-to-day claim patterns must align to the insured day-to-day categories and provider rules to avoid gaps. [file:1]",
@@ -5604,7 +5592,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "certainty"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Pregnancy pathway optimisation: convert a high-frequency, time-bounded utilisation pattern into funded benefits by aligning provider types and visit counts to the defined maternity basket. [file:1]",
             primary_risk_warning: "Out-of-basket maternity utilisation (extra scans/visits or non-aligned provider billing) may shift costs into savings or member out-of-pocket exposure. [file:1]",
@@ -5651,7 +5639,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "family"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Early-childhood utilisation is bursty and GP/pharmacy heavy; this persona optimises benefit capture by reserving the under-2 specialist-type consults for high-value events and using routine care efficiently. [file:1]",
             primary_risk_warning: "Frequent minor claims can drain savings quickly, pushing the household into insured day-to-day rules earlier than planned. [file:1]",
@@ -5698,7 +5686,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Convert tail-risk psychiatric admission cost and structured outpatient depression management into a defined-benefit framework by maintaining programme registration and utilising eligible provider types. [file:1]",
             primary_risk_warning: "Defined annual limits create a hard ceiling; sustained high utilisation may revert to self-funding once limits are reached. [file:1]",
@@ -5745,7 +5733,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Tail-risk transfer: shift high-cost oncology exposure into the plan’s defined cancer funding envelope and related hospital/radiology structures. [file:1]",
             primary_risk_warning: "Cancer benefit is capped at a stated family limit, so extreme-cost cases can still generate residual exposure beyond the sub-limit. [file:1]",
@@ -5792,7 +5780,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Optimisation for legally protected/defined pathways (PMB/CDL) to reduce catastrophic variance from chronic and life-threatening conditions through plan risk pooling. [file:1]",
             primary_risk_warning: "Non-PMB/non-CDL chronic needs may not align to the most protective benefit pathways and could create day-to-day cost pressure via savings depletion. [file:1]",
@@ -5839,7 +5827,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Maximise benefit capture by synchronising planned optical and dental events to the plan’s stated benefit cycles and by using the specified provider networks to avoid benefit leakage. [file:1]",
             primary_risk_warning: "Going outside the specified optical/dental networks can reduce payable amounts or shift costs into savings/out-of-pocket depending on the rule set. [file:1]",
@@ -5885,7 +5873,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "value"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "One-off elective procedure optimisation: claim value concentrates in a single event, so timing within the eligible age band and within the family limit dominates expected value. [file:1]",
             primary_risk_warning: "The refractive surgery benefit is limited (family limit) and age-gated, so ineligible timing leads to full self-funding. [file:1]",
@@ -5932,7 +5920,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "risk"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Risk-transfer optimisation with a constraint: keep broad hospital/trauma cover while recognising that certain high-cost elective/degenerative joint pathways may not be funded unless they qualify under PMB or acute injury rules. [file:1]",
             primary_risk_warning: "Degenerative joint replacement demand can generate significant self-funding exposure if it does not qualify under PMB and is not linked to an acute injury. [file:1]",
@@ -5979,7 +5967,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "control"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Liquidity-first: minimise year-to-year leakage by preserving savings (rollover + interest) and shifting only truly necessary spend into savings, while relying on insured day-to-day only when savings are intentionally exhausted. [file:1]",
             primary_risk_warning: "Over-preserving savings can cause under-utilisation of valuable insured benefits and may increase out-of-pocket if services fall outside insured day-to-day rules. [file:1]",
@@ -6026,7 +6014,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "medihelp-medprime-elect-2026",
+            target_plan_id: "medihelp-medprime-elect-network-2026",
             brand_lock: "Medihelp",
             mathematical_basis: "Two-phase optimisation: (1) spend savings predictably early year, then (2) switch behaviour to strict network routing to maximise claim acceptance under insured day-to-day once savings is exhausted. [file:1]",
             primary_risk_warning: "If behaviour does not change post-savings, the member can experience higher out-of-pocket due to network/provider rules on insured day-to-day categories. [file:1]",
@@ -6041,7 +6029,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "medshield-mediphila-hospital-starter-2026",
         code: "MS-MPH-001",
@@ -6559,7 +6546,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "momentum-ingwe-network-family-gp-unlimited-2026",
         code: "MMS-ING-NET-FAM-GP-2026",
@@ -7074,7 +7060,6 @@ export const PERSONAS: Persona[] = [
             }
         }
     },
-
     {
         slug: "sizwehosmed-access-core-young-dsp-hospital-starter-2026",
         code: "SH-ACORE-YDSP-2026-01",
@@ -7475,7 +7460,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Value lever is family \"pooling\": spread fixed contributions across higher expected utilisation without converting claims into co-pay-heavy leakage.",
             primary_risk_warning: "Non-PMB back surgery co-pay exposure and oncology/radiology limits can create tail-cost events.",
@@ -7521,7 +7506,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Expected oncology shortfall = max(0, oncology_cost - annual_limit) * 20% (non-PMB usage above limit).",
             primary_risk_warning: "Above-limit oncology utilisation triggers a 20% co-payment; non-cancer specialised drugs show no benefit on this option.",
@@ -7567,7 +7552,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Imaging expected cost includes plan limit-sharing plus an additional non-PMB MRI/CT co-pay percentage where applicable.",
             primary_risk_warning: "Non-PMB MRI/CT scans can trigger co-payment even within the combined in/out-of-hospital radiology limit structure.",
@@ -7613,7 +7598,7 @@ export const PERSONAS: Persona[] = [
             priority_tag: "budget"
         },
         actuarial_logic: {
-            target_plan_id: "sizwehosmed-gold-ascend-edo-2026",
+            target_plan_id: "sizwehosmed-gold-ascend-edo-network-2026",
             brand_lock: "Sizwe Hosmed",
             mathematical_basis: "Arbitrage comes from trading provider choice for a constrained hospital network while retaining broad benefit structures.",
             primary_risk_warning: "Non-network behaviour can convert intended savings into co-pay and payment-risk outcomes.",
@@ -8041,5 +8026,5 @@ export const PERSONAS: Persona[] = [
                 deductible_trigger_event: "Second joint replacement request within the same year."
             }
         }
-    },
-]
+    }
+];

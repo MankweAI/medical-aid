@@ -17,7 +17,7 @@ export function calculateMonthlyPremium(
         // Logic for KeyCare / BonCap 
         const bands = pricing_matrix as IncomeBand[];
         // Find the correct band
-        const activeBand = bands.find(band => income >= band.min && income <= band.max);
+        const activeBand = bands.find(band => income >= band.min && (band.max === null || income <= band.max));
 
         if (activeBand) {
             rates = activeBand;

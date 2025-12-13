@@ -9,7 +9,7 @@ export interface FixedPricing {
 
 export interface IncomeBand {
     min: number;
-    max: number;
+    max: number | null;
     main: number;
     adult: number;
     child: number;

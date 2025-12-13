@@ -24,7 +24,7 @@ export const PricingEngine = {
         } else if (contribution.pricing_model === 'Income_Banded') {
             const bands = contribution.pricing_matrix as IncomeBand[];
             const activeBand = bands.find((band) =>
-                income >= band.min && (band.max === 0 || income <= band.max)
+                income >= band.min && (band.max === null || band.max === 0 || income <= band.max)
             ) || bands[bands.length - 1];
             rates = activeBand;
         }
