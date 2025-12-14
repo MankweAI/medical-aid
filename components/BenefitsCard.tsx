@@ -1,7 +1,7 @@
 'use client';
 
 import { Plan } from '@/utils/types';
-import { Phone, FileText } from 'lucide-react';
+import { ShieldCheck, FileText } from 'lucide-react'; // Swapped Phone for ShieldCheck
 import PlanDetails from '@/components/PlanDetails';
 import clsx from 'clsx';
 
@@ -33,14 +33,14 @@ export default function BenefitsCard({ plan, onVerify }: { plan: Plan; onVerify:
                 <PlanDetails plan={plan} />
             </div>
 
-            {/* Footer CTA (Identical to FeedCard) */}
+            {/* Footer CTA (Updated to Match Winner Style) */}
             <div className="border-t border-slate-100 bg-slate-50/50 p-4 mt-auto">
                 <button
                     onClick={onVerify}
-                    className="w-full py-3 bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
+                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-200 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
                 >
-                    <Phone className="w-3.5 h-3.5" />
-                    Verify with Specialist
+                    <ShieldCheck className="w-4 h-4 text-emerald-100" />
+                    Check Your Coverage
                 </button>
             </div>
         </div>

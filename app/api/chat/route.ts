@@ -82,10 +82,15 @@ export async function POST(req: Request) {
                 { role: 'system', content: systemPrompt },
                 ...messages.map((m: any) => {
                     let content = m.parts || m.content;
-                    // System messages must be strings in AI SDK v5
-                    if (m.role === 'system' && Array.isArray(content)) {
-                        content = content.map((p: any) => p.text).join('');
+
+                    // ROBUSTNESS: Always flatten array content to string for consistency
+                    if (Array.isArray(content)) {
+                        content = content
+                            .filter((p: any) => p.type === 'text')
+                            .map((p: any) => p.text)
+                            .join('');
                     }
+
                     return {
                         role: m.role,
                         content

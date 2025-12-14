@@ -10,7 +10,8 @@ import {
     Phone,
     Activity,
     Zap,
-    AlertTriangle
+    AlertTriangle,
+    ShieldCheck // Added for the new button
 } from 'lucide-react';
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -169,14 +170,19 @@ export default function FeedCard({ plan, onVerify, verdict }: FeedCardProps) {
                 </div>
             )}
 
-            {/* 6. FOOTER */}
+            {/* 6. FOOTER - REDESIGNED BUTTON */}
             <div className="p-4 mt-2 border-t border-slate-100/50">
                 <button
                     onClick={onVerify}
-                    className="w-full py-3 bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
+                    className={clsx(
+                        "w-full py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]",
+                        isWinner
+                            ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200"
+                            : "bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 text-emerald-700"
+                    )}
                 >
-                    <Phone className="w-3.5 h-3.5" />
-                    Verify with Specialist
+                    <ShieldCheck className={clsx("w-4 h-4", isWinner ? "text-emerald-100" : "text-emerald-600")} />
+                    Check Your Coverage
                 </button>
             </div>
         </div>
