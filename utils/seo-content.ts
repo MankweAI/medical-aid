@@ -1,19 +1,5 @@
 import { Plan } from '@/utils/types';
 import { Persona } from '@/utils/persona';
-import { PLANS } from '@/data/plans';
-import { PERSONAS } from '@/data/personas';
-import { PricingEngine } from '@/utils/engine'; // Import Engine for accurate pricing
-
-// COMPATIBILITY MATRIX (Who can talk to whom?)
-const COMPATIBILITY_MAP: Record<string, string[]> = {
-    'Student': ['Budget', 'Savings', 'Family'],
-    'Family': ['Maternity', 'Savings', 'Budget', 'Student'],
-    'Savings': ['Family', 'Budget', 'Student'],
-    'Maternity': ['Family'],
-    'Chronic': ['Senior', 'Comprehensive'],
-    'Senior': ['Chronic', 'Comprehensive'],
-    'Budget': ['Student', 'Family', 'Savings']
-};
 
 export const ContentGenerator = {
 
@@ -35,76 +21,5 @@ export const ContentGenerator = {
             { question: "What happens if I use a non-network hospital?", answer: plan.network_restriction === 'Any' ? "Nothing. This plan allows you to use any private hospital in South Africa without penalty." : `You will be liable for a co-payment (typically R${plan.procedure_copays.admission_penalty_non_network || '15,000'}) unless it is a life-threatening emergency.` },
             { question: "Is maternity covered on this plan?", answer: plan.defined_baskets.maternity.antenatal_consults > 0 ? `Yes. It includes a separate 'Risk Benefit' for ${plan.defined_baskets.maternity.antenatal_consults} antenatal visits and 2 ultrasounds, so you don't use your savings.` : "No specific maternity basket. All pregnancy-related costs will be paid from your Savings Account or out of pocket." }
         ];
-    },
-
-    // 3. CROSS-SCHEME SMART PIVOT (ROBUST VERSION)
-    getSmartPivot: (currentPlan: Plan, currentPersona: Persona) => {
-
-        // HELPER: Find the best persona for a plan ID
-        // This logic is now reused to validate candidates
-        const findBestPersona = (targetPlanId: string) => {
-            const candidates = PERSONAS.filter(p => p.actuarial_logic?.target_plan_id === targetPlanId);
-
-            // 1. Exact Category Match
-            const exact = candidates.find(p => p.meta.category === currentPersona.meta.category);
-            if (exact) return exact;
-
-            // 2. Compatible Match
-            const allowedCategories = COMPATIBILITY_MAP[currentPersona.meta.category] || [];
-            const compatible = candidates.find(p => allowedCategories.includes(p.meta.category));
-            if (compatible) return compatible;
-
-            // 3. Any Match (Fallback for sparse data)
-            return candidates.length > 0 ? candidates[0] : null;
-        };
-
-        // A. CALCULATE REAL-WORLD COST
-        // We must calculate the actual premium for the user's income/family
-        // to ensure the sort order is actuarially correct.
-        const calculatedLadder = PLANS.map(p => {
-            const financials = PricingEngine.calculateProfile(
-                p.contributions[0],
-                currentPersona.defaults.family_composition,
-                currentPersona.defaults.income
-            );
-            return {
-                plan: p,
-                realCost: financials.monthlyPremium,
-                linkedPersona: findBestPersona(p.id) // Pre-fetch persona to check validity
-            };
-        });
-
-        // B. FILTER INVALID CANDIDATES
-        // 1. Remove the current plan itself
-        // 2. Remove plans that don't have a linked Persona (we can't route to them)
-        const validLadder = calculatedLadder.filter(item =>
-            item.plan.id !== currentPlan.id &&
-            item.linkedPersona !== null
-        );
-
-        // C. SORT BY PRICE (Low to High)
-        validLadder.sort((a, b) => a.realCost - b.realCost);
-
-        // D. FIND PIVOT POINTS
-        // We look for the current plan's price point in this new valid ladder
-        // Note: currentPlan isn't in validLadder, so we find the insertion index
-        const currentCost = PricingEngine.calculateProfile(
-            currentPlan.contributions[0],
-            currentPersona.defaults.family_composition,
-            currentPersona.defaults.income
-        ).monthlyPremium;
-
-        // Find the index where the current plan *would* fit
-        let insertionIndex = validLadder.findIndex(item => item.realCost >= currentCost);
-        if (insertionIndex === -1) insertionIndex = validLadder.length; // It's the most expensive
-
-        // E. SELECT NEIGHBORS
-        const cheaperOption = insertionIndex > 0 ? validLadder[insertionIndex - 1] : null;
-        const richerOption = insertionIndex < validLadder.length ? validLadder[insertionIndex] : null;
-
-        return {
-            cheaper: cheaperOption ? { plan: cheaperOption.plan, persona: cheaperOption.linkedPersona! } : null,
-            richer: richerOption ? { plan: richerOption.plan, persona: richerOption.linkedPersona! } : null
-        };
     }
 };

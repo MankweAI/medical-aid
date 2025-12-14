@@ -2,19 +2,24 @@
 
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { usePersona } from '@/context/PersonaContext';
-import { PLANS } from '@/data/plans';
-import { PERSONAS } from '@/data/personas';
 import { PricingEngine } from '@/utils/engine';
 import { validatePlan } from '@/utils/persona';
 import { ShieldCheck, Sparkles, TrendingDown, Info } from 'lucide-react';
 import FeedCard from '@/components/FeedCard';
-import BenefitsCard from '@/components/BenefitsCard'; // <--- NEW IMPORT
+import BenefitsCard from '@/components/BenefitsCard';
 import ExpertModal from '@/components/ExpertModal';
 import ChatWidget from '@/components/ChatWidget';
 import FeedSkeleton from '@/components/skeletons/FeedSkeleton';
 import clsx from 'clsx';
+import { Plan } from '@/utils/types';
+import { Persona } from '@/utils/persona';
 
-export default function SinglePlanHero({ persona: slug }: { persona: string }) {
+interface Props {
+    persona: Persona;
+    plan?: Plan;
+}
+
+export default function SinglePlanHero({ persona: currentPersona, plan: anchorPlan }: Props) {
     const { state, isChatOpen, setIsChatOpen } = usePersona();
     const [modalOpen, setModalOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);
@@ -22,14 +27,6 @@ export default function SinglePlanHero({ persona: slug }: { persona: string }) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => { setIsClient(true); }, []);
-
-    // ... (Data Lookups & Calculations remain the same) ...
-    const currentPersona = useMemo(() => PERSONAS.find(p => p.slug === slug), [slug]);
-    const anchorPlan = useMemo(() => {
-        const logic = currentPersona?.actuarial_logic;
-        if (!logic) return null;
-        return PLANS.find(p => p.id === logic.target_plan_id);
-    }, [currentPersona]);
 
     const displayPlan = useMemo(() => {
         if (!anchorPlan || !currentPersona) return null;

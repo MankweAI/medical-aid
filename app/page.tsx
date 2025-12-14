@@ -4,17 +4,19 @@ import HomeHero from '@/components/home/HomeHero';
 import DailyInsight from '@/components/DailyInsight';
 import PinsFab from '@/components/PinsFab';
 import AppHeader from '@/components/AppHeader';
-import { PERSONAS } from '@/data/personas';
 import { ArrowRight, BookOpen, Database, LayoutGrid } from 'lucide-react';
+import { createClient } from '@/utils/supabase/server';
+import { Persona } from '@/utils/persona';
 
 export const metadata: Metadata = {
   title: 'HealthOS | Medical Strategy Console',
   description: 'Access the 2026 Virtual Actuary engine. Calculate risk, compare premiums, and verify benefits.',
 };
 
-export default function AppHome() {
-  // Use the data source to build the directory
-  const directory = PERSONAS;
+export default async function AppHome() {
+  const supabase = await createClient();
+  const { data: rows } = await supabase.from('personas').select('data');
+  const directory = rows?.map(r => r.data as Persona) || [];
 
   return (
     <main className="min-h-screen relative bg-slate-50/50 pb-20">

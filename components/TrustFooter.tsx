@@ -1,38 +1,88 @@
 'use client';
 
 import Link from 'next/link';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, ExternalLink, Lock, Mail } from 'lucide-react';
 
 export default function TrustFooter() {
-    return (
-        <footer className="px-6 py-12 bg-slate-50 border-t border-slate-100 mt-24">
-            <div className="flex flex-col gap-6">
+    const currentYear = new Date().getFullYear();
 
-                {/* Authority Signal */}
-                <div className="flex items-start gap-3">
-                    <div className="p-2 bg-white rounded-full border border-slate-200 shadow-sm shrink-0">
-                        <ShieldCheck className="w-4 h-4 text-slate-400" />
+    return (
+        <footer className="bg-slate-50 border-t border-slate-100 mt-24">
+            <div className="max-w-7xl mx-auto px-6 py-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
+
+                    {/* COLUMN 1: AUTHORITY SIGNAL */}
+                    <div className="lg:col-span-5 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-white rounded-full border border-slate-200 shadow-sm shrink-0">
+                                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                            </div>
+                            <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                                Independent Actuarial Data
+                            </span>
+                        </div>
+                        <p className="text-xs text-slate-500 leading-relaxed max-w-md">
+                            HealthOS is an algorithmic analysis tool designed to simplify medical scheme complexity.
+                            We are not a financial services provider.
+                        </p>
+                        <div className="flex items-center gap-2 text-[10px] text-slate-400 bg-white/50 px-3 py-2 rounded-lg border border-slate-100 w-fit">
+                            <Lock className="w-3 h-3" />
+                            <span>SSL Secured & POPIA Compliant</span>
+                        </div>
                     </div>
-                    <div>
-                        <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-1">
-                            Independent Actuarial Data
-                        </h5>
-                        <p className="text-[10px] text-slate-500 leading-relaxed">
-                            HealthOS is an algorithmic analysis tool, not a financial services provider.
-                            All benefits data is sourced directly from the <span className="font-bold text-slate-700">Council for Medical Schemes (CMS)</span> 2026 registered rules.
+
+                    {/* COLUMN 2: DATA PROVENANCE (Updated) */}
+                    <div className="lg:col-span-4 space-y-4">
+                        <h6 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Data Provenance</h6>
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                            Benefit structures and premiums are sourced directly from the <strong>2026 Medical Scheme brochures</strong>.
+                            Regulatory oversight is provided by the
+                            <a
+                                href="https://www.medicalschemes.co.za/"
+                                target="_blank"
+                                rel="noopener noreferrer nofollow"
+                                className="inline-flex items-center gap-1 text-blue-600 hover:underline font-medium ml-1"
+                            >
+                                Council for Medical Schemes (CMS) <ExternalLink className="w-3 h-3" />
+                            </a>
+                            .
                         </p>
                     </div>
+
+                    {/* COLUMN 3: LINKS */}
+                    <div className="lg:col-span-3 flex flex-col gap-2 text-xs font-medium text-slate-500">
+                        <h6 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Platform</h6>
+                        <Link href="/about" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
+                            About the Creator
+                        </Link>
+                        <Link href="/methodology" className="hover:text-emerald-600 transition-colors">
+                            Methodology & Logic
+                        </Link>
+                        <Link href="mailto:hello@healthos.co.za" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
+                            <Mail className="w-3 h-3" /> Contact Support
+                        </Link>
+                    </div>
                 </div>
 
-                {/* Links for E-E-A-T */}
-                <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <Link href="/about" className="hover:text-blue-600 transition-colors">About the Creator</Link>
-                    <Link href="/methodology" className="hover:text-blue-600 transition-colors">Methodology</Link>
-                    <Link href="/disclaimer" className="hover:text-blue-600 transition-colors">Disclaimer</Link>
-                    <Link href="/privacy" className="hover:text-blue-600 transition-colors">Privacy</Link>
-                    <span className="text-slate-300">© 2025 HealthOS</span>
-                </div>
+                {/* BOTTOM BAR: LEGAL & DISCLAIMER */}
+                <div className="mt-12 pt-8 border-t border-slate-200/60">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
 
+                        {/* Legal Links */}
+                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            <Link href="/disclaimer" className="hover:text-slate-600 transition-colors">Disclaimer</Link>
+                            <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
+                            <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Use</Link>
+                            <span>© {currentYear} HealthOS</span>
+                        </div>
+
+                        {/* Explicit Disclaimer Text */}
+                        <div className="md:max-w-md text-[10px] text-slate-400 leading-relaxed text-right">
+                            <span className="font-bold">Important:</span> Information presented is factual (FAIS definition) and does not constitute financial advice.
+                            Consult an accredited FSP before changing cover.
+                        </div>
+                    </div>
+                </div>
             </div>
         </footer>
     );

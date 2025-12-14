@@ -9,23 +9,33 @@ import { ArrowRight, TrendingDown, TrendingUp, Activity, AlertTriangle, Calculat
 import Link from 'next/link';
 import clsx from 'clsx';
 
-interface Props {
+interface PivotItem {
     plan: Plan;
     persona: Persona;
 }
 
-export default function StrategyFooter({ plan, persona }: Props) {
+export interface Pivots {
+    cheaper: PivotItem | null;
+    richer: PivotItem | null;
+}
+
+interface Props {
+    plan: Plan;
+    persona: Persona;
+    pivots: Pivots;
+}
+
+export default function StrategyFooter({ plan, persona, pivots }: Props) {
     const glossary = ContentGenerator.generateGlossary(plan);
     const faq = ContentGenerator.generateFAQ(plan, persona);
-    const pivots = ContentGenerator.getSmartPivot(plan, persona);
 
-    // NEW: Destructure Actuarial Logic
+    // Destructure Actuarial Logic
     const { utilization_assumptions, inflection_risks } = persona.actuarial_logic || {};
 
     return (
         <div className="mt-6 space-y-8 animate-in slide-in-from-bottom-8 duration-700">
 
-            {/* --- NEW SECTION: ACTUARIAL LOGIC MONITOR --- */}
+            {/* --- ACTUARIAL LOGIC MONITOR --- */}
             {(utilization_assumptions || inflection_risks) && (
                 <div className="bg-slate-900 text-slate-300 rounded-[24px] p-6 relative overflow-hidden border border-slate-800 shadow-2xl">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />

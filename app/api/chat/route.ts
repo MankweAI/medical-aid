@@ -1,61 +1,107 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { streamText, convertToCoreMessages } from 'ai';
 
 // Allow responses to stream for up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-    // 1. Extract the messages and the specific plan being viewed
-    const { messages, contextPlan } = await req.json();
+    console.log('--- API/CHAT/ROUTE POST RECEIVED ---');
+    try {
+        const json = await req.json();
+        const { messages, contextPlan } = json;
+        console.log('Messages count:', messages?.length);
+        console.log('Context Plan:', contextPlan?.identity?.plan_name);
+        console.log('API Key Present:', !!process.env.OPENAI_API_KEY);
 
-    // 2. Distill the plan data into a clean JSON context for the AI
-    // We remove heavy UI properties (like logos/slugs) to save tokens and reduce noise.
-    const financialData = {
-        plan_name: contextPlan.identity.plan_name,
-        price: contextPlan.price,
-        savings_account: contextPlan.savings_annual,
-        network_rule: contextPlan.network_restriction,
-        benefits: contextPlan.defined_baskets,
-        co_payments: contextPlan.procedure_copays,
-        critical_warning: contextPlan.red_flag, // <--- The "Red Flag" hook
-    };
+        if (!process.env.OPENAI_API_KEY) {
+            console.error('CRITICAL: OPENAI_API_KEY is missing!');
+            return new Response('Missing API Key', { status: 500 });
+        }
 
-    // 3. Construct the "Financial Analyst" Persona with SOFT CLOSE lead nurturing
-    const systemPrompt = `
-    You are the HealthOS Virtual Actuary. Your goal is to analyze the financial rules of the medical aid plan provided in the JSON context below.
+        // 1. RATE LIMIT CHECK: "The 3-Strike Rule"
+        // We count how many times the assistant has already replied in the conversation history.
+        const assistantReplies = messages.filter((m: any) => m.role === 'assistant').length;
 
-    CONTEXT DATA:
+        // If they have already received 3 replies, we block the 4th request.
+        if (assistantReplies >= 3) {
+            // We return a "canned" stream that forces the soft close.
+            return streamText({
+                model: openai('gpt-4o-mini'),
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'The user has reached their question limit. You must politely refuse to answer. Tell them: "You have reached your free question limit for this session. To continue exploring this plan, please verify your profile." Then, immediately append the code: [TRIGGER_LEAD_FORM]'
+                    },
+                    {
+                        role: 'user',
+                        content: 'I have another question.'
+                    }
+                ]
+            }).toTextStreamResponse();
+        }
+
+        // 2. DATA DISTILLATION
+        // We only pass the "Need to Know" data to the LLM to keep it focused and accurate.
+        const financialData = {
+            plan_name: contextPlan.identity.plan_name,
+            price: contextPlan.price,
+            savings_account: contextPlan.savings_annual,
+            network_rule: contextPlan.network_restriction,
+            benefits: contextPlan.defined_baskets,
+            co_payments: contextPlan.procedure_copays,
+            critical_warning: contextPlan.red_flag,
+        };
+
+        // 3. PROMPT ENGINEERING: "The HealthOS Analyst"
+        // This prompt is designed to be "Anti-Hallucination" and "Sales-Aware".
+        const systemPrompt = `
+    You are the **HealthOS Senior Analyst**, an expert in South African medical schemes.
+    Your goal is to explain the specific plan data provided below to the user.
+
+    ### SOURCE OF TRUTH (JSON DATA):
     ${JSON.stringify(financialData, null, 2)}
 
-    CORE INSTRUCTIONS:
-    1. **Always Be Helpful First:** Never give a one-line dismissal. Always try to answer with what you DO know from the data before mentioning limitations.
-    2. **Strict Data Adherence:** Answer based on the provided JSON. Do not hallucinate clinical benefits not listed.
-    3. **The "Red Flag" Pivot:** If asked if the plan is "good" or "safe", mention the 'critical_warning' from the data.
-4. **No Hallucinated Math:** You cannot recalculate premiums for different family sizes. If the user asks "How much for a family of 4?", reply: "Please use the 'Covering' setting in the control panel above to instantly recalculate the precise premium."
+    ### CRITICAL RULES:
+    1.  **Strict Data Sovereignty:** ONLY answer based on the JSON data above. If a user asks about a benefit not listed (e.g., "Optometry" or "Dentistry" if not in the JSON), say: "That specific benefit isn't detailed in my current financial view." Do NOT guess.
+    2.  **The "Red Flag" Pivot:** If the user asks if the plan is "good", "safe", or "recommended", you MUST mention the 'critical_warning' found in the data.
+    3.  **Currency Formatting:** Always format money as **R**, e.g., **R1,200** or **R15,000**.
+    4.  **Tone:** Professional, objective, and concise. Use bullet points for lists.
 
-    SOFT CLOSE TECHNIQUE (for unknown questions):
-    When a user asks about something NOT in your data (specific doctors, hospitals, medication brands, waiting periods, etc.), use this 3-step approach:
-    
-    Step 1 - VALIDATE: Acknowledge their question is important. Example: "That's a really important question to ask before choosing a plan."
-    Step 2 - BRIDGE: Share what you CAN confirm from the data. Example: "What I can tell you is that this plan has [relevant benefit from data]..."
-    Step 3 - SOFT CLOSE: Gently offer expert help. Example: "For the specific details about [their question], I'd recommend speaking with a benefits advisor who can check the scheme rules in real-time. Would you like me to connect you?"
-    
-    ONLY output [TRIGGER_LEAD_FORM] when the user CONFIRMS they want to connect (says "yes", "okay", "sure", "connect me", etc.) or explicitly asks to apply/get a quote.
+    ### SALES BEHAVIOR (The "Soft Close"):
+    - **No Financial Advice:** Never say "You should buy this." Instead, say "This plan is structured for..."
+    - **Handling Unknowns:** If asked about specific doctors, hospitals, or waiting periods (which are not in your JSON), use this response:
+      "I can't verify specific providers or waiting periods in real-time. A human specialist can check that for you immediately. Would you like to connect?"
+    - **Triggering the Lead:** If the user agrees to connect, asks for a human, or implies intent to proceed, append exactly this code at the end of your message: **[TRIGGER_LEAD_FORM]**
+    `;
 
-    RESPONSE FORMAT:
-    Keep answers conversational and warm. Use **bold** for money values. Never be robotic or dismissive.
-  `;
+        // 4. GENERATE STREAM
+        // Note: In AI SDK 4.0, streamText is synchronous (no 'await' needed)
+        const result = streamText({
+            model: openai('gpt-4o-mini'),
+            messages: [
+                { role: 'system', content: systemPrompt },
+                ...messages.map((m: any) => {
+                    let content = m.parts || m.content;
+                    // System messages must be strings in AI SDK v5
+                    if (m.role === 'system' && Array.isArray(content)) {
+                        content = content.map((p: any) => p.text).join('');
+                    }
+                    return {
+                        role: m.role,
+                        content
+                    };
+                })
+            ],
+        });
 
-    // 4. Stream the response
-    const result = await streamText({
-        model: openai('gpt-4o-mini'), // Cost-effective and fast
-        messages: [
-            { role: 'system', content: systemPrompt },
-            ...messages
-        ],
-    });
-
-    // IMPORTANT: Must use toDataStreamResponse() for the useChat hook to work
-    // toTextStreamResponse() returns plain text which useChat cannot parse
-    return result.toDataStreamResponse();
+        return result.toTextStreamResponse();
+    } catch (error: any) {
+        console.error('API ROUTE ERROR:', error);
+        return new Response(JSON.stringify({
+            error: 'Internal Server Error',
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        }), { status: 500 });
+    }
 }
