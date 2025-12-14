@@ -11,7 +11,7 @@ export default function TrustFooter() {
             <div className="max-w-7xl mx-auto px-6 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
 
-                    {/* COLUMN 1: AUTHORITY SIGNAL */}
+                    {/* COLUMN 1: AUTHORITY SIGNAL (Expanded) */}
                     <div className="lg:col-span-5 space-y-4">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-white rounded-full border border-slate-200 shadow-sm shrink-0">
@@ -31,12 +31,11 @@ export default function TrustFooter() {
                         </div>
                     </div>
 
-                    {/* COLUMN 2: DATA PROVENANCE (Updated) */}
+                    {/* COLUMN 2: DATA PROVENANCE (New) */}
                     <div className="lg:col-span-4 space-y-4">
                         <h6 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Data Provenance</h6>
                         <p className="text-xs text-slate-500 leading-relaxed">
-                            Benefit structures and premiums are sourced directly from the <strong>2026 Medical Scheme brochures</strong>.
-                            Regulatory oversight is provided by the
+                            Benefit structures and premiums are sourced directly from the 2026 registered rules of the
                             <a
                                 href="https://www.medicalschemes.co.za/"
                                 target="_blank"
@@ -45,11 +44,11 @@ export default function TrustFooter() {
                             >
                                 Council for Medical Schemes (CMS) <ExternalLink className="w-3 h-3" />
                             </a>
-                            .
+                            . While rigorous, this data serves as a guide and does not replace the official scheme brochure.
                         </p>
                     </div>
 
-                    {/* COLUMN 3: LINKS */}
+                    {/* COLUMN 3: LINKS (Organized) */}
                     <div className="lg:col-span-3 flex flex-col gap-2 text-xs font-medium text-slate-500">
                         <h6 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Platform</h6>
                         <Link href="/about" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
@@ -76,7 +75,7 @@ export default function TrustFooter() {
                             <span>© {currentYear} HealthOS</span>
                         </div>
 
-                        {/* Explicit Disclaimer Text */}
+                        {/* Explicit Disclaimer Text (Critical for YMYL) */}
                         <div className="md:max-w-md text-[10px] text-slate-400 leading-relaxed text-right">
                             <span className="font-bold">Important:</span> Information presented is factual (FAIS definition) and does not constitute financial advice.
                             Consult an accredited FSP before changing cover.
