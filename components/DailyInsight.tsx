@@ -4,7 +4,7 @@ const INSIGHTS = [
     {
         term: "The Income Cliff",
         definition: "A specific threshold in scheme rules (e.g. R9,000 pm) where a R1 salary increase triggers a disproportionate premium hike.",
-        source: "HealthOS Database"
+        source: "Intellihealth Database"
     },
     {
         term: "Late Joiner Penalty",

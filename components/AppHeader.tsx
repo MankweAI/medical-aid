@@ -37,7 +37,7 @@ export default function AppHeader() {
 
                     <Link href="/" className="flex flex-col">
                         <span className="font-black text-white tracking-tight text-sm leading-none">
-                            HealthOS
+                            Intellihealth
                         </span>
                         <span className="text-[9px] font-bold text-emerald-100/80 uppercase tracking-wider">
                             Virtual Actuary

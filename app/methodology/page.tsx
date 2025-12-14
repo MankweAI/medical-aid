@@ -2,7 +2,7 @@ import { ShieldCheck, Calculator, Database, Scale } from 'lucide-react';
 import CloseButton from '@/components/CloseButton';
 
 export const metadata = {
-    title: 'Actuarial Methodology | HealthOS',
+    title: 'Actuarial Methodology | Intellihealth',
     description: 'How our algorithms calculate "Effective Cost" and rank medical aid plans based on CMS registered rules.',
 };
 
@@ -18,7 +18,7 @@ export default function MethodologyPage() {
                         How the "Virtual Actuary" Works
                     </h1>
                     <p className="text-lg text-slate-600 leading-relaxed">
-                        HealthOS does not sell ad space. Our rankings are purely mathematical, driven by a proprietary
+                        Intellihealth does not sell ad space. Our rankings are purely mathematical, driven by a proprietary
                         <strong> "Risk-Adjusted Value"</strong> model. Here is exactly how we calculate your results.
                     </p>
                 </header>

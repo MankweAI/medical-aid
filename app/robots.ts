@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
                 '/_next/',    // Don't index build files
             ],
         },
-        sitemap: 'https://healthos.co.za/sitemap.xml',
+        sitemap: 'https://intellihealth.co.za/sitemap.xml',
     };
 }
 

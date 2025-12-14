@@ -4,10 +4,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'About the Creator | HealthOS',
-    description: 'Mankwe Mokgabudi is the Data Analyst & Software Engineer behind HealthOS, the Virtual Actuary for South African Medical Aid comparison.',
+    title: 'About the Creator | Intellihealth',
+    description: 'Mankwe Mokgabudi is the Data Analyst & Software Engineer behind Intellihealth, the Virtual Actuary for South African Medical Aid comparison.',
     openGraph: {
-        title: 'Meet the Architect behind HealthOS',
+        title: 'Meet the Architect behind Intellihealth',
         description: 'Merging Actuarial Science with Modern Engineering to decode Medical Aid.',
         type: 'profile',
         firstName: 'Mankwe',
@@ -24,14 +24,14 @@ export default function AboutPage() {
         name: 'Mankwe Mokgabudi',
         jobTitle: 'Data Analyst & Software Engineer',
         knowsAbout: ['Medical Schemes Act', 'Actuarial Science', 'Next.js', 'Data Engineering'],
-        url: 'https://healthos.co.za/about',
+        url: 'https://intellihealth.co.za/about',
         sameAs: [
             'https://www.linkedin.com/in/mankwe-mokgabudi/',
             'https://github.com/mankwe'
         ],
         worksFor: {
             '@type': 'Organization',
-            name: 'HealthOS'
+            name: 'Intellihealth'
         }
     };
 
@@ -82,11 +82,11 @@ export default function AboutPage() {
                 <section className="prose prose-slate prose-sm md:prose-base max-w-none mb-12 relative z-10">
                     <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                        Why I Built HealthOS
+                        Why I Built Intellihealth
                     </h2>
 
                     <div className="pl-4 border-l-2 border-emerald-500/30 italic text-slate-600 text-lg leading-relaxed my-6">
-                        "I built HealthOS to solve a problem I faced myself: Medical Aid jargon is designed to confuse.
+                        "I built Intellihealth to solve a problem I faced myself: Medical Aid jargon is designed to confuse.
                         By combining <strong>Actuarial Data Science</strong> with <strong>Modern Software Engineering</strong>,
                         I created this 'Virtual Actuary' to give South Africans an unfair advantage."
                     </div>

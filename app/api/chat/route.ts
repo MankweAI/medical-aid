@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         // 3. PROMPT ENGINEERING: "The HealthOS Analyst"
         // This prompt is designed to be "Anti-Hallucination" and "Sales-Aware".
         const systemPrompt = `
-    You are the **HealthOS Senior Analyst**, an expert in South African medical schemes.
+    You are the **Intellihealth Senior Analyst**, an expert in South African medical schemes.
     Your goal is to explain the specific plan data provided below to the user.
 
     ### SOURCE OF TRUTH (JSON DATA):

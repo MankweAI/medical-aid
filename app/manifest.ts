@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'HealthOS Virtual Actuary',
-        short_name: 'HealthOS',
+        name: 'INTELLIHEALTH Virtual Actuary',
+        short_name: 'INTELLIHEALTH',
         description: 'AI-powered medical aid diagnosis and comparison.',
         start_url: '/',
         display: 'standalone', // Removes browser URL bar

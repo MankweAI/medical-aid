@@ -22,7 +22,7 @@ export default function TrustFooter() {
                             </span>
                         </div>
                         <p className="text-xs text-slate-500 leading-relaxed max-w-md">
-                            HealthOS is an algorithmic analysis tool designed to simplify medical scheme complexity.
+                            Intellihealth is an algorithmic analysis tool designed to simplify medical scheme complexity.
                             We are not a financial services provider.
                         </p>
                         <div className="flex items-center gap-2 text-[10px] text-slate-400 bg-white/50 px-3 py-2 rounded-lg border border-slate-100 w-fit">
@@ -57,7 +57,7 @@ export default function TrustFooter() {
                         <Link href="/methodology" className="hover:text-emerald-600 transition-colors">
                             Methodology & Logic
                         </Link>
-                        <Link href="mailto:hello@healthos.co.za" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
+                        <Link href="mailto:hello@intellihealth.co.za" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
                             <Mail className="w-3 h-3" /> Contact Support
                         </Link>
                     </div>
@@ -72,7 +72,7 @@ export default function TrustFooter() {
                             <Link href="/disclaimer" className="hover:text-slate-600 transition-colors">Disclaimer</Link>
                             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
                             <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Use</Link>
-                            <span>© {currentYear} HealthOS</span>
+                            <span>© {currentYear} Intellihealth</span>
                         </div>
 
                         {/* Explicit Disclaimer Text (Critical for YMYL) */}

@@ -2,7 +2,7 @@ import { Lock, EyeOff, Server } from 'lucide-react';
 import CloseButton from '@/components/CloseButton';
 
 export const metadata = {
-    title: 'Privacy Policy | HealthOS',
+    title: 'Privacy Policy | Intellihealth',
     description: 'How we protect your data in compliance with POPIA.',
 };
 
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
                     <h3 className="font-bold text-slate-900">3. Your Rights</h3>
                     <p>
                         Under the Protection of Personal Information Act (POPIA), you have the right to request the deletion
-                        of your lead data at any time by emailing <em>privacy@healthos.co.za</em>.
+                        of your lead data at any time by emailing <em>privacy@intellihealth.co.za</em>.
                     </p>
                 </div>
 

@@ -106,19 +106,19 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     const { data } = await supabase.from('personas').select('data').eq('slug', params.slug).single();
     const persona = data?.data as Persona | undefined;
 
-    if (!persona) return { title: 'Not Found | HealthOS' };
+    if (!persona) return { title: 'Not Found | Intellihealth' };
 
     return {
         title: `${persona.meta.title} | 2026 Strategy`,
         description: persona.meta.description,
         alternates: {
-            canonical: `https://healthos.co.za/personas/${params.slug}`,
+            canonical: `https://intellihealth.co.za/personas/${params.slug}`,
         },
         other: {
             'script:ld+json': JSON.stringify({
                 '@context': 'https://schema.org',
                 '@type': 'FinanceApplication',
-                'name': `HealthOS Calculator: ${persona.meta.title}`,
+                'name': `Intellihealth Calculator: ${persona.meta.title}`,
                 'applicationCategory': 'Finance',
                 'operatingSystem': 'Web',
                 'offers': {

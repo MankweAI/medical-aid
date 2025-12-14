@@ -2,8 +2,8 @@ import { AlertTriangle, FileText } from 'lucide-react';
 import CloseButton from '@/components/CloseButton';
 
 export const metadata = {
-    title: 'Legal Disclaimer | HealthOS',
-    description: 'Important legal information regarding the use of the HealthOS platform.',
+    title: 'Legal Disclaimer | Intellihealth',
+    description: 'Important legal information regarding the use of the Intellihealth platform.',
 };
 
 export default function DisclaimerPage() {
@@ -22,7 +22,7 @@ export default function DisclaimerPage() {
                 <div className="prose prose-slate prose-sm max-w-none">
                     <h3 className="font-bold text-slate-900">1. Information, Not Advice</h3>
                     <p>
-                        HealthOS is an algorithmic analysis tool designed to organize and compare public medical scheme data.
+                        Intellihealth is an algorithmic analysis tool designed to organize and compare public medical scheme data.
                         The information provided on this website constitutes <strong>factual information</strong> as defined
                         in the Financial Advisory and Intermediary Services Act (FAIS). It does <strong>not</strong> constitute
                         financial advice, recommendation, or guidance.
@@ -31,7 +31,7 @@ export default function DisclaimerPage() {
                     <h3 className="font-bold text-slate-900 mt-8">2. The Role of the Specialist</h3>
                     <p>
                         While our algorithms are rigorous, they cannot account for your personal medical history (e.g., specific pre-existing conditions).
-                        Therefore, HealthOS facilitates a connection to an <strong>Accredited Healthcare Broker</strong> (FSP Registered)
+                        Therefore, Intellihealth facilitates a connection to an <strong>Accredited Healthcare Broker</strong> (FSP Registered)
                         for the final "Advice" step. No policy can be activated without this verification.
                     </p>
 
@@ -43,7 +43,7 @@ export default function DisclaimerPage() {
 
                     <h3 className="font-bold text-slate-900 mt-8">4. Indemnity</h3>
                     <p>
-                        By using HealthOS, you agree that the owners and developers are not liable for any decisions made based
+                        By using Intellihealth, you agree that the owners and developers are not liable for any decisions made based
                         on these calculations. You are urged to verify all benefits with the scheme directly before joining.
                     </p>
                 </div>

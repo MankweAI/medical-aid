@@ -27,7 +27,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "HealthOS",
+  title: "INTELLIHEALTH",
   description: "Virtual Actuary Service",
 };
 

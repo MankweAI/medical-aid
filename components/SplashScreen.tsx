@@ -42,7 +42,13 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                         <Zap className="w-12 h-12 text-emerald-600 fill-current" />
                     </div>
                 </div>
-                {/* ... existing text ... */}
+
+                <h1 className="mt-8 text-3xl font-black text-white tracking-tight">
+                    Intellihealth
+                </h1>
+                <p className="mt-2 text-sm font-medium text-emerald-100/80 tracking-widest uppercase">
+                    Virtual Actuary
+                </p>
             </div>
 
             {/* 3. THE CONTENT (Visible to Bots, Hidden from Humans by the Curtain) */}

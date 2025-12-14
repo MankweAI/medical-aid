@@ -5,7 +5,7 @@ import DailyInsight from '@/components/DailyInsight';
 import { Server, Radio, Database, Activity } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'HealthOS | Strategy Console',
+  title: 'Intellihealth | Strategy Console',
   description: 'Access the 2026 Virtual Actuary engine. Calculate risk, compare premiums, and verify benefits.',
 };
 

@@ -22,6 +22,7 @@ interface PersonaContextType {
     setMembers: (val: FamilyComposition) => void;
     setPersona: (slug: string) => void;
     setFilter: (key: keyof UserState['filters'], value: any) => void;
+    setUnifiedProfile: (persona: any) => void;
     activePersonaPath: string;
     // New Global UI State
     isChatOpen: boolean;
@@ -50,7 +51,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     // Hydrate from LocalStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('healthos_profile');
+            const saved = localStorage.getItem('intellihealth_profile');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -76,7 +77,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
     // Persist to LocalStorage (User Data only, not UI state)
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            localStorage.setItem('healthos_profile', JSON.stringify(state));
+            localStorage.setItem('intellihealth_profile', JSON.stringify(state));
         }
     }, [state]);
 
@@ -91,6 +92,22 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
         }));
     }, []);
 
+    // Atomic update to prevent race conditions on mount
+    const setUnifiedProfile = useCallback((persona: any) => {
+        setState(prev => ({
+            ...prev,
+            income: persona.defaults.income,
+            members: persona.defaults.family_composition,
+            persona: persona.slug,
+            filters: {
+                ...prev.filters,
+                network: persona.search_profile.network_tolerance,
+                savings: persona.search_profile.min_savings_allocation > 0 ? 'Yes' : 'No',
+                priority: persona.search_profile.priority_tag
+            }
+        }));
+    }, []);
+
     const activePersonaPath = state.persona
         ? `/personas/${state.persona}?income=${state.income}`
         : '/';
@@ -102,6 +119,7 @@ export function PersonaProvider({ children }: { children: React.ReactNode }) {
             setMembers,
             setPersona,
             setFilter,
+            setUnifiedProfile,
             activePersonaPath,
             isChatOpen,
             setIsChatOpen

@@ -141,7 +141,7 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
                         <Bot className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h4 className="font-bold text-sm">HealthOS Analyst</h4>
+                        <h4 className="font-bold text-sm">Intellihealth Analyst</h4>
                         <div className="flex items-center gap-2">
                             {/* CREDIT COUNTER BADGE */}
                             <span className={clsx(

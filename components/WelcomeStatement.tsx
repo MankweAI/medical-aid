@@ -10,28 +10,18 @@ interface Props {
 }
 
 export default function WelcomeStatement({ persona }: Props) {
-    const { setPersona, setIncome, setMembers, setFilter } = usePersona();
+    const { setUnifiedProfile } = usePersona();
 
     useEffect(() => {
-        setPersona(persona.slug);
-        setIncome(persona.defaults.income);
-        setMembers(persona.defaults.family_composition);
-
-        setFilter('network', persona.search_profile.network_tolerance);
-        setFilter('savings', persona.search_profile.min_savings_allocation > 0 ? 'Yes' : 'No');
-        setFilter('priority', persona.search_profile.priority_tag);
-
-    }, [persona, setPersona, setIncome, setMembers, setFilter]);
+        // Atomic update to prevent multiple re-renders
+        setUnifiedProfile(persona);
+    }, [persona, setUnifiedProfile]);
 
     return (
         <div className="mb-8 animate-in slide-in-from-top-2 fade-in duration-500 pt-6">
 
             {/* 1. STRATEGY BADGE (The "System Name") */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-emerald-900/20">
-                    <Target className="w-3 h-3 text-emerald-100" />
-                    Strategy: {persona.meta.title}
-                </div>
                 <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 uppercase tracking-wider px-2">
                     <CheckCircle2 className="w-3 h-3" />
                     2026 Validated
