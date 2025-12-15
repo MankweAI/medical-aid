@@ -6,12 +6,12 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: '*',
             allow: '/',
             disallow: [
-                '/api/',      // Don't index backend
-                '/profile/',  // Don't index user profiles (if added later)
-                '/_next/',    // Don't index build files
+                '/api/',
+                '/profile/',
+                '/_next/',
             ],
         },
-        sitemap: 'https://intellihealth.co.za/sitemap.xml',
+        // 🔴 UPDATE THIS LINE
+        sitemap: 'https://www.intellihealth.co.za/sitemap.xml',
     };
 }
-
