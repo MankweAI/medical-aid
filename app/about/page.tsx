@@ -52,8 +52,12 @@ export default function AboutPage() {
                 <header className="flex flex-col md:flex-row gap-8 items-center mb-12 relative z-10">
                     <div className="group relative">
                         <div className="absolute -inset-1 bg-gradient-to-tr from-blue-600 to-emerald-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                        <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center text-5xl shadow-sm border border-slate-100 relative shrink-0">
-                            👨‍💻
+                        <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 relative shrink-0 overflow-hidden">
+                            <img
+                                src="/images/mankwe-profile.jpeg"
+                                alt="Mankwe Mokgabudi"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                     </div>
 
@@ -103,7 +107,7 @@ export default function AboutPage() {
                 <div className="grid md:grid-cols-2 gap-4 border-t border-slate-100 pt-8 relative z-10">
                     {/* LinkedIn */}
                     <Link
-                        href="https://linkedin.com"
+                        href="https://www.linkedin.com/in/mankwe-mokgabudi-9a90a9353/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl hover:bg-[#0077b5]/5 hover:border-[#0077b5]/20 border border-transparent transition-all group"

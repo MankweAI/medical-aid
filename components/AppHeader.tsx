@@ -1,6 +1,6 @@
 'use client';
 
-import { Zap, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { usePersona } from '@/context/PersonaContext';
@@ -22,19 +22,13 @@ export default function AppHeader() {
 
                 {/* BRAND / BACK BUTTON */}
                 <div className="flex items-center gap-3">
-                    {!isHome ? (
-                        <button
-                            onClick={() => router.back()}
-                            className="p-1.5 bg-white/20 rounded-lg text-white/80 hover:text-white hover:bg-white/30 transition-all active:scale-95"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                        </button>
-                    ) : (
-                        <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-lg">
-                            <Zap className="w-4 h-4 fill-current" />
-                        </div>
-                    )}
-
+                    <div className="w-10 h-10 rounded-xl  flex items-center justify-center shadow-lg overflow-hidden bg-[#F0FDF4]">
+                        <img
+                            src="/intellihealth-logo.png"
+                            alt="Intellihealth Logo"
+                            className="w-full h-full object-cover p-1"
+                        />
+                    </div>
                     <Link href="/" className="flex flex-col">
                         <span className="font-black text-white tracking-tight text-sm leading-none">
                             Intellihealth

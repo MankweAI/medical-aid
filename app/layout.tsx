@@ -27,10 +27,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.intellihealth.co.za'),
   title: "INTELLIHEALTH",
   description: "Virtual Actuary Service",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/intellihealth-favicon.ico",
   },
   verification: {
     google: "YE1cU8zYRudNEtvDGPaaaMHzDa7qEDCIxbYgqQtnym0",

@@ -6,12 +6,12 @@ export default function manifest(): MetadataRoute.Manifest {
         short_name: 'INTELLIHEALTH',
         description: 'AI-powered medical aid diagnosis and comparison.',
         start_url: '/',
-        display: 'standalone', // Removes browser URL bar
+        display: 'standalone',
         background_color: '#F1F5F9',
         theme_color: '#FFFFFF',
         icons: [
             {
-                src: '/favicon.ico',
+                src: '/intellihealth-favicon.ico',
                 sizes: 'any',
                 type: 'image/x-icon',
             },
