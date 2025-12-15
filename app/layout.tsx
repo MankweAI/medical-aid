@@ -29,6 +29,27 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "INTELLIHEALTH",
   description: "Virtual Actuary Service",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  verification: {
+    google: "YE1cU8zYRudNEtvDGPaaaMHzDa7qEDCIxbYgqQtnym0",
+  },
+  openGraph: {
+    title: "INTELLIHEALTH",
+    description: "Virtual Actuary Service",
+    type: "website",
+    locale: "en_US",
+    siteName: "INTELLIHEALTH",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "INTELLIHEALTH",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

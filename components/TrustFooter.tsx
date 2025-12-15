@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { ShieldCheck, ExternalLink, Lock, Mail } from 'lucide-react';
+import { useState } from 'react';
+import ContactModal from './ContactModal';
 
 export default function TrustFooter() {
     const currentYear = new Date().getFullYear();
+    const [isContactOpen, setIsContactOpen] = useState(false);
 
     return (
         <footer className="bg-slate-50 border-t border-slate-100 mt-24">
@@ -57,11 +60,19 @@ export default function TrustFooter() {
                         <Link href="/methodology" className="hover:text-emerald-600 transition-colors">
                             Methodology & Logic
                         </Link>
-                        <Link href="mailto:hello@intellihealth.co.za" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
+                        <button
+                            onClick={() => setIsContactOpen(true)}
+                            className="hover:text-emerald-600 transition-colors flex items-center gap-2 text-left"
+                        >
                             <Mail className="w-3 h-3" /> Contact Support
-                        </Link>
+                        </button>
                     </div>
                 </div>
+
+                <ContactModal
+                    isOpen={isContactOpen}
+                    onClose={() => setIsContactOpen(false)}
+                />
 
                 {/* BOTTOM BAR: LEGAL & DISCLAIMER */}
                 <div className="mt-12 pt-8 border-t border-slate-200/60">

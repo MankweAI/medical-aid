@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
-import { UIMessage } from 'ai';
+// import { UIMessage } from 'ai'; // Removed to avoid strict type conflicts with manual parts
 import { X, Send, Bot, Sparkles, ChevronRight, ShieldAlert, Baby, Coins, User, Lock } from 'lucide-react';
 import { Plan } from '@/utils/types';
 import clsx from 'clsx';
@@ -19,66 +19,25 @@ interface ChatWidgetProps {
 
 export default function ChatWidget({ contextPlan, onClose, onVerify, financialContext }: ChatWidgetProps) {
 
+    // State management
     const [input, setInput] = useState('');
-    const { messages, status, sendMessage } = useChat<UIMessage>({
-        // @ts-expect-error - streamProtocol exists in runtime but types might be outdated
-        streamProtocol: 'text',
-        messages: [
-            {
-                id: 'welcome',
-                role: 'assistant',
-                parts: [{ type: 'text', text: `Hello! I have the 2026 financial rules loaded for **${contextPlan.identity.plan_name}**. \n\nI can calculate costs, savings, and co-pays. For clinical advice, I'll connect you with an expert.` }]
-            }
-        ],
-    });
-
-    // Helper to extract text from UIMessage parts
-    const getText = (m: UIMessage) => {
-        if (m.parts) {
-            return m.parts
-                .filter(p => p.type === 'text')
-                .map(p => p.text)
-                .join('');
+    const [messages, setMessages] = useState<any[]>([
+        {
+            id: 'welcome',
+            role: 'assistant',
+            content: `Hello! I have the 2026 financial rules loaded for **${contextPlan.identity.plan_name}**. \n\nI can calculate costs, savings, and co-pays. For clinical advice, I'll connect you with an expert.`
         }
-        // Fallback or initial messages might be different?
-        // Initial messages provided to useChat are usually UIMessage format too.
-        // But our initial message above has 'content'. 
-        // We should fix initial message too? 
-        // Actually, let's allow 'content' access as fallback if casted from any, 
-        // to be safe, but types say no.
-        // We will update initial message to use parts.
-        return '';
-    };
+    ]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const isLoading = status === 'streaming' || status === 'submitted';
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setInput(e.target.value);
-    };
-
-    const handleSubmit = async (e?: React.FormEvent) => {
-        e?.preventDefault();
-        if (!input.trim()) return;
-
-        // Send using new payload structure
-        sendMessage({
-            role: 'user',
-            parts: [{ type: 'text', text: input }]
-        }, { body: { contextPlan } });
-
-        setInput('');
-    };
-
-    // --- NEW: RATE LIMIT CALCULATOR ---
+    // --- RATE LIMIT CALCULATOR ---
     const MAX_QUERIES = 3;
-    // Count assistant replies (excluding the initial welcome message)
     const assistantReplyCount = useMemo(() =>
-        messages.filter(m => m.role === 'assistant').length - 1,
+        messages.filter((m: any) => m.role === 'assistant').length - 1,
         [messages]);
 
     const queriesLeft = Math.max(0, MAX_QUERIES - assistantReplyCount);
     const isLimitReached = queriesLeft === 0;
-    // ----------------------------------
 
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -88,15 +47,90 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
         }
     }, [messages]);
 
-    useEffect(() => {
-        const lastMessage = messages[messages.length - 1];
-        if (lastMessage?.role === 'assistant') {
-            const text = getText(lastMessage);
-            if (text.includes('[TRIGGER_LEAD_FORM]')) {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInput(e.target.value);
+    };
+
+    /**
+     * CORE SEND LOGIC (Replacing useChat)
+     */
+    const sendMessage = async (content: string) => {
+        if (!content.trim() || isLimitReached || isLoading) return;
+
+        // 1. Optimistic Update
+        const userMsg = {
+            id: Date.now().toString(),
+            role: 'user',
+            content
+        };
+        const assistantPlaceholderId = (Date.now() + 1).toString();
+        const assistantMsg = {
+            id: assistantPlaceholderId,
+            role: 'assistant',
+            content: ''
+        };
+
+        setInput('');
+        setMessages(prev => [...prev, userMsg, assistantMsg]);
+        setIsLoading(true);
+
+        try {
+            // 2. Network Request
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [...messages, userMsg],
+                    contextPlan
+                })
+            });
+
+            if (!response.ok || !response.body) {
+                throw new Error('Network error');
+            }
+
+            // 3. Read Stream
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let done = false;
+            let assistantText = '';
+
+            while (!done) {
+                const { value, done: DONE } = await reader.read();
+                done = DONE;
+
+                if (value) {
+                    const chunk = decoder.decode(value, { stream: true });
+                    assistantText += chunk;
+
+                    // Live Update
+                    setMessages(prev => prev.map(m =>
+                        m.id === assistantPlaceholderId
+                            ? { ...m, content: assistantText }
+                            : m
+                    ));
+                }
+            }
+
+            // Check for trigger code after stream completes
+            if (assistantText.includes('[TRIGGER_LEAD_FORM]')) {
                 onVerify();
             }
+
+        } catch (error) {
+            console.error('Chat Error:', error);
+            setMessages(prev => [
+                ...prev.filter(m => m.id !== assistantPlaceholderId),
+                {
+                    id: 'error',
+                    role: 'assistant',
+                    content: "I'm having trouble connecting right now. Please try again or ask for an expert."
+                }
+            ]);
+        } finally {
+            setIsLoading(false);
         }
-    }, [messages, onVerify]);
+    };
 
     const SUGGESTIONS = [
         {
@@ -119,12 +153,19 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
         }
     ];
 
+    const onFormSubmit = (e?: React.FormEvent) => {
+        e?.preventDefault();
+        sendMessage(input);
+    };
+
     const handleChipClick = (prompt: string) => {
-        if (isLimitReached) return;
-        sendMessage({
-            role: 'user',
-            parts: [{ type: 'text', text: prompt }]
-        }, { body: { contextPlan } });
+        sendMessage(prompt);
+    };
+
+    // Helper to extract text from message objects (legacy support)
+    const getText = (m: any) => {
+        if (typeof m.content === 'string') return m.content;
+        return '';
     };
 
     const cleanContent = (text: string) => {
@@ -134,7 +175,7 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
     return (
         <div className="fixed inset-0 w-full h-full bg-white flex flex-col z-[60] overflow-hidden animate-in fade-in font-sans">
 
-            {/* HEADER - Green Theme with Credits */}
+            {/* HEADER */}
             <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 p-4 flex justify-between items-center text-white shrink-0 shadow-md relative z-10">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-white/20 rounded-full backdrop-blur-md border border-white/10">
@@ -143,7 +184,6 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
                     <div>
                         <h4 className="font-bold text-sm">Intellihealth Analyst</h4>
                         <div className="flex items-center gap-2">
-                            {/* CREDIT COUNTER BADGE */}
                             <span className={clsx(
                                 "text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20 transition-colors",
                                 isLimitReached ? "bg-rose-500 text-white" : "bg-emerald-800/30 text-emerald-50"
@@ -160,9 +200,10 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
 
             {/* CHAT AREA */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
-                {messages.map((m) => {
+                {messages.map((m: any) => {
                     const isUser = m.role === 'user';
-                    if (m.id === 'welcome') return null;
+                    // We render all messages, including welcome (if it's in the messages array)
+                    // Note: If you want to skip the hardcoded ID 'welcome', check m.id
 
                     return (
                         <div key={m.id} className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -200,7 +241,7 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
                     </div>
                 )}
 
-                {/* SUGGESTIONS (Hidden if limit reached) */}
+                {/* SUGGESTIONS */}
                 {!isLoading && messages.length < 3 && !isLimitReached && (
                     <div className="mt-4 space-y-2 pl-11 pr-4 animate-in slide-in-from-bottom-4 fade-in duration-500">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
@@ -226,9 +267,9 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
                 )}
             </div>
 
-            {/* INPUT AREA (Locked if limit reached) */}
+            {/* INPUT AREA */}
             <form
-                onSubmit={handleSubmit}
+                onSubmit={onFormSubmit}
                 className="p-3 bg-white border-t border-slate-100 shrink-0 pb-5"
             >
                 {isLimitReached ? (
