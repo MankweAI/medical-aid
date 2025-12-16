@@ -8,6 +8,7 @@ import ActionDock from "@/components/PinsFab";
 import TrustFooter from "@/components/TrustFooter";
 import SplashScreen from "@/components/SplashScreen";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   title: "INTELLIHEALTH",
   description: "Virtual Actuary Service",
   icons: {
-    icon: "/intellihealth-favicon.ico",
+    icon: "/favicon.ico",
   },
   verification: {
     google: "YE1cU8zYRudNEtvDGPaaaMHzDa7qEDCIxbYgqQtnym0",
