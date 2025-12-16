@@ -6,7 +6,7 @@ import { usePersona } from '@/context/PersonaContext';
 import MagicSearch from '@/components/MagicSearch';
 import ControlPanel from '@/components/ControlPanel'; // Integrated Context
 import TrustTicker from '@/components/TrustTicker';
-import { Zap, ShieldCheck, Terminal, Cpu, ChevronRight } from 'lucide-react';
+import { Zap, ChevronRight, Sparkles } from 'lucide-react';
 import GlassCard from '@/components/ui/GlassCard';
 
 export default function HomeHero() {
@@ -34,28 +34,31 @@ export default function HomeHero() {
     return (
         <section className="w-full max-w-3xl mx-auto relative z-20">
 
-            {/* CONSOLE HEADER */}
-            <div className="flex items-end justify-between mb-6 px-2 animate-in fade-in slide-in-from-top-4 duration-700">
-                <div>
-                    <div className="flex items-center gap-2 text-emerald-600 mb-2">
-                        <Terminal className="w-4 h-4" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest">System Ready</span>
-                    </div>
-                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-                        Strategy Console
-                    </h1>
-                </div>
-                <div className="hidden md:flex items-center gap-4 text-[10px] font-mono text-slate-400">
-                    <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        v2026.1.0
+            {/* WELCOME HERO SECTION */}
+            <div className="text-center mb-8 px-4 animate-in fade-in slide-in-from-top-4 duration-700">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-md border border-emerald-100 rounded-full px-3 py-1 mb-6 shadow-sm">
+                    <span className="flex h-2 w-2 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span>|</span>
-                    <span className="flex items-center gap-1.5">
-                        <ShieldCheck className="w-3 h-3" />
-                        CMS Compliant
+                    <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">
+                        2026 Rules Active
                     </span>
                 </div>
+
+                {/* Main Heading */}
+                <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight mb-5 leading-[1.1]">
+                    Intellihealth <br className="hidden md:block" />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
+                        Virtual Actuary
+                    </span>
+                </h1>
+
+                {/* Description Subtitle */}
+                <p className="text-slate-600 text-lg md:text-xl font-medium max-w-xl mx-auto leading-relaxed">
+                    Navigate the complexity of medical aid. Compare 70+ plans, analyze hidden benefits, and calculate your exact risk profile in seconds.
+                </p>
             </div>
 
             {/* MAIN INTERFACE CARD */}
@@ -84,8 +87,8 @@ export default function HomeHero() {
                         {/* STATUS FOOTER */}
                         <div className="bg-slate-900 text-slate-400 p-3 flex justify-between items-center text-[10px] font-mono uppercase tracking-widest px-6">
                             <div className="flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-emerald-500" />
-                                <span>Engine Idle</span>
+                                <Sparkles className="w-3 h-3 text-emerald-500" />
+                                <span>AI Ready</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span>Awaiting Input</span>
@@ -118,11 +121,11 @@ export default function HomeHero() {
 
             {/* Quick Links (Bottom) */}
             {view === 'input' && (
-                <div className="mt-6 flex justify-center gap-6 opacity-60 hover:opacity-100 transition-opacity">
-                    <button onClick={() => router.push('/methodology')} className="text-xs font-bold text-slate-500 flex items-center gap-1 hover:text-emerald-600">
+                <div className="mt-8 flex justify-center gap-6 opacity-60 hover:opacity-100 transition-opacity">
+                    <button onClick={() => router.push('/methodology')} className="text-xs font-bold text-slate-500 flex items-center gap-1 hover:text-emerald-600 transition-colors">
                         View Logic <ChevronRight className="w-3 h-3" />
                     </button>
-                    <button onClick={() => router.push('/compare')} className="text-xs font-bold text-slate-500 flex items-center gap-1 hover:text-emerald-600">
+                    <button onClick={() => router.push('/compare')} className="text-xs font-bold text-slate-500 flex items-center gap-1 hover:text-emerald-600 transition-colors">
                         Compare Datasets <ChevronRight className="w-3 h-3" />
                     </button>
                 </div>

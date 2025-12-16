@@ -17,7 +17,13 @@ export default function AppHeader() {
     if (isChatOpen) return null;
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50">
+        /* Updated classes:
+           - kept 'fixed top-0 left-0 right-0 z-50' for positioning
+           - added 'w-full' to ensure it stretches
+           - added 'md:max-w-[600px]' to match #app-frame constraints
+           - added 'mx-auto' to center it within the viewport when constrained
+        */
+        <header className="fixed top-0 left-0 right-0 z-50 w-full md:max-w-[600px] mx-auto">
             <div className="w-full flex justify-between items-center bg-gradient-to-r from-emerald-600 to-emerald-500 backdrop-blur-xl border-b border-emerald-400/30 shadow-lg shadow-emerald-900/20 p-3 px-5 transition-all">
 
                 {/* BRAND / BACK BUTTON */}

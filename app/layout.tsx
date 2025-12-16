@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   title: "INTELLIHEALTH",
   description: "Virtual Actuary Service",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/intellihealth-favicon.ico",
   },
   verification: {
     google: "YE1cU8zYRudNEtvDGPaaaMHzDa7qEDCIxbYgqQtnym0",

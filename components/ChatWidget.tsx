@@ -173,7 +173,12 @@ export default function ChatWidget({ contextPlan, onClose, onVerify, financialCo
     };
 
     return (
-        <div className="fixed inset-0 w-full h-full bg-white flex flex-col z-[60] overflow-hidden animate-in fade-in font-sans">
+        /* Updated Container: 
+           - Added 'md:max-w-[600px] mx-auto' to match #app-frame width
+           - Added 'md:border-x md:border-black/5' to match #app-frame borders
+           - Added 'md:shadow-2xl' to match the app's elevation feel
+        */
+        <div className="fixed inset-0 w-full h-full md:max-w-[600px] mx-auto md:border-x md:border-black/5 md:shadow-2xl bg-white flex flex-col z-[60] overflow-hidden animate-in fade-in font-sans">
 
             {/* HEADER */}
             <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 p-4 flex justify-between items-center text-white shrink-0 shadow-md relative z-10">
