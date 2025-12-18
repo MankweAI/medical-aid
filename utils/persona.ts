@@ -6,6 +6,9 @@ export type PersonaSlug = string;
 export interface UserProfile {
     slug: PersonaSlug;
     code: string;
+    display_title?: string;
+    human_insight?: string;
+    hero_image_tag?: string;
     updatedAt?: string;
 
     meta: {

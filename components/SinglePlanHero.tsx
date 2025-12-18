@@ -134,7 +134,8 @@ export default function SinglePlanHero({ persona: currentPersona, plan: anchorPl
                         onVerify={() => setModalOpen(true)}
                         verdict={{
                             tier: 'WINNER',
-                            badge: currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
+                            // Prioritize conversational insight over raw technical logic [cite: 40]
+                            badge: currentPersona.human_insight || currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
                             warning: displayPlan.red_flag || ''
                         }}
                     />

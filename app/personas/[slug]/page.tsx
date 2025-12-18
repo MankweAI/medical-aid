@@ -5,7 +5,8 @@ import ControlPanel from '@/components/ControlPanel';
 import SinglePlanHero from '@/components/SinglePlanHero';
 import StrategyFooter from '@/components/StrategyFooter';
 import AppHeader from '@/components/AppHeader';
-import { createClient } from '@/utils/supabase/server';
+import { PERSONAS } from '@/data/personas';
+import { PLANS } from '@/data/plans';
 import { Persona } from '@/utils/persona';
 import { Plan } from '@/utils/types';
 import { PricingEngine } from '@/utils/engine';
@@ -102,9 +103,8 @@ function getSmartPivot(currentPlan: Plan, currentPersona: Persona, allPlans: Pla
 // 1. DYNAMIC METADATA
 export async function generateMetadata(props: Props): Promise<Metadata> {
     const params = await props.params;
-    const supabase = await createClient();
-    const { data } = await supabase.from('personas').select('data').eq('slug', params.slug).single();
-    const persona = data?.data as Persona | undefined;
+    // Use local data instead of Supabase
+    const persona = PERSONAS.find(p => p.slug === params.slug);
 
     if (!persona) return { title: 'Not Found | Intellihealth' };
 
@@ -136,21 +136,17 @@ export default async function PersonaPage(props: Props) {
     const params = await props.params;
     const { slug } = params;
 
-    const supabase = await createClient();
-
-    // Fetch Persona
-    const { data: personaRow } = await supabase.from('personas').select('data').eq('slug', slug).single();
-    const persona = personaRow?.data as Persona | undefined;
+    // Use local data instead of Supabase
+    const persona = PERSONAS.find(p => p.slug === slug);
 
     if (!persona) notFound();
 
-    // Fetch Target Plan
+    // Fetch Target Plan from local data
     const targetId = persona.actuarial_logic?.target_plan_id;
     let plan: Plan | undefined;
 
     if (targetId) {
-        const { data: planRow } = await supabase.from('plans').select('data').eq('id', targetId).single();
-        if (planRow) plan = planRow.data as Plan;
+        plan = PLANS.find(p => p.id === targetId);
     }
 
     // Calculate Pivots if plan exists
@@ -158,15 +154,8 @@ export default async function PersonaPage(props: Props) {
     let pivots: Pivots = { cheaper: null, richer: null };
 
     if (plan) {
-        // Fetch ALL plans and personas to calculate the market ladder
-        const { data: allPersonasRows } = await supabase.from('personas').select('data');
-        const { data: allPlansRows } = await supabase.from('plans').select('data');
-
-        const allPersonas = allPersonasRows?.map(r => r.data as Persona) || [];
-        const allPlans = allPlansRows?.map(r => r.data as Plan) || [];
-
-        // Now valid because pivots is typed as Pivots
-        pivots = getSmartPivot(plan, persona, allPlans, allPersonas);
+        // Use local data for all plans and personas
+        pivots = getSmartPivot(plan, persona, PLANS, PERSONAS);
     }
 
     return (

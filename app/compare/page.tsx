@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import { PLANS } from '@/data/plans';
 import CompareClient from './CompareClient';
 import { Plan } from '@/utils/types';
 
@@ -10,13 +10,8 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
         return <CompareClient plans={[]} />;
     }
 
-    const supabase = await createClient();
-    const { data } = await supabase
-        .from('plans')
-        .select('data')
-        .in('id', planIds);
-
-    const resolvedPlans = data?.map(row => row.data as Plan) || [];
+    // Use local data instead of Supabase
+    const resolvedPlans = PLANS.filter(p => planIds.includes(p.id));
 
     return <CompareClient plans={resolvedPlans} />;
 }
