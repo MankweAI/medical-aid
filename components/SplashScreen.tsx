@@ -38,7 +38,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                 className={`fixed inset-0 z-[99999] bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 flex flex-col items-center justify-center ${isExiting ? 'animate-splash-exit' : ''}`}
             >
                 <div className="animate-splash-pulse">
-                    <div className="w-24 h-24 bg-[#F0FDF4] rounded-[28px] flex items-center justify-center shadow-2xl shadow-emerald-900/30 overflow-hidden">
+                    <div className="w-24 h-22 bg-[#F0FDF4] rounded-[28px] flex items-center justify-center shadow-2xl shadow-emerald-900/30 overflow-hidden">
                         <img
                             src="/intellihealth-logo.png"
                             alt="Intellihealth Logo"
