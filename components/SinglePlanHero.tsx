@@ -121,33 +121,57 @@ export default function SinglePlanHero({ persona: currentPersona, plan: anchorPl
                 )}
             </div>
 
-            {/* 2. THE SWIPE DECK (Carousel) */}
+            {/* 2. THE SWIPE DECK (Carousel) - Order based on ui_priority */}
             <div
                 ref={scrollRef}
                 onScroll={handleScroll}
                 className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-4 pb-4 no-scrollbar items-start"
             >
-                {/* CARD 1: PRIMARY FEED */}
-                <div className="w-full min-w-[100%] snap-center">
-                    <FeedCard
-                        plan={displayPlan}
-                        onVerify={() => setModalOpen(true)}
-                        verdict={{
-                            tier: 'WINNER',
-                            // Prioritize conversational insight over raw technical logic [cite: 40]
-                            badge: currentPersona.human_insight || currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
-                            warning: displayPlan.red_flag || ''
-                        }}
-                    />
-                </div>
-
-                {/* CARD 2: FULL BENEFITS */}
-                <div className="w-full min-w-[100%] snap-center h-full">
-                    <BenefitsCard
-                        plan={displayPlan}
-                        onVerify={() => setModalOpen(true)}
-                    />
-                </div>
+                {currentPersona.ui_priority === 'Clinical_First' ? (
+                    <>
+                        {/* CLINICAL FIRST: Benefits → Pricing */}
+                        <div className="w-full min-w-[100%] snap-center h-full">
+                            <BenefitsCard
+                                plan={displayPlan}
+                                onVerify={() => setModalOpen(true)}
+                            />
+                        </div>
+                        <div className="w-full min-w-[100%] snap-center">
+                            <FeedCard
+                                plan={displayPlan}
+                                onVerify={() => setModalOpen(true)}
+                                verdict={{
+                                    tier: 'WINNER',
+                                    badge: currentPersona.human_insight || currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
+                                    warning: displayPlan.red_flag || ''
+                                }}
+                                isClinicalFirst={true}
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        {/* PRICE FIRST: Pricing → Benefits */}
+                        <div className="w-full min-w-[100%] snap-center">
+                            <FeedCard
+                                plan={displayPlan}
+                                onVerify={() => setModalOpen(true)}
+                                verdict={{
+                                    tier: 'WINNER',
+                                    badge: currentPersona.human_insight || currentPersona.actuarial_logic?.mathematical_basis || 'Algorithmic Match',
+                                    warning: displayPlan.red_flag || ''
+                                }}
+                                isClinicalFirst={false}
+                            />
+                        </div>
+                        <div className="w-full min-w-[100%] snap-center h-full">
+                            <BenefitsCard
+                                plan={displayPlan}
+                                onVerify={() => setModalOpen(true)}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* 3. PAGINATION DOTS */}

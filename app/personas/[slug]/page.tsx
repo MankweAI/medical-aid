@@ -5,11 +5,16 @@ import ControlPanel from '@/components/ControlPanel';
 import SinglePlanHero from '@/components/SinglePlanHero';
 import StrategyFooter from '@/components/StrategyFooter';
 import AppHeader from '@/components/AppHeader';
+import TrustTicker from '@/components/TrustTicker';
+import RelatedPersonas from '@/components/RelatedPersonas';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { PERSONAS } from '@/data/personas';
 import { PLANS } from '@/data/plans';
 import { Persona } from '@/utils/persona';
 import { Plan } from '@/utils/types';
 import { PricingEngine } from '@/utils/engine';
+import { getV2Slug, resolvePersona } from '@/utils/slug-utils';
+import { generateAllSchemas } from '@/utils/seo-schema';
 
 // Define the shape of our pivot data here or import from StrategyFooter if exported
 interface PivotItem {
@@ -103,16 +108,19 @@ function getSmartPivot(currentPlan: Plan, currentPersona: Persona, allPlans: Pla
 // 1. DYNAMIC METADATA
 export async function generateMetadata(props: Props): Promise<Metadata> {
     const params = await props.params;
-    // Use local data instead of Supabase
-    const persona = PERSONAS.find(p => p.slug === params.slug);
+    // Resolve persona by V1 or V2 slug
+    const persona = resolvePersona(params.slug);
 
     if (!persona) return { title: 'Not Found | Intellihealth' };
+
+    // Always use V2 slug for canonical URL
+    const canonicalSlug = getV2Slug(persona.slug);
 
     return {
         title: `${persona.meta.title} | 2026 Strategy`,
         description: persona.meta.description,
         alternates: {
-            canonical: `https://intellihealth.co.za/personas/${params.slug}`,
+            canonical: `https://intellihealth.co.za/personas/${canonicalSlug}`,
         },
         other: {
             'script:ld+json': JSON.stringify({
@@ -136,8 +144,8 @@ export default async function PersonaPage(props: Props) {
     const params = await props.params;
     const { slug } = params;
 
-    // Use local data instead of Supabase
-    const persona = PERSONAS.find(p => p.slug === slug);
+    // Resolve persona by V1 or V2 slug (supports both URL formats)
+    const persona = resolvePersona(slug);
 
     if (!persona) notFound();
 
@@ -158,12 +166,47 @@ export default async function PersonaPage(props: Props) {
         pivots = getSmartPivot(plan, persona, PLANS, PERSONAS);
     }
 
+    // Trust messages for the ticker
+    const trustMessages = [
+        `${persona.meta.title} strategy verified`,
+        `Covering ${persona.defaults.family_composition.adult + persona.defaults.family_composition.child} family members`,
+        '2026 rates applied'
+    ];
+
+    const isClinicalFirst = persona.ui_priority === 'Clinical_First';
+
+    // Generate canonical URL for schemas
+    const canonicalUrl = `https://intellihealth.co.za/personas/${getV2Slug(persona.slug)}`;
+
+    // Generate JSON-LD schemas
+    const schemas = plan ? generateAllSchemas(plan, persona, canonicalUrl) : [];
+
     return (
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden animate-page-enter">
+            {/* JSON-LD Structured Data */}
+            {schemas.map((schema, index) => (
+                <script
+                    key={index}
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+                />
+            ))}
+
             <AppHeader />
 
             <section className="relative z-10 pt-16 px-4 sm:px-6 pb-2">
+                {/* Semantic Breadcrumb Navigation */}
+                <Breadcrumbs persona={persona} />
+
                 <WelcomeStatement persona={persona} />
+
+                {/* TrustTicker appears high for Clinical personas */}
+                {isClinicalFirst && (
+                    <div className="mb-4">
+                        <TrustTicker messages={trustMessages} />
+                    </div>
+                )}
+
                 <ControlPanel />
             </section>
 
@@ -177,6 +220,19 @@ export default async function PersonaPage(props: Props) {
                         <StrategyFooter plan={plan} persona={persona} pivots={pivots} />
                     </div>
                 )}
+
+                {/* TrustTicker appears lower for Budget personas */}
+                {!isClinicalFirst && (
+                    <div className="px-4 pb-4">
+                        <TrustTicker messages={trustMessages} />
+                    </div>
+                )}
+
+                {/* Related Strategies for Internal Linking */}
+                <RelatedPersonas
+                    currentPersona={persona}
+                    allPersonas={PERSONAS}
+                />
             </section>
         </main>
     );

@@ -1,11 +1,29 @@
 'use client';
 
 import { Plan } from '@/utils/types';
-import { ShieldCheck, FileText } from 'lucide-react'; // Swapped Phone for ShieldCheck
+import { ShieldCheck, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import PlanDetails from '@/components/PlanDetails';
 import clsx from 'clsx';
+import { useState } from 'react';
 
-export default function BenefitsCard({ plan, onVerify }: { plan: Plan; onVerify: () => void }) {
+interface BenefitsCardProps {
+    plan: Plan;
+    onVerify: () => void;
+    isClinicalFirst?: boolean;
+    humanInsight?: string;
+}
+
+/**
+ * BenefitsCard Component
+ * 
+ * Displays clinical breakdown with "Actuarial Toggle" feature:
+ * - Clinical_First personas: Toggle collapsed by default (show human insight only)
+ * - Price_First personas: Toggle expanded by default (show details immediately)
+ */
+export default function BenefitsCard({ plan, onVerify, isClinicalFirst = false, humanInsight }: BenefitsCardProps) {
+    // Default state based on persona priority
+    const [isExpanded, setIsExpanded] = useState(!isClinicalFirst);
+
     return (
         <div className={clsx(
             "h-full bg-white rounded-3xl overflow-hidden flex flex-col relative w-full transition-all",
@@ -28,9 +46,49 @@ export default function BenefitsCard({ plan, onVerify }: { plan: Plan; onVerify:
                 </div>
             </div>
 
-            {/* Scrollable Content Area */}
-            <div className="p-5 flex-1">
-                <PlanDetails plan={plan} />
+            {/* Human Insight (Always Visible for Clinical_First) */}
+            {humanInsight && isClinicalFirst && (
+                <div className="px-5 pt-4 pb-2">
+                    <div className="p-3 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-xl border border-emerald-100/80">
+                        <p className="text-sm text-slate-700 leading-relaxed">
+                            {humanInsight}
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {/* Actuarial Toggle Button */}
+            <div className="px-5 pt-3">
+                <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className={clsx(
+                        "w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all",
+                        "border text-sm font-medium",
+                        isExpanded
+                            ? "bg-slate-100 border-slate-200 text-slate-700"
+                            : "bg-emerald-50 border-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                    )}
+                >
+                    <span className="flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        {isExpanded ? 'Hide Strategy Analysis' : 'View Strategy Analysis'}
+                    </span>
+                    {isExpanded ? (
+                        <ChevronUp className="w-4 h-4" />
+                    ) : (
+                        <ChevronDown className="w-4 h-4" />
+                    )}
+                </button>
+            </div>
+
+            {/* Collapsible Content Area */}
+            <div className={clsx(
+                "transition-all duration-300 ease-in-out overflow-hidden",
+                isExpanded ? "opacity-100 max-h-[2000px]" : "opacity-0 max-h-0"
+            )}>
+                <div className="p-5 flex-1">
+                    <PlanDetails plan={plan} />
+                </div>
             </div>
 
             {/* Footer CTA (Updated to Match Winner Style) */}

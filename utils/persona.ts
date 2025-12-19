@@ -9,6 +9,7 @@ export interface UserProfile {
     display_title?: string;
     human_insight?: string;
     hero_image_tag?: string;
+    ui_priority?: 'Price_First' | 'Clinical_First';
     updatedAt?: string;
 
     meta: {

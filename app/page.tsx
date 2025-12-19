@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import AppHeader from '@/components/AppHeader';
 import HomeHero from '@/components/home/HomeHero';
 import DailyInsight from '@/components/DailyInsight';
+import CategoryFilter from '@/components/CategoryFilter';
 import { Server, Radio, Database, Activity } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -9,7 +10,14 @@ export const metadata: Metadata = {
   description: 'Access the 2026 Virtual Actuary engine. Calculate risk, compare premiums, and verify benefits.',
 };
 
-export default function AppHome() {
+interface HomePageProps {
+  searchParams: Promise<{ category?: string }>;
+}
+
+export default async function AppHome({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+  const categoryFilter = params?.category || null;
+
   return (
     <main className="min-h-screen bg-slate-50 relative selection:bg-emerald-500/30 font-sans overflow-hidden">
       <AppHeader />
@@ -21,6 +29,11 @@ export default function AppHome() {
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none z-0" />
 
       <div className="relative z-10 pt-32 px-4 container mx-auto max-w-6xl flex flex-col min-h-[calc(100vh-100px)]">
+
+        {/* CATEGORY FILTER (when arriving from breadcrumb) */}
+        {categoryFilter && (
+          <CategoryFilter category={categoryFilter} />
+        )}
 
         {/* 1. THE CONSOLE (Central Interaction Layer) */}
         <div className="flex-1 flex flex-col justify-center pb-20">
