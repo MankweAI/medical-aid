@@ -4,11 +4,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "bestmed-rhythm1-network-entry-level-2026",
         code: "BMRHYTHM1_ENTRY",
+        // V2 ENRICHMENT
+        display_title: "Budget-Friendly Cover for Entry-Level Earners",
+        human_insight: "If you earn under R9,000 per month and need unlimited GP visits without breaking the bank, this plan is designed specifically for you. It's the most affordable way to get covered.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "Rhythm1 Entry-Level Earner (<R9k)",
             marketing_heading: "Unbeatable Value for Lower Income Earners",
             description: "Strictly for individuals earning under R9,000/month. Provides unlimited network GP visits and basic hospital cover at a highly subsidized rate of R1,736/month. Essential primary care focus.",
-            category: "Network Plan",
+            category: "Budget",
             strategic_intent: "Strict_Budget_Management"
         },
         defaults: {
@@ -51,11 +56,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "bonsave-network-savings-single-msa-max-2026",
         code: "BONSAVE_SINGLE_MSA",
+        // V2 ENRICHMENT
+        display_title: "Maximize Your Savings with Smart Network Cover",
+        human_insight: "You're healthy, smart with money, and want to build up savings that roll over year after year. This plan gives you R12,144 in your medical savings account plus an extra R5,000 booster—perfect for low healthcare users who want liquidity.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "BonSave Single MSA Maximization",
             marketing_heading: "High Savings Allocation with Network Hospital Safety Net",
             description: "For healthy singles optimizing R12,144 savings with R5,000 Benefit Booster to maximize liquidity and rollover potential",
-            category: "Savings + Network Hospital",
+            category: "Savings",
             strategic_intent: "MSA_Maximisation_Roll_Over"
         },
         defaults: {
@@ -99,11 +109,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "standard-full-choice-type-1-diabetes-child-insulin-pump-2026",
         code: "STANDARD_T1D_CHILD_PUMP",
+        // V2 ENRICHMENT
+        display_title: "Complete Insulin Pump Cover for Your Child",
+        human_insight: "Your child's Type 1 diabetes needs the best technology. This plan covers insulin pumps (R65,000), continuous glucose monitors (R28,000/yr), and all consumables. It's specifically designed for families managing childhood diabetes with full hospital freedom.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Clinical_First",
         meta: {
             title: "Standard Type 1 Diabetes Child Insulin Pump Coverage",
             marketing_heading: "Insulin Pump and CGM for Type 1 Diabetic Children Under 18",
             description: "For families with Type 1 diabetic children needing insulin pump (R65,000/5yrs), CGM (R28,000/yr), consumables (R93,000/yr)",
-            category: "Type 1 Diabetes Specialized Technology",
+            category: "Chronic",
             strategic_intent: "High_Cost_Technology_Funding"
         },
         defaults: {
@@ -147,11 +162,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "hospital-standard-network-disaster-single-pmb-2026",
         code: "HOSPSTD_DISASTER_SINGLE",
+        // V2 ENRICHMENT
+        display_title: "Affordable Hospital Safety Net",
+        human_insight: "You're healthy, handle day-to-day costs yourself, but want peace of mind for major emergencies. This gives you hospital cover with 2 ER visits—pure catastrophic protection without paying for benefits you won't use.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "Hospital Standard Single Disaster Cover PMB Only",
             marketing_heading: "Network Hospital Safety Net with Emergency Room Benefit",
             description: "Hospital-only cover for individuals who self-fund day-to-day and need catastrophic protection with 2 ER visits",
-            category: "Catastrophic Hospital Only",
+            category: "Budget",
             strategic_intent: "Disaster_Cover_Only"
         },
         defaults: {
@@ -194,11 +214,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "hospital-standard-network-family-maternity-emergency-2026",
         code: "HOSPSTD_FAM_MAT",
+        // V2 ENRICHMENT
+        display_title: "Emergency Maternity Cover for Budget-Conscious Families",
+        human_insight: "Planning a baby but watching your budget? This covers emergency C-sections, 6 antenatal visits, and gives your growing family hospital protection—all at an affordable family rate with child capping.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Clinical_First",
         meta: {
             title: "Hospital Standard Family Maternity Emergency C-Section Only",
             marketing_heading: "Hospital Cover with Emergency C-Section and Child Capping",
             description: "For families planning pregnancy needing emergency C-section cover only, with child capping rules",
-            category: "Maternity Emergency Hospital Only",
+            category: "Maternity",
             strategic_intent: "Minimum_Maternity_Funding"
         },
         defaults: {
@@ -243,11 +268,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "bonstart-plus-network-edge-family-maternity-enhanced-2026",
         code: "BONSTARTPL_FAM_MAT",
+        // V2 ENRICHMENT
+        display_title: "Enhanced Maternity for Growing Families",
+        human_insight: "You're planning a baby and want better antenatal care without the premium price tag. This plan gives you 6 antenatal consultations, 2 ultrasounds, unlimited virtual GP, and lower co-payments than basic options.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Clinical_First",
         meta: {
             title: "BonStart Plus Family Maternity Enhanced Coverage",
             marketing_heading: "Affordable Maternity with Hospital Cover and Lower Co-Payments",
             description: "For families planning pregnancy needing 6 antenatal consultations, 2 ultrasounds, with R75 GP co-pay vs R130 on BonStart",
-            category: "Budget Maternity Enhanced",
+            category: "Maternity",
             strategic_intent: "Enhanced_Maternity_Funding"
         },
         defaults: {
@@ -291,11 +321,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "bonstart-plus-network-edge-family-child-cap-sports-injury-2026",
         code: "BONSTARTPL_FAM_SPORT",
+        // V2 ENRICHMENT
+        display_title: "Active Family Cover with Sports Physio",
+        human_insight: "Your kids play sports, and injuries happen. This plan covers 4 physio visits per child with just a R75 co-pay—plus hospital cover for the whole family. Great for active households with multiple children.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "BonStart Plus Family Sports Injury Physiotherapy",
             marketing_heading: "Child Capping with Sports Physiotherapy Coverage",
             description: "For active families with children needing 4 physiotherapy consultations per beneficiary for sport-related injuries",
-            category: "Budget Family Sports Active",
+            category: "Family",
             strategic_intent: "Defined_Benefit_Funding"
         },
         defaults: {
@@ -339,11 +374,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "discovery-classic-core-single-hospital-only-2026",
         code: "DH_CORE_CLASSIC_SINGLE",
+        // V2 ENRICHMENT
+        display_title: "Strong Hospital Cover for Healthy Singles",
+        human_insight: "You're healthy and don't need much day-to-day cover, but you want top-tier hospital protection. This gives you unlimited hospital cover at 200% tariff with a modest Personal Health Fund—perfect for low-use individuals who want quality when it matters.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "Classic Core Single Hospital-Only with PHF",
             marketing_heading: "Hospital-Only Cover with 200% Tariff and Personal Health Fund",
             description: "For relatively healthy singles who want strong hospital cover at up to 200% of tariff and a modest Personal Health Fund, but are willing to self‑fund most day‑to‑day costs.",
-            category: "Hospital Core",
+            category: "Budget",
             strategic_intent: "Catastrophic_Only_with_Min_Day2Day"
         },
         defaults: {
@@ -386,11 +426,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "discovery-classic-delta-core-young-family-2026",
         code: "DH_CORE_DELTA_FAMILY",
+        // V2 ENRICHMENT
+        display_title: "Network Hospital Savings for Young Families",
+        human_insight: "You're comfortable using network hospitals and want to save money. The Delta network gives you significant premium discounts—ideal for young families near network providers who prioritize value over unlimited choice.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "Classic Delta Core Young Family Hospital Network",
             marketing_heading: "Discounted Contributions for Families Willing to Use Delta Hospital Network",
             description: "For young families who accept a narrower hospital network and large non‑network co‑payments in exchange for lower premiums.",
-            category: "Network Discount Hospital",
+            category: "Family",
             strategic_intent: "Network_Discount_Arbitrage"
         },
         defaults: {
@@ -434,6 +479,11 @@ export const PERSONAS: Persona[] = [
     {
         slug: "medihelp-medprime-vision-dental-network-maximiser-2026",
         code: "MH-MP-VIS-DENT-2026",
+        // V2 ENRICHMENT
+        display_title: "Maximize Your Optical & Dental Benefits",
+        human_insight: "You want to get the most from your optical and dental benefits. This plan lets you exploit the 24-month optical cycle and network dentistry to maximize claim value—perfect for planners who time their benefits strategically.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "Vision + Dental Network Maximiser",
             marketing_heading: "Exploit optometry/dentistry cycles with network compliance.",
@@ -465,7 +515,7 @@ export const PERSONAS: Persona[] = [
         actuarial_logic: {
             target_plan_id: "medihelp-medprime-any-2026",
             brand_lock: "Medihelp",
-            mathematical_basis: "Maximise benefit capture by synchronising planned optical and dental events to the plan’s stated benefit cycles and by using the specified provider networks to avoid benefit leakage. [file:1]",
+            mathematical_basis: "Maximise benefit capture by synchronising planned optical and dental events to the plan's stated benefit cycles and by using the specified provider networks to avoid benefit leakage. [file:1]",
             primary_risk_warning: "Going outside the specified optical/dental networks can reduce payable amounts or shift costs into savings/out-of-pocket depending on the rule set. [file:1]",
             utilization_assumptions: {
                 gp_visits_frequency: "Low",
@@ -481,11 +531,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "medihelp-medprime-refractive-surgery-18-50-optimiser-2026",
         code: "MH-MP-REFRACT-1850-2026",
+        // V2 ENRICHMENT
+        display_title: "Laser Eye Surgery Coverage (Ages 18-50)",
+        human_insight: "Ready to ditch the glasses? If you're between 18 and 50, this plan covers refractive surgery within the family limit. Perfect timing is everything—get your LASIK or lens replacement funded before you age out.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Price_First",
         meta: {
             title: "Refractive Surgery (18–50) Optimiser",
             marketing_heading: "Target the stated refractive surgery family limit within the eligible age band.",
-            description: "Optimises for refractive surgery funding by utilising the plan’s stated refractive surgery benefit (family limit) and the stated eligible beneficiary age band (18–50). [file:1]",
-            category: "Elective Procedure",
+            description: "Optimises for refractive surgery funding by utilising the plan's stated refractive surgery benefit (family limit) and the stated eligible beneficiary age band (18–50). [file:1]",
+            category: "Lifestyle",
             strategic_intent: "High_Cost_Technology_Funding"
         },
         defaults: {
@@ -528,11 +583,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "momentum-extender-associated-gp-compliance-2026",
         code: "MMS-EXT-ASSOC-GP-2026",
+        // V2 ENRICHMENT
+        display_title: "Chronic Care with Network GP Compliance",
+        human_insight: "Managing chronic conditions requires discipline. Using Associated GPs ensures your claims accumulate correctly toward your threshold—avoiding surprise co-payments and maximizing your Extended Cover benefits.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Clinical_First",
         meta: {
             title: "Extender Associated Chronic (GP compliance to avoid penalties)",
             marketing_heading: "Avoids the 70% accumulation + co-pay behaviour",
             description: "Optimises the Extender mechanics by selecting Associated as chronic provider and then strictly using Associated GPs so claims accumulate correctly to Threshold and avoid co-payment penalties in Extended Cover.",
-            category: "Network Compliance",
+            category: "Chronic",
             strategic_intent: "Risk_Mitigation_CoPayment"
         },
         defaults: {
@@ -574,11 +634,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "momentum-summit-full-choice-specialist-max-2026",
         code: "MMS-SUM-SPEC-MAX-2026",
+        // V2 ENRICHMENT
+        display_title: "Premium Full Choice with Top Specialists",
+        human_insight: "You want the best specialists without network restrictions. This plan offers enhanced specialist funding at higher tariff rates with complete provider freedom—for those who value quality care above all else.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Clinical_First",
         meta: {
             title: "Summit Full Choice (Specialist funding focus)",
             marketing_heading: "High specialist tariff room with broad provider freedom",
             description: "Targets members who want broad provider choice with enhanced specialist funding levels (non-associated specialists covered up to a higher multiple of scheme rate on this option).",
-            category: "Premium Full Choice",
+            category: "Comprehensive",
             strategic_intent: "Defined_Specialist_Funding"
         },
         defaults: {
@@ -622,11 +687,16 @@ export const PERSONAS: Persona[] = [
     {
         slug: "sizwehosmed-titanium-executive-prosthesis-joint-spine-limit-planner-2026",
         code: "SH-TEXEC-PROS-2026-05",
+        // V2 ENRICHMENT
+        display_title: "Executive Cover for Joint & Spine Surgery",
+        human_insight: "Joint or spine surgery is on your horizon. This executive plan covers prosthesis costs, but you need to plan carefully—the one-joint-per-year limit means sequencing your procedures strategically to avoid out-of-pocket surprises.",
+        hero_image_tag: "placeholder",
+        ui_priority: "Clinical_First",
         meta: {
             title: "Titanium \"Executive\": Prosthesis Limit Planner",
             marketing_heading: "Device limits force sequencing decisions.",
             description: "Optimises around family prosthesis limits plus per-beneficiary joint/spine event constraints to avoid uncovered device spend.",
-            category: "Device risk",
+            category: "Senior",
             strategic_intent: "Internal_Device_Risk_Transfer"
         },
         defaults: {
