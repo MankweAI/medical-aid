@@ -7,6 +7,7 @@ interface RelatedPersonasProps {
     currentPersona: Persona;
     allPersonas: Persona[];
     maxItems?: number;
+    embedded?: boolean;
 }
 
 /**
@@ -55,11 +56,39 @@ function findRelatedPersonas(current: Persona, all: Persona[], max: number): Per
     return related.slice(0, max);
 }
 
-export default function RelatedPersonas({ currentPersona, allPersonas, maxItems = 4 }: RelatedPersonasProps) {
+export default function RelatedPersonas({ currentPersona, allPersonas, maxItems = 4, embedded = false }: RelatedPersonasProps) {
     const relatedPersonas = findRelatedPersonas(currentPersona, allPersonas, maxItems);
 
     if (relatedPersonas.length === 0) return null;
 
+    const content = (
+        <div className="grid gap-2">
+            {relatedPersonas.map((persona) => (
+                <Link
+                    key={persona.slug}
+                    href={`/personas/${getV2Slug(persona.slug)}`}
+                    className="group flex items-center justify-between p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition-colors"
+                >
+                    <div className="min-w-0">
+                        <span className="text-sm font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors block truncate">
+                            {persona.display_title || persona.meta.title}
+                        </span>
+                        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                            {persona.meta.category}
+                        </span>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all shrink-0" />
+                </Link>
+            ))}
+        </div>
+    );
+
+    // Embedded mode: just return the content without card wrapper
+    if (embedded) {
+        return content;
+    }
+
+    // Standalone mode: wrap in card
     return (
         <div className="mt-8 px-4">
             <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
@@ -69,28 +98,9 @@ export default function RelatedPersonas({ currentPersona, allPersonas, maxItems 
                     </div>
                     <h3 className="text-sm font-bold text-slate-900">Related Strategies</h3>
                 </div>
-
-                <div className="grid gap-3">
-                    {relatedPersonas.map((persona) => (
-                        <Link
-                            key={persona.slug}
-                            href={`/personas/${getV2Slug(persona.slug)}`}
-                            className="group flex items-center justify-between p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition-colors"
-                        >
-                            <div className="min-w-0">
-                                {/* SEO: Using display_title as anchor text */}
-                                <span className="text-sm font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors block truncate">
-                                    {persona.display_title || persona.meta.title}
-                                </span>
-                                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
-                                    {persona.meta.category}
-                                </span>
-                            </div>
-                            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all shrink-0" />
-                        </Link>
-                    ))}
-                </div>
+                {content}
             </div>
         </div>
     );
 }
+

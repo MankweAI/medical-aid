@@ -6,7 +6,6 @@ import SinglePlanHero from '@/components/SinglePlanHero';
 import StrategyFooter from '@/components/StrategyFooter';
 import AppHeader from '@/components/AppHeader';
 import TrustTicker from '@/components/TrustTicker';
-import RelatedPersonas from '@/components/RelatedPersonas';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { PERSONAS } from '@/data/personas';
 import { PLANS } from '@/data/plans';
@@ -216,8 +215,8 @@ export default async function PersonaPage(props: Props) {
 
                 {/* THE ACTUARIAL FOOTNOTES */}
                 {plan && (
-                    <div className="px-4 pb-12">
-                        <StrategyFooter plan={plan} persona={persona} pivots={pivots} />
+                    <div className="px-4 pb-8">
+                        <StrategyFooter plan={plan} persona={persona} pivots={pivots} allPersonas={PERSONAS} />
                     </div>
                 )}
 
@@ -228,11 +227,7 @@ export default async function PersonaPage(props: Props) {
                     </div>
                 )}
 
-                {/* Related Strategies for Internal Linking */}
-                <RelatedPersonas
-                    currentPersona={persona}
-                    allPersonas={PERSONAS}
-                />
+
             </section>
         </main>
     );

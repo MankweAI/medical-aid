@@ -174,16 +174,20 @@ export default function SinglePlanHero({ persona: currentPersona, plan: anchorPl
                 )}
             </div>
 
-            {/* 3. PAGINATION DOTS */}
-            <div className="flex justify-center gap-2 mb-2">
-                <div className={clsx("w-2 h-2 rounded-full transition-colors duration-300", activeCard === 0 ? "bg-emerald-600" : "bg-slate-300")} />
-                <div className={clsx("w-2 h-2 rounded-full transition-colors duration-300", activeCard === 1 ? "bg-emerald-600" : "bg-slate-300")} />
-            </div>
+            {/* 3. PAGINATION DOTS - Only visible after initial delay */}
+            {isClient && (
+                <div className="flex flex-col items-center gap-1 -mt-2 pt-0">
+                    <div className="flex justify-center gap-2">
+                        <div className={clsx("w-2 h-2 rounded-full transition-colors duration-300", activeCard === 0 ? "bg-emerald-600" : "bg-slate-300")} />
+                        <div className={clsx("w-2 h-2 rounded-full transition-colors duration-300", activeCard === 1 ? "bg-emerald-600" : "bg-slate-300")} />
+                    </div>
 
-            {activeCard === 0 && (
-                <p className="text-center text-[10px] text-slate-400 font-medium animate-pulse">
-                    Swipe for Breakdown →
-                </p>
+                    {activeCard === 0 && (
+                        <p className="text-center text-[10px] text-slate-400 font-medium animate-pulse">
+                            Swipe for Breakdown →
+                        </p>
+                    )}
+                </div>
             )}
 
             {/* CHAT & MODAL */}
