@@ -35,11 +35,9 @@ async function syncPlans() {
     // 2. Map local PLANS to database rows - store full object in JSONB
     const dbRows = PLANS.map((plan) => ({
         id: plan.id,
-        scheme_name: plan.scheme_name,
-        plan_name: plan.plan_name,
-        plan_type: plan.plan_type,
-        data: plan, // Store full plan object in JSONB column
-        updated_at: new Date().toISOString()
+        scheme_name: plan.identity.scheme_name,
+        plan_name: plan.identity.plan_name,
+        data: plan // Store full plan object in JSONB column
     }));
 
     // 3. Perform bulk insertion
