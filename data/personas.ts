@@ -7,7 +7,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Save on Premiums by Accepting Joint Surgery Exclusion",
         human_insight: "You need comprehensive cover but can accept not having elective joint replacement. This trade-off saves you money on premiums while still providing robust day-to-day and chronic benefits.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Price_First",
         meta: {
             title: "Senior Accepting Joint Exclusion for Lower Premium",
@@ -59,7 +59,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "ADHD & Non-CDL Cover for Your Family",
         human_insight: "Your child needs ADHD medication or similar non-CDL treatment. This plan covers 7 non-CDL conditions with a defined family limit, helping manage ongoing medication costs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Family Managing Child's ADHD on a Budget",
@@ -111,7 +111,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Fund Your Elective Joint Replacement",
         human_insight: "You're anticipating hip or knee surgery. This plan specifically covers elective joint replacement—a benefit excluded on cheaper options—making it the smart upgrade for your needs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Senior Funding Elective Joint Replacement",
@@ -163,7 +163,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Maximum Cover for Biological Medicines",
         human_insight: "Your condition requires expensive biologic drugs like Humira or Remicade. This plan offers a massive R420,695 biologic limit—essential for transferring catastrophic medication costs to the scheme.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Funding for High-Cost Biological Medicine",
@@ -215,7 +215,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Executive Cover: Maximum Risk Transfer",
         human_insight: "You want top-tier protection where the scheme pays first. Day-to-day claims come from a R45,375 limit before touching your savings—maximum certainty for high-income earners.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Executive with Maximum Risk Transfer",
@@ -267,7 +267,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Insulin Pump & CGM Technology Cover",
         human_insight: "Living with Type 1 diabetes means you need an insulin pump and continuous glucose monitoring. This plan covers R53,143 for pumps and R30,357/year for CGM sensors from risk.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Type 1 Diabetes Patient Leveraging Technology Benefits",
@@ -319,7 +319,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Bare-Bones Hospital Safety Net",
         human_insight: "You're young and healthy, and just need emergency hospital cover at the lowest cost. This network-only plan is your safety net for R2,269/month—no frills, pure disaster protection.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Network Hospital-Only Young Starter",
@@ -370,7 +370,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Large Family Hospital Plan: 4+ Kids Pay for 3",
         human_insight: "With 4 or more children, you leverage the 3-child cap rule. Your 4th child and beyond are covered free—massive savings for large families needing hospital protection.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Large Family Network Hospital Plan",
@@ -421,7 +421,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Hospital Freedom for Seniors (Joint Exclusion)",
         human_insight: "You're 60+ and want any-hospital access but accept that elective joint replacement isn't covered. This gives you hospital freedom at R2,523/month for CDL conditions.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Price_First",
         meta: {
             title: "Senior Joint Replacement Risk (Full Choice)",
@@ -472,7 +472,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Basic Maternity: Hospital Birth + 6 Visits",
         human_insight: "You're planning a pregnancy on a budget. This covers 6 antenatal visits, 2 ultrasounds, and hospital birth—essential maternity at the lowest possible cost.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Network Maternity Bare-Minimum",
@@ -523,7 +523,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "CDL Chronic Cover: Diabetes & Hypertension",
         human_insight: "You have Type 2 diabetes, hypertension, or other CDL conditions. This plan covers your chronic medication unlimited from scheme risk at an affordable network rate.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Clinical_First",
         meta: {
             title: "CDL Chronic Disease Management (Network)",
@@ -574,7 +574,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Hospital + Savings for Young Singles",
         human_insight: "You want hospital cover plus a small day-to-day buffer. Your R444/month savings handles GP visits and acute medicine, with unused funds rolling over annually.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Price_First",
         meta: {
             title: "Network Savings Account Single Starter",
@@ -626,7 +626,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Family Savings with 3-Child Cap",
         human_insight: "Your family of 5 benefits from the child cap rule. Combined savings of R1,116/month cover day-to-day expenses while hospital protection keeps everyone safe.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Network Savings Family (3-Child Cap)",
@@ -678,7 +678,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Senior Savings with Hospital Freedom",
         human_insight: "You're 60+ and want any-hospital access with a savings buffer. Accept the joint exclusion trade-off and get R493/month savings plus full hospital freedom.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "Full Choice Savings Senior (Joint Exclusion Aware)",
@@ -730,7 +730,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Maternity + Savings for Extra Care",
         human_insight: "You're pregnant and want a financial buffer for extras. Your savings account covers additional GP visits and medication beyond the 6 funded antenatal consultations.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Network Savings Maternity (6 Visits)",
@@ -782,7 +782,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Enhanced Maternity: 9 Visits + Supplements",
         human_insight: "You want comprehensive pregnancy care with 9 antenatal visits, postnatal check, and pregnancy supplements funded. This plan goes beyond the basics for peace of mind.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Network Enhanced Maternity (9 Visits + Supplements)",
@@ -835,7 +835,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Non-CDL Chronic: ADHD, Acne & Migraine",
         human_insight: "You have non-CDL conditions like ADHD, severe acne, or migraines. This plan covers 5 non-CDL conditions at 80% scheme tariff with a useful savings buffer.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Clinical_First",
         meta: {
             title: "Network Non-CDL Chronic Manager (5 Conditions)",
@@ -887,7 +887,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Family Maternity + Savings with Child Cap",
         human_insight: "Your growing family needs enhanced maternity with 9 antenatal visits and supplements, plus a savings buffer for day-to-day. Preventative dentistry keeps your kids healthy.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Network Family Maternity + Savings (3-Child Cap)",
@@ -940,7 +940,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Premium Maternity + Optometry with Hospital Freedom",
         human_insight: "You want full hospital choice plus enhanced maternity and the optometry benefit. No network restrictions—ideal for families who value flexibility alongside comprehensive care.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Beat3 Plus Enhanced Family Maternity + High Savings",
@@ -994,7 +994,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Comprehensive Hybrid: Savings + Day-to-Day",
         human_insight: "You want the best of both worlds. Savings pays first, then generous day-to-day limits kick in. Perfect for singles who need predictable healthcare costs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Price_First",
         meta: {
             title: "Beat4 Comprehensive Single (Savings + Day-to-Day)",
@@ -1048,7 +1048,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Family Hybrid: High Day-to-Day + Maternity",
         human_insight: "Your family needs comprehensive cover with high savings, generous day-to-day limits, and enhanced maternity. Optometry and preventative dentistry for the kids included.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Beat4 Comprehensive Family (Savings + Day-to-Day)",
@@ -1103,7 +1103,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Senior Comprehensive: Joint Cover + Day-to-Day",
         human_insight: "You're 60+ and need elective joint replacement covered, not just PMBs. Add hearing aids and cochlear implants, plus high day-to-day limits for quality senior care.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "Beat4 Senior Comprehensive (60+)",
@@ -1157,7 +1157,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget-Friendly Cover for Entry-Level Earners",
         human_insight: "Earning under R9,000/month? This plan gives you unlimited GP visits at a subsidized R1,736 rate. The most affordable way to get covered.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Rhythm1 Entry-Level Earner (<R9k)",
@@ -1208,7 +1208,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Essential Maternity for Mid-Income Earners",
         human_insight: "You earn R9k-R14k and need pregnancy cover. This gives you 6 antenatal visits and 2 ultrasounds—essential care for a low-risk pregnancy on a budget.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Rhythm1 Basic Maternity (Mid-Income)",
@@ -1259,7 +1259,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Better Benefits for Less: Rhythm2 Arbitrage",
         human_insight: "Earning over R14k? Here's a pricing anomaly: Rhythm2 costs LESS than Rhythm1 but gives you MORE benefits like dentures and enhanced maternity. Pure value.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "Rhythm2 High Income Optimizer",
@@ -1310,7 +1310,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Full Maternity: 9 Visits + Supplements",
         human_insight: "You want more than basic pregnancy care. Get 9 antenatal visits (vs 6), postnatal support, and R145/month in supplements for your First 1000 Days journey.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Rhythm2 Enhanced Maternity",
@@ -1361,7 +1361,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Senior Care: Dentures & Optometry Included",
         human_insight: "You need unlimited GP visits plus dentures and spectacles. This plan covers 2 removable dentures every 24 months and includes an optometry benefit.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "Rhythm2 Senior with Denture Cover",
@@ -1413,7 +1413,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Large Family: Unlimited GP with Child Cap",
         human_insight: "With 4+ kids, you only pay for 3 but everyone gets unlimited GP visits. Critical value for large households on a tight budget.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Rhythm1 Large Family (Capped)",
@@ -1464,7 +1464,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Low-Income Network Cover with Unlimited GP",
         human_insight: "Earning under R11,930? Get unlimited network GP visits plus hospital cover at the lowest possible premium. Perfect entry point for budget-conscious singles.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "BonCap Income Band 1 Single Starter",
@@ -1516,7 +1516,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Large Family Value: 4+ Kids Pay for 3",
         human_insight: "Your 4th child and beyond cost zero extra. Combined with unlimited network GP, this is massive savings for growing families in the R12k-R19k income band.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "BonCap Income Band 2 Large Family Leverage",
@@ -1568,7 +1568,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Pregnancy Planning with Specialist Access",
         human_insight: "You're planning a baby and need specialist consultations plus the maternity programme. Get 12 antenatal visits with network compliance.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonCap Income Band 3 Maternity Risk Transfer",
@@ -1620,7 +1620,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Full Chronic Management with 28 Conditions",
         human_insight: "You have chronic conditions requiring consistent medication. This covers 28 conditions including depression, with unlimited network GP for regular follow-ups.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonCap Income Band 4 Chronic Risk Management",
@@ -1672,7 +1672,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Absolute Minimum Hospital Safety Net",
         human_insight: "You self-fund day-to-day and just need emergency hospital protection. At R1,275/month flat rate, this is pure catastrophic cover for the uninsured.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "BonCore Disaster Cover Single",
@@ -1724,7 +1724,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Large Family Hospital Safety Net: 5+ Kids Pay for 3",
         human_insight: "With 5 children, your 4th and 5th are free. A 7-person family pays only R6,375/month for hospital catastrophic cover—unbeatable value.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "BonCore Large Family Disaster Leverage",
@@ -1776,7 +1776,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Hospital Protection with Day-to-Day Booster",
         human_insight: "You need hospital cover plus a small day-to-day benefit. Complete your wellness screening to unlock R1,160 for GP visits, X-rays, and blood tests.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "BonEssential Single PMB Hospital Focus",
@@ -1828,7 +1828,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Absolute Minimum Premium for Families",
         human_insight: "You need the cheapest possible hospital cover for your family. Accept the stricter network and higher co-payments to achieve rock-bottom premiums.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "BonEssential Select Family Budget Hospital",
@@ -1880,7 +1880,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Savings Rollover Strategy for Young Professionals",
         human_insight: "You're healthy and want to build savings that accumulate year over year. Low utilization means your R11,880 savings rolls over, creating a multi-year liquidity buffer.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "BonComplete Single MSA Maximization",
@@ -1932,7 +1932,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "32 Chronic Conditions + Savings for Families",
         human_insight: "Your family has non-CDL conditions like child ADHD, eczema, or allergies. This covers 32 conditions—more than basic plans—with a solid savings account.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonComplete Family Chronic + Savings Hybrid",
@@ -1985,7 +1985,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "46 Chronic Conditions + Dental + Mental Health",
         human_insight: "You need more than basic chronic cover. This plan covers 46 conditions including mental health (R14,400), osteoporosis, and GORD—plus comprehensive dental.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonClassic Family 46 Chronic Conditions + Savings",
@@ -2038,7 +2038,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Senior Joint Replacement: Avoid R38,560 Co-Pay",
         human_insight: "You're 55+ and may need hip or knee replacement. Using the designated service providers saves you R38,560 in co-payments—critical for planned surgery.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonClassic Senior Joint Replacement Risk",
@@ -2090,7 +2090,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Affluent Senior: 61 Chronic + Any Hospital",
         human_insight: "You want unrestricted hospital access with maximum chronic coverage. This covers 61 conditions including rare diseases, biologics, and refractive surgery.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonComprehensive Senior 61 Chronic + Full Hospital Choice",
@@ -2143,7 +2143,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Dental Implants: Only Plan with This Benefit",
         human_insight: "You need dental implants—and this is the ONLY plan that covers them. Get 2 implants per beneficiary every 5 years plus 3 crowns per family annually.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "default-medical",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonComprehensive Dental Implant Strategy",
@@ -2242,7 +2242,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Young Parent Maternity + Benefit Booster",
         human_insight: "Planning your first or second child? Get 6 antenatal visits plus R2,070 Benefit Booster unlocked via wellness screening—perfect for new parents.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonComplete Young Family Maternity Optimization",
@@ -2294,7 +2294,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Contraceptive Cover for Women Under 50",
         human_insight: "You need reliable contraceptive coverage. This plan covers R2,050/year for contraceptives with a solid savings account for other healthcare needs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonClassic Young Adult Contraceptive Strategy",
@@ -2346,7 +2346,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget Contraceptive + Unlimited GP",
         human_insight: "You're under 50 and need contraceptive coverage at the lowest premium. Get R1,330/year for contraceptives plus unlimited network GP visits.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Price_First",
         meta: {
             title: "BonCap Young Adult Contraceptive Budget Strategy",
@@ -2398,7 +2398,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "100% Orthodontics for Teens",
         human_insight: "Your teenager needs braces. This is the only plan offering 100% orthodontic funding (vs 65% elsewhere)—saving you R10,500-R21,000 on treatment.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonComprehensive Family Orthodontics 100% Funding",
@@ -2450,7 +2450,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Private Vaccinations + Baby Care for Infants",
         human_insight: "Your baby deserves the private vaccination schedule, hearing screening, and 24/7 Babyline support. Premium childcare benefits for young families.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonClassic Young Family Childcare Benefits",
@@ -2502,7 +2502,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Enhanced Paediatrician Access for Young Children",
         human_insight: "Your infants need specialist paediatrician care. Get 3 visits under age 1, 2 visits ages 1-2, and 2 GP visits ages 2-12—without network restrictions.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonComprehensive Child Specialist Consultation Strategy",
@@ -2554,7 +2554,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "High Savings + R5,000 Booster for Singles",
         human_insight: "You're healthy and want maximum savings rollover. Get R12,144 in savings plus unlock R5,000 Benefit Booster—perfect for building a multi-year liquidity buffer.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "BonSave Single MSA Maximization",
@@ -2606,7 +2606,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Family Orthodontics + Savings with Child Cap",
         human_insight: "Your children need braces and you want savings protection. Get 100% orthodontic funding plus child capping rules for large families.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonSave Family Orthodontic Maximization",
@@ -2658,7 +2658,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Large Family Budget: 4+ Kids Pay for 3",
         human_insight: "With 4+ children, you only pay for 3. Combined with savings and network cover, this is massive value for growing families on a budget.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "BonFit Large Family Budget Leverage",
@@ -2710,7 +2710,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Pregnancy Planning with Savings Safety Net",
         human_insight: "You're planning a pregnancy and want savings protection. Get 6 antenatal visits, 2 ultrasounds, and maternity programme with R4,000 Benefit Booster.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonPrime Maternity Risk Transfer with Savings",
@@ -2763,7 +2763,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Chronic Management with DSP Savings Hybrid",
         human_insight: "You have chronic conditions needing consistent medication. Get 28 conditions covered via Marara Pharmacy DSP with savings for day-to-day expenses.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonPrime Chronic Disease Management with Savings",
@@ -2815,7 +2815,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Traditional Day-to-Day with Sublimits",
         human_insight: "You want predictable day-to-day cover with clear sublimits for GP, specialist, medicine, and auxiliary. R11,080 overall limit structured logically.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Primary Family Day-to-Day Moderate Coverage",
@@ -2867,7 +2867,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Any Hospital + 45 Chronic Conditions",
         human_insight: "Your family needs full hospital choice with expanded chronic coverage. 45 conditions including mental health, GORD, and anxiety—all with any hospital access.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Standard Family 45 Chronic Conditions + Full Hospital Choice",
@@ -2920,7 +2920,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Save R1,237/Month with GP Nomination",
         human_insight: "You can commit to a nominated GP and network hospitals. This saves R1,237/month compared to Standard while keeping 45 chronic conditions covered.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Standard Select Family 45 Chronic + Nominated GP Compliance",
@@ -2972,7 +2972,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Senior Joint Replacement with Any Hospital",
         human_insight: "You're 55+ and may need hip or knee replacement. Using the DSP saves you R38,560 in co-payments while enjoying any-hospital access.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "Standard Senior Joint Replacement Risk Management",
@@ -3025,7 +3025,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Type 1 Diabetes: Child Insulin Pump + CGM",
         human_insight: "Your child has Type 1 diabetes and needs pump technology. Get R65,000 for pump, R28,000/year for CGM, and R93,000/year for consumables.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Standard Type 1 Diabetes Child Insulin Pump Coverage",
@@ -3078,7 +3078,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Hospital Safety Net + Emergency Room",
         human_insight: "You self-fund day-to-day and just need hospital protection. Get 2 emergency room visits and 28 chronic conditions covered at network rates.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Hospital Standard Single Disaster Cover PMB Only",
@@ -3130,7 +3130,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Emergency C-Section Cover for Families",
         human_insight: "You need hospital maternity for emergency C-sections only. Natural birth covered as PMB. Get 6 antenatal visits with child capping rules.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Hospital Standard Family Maternity Emergency C-Section Only",
@@ -3183,7 +3183,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Ultra-Budget: R130 GP Co-Pay Hospital Cover",
         human_insight: "You need the absolute minimum premium. Accept R130 GP co-payments and unlimited virtual GP for pure catastrophic hospital protection.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "BonStart Single Edge Co-Payment Disaster Cover",
@@ -3235,7 +3235,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget Maternity: R75 GP Co-Pay",
         human_insight: "You're planning pregnancy on a budget. Get 6 antenatal visits and 2 ultrasounds with lower R75 GP co-pay (vs R130 on BonStart).",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "BonStart Plus Family Maternity Enhanced Coverage",
@@ -3288,7 +3288,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Active Family: Sports Physiotherapy Benefit",
         human_insight: "Your active kids play sports and get injuries. Get 4 physio visits per person with R75 co-pay plus R6,860 for general appliances.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "BonStart Plus Family Sports Injury Physiotherapy",
@@ -3340,7 +3340,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Smart Saver: MSA + Unlimited Smart GP",
         human_insight: "You want savings that roll over plus unlimited Smart GP visits. This hybrid gives you MSA flexibility with rich day-to-day benefits.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Smart Saver MSA Hybrid",
@@ -3393,7 +3393,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget Smart Saver with MSA",
         human_insight: "You want MSA rollover at a budget price. Accept higher co-pays and some exclusions to get Smart GP access with savings protection.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Essential Smart Saver Budget MSA",
@@ -3446,7 +3446,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "No MSA: Unlimited Smart GP + Sports Cover",
         human_insight: "You're active and don't want MSA complexity. Get unlimited Smart GP, sports injury benefits, and higher PHF—all risk-funded.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Smart Rich Risk‑Funded Day‑to‑Day",
@@ -3499,7 +3499,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Cheapest Smart with Core Benefits",
         human_insight: "You need the cheapest Smart plan with basic day-to-day. Accept higher co-pays and procedure exclusions for lower premiums.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Essential Smart Budget Risk‑Funded",
@@ -3552,7 +3552,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Dynamic Smart: Lower Premium via Routing",
         human_insight: "You're comfortable with Ask Discovery routing you to hospitals. Trade flexibility for significant premium savings in the Dynamic Smart network.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Essential Dynamic Smart Efficiency Network",
@@ -3605,7 +3605,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Ultra-Budget Smart: PMB-Focused Hospital",
         human_insight: "You're young and healthy, and want the lowest Smart premium. Accept PMB-focused hospital cover and many exclusions for minimal cost.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "Active Smart Ultra‑Budget Plan",
@@ -3658,7 +3658,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Large MSA (20%) + Day-to-Day Extender",
         human_insight: "You want maximum savings with a large 20% MSA allocation. Plus Day-to-Day Extender and Personal Health Fund up to R10,000.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Saver MSA High Day‑to‑Day",
@@ -3711,7 +3711,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Delta Network: Lower Premiums",
         human_insight: "You live near Delta hospitals and want lower premiums. Accept the Delta network for significant savings compared to Classic Saver.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Delta Saver Hospital Network Discount",
@@ -3764,7 +3764,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget Saver: 15% MSA + 100% Tariff",
         human_insight: "You want savings with lower premiums. Accept smaller MSA (15%), reduced PHF, and 100% hospital tariff to save money.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Essential Saver Budget MSA",
@@ -3817,7 +3817,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Coastal Resident: Regional Discount",
         human_insight: "You live in a coastal province and want lower premiums. Accept coastal hospital restrictions to save significantly.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Coastal Saver Regional Hospital Discount",
@@ -3870,7 +3870,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Income-Banded KeyCare Network Plan",
         human_insight: "Your income qualifies for lower premiums. Get unlimited KeyCare GP visits and network specialist cover with income verification.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "KeyCare Plus Income‑Banded Network Plan",
@@ -3923,7 +3923,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "KeyCare Start: Ultra-Low Premium",
         human_insight: "You need the lowest Discovery premium. Choose one KeyCare Start hospital in your region for exclusive use. Very strict network.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "KeyCare Start Budget Regional Network",
@@ -3976,7 +3976,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "KeyCare Online: Digital-First Care",
         human_insight: "You're comfortable with telemedicine. Access care through KeyCare Online Practice for the absolute lowest Discovery premiums.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "KeyCare Start Regional Online Practice",
@@ -4029,7 +4029,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Priority: Large MSA (25%) + Limited ATB",
         human_insight: "You want a large savings account with Above Threshold protection. Get 25% MSA allocation with limited ATB for predictable coverage.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Priority Limited Above Threshold Benefit",
@@ -4082,7 +4082,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget Priority: 15% MSA + Limited ATB",
         human_insight: "You want Above Threshold protection at lower cost. Accept smaller MSA and reduced PHF to get limited ATB coverage.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Essential Priority Budget Limited ATB",
@@ -4135,7 +4135,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Executive: Unlimited ATB + Multi-Chronic",
         human_insight: "You have multiple chronic conditions and high utilization. Get unlimited Above Threshold Benefit and extended chronic lists.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Executive Multi‑Chronic Unlimited Day‑to‑Day",
@@ -4188,7 +4188,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Executive Oncology: R500K+ Cancer Cover",
         human_insight: "You have cancer or high oncology risk. Get R500,000+ oncology cover with innovation benefits and extended oncology treatment.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Executive Oncology Innovation and Extended Cover",
@@ -4241,7 +4241,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Executive Global: US$1M Travel Cover",
         human_insight: "You travel internationally often. Get US$1M emergency cover and access to overseas treatment not available in South Africa.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Executive Global Traveller and Overseas Treatment",
@@ -4293,7 +4293,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Executive: High Dental + Allied Limits",
         human_insight: "You need major orthodontic work, extensive therapy, and optical. Unlimited ATB + high dental and allied limits.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Executive Dental, Orthodontic and Allied High-Use",
@@ -4345,7 +4345,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Classic Core: Hospital + PHF Only",
         human_insight: "You're healthy and want strong hospital cover without MSA complexity. Get 200% tariff and modest PHF while self-funding day-to-day.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Core Single Hospital-Only with PHF",
@@ -4397,7 +4397,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Delta Core: Family Network Discount",
         human_insight: "Your family can use Delta hospitals. Accept the network for lower premiums—but beware R11,000+ co-pay for non-network.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Delta Core Young Family Hospital Network",
@@ -4449,7 +4449,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Coastal Core: Regional Hospital Discount",
         human_insight: "You live in a coastal province. Accept coastal hospital restrictions for lower premiums than national options.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Coastal Core Coastal-Resident Hospital Cover",
@@ -4501,7 +4501,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Core Oncology: R250K Cancer Cover",
         human_insight: "You have controlled oncology needs. Get R250,000 cancer cover per 12 months with hospital-only protection.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Essential Core Oncology Budget Protection",
@@ -4553,7 +4553,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Classic Comprehensive Family: MSA + ATB",
         human_insight: "Your family needs structured savings, limited ATB, and 200% specialist cover. Balanced for mid-to-high income households.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Classic Comprehensive Family with MSA and ATB",
@@ -4606,7 +4606,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Smart Comprehensive: Network Savings",
         human_insight: "You're urban and comfortable with Smart networks. Get lower premiums with R75 GP co-pay while keeping savings and ATB.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Price_First",
         meta: {
             title: "Classic Smart Comprehensive Urban Network User",
@@ -4658,7 +4658,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Comprehensive: ADL + Mental Health",
         human_insight: "You have psychiatric or autoimmune conditions. Get Additional Disease List chronic cover plus structured mental health programs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Classic Comprehensive ADL and Mental Health Conditions",
@@ -4711,7 +4711,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Comprehensive: Extended Oncology Cover",
         human_insight: "You expect high oncology spend without Executive prices. Get R500K+ oncology with innovation and extended benefits.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Classic Comprehensive Extended Oncology",
@@ -4763,7 +4763,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "flexiFED 3: R4K Extra via Health Assessment",
         human_insight: "Complete the Health Risk Assessment to unlock R4,000 family benefit for GP, specialists, dental—claims don't count toward threshold.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "flexiFED 3 D2D+ Health Risk Assessment Unlocker",
@@ -4817,7 +4817,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "flexiFED 3GRID: 10% Discount for Families",
         human_insight: "Accept 120 GRID hospitals and save R11,676/year as a couple. Full maternity + childhood benefits with private ward access.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "flexiFED 3GRID 10% Discount Maternity Family",
@@ -4872,7 +4872,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "flexiFED 3Elect: 25% Off with R15,950 Excess",
         human_insight: "You're young and healthy with low hospital risk. Accept R15,950 excess on planned admissions for 25% premium discount.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "flexiFED 3Elect 25% Discount R15,950 Excess Acceptor",
@@ -4926,7 +4926,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "flexiFED 3 Hospital: Optional Savings Activation",
         human_insight: "Start on pure hospital plan at R4,946/month. Self-fund GP to reach threshold, then activate backup savings only if needed.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "flexiFED 3 Hospital Plan Backup Savings Threshold Racer",
@@ -4980,7 +4980,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "myFED Band 1: R1,719 Unlimited GP",
         human_insight: "Household income R1-R11,063? Get unlimited nominated GP at rock-bottom R1,719 premium with myFED network requirements.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "myFED Income Band 1 Entry-Level Corporate Employee",
@@ -5034,7 +5034,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "myFED Band 4: Income Cliff Warning",
         human_insight: "Household income R21,652+? Be aware: R1 income increase triggers R42,156/year premium jump. Consider flexiFED 3GRID instead.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "myFED Income Band 4 Cliff - Corporate Escalation Trap",
@@ -5088,7 +5088,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "myFED Dispensing GP: Unlimited Acute Meds",
         human_insight: "Nominate a dispensing GP for unlimited acute medicine at one visit—no pharmacy trip needed. Perfect for families with kids.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "myFED Dispensing GP Acute Medicine Unlimited Formulary User",
@@ -5142,7 +5142,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Under-35: Unlimited Virtual GP",
         human_insight: "You're under 35 and digital-first. Get unlimited free virtual GP plus 3 in-person visits—all without depleting savings.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Under-35 Virtual GP Maximizer",
@@ -5195,7 +5195,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Under-35 Maternity: R9,330 C-Section Risk",
         human_insight: "You're under 35 and planning natural birth. Accept R9,330 elective C-section co-pay for budget maternity with savings.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "Under-35 Young Family C-Section Acceptor",
@@ -5248,7 +5248,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "maxima PLUS: Triple-Pool Benefit Cycler",
         human_insight: "You're 50+ and want strategic benefit cycling. OHEB exhausts first, then savings, then threshold unlocks unlimited.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "maxima PLUS Triple-Pool Benefit Cycler",
@@ -5302,7 +5302,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "85 Chronic Conditions: Including Osteoarthritis",
         human_insight: "You have multiple chronic conditions from acne to osteoarthritis. Get 27 CDL + 58 additional conditions at any pharmacy.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "58-Condition Biologic & Osteoarthritis Manager",
@@ -5357,7 +5357,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "maxima EXEC: 10% Co-Pay Savings Trade",
         human_insight: "Accept 10% co-pay above threshold to save R7,120/month vs PLUS. Lower chronic cap but 45 conditions covered.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Price_First",
         meta: {
             title: "maxima EXEC 10% Co-Pay Threshold Acceptor",
@@ -5411,7 +5411,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "maxima EXEC: R643K Oncology Family Cover",
         human_insight: "Your family accepts Core oncology protocols for 37% lower premium. Good for early-stage cancer; risky for Stage III-IV.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "maxima EXEC Core Oncology Protocol Family",
@@ -5465,7 +5465,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Budget Hospital Starter for Young Singles",
         human_insight: "You're 22-30 and healthy. Get lowest-cost hospital protection with optional savings activation when needed.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "Budget Hospital Starter",
@@ -5517,7 +5517,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Elect: R6,948/Year Saved with Excess Risk",
         human_insight: "Accept R15,950 excess on planned surgeries to save 25% annually. Only works if you expect zero planned admissions.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Elect Excess Risk Taker",
@@ -5568,7 +5568,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Threshold Racer with Depression Cover",
         human_insight: "You have depression and want unlimited GP. Race to R5,508 threshold while using R2,400 depression medication benefit.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Threshold Accumulator with Depression Cover",
@@ -5620,7 +5620,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "First Baby Maternity Optimizer",
         human_insight: "Planning your first child within 12 months? Get 8 antenatal visits, doula, hearing screening—R15,000+ maternity value.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "First Pregnancy Maternity Maximizer",
@@ -5674,7 +5674,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "GRID Network Family: R5,136/Year Savings",
         human_insight: "Young family willing to use 120 GRID hospitals? Save R5,136/year while accessing maternity and threshold dental.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "GRID Network Family Builder",
@@ -5727,7 +5727,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Unlimited Network GP from Rand 1",
         human_insight: "Your family uses 8+ GP visits/month. Get unlimited network GP from Rand 1—visits don't deplete your savings pool.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Network GP From Rand 1 Maximizer",
@@ -5780,7 +5780,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "4+ Children: Free 4th Child + GRID Discount",
         human_insight: "Have 4+ kids? Only pay for 3 plus get 10% GRID discount. Child rates extend to age 27 for students.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "4+ Child Family Capping Arbitrage",
@@ -5833,7 +5833,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Family Spacing: Contraceptive + 25% Discount",
         human_insight: "Spacing children? Get contraceptive coverage from risk + 25% Elect discount. Upgrade within 30 days of pregnancy.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Price_First",
         meta: {
             title: "Contraceptive Phase Family Spacer",
@@ -5886,7 +5886,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp Network Single: Elect Discount",
         human_insight: "You commit to Elect network hospitals and providers. Get contribution discount for network compliance.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Network Single Starter",
@@ -5938,7 +5938,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp Full Choice Family Core",
         human_insight: "Your family wants any private hospital with savings first for day-to-day. Full coverage without network restrictions.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Full Choice Family Core",
@@ -5990,7 +5990,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp: Pay for Only 2 Kids",
         human_insight: "Have 3+ kids under 18? Pay for only 2 while they all get full cover. Massive savings for large families.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Large Family Child-Cap Arbitrage",
@@ -6042,7 +6042,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Under-26 Child Rate Extended",
         human_insight: "Keep dependants at child rates until age 26. Perfect for families supporting older teens and young adults.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Under-26 Dependant Rate Maximiser",
@@ -6093,7 +6093,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Young Adult: HPV + Contraceptive Optimizer",
         human_insight: "You're 15-26 and want maximum preventive benefits. Time HPV vaccinations and contraceptive cycles perfectly.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "default-medical",
         ui_priority: "Clinical_First",
         meta: {
             title: "Young Adult Preventive + Contraceptive Optimiser",
@@ -6145,7 +6145,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp Enhanced Maternity Planner",
         human_insight: "Planning pregnancy? Get 10 ante/postnatal consults, scans, supplements, and newborn screening fully defined.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Enhanced Maternity Funding Planner",
@@ -6198,7 +6198,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Baby Under 2: Specialist Consult Optimizer",
         human_insight: "Your baby is under 2. Get 2 paed/GP/ENT consults plus immunizations—optimize for high early-childhood use.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Clinical_First",
         meta: {
             title: "Baby Under-2 Consultation Optimiser",
@@ -6250,7 +6250,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp Mental Health Risk Transfer",
         human_insight: "You need psychiatric and depression coverage. Get defined limits for in-hospital and out-of-hospital mental health.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "default-medical",
         ui_priority: "Clinical_First",
         meta: {
             title: "Mental Health Risk Transfer (Enhanced)",
@@ -6302,7 +6302,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp Cancer Risk Transfer Family",
         human_insight: "Your family needs cancer protection. Use the stated family cancer treatment limit for defined oncology funding.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Defined Cancer Risk Transfer (Family)",
@@ -6354,7 +6354,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "CDL/PMB Chronic Risk Transfer",
         human_insight: "Your chronic conditions are non-negotiable. Get 271 PMB diagnoses + all CDL with unlimited PMB medicine.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "CDL/PMB Chronic Risk Transfer",
@@ -6406,7 +6406,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Vision + Dental Network Maximizer",
         human_insight: "Time your optical and dental claims to the 24-month cycle. Use Opticlear + DRC networks for full benefit.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "default-medical",
         ui_priority: "Price_First",
         meta: {
             title: "Vision + Dental Network Maximiser",
@@ -6458,7 +6458,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Refractive Surgery: Ages 18-50",
         human_insight: "You want LASIK or refractive surgery. Use the stated family limit within your 18-50 eligible window.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Refractive Surgery (18–50) Optimiser",
@@ -6509,7 +6509,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Senior: Joint Replacement Exclusion Risk",
         human_insight: "You're a senior accepting that degenerative joint replacements aren't covered unless acute injury or PMB.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "Senior Joint Degeneration Risk (Non-PMB Constraint)",
@@ -6561,7 +6561,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medihelp MSA Rollover + Interest",
         human_insight: "You want savings that grow. Get interest on unused MSA with full rollover—multi-year liquidity strategy.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Savings Rollover + Interest Maximiser",
@@ -6613,7 +6613,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Elect: Post-Savings Network Routing",
         human_insight: "After savings deplete, insured day-to-day kicks in—but only through Elect networks. Route providers strategically.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Elect Post-Savings Day-to-Day Network Router",
@@ -6665,7 +6665,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medshield Starter: Compact Network Hospital",
         human_insight: "First-time private cover? Get unlimited hospital via Compact Network while keeping day-to-day usage low.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Starter: Compact-network hospital risk transfer",
@@ -6717,7 +6717,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medshield Family: R4,700 Day-to-Day Defender",
         human_insight: "Your kids get sick often. Stretch the R4,700 day-to-day limit carefully to avoid early exhaustion.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Family: Day-to-day limit defender (child sickness pattern)",
@@ -6769,7 +6769,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medshield: Co-Payment Minimizer",
         human_insight: "You risk accidental out-of-network usage. Stay strict with network rules to avoid 20-40% co-payments.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Network risk: Co-payment minimiser",
@@ -6821,7 +6821,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Young Woman: 13 Oral Contraceptive Scripts",
         human_insight: "You prefer oral contraception. Maximize 13 scripts/year within the R155/script cap.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Young Adult: Oral contraception script maximiser",
@@ -6873,7 +6873,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Young Woman: IUD Multi-Year Value",
         human_insight: "Choose IUD/implant instead of oral scripts. One authorized device gives multi-year contraception coverage.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Young Adult: IUD/implant device arbitrage",
@@ -6925,7 +6925,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Medshield Maternity: Network Pregnancy Path",
         human_insight: "Planning pregnancy? Pre-authorize and deliver at Compact Network hospital to avoid large co-payments.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Maternity: Compact network confinement planner",
@@ -6977,7 +6977,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Chronic: CDL + Depression DSP Discipline",
         human_insight: "Your chronic conditions need PMB cover. Register, use network pharmacy, stay formulary-compliant.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Chronic: PMB CDL + Depression (DSP discipline)",
@@ -7029,7 +7029,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Mental Health: PMB-Only Guardrails",
         human_insight: "You need mental health cover. Plan around PMB framing, pre-authorization, and network requirements.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "mental-health-support-clinical",
         ui_priority: "Clinical_First",
         meta: {
             title: "Mental health: PMB-only utilisation guardrails",
@@ -7081,7 +7081,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Oncology: ICON DSP Lock-In Required",
         human_insight: "Cancer diagnosis? Use ICON/DSP strictly. Non-DSP oncology triggers catastrophic 40% co-payment.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Cancer: ICON DSP lock-in (avoid 40% oncology co-pay)",
@@ -7133,7 +7133,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Dental: Wisdom Teeth Co-Pay Avoidance",
         human_insight: "Expecting wisdom tooth removal? Route to day clinic vs hospital and get authorization to minimize co-pay.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Dental: Wisdom teeth co-payment avoidance",
@@ -7185,7 +7185,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Ingwe Connect: Lowest Cost Entry",
         human_insight: "Entry-level private hospital via Connect Network. Accept State facilities for day-to-day and chronic.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Ingwe Starter (Connect Network + State day-to-day)",
@@ -7237,7 +7237,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Ingwe Family: Unlimited Network GP",
         human_insight: "Your family uses GP frequently. Get stable day-to-day via Ingwe network GP protocols.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Clinical_First",
         meta: {
             title: "Ingwe Family (Network GP heavy use)",
@@ -7286,6 +7286,11 @@ export const PERSONAS: Persona[] = [
     {
         slug: "momentum-ingwe-any-hospital-network-penalty-guard-2026",
         code: "MMS-ING-ANY-PEN-2026",
+        // V2 ENRICHMENT
+        display_title: "Ingwe Any-Hospital (Penalty-aware)",
+        human_insight: "You want hospital flexibility but understand network penalties. Align day-to-day and chronic usage to the required network routing for that selection.",
+        hero_image_tag: "disaster-cover-professional-minimalist",
+        ui_priority: "Clinical_First",
         meta: {
             title: "Ingwe Any-Hospital (Penalty-aware)",
             marketing_heading: "Wants hospital flexibility but understands network penalties",
@@ -7336,7 +7341,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Evolve Starter: Strict Network + State",
         human_insight: "Accept Evolve Network for hospital and State for chronic. Low-price positioning with constraints.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Evolve Starter (Strict Network + State chronic)",
@@ -7388,7 +7393,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Evolve Maternity: Co-Pay Exception",
         human_insight: "Planning pregnancy? Use the co-pay exception for maternity while staying in Evolve Network.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Evolve Maternity Path (Co-pay exception aware)",
@@ -7440,7 +7445,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Incentive: Associated Hospital Saver",
         human_insight: "Save on contributions via Associated hospitals + courier pharmacy. Stay compliant to avoid 30% co-pay.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Incentive Network Saver (Associated hospitals + Associated chronic)",
@@ -7492,7 +7497,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Incentive: Oncology Limit Manager",
         human_insight: "Cancer is your dominant risk. Plan around the annual oncology limit + percentage co-pay thereafter.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Incentive Oncology Limit Manager",
@@ -7543,7 +7548,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Extender Family: Threshold Activator",
         human_insight: "Your family expects meaningful day-to-day spend. Push through Threshold to unlock Extended Cover.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Price_First",
         meta: {
             title: "Extender Family (Threshold activator)",
@@ -7595,7 +7600,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Extender: 4+ Kids Threshold Leverage",
         human_insight: "More than 3 kids? Threshold's child component is capped at 3—reach Extended Cover faster.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Price_First",
         meta: {
             title: "Extender Large Family (3-child Threshold cap leverage)",
@@ -7646,7 +7651,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Extender: Associated GP Compliance",
         human_insight: "Keep claims accumulating to Threshold correctly. Use Associated GPs to avoid 70% accumulation penalty.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Price_First",
         meta: {
             title: "Extender Associated Chronic (GP compliance to avoid penalties)",
@@ -7697,7 +7702,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Summit: Full Choice Specialist Funding",
         human_insight: "You want broad provider choice with enhanced specialist tariffs. Premium full choice positioning.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Summit Full Choice (Specialist funding focus)",
@@ -7749,7 +7754,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Custom: Associated Hospital Penalty Avoid",
         human_insight: "You chose Associated hospitals. Never deviate—30% hospital-account co-pay stacks on top of standard.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Custom Associated Hospital (Penalty avoidance)",
@@ -7801,7 +7806,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Access Core: Young DSP Starter",
         human_insight: "Hospital-first cover for young, healthy members. PMB-only at DSP hospitals with low day-to-day needs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Access \"Core\": Young DSP Hospital Starter",
@@ -7852,7 +7857,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Access: Non-DSP 30% Penalty Risk",
         human_insight: "You're likely to deviate from DSP. Plan for 30% co-payment as expected cost—not a surprise.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Access \"Core\": Non-DSP Usage Penalty Risk",
@@ -7903,7 +7908,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Access: Bambino Maternity Path",
         human_insight: "Pregnancy is your main utilization driver. Register for Bambino maternity benefits (visits, scans, vitamins).",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "maternity-advanced-family-growth",
         ui_priority: "Clinical_First",
         meta: {
             title: "Access \"Core\": Bambino Maternity Path",
@@ -7955,7 +7960,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe 55+: AMD + Joint Constraint",
         human_insight: "You're 55+ with AMD needs and potential joint replacement. One joint per year rule forces staged planning.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "Access \"Core\": 55+ AMD & Joint Constraint",
@@ -8006,7 +8011,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Saver: MSA Liquidity Starter",
         human_insight: "Use MSA for predictable routine spend. Preserve risk benefits for true PMB hospital events.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Price_First",
         meta: {
             title: "Access \"Saver\": Upfront MSA Liquidity Starter",
@@ -8057,7 +8062,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Saver: MSA Exhaustion Cliff Manager",
         human_insight: "Plan for the post-MSA world. Avoid premature depletion—limited post-MSA consult rules apply.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Access \"Saver\": MSA Exhaustion Cliff Manager",
@@ -8108,7 +8113,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Saver: Optical/Dental DSP Arbitrage",
         human_insight: "Route optical/dental through DSP to pay from risk instead of draining your MSA.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Access \"Saver\": Optical/Dental DSP Arbitrage",
@@ -8159,7 +8164,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Saver: Day Procedure Scheduler",
         human_insight: "Same procedure, different facility = different cost. Pick day facilities to avoid acute-hospital exclusions.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "disaster-cover-professional-minimalist",
         ui_priority: "Price_First",
         meta: {
             title: "Access \"Saver\": Day-Procedure Deductible Scheduler",
@@ -8210,7 +8215,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Gold Ascend: Family Full Choice",
         human_insight: "Your young family wants broad hospital choice with in/out-of-hospital cover and mental health PMB.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Gold \"Ascend\": Family Full-Choice Cover",
@@ -8261,7 +8266,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Gold: Oncology Limit Guardrail",
         human_insight: "Cancer risk? Understand when 20% co-pay kicks in above the annual oncology limit.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Gold \"Ascend\": Oncology Limit Guardrail",
@@ -8312,7 +8317,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Gold: MRI/CT Non-PMB Co-Pay",
         human_insight: "Expecting advanced imaging? Non-PMB MRI/CT scans trigger co-pay even within limits.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Clinical_First",
         meta: {
             title: "Gold \"Ascend\": Non-PMB MRI/CT Copay Manager",
@@ -8363,7 +8368,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Gold EDO: Network Hospital Leverage",
         human_insight: "Same cover logic with network hospital constraint. High compliance = affordability.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Gold Ascend \"EDO\": Network Hospital Price Leverage",
@@ -8414,7 +8419,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Value Platinum: Full Choice Family",
         human_insight: "Comprehensive family cover with open hospital choice. MSA for day-to-day, risk for catastrophic.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Clinical_First",
         meta: {
             title: "Value \"Platinum\": Family Full-Choice High Cover",
@@ -8465,7 +8470,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Value Platinum Core: Network",
         human_insight: "High benefits with network hospital constraint. Route elective admissions into network.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "comprehensive-executive-high-liquidity",
         ui_priority: "Price_First",
         meta: {
             title: "Value Platinum \"Core\": Network Hospital Leverage",
@@ -8516,7 +8521,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Value Platinum: Radiology Co-Pay",
         human_insight: "Each MRI/CT/PET scan triggers fixed co-pay (except PMB). Plan for recurring imaging costs.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "hospital-saver-young-adult-active",
         ui_priority: "Clinical_First",
         meta: {
             title: "Value \"Platinum\": Specialised Radiology Event Co-pay Manager",
@@ -8567,7 +8572,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Value Platinum: Oncology 20% Over-Limit",
         human_insight: "High oncology limit but not infinite. 20% co-pay once per-beneficiary limit exceeded.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Value \"Platinum\": Oncology Over-Limit 20% Co-pay",
@@ -8618,7 +8623,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Titanium: 62 Chronic Conditions",
         human_insight: "Your dominant cost is chronic management. Get 62 conditions covered under managed-care protocols.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "chronic-management-senior-diabetes",
         ui_priority: "Clinical_First",
         meta: {
             title: "Titanium \"Executive\": Multi-Chronic High Transfer",
@@ -8669,7 +8674,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Titanium: Biologic Bridge Funding",
         human_insight: "Non-cancer biologics are your cost center. Stay within annual per-beneficiary limit.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "oncology-transfer-critical-care",
         ui_priority: "Clinical_First",
         meta: {
             title: "Titanium \"Executive\": Biologic Bridge Funding",
@@ -8720,7 +8725,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Titanium: Orthodontics 9-21 Window",
         human_insight: "Your child needs braces? Time orthodontic treatment inside the 9-21 age window.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "family-budget-starter-essentials",
         ui_priority: "Price_First",
         meta: {
             title: "Titanium \"Executive\": Orthodontics 9–21 Dental Strategy",
@@ -8771,7 +8776,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Titanium 55+: AMD Diagnostics",
         human_insight: "You're 55+ with AMD treatment needs and advanced diagnostics. Age-gated ophthalmology benefit.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "senior-surgical-joint-replacement",
         ui_priority: "Clinical_First",
         meta: {
             title: "Titanium \"Executive\": 55+ AMD Diagnostics Path",
@@ -8822,7 +8827,7 @@ export const PERSONAS: Persona[] = [
         // V2 ENRICHMENT
         display_title: "Sizwe Titanium: Prosthesis Limit Planner",
         human_insight: "Device limits force sequencing. One joint per year—prioritize highest-severity event first.",
-        hero_image_tag: "placeholder",
+        hero_image_tag: "default-medical",
         ui_priority: "Clinical_First",
         meta: {
             title: "Titanium \"Executive\": Prosthesis Limit Planner",

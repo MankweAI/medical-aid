@@ -18,46 +18,67 @@ export default async function AppHome({ searchParams }: HomePageProps) {
   const categoryFilter = params?.category || null;
 
   return (
-    <main className="min-h-screen bg-slate-50 relative selection:bg-emerald-500/30 font-sans overflow-hidden">
+    <main className="min-h-screen bg-slate-50 relative selection:bg-emerald-500/30 font-sans overflow-x-hidden">
       <AppHeader />
 
-      {/* V2 HERO BACKGROUND IMAGE */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/images/hero/placeholder.jpg"
-          alt="Healthcare lifestyle"
-          className="w-full h-full object-cover"
-        />
-        {/* Gradient Overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-50" />
-        {/* Soft blur at bottom for seamless transition */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-slate-50 to-transparent" />
-      </div>
+      {/* 1. ATMOSPHERIC HERO BACKGROUND (Redesigned Position) */}
+      <div className="relative h-[85vh] min-h-[700px] w-full bg-slate-900 overflow-hidden">
+        {/* The Image: Positioned at Top 30% to keep subjects visible */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/hero/home-page-backround.jpg"
+            alt="Healthcare lifestyle"
+            className="w-full h-full object-cover object-[center_30%] opacity-60 scale-105"
+          />
 
-      <div className="relative z-10 pt-32 px-4 container mx-auto max-w-6xl flex flex-col min-h-[calc(100vh-100px)]">
+          {/* Strategic Gradients for Readability */}
+          {/* Top Mask: Ensures Header visibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-transparent to-transparent" />
 
-        {/* CATEGORY FILTER (when arriving from breadcrumb) */}
-        {categoryFilter && (
-          <CategoryFilter category={categoryFilter} />
-        )}
+          {/* Side Mask: Provides contrast for the HomeHero text */}
+          <div className="absolute inset-y-0 left-0 w-full md:w-1/2 bg-gradient-to-r from-slate-900/40 to-transparent" />
 
-        {/* 1. THE CONSOLE (Central Interaction Layer) */}
-        <div className="flex-1 flex flex-col justify-center pb-12">
-          <HomeHero />
+          {/* Bottom Mask: Deep blend into the page body */}
+          <div className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-slate-50 via-slate-50/20 to-transparent" />
         </div>
 
-        {/* 2. ACTUARIAL INSIGHT CARD */}
-        <div className="pb-12">
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-700" />
+        {/* HERO CONTENT CONTAINER */}
+        <div className="relative z-10 h-full pt-32 px-4 container mx-auto max-w-6xl flex flex-col">
+          {/* CATEGORY FILTER - Positioned relative to hero text */}
+          {categoryFilter && (
+            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
+              <CategoryFilter category={categoryFilter} />
+            </div>
+          )}
 
-            <div className="bg-white/80 border border-white/60 rounded-2xl p-1.5 backdrop-blur-xl shadow-lg relative hover:shadow-xl transition-all">
+          {/* CENTRAL INTERACTION LAYER */}
+          <div className="flex-1 flex flex-col justify-center pb-24">
+            <HomeHero />
+          </div>
+        </div>
+      </div>
+
+      {/* 2. OVERLAP SECTION (The "Decision Stack" Visual) */}
+      <div className="relative z-20 -mt-20 px-4 container mx-auto max-w-6xl pb-20">
+        <div className="max-w-4xl mx-auto">
+          {/* ACTUARIAL INSIGHT CARD - Integrated with Negative Margin */}
+          <div className="relative group">
+            {/* Subtle glow effect on hover */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition duration-700" />
+
+            <div className="bg-white/95 border border-white rounded-[2rem] p-2 backdrop-blur-3xl shadow-2xl shadow-slate-900/10 relative hover:shadow-emerald-900/5 transition-all">
               <DailyInsight />
             </div>
           </div>
-        </div>
 
+          {/* Trust Footer/Logo Area */}
+          <div className="mt-12 text-center">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4">
+              Powered by Actuarial Intelligence
+            </p>
+          </div>
+        </div>
       </div>
     </main>
-  )
+  );
 }

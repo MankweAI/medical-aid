@@ -14,7 +14,7 @@ export default function WelcomeStatement({ persona }: { persona: Persona }) {
 
     // Resolve image path: try persona-specific, fallback to placeholder
     const heroImagePath = persona.hero_image_tag && !imgError
-        ? `/images/personas/${persona.hero_image_tag}.jpg`
+        ? `/images/hero/${persona.hero_image_tag}.jpg`
         : PLACEHOLDER_IMAGE;
 
     // SEO alt text pattern
