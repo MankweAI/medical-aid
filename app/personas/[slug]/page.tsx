@@ -7,7 +7,7 @@ import StrategyFooter from '@/components/StrategyFooter';
 import AppHeader from '@/components/AppHeader';
 import TrustTicker from '@/components/TrustTicker';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { PERSONAS } from '@/data/personas';
+import { PERSONAS } from '@/data/personas-backup';
 import { PLANS } from '@/data/plans';
 import { Persona } from '@/utils/persona';
 import { Plan } from '@/utils/types';

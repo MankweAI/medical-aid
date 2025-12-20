@@ -27,9 +27,10 @@ const EmailTemplate = ({ title, data }: { title: string; data: Record<string, st
 /**
  * Handle Expert Modal Leads
  */
-export async function submitLead(formData: FormData, context: { planName: string; persona: string }) {
+export async function submitLead(formData: FormData, context: { planName: string; persona: string; question: string }) {
     const name = formData.get('name') as string;
     const phone = formData.get('phone') as string;
+
 
     if (!name || !phone) {
         return { success: false, error: 'Missing fields' };
@@ -47,6 +48,7 @@ export async function submitLead(formData: FormData, context: { planName: string
                     Phone: phone,
                     'Interested Plan': context.planName,
                     'User Persona': context.persona,
+                    'User Question': context.question,
                     'Submitted At': new Date().toLocaleString()
                 }
             })

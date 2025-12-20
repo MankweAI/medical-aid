@@ -11,7 +11,6 @@ export interface UserProfile {
     hero_image_tag?: string;
     ui_priority?: 'Price_First' | 'Clinical_First';
     updatedAt?: string;
-
     meta: {
         title: string;
         marketing_heading: string;
@@ -53,6 +52,14 @@ export interface UserProfile {
             income_cliff_sensitivity: boolean;
             deductible_trigger_event?: string;
             benefit_cap_warning?: string;
+        };
+        ui_hooks?: {
+            simple_verdict: string;      // "Good for basic hospital stays, but you pay for your own daily meds."
+            the_catch_simple: string;    // "You pay the first R15,000 for any non-emergency surgery."
+            pressing_questions: {
+                question: string;        // "How does this cover my ADHD medication?"
+                context_for_expert: string; // "User is on ADHD meds, plan has a R16,827 limit."
+            }[];
         };
     };
 }

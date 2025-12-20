@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { PERSONAS } from '@/data/personas';
+import { PERSONAS } from '@/data/personas-backup';
 import { getV2Slug } from '@/utils/slug-utils';
 
 const GLOBAL_LAUNCH_DATE = new Date('2025-10-01');

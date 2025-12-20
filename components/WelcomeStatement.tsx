@@ -50,19 +50,6 @@ export default function WelcomeStatement({ persona }: { persona: Persona }) {
             <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-[1.1] mb-5 tracking-tight">
                 {persona.display_title || persona.meta.marketing_heading}
             </h1>
-
-            <div className="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-white/50 shadow-sm max-w-2xl relative overflow-hidden group hover:border-emerald-200 transition-colors">
-                <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/50" />
-                <div className="flex gap-4 items-start relative z-10">
-                    <div className="bg-emerald-50 p-2.5 rounded-xl shrink-0 text-emerald-600">
-                        <Activity className="w-5 h-5" />
-                    </div>
-                    <div>
-                        <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Your Strategy</h2>
-                        <p className="text-sm text-slate-600 leading-relaxed font-medium">{narrative}</p>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
