@@ -127,7 +127,7 @@ export default function StrategyFooter({ plan, persona, pivots, allPersonas }: P
 
             {/* 4. FAQ */}
             <section>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-top gap-2 mb-0">
                     <div className="bg-amber-50 p-1.5 rounded-lg">
                         <HelpCircle className="w-4 h-4 text-amber-600" />
                     </div>

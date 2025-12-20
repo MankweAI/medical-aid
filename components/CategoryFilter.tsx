@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { PERSONAS } from '@/data/personas';
 import { getV2Slug } from '@/utils/slug-utils';
 import { X, ChevronRight, Filter, Users } from 'lucide-react';
 import clsx from 'clsx';
+import { Persona } from '@/utils/persona';
 
 interface CategoryFilterProps {
     category: string;
+    personas: Persona[];
 }
 
 /**
@@ -16,13 +17,11 @@ interface CategoryFilterProps {
  * Displays when user arrives from breadcrumb navigation (/?category=X)
  * Shows filtered list of personas matching the selected category
  */
-export default function CategoryFilter({ category }: CategoryFilterProps) {
+export default function CategoryFilter({ category, personas }: CategoryFilterProps) {
     const decodedCategory = decodeURIComponent(category);
 
-    // Filter personas by category
-    const matchingPersonas = PERSONAS.filter(
-        p => p.meta.category.toLowerCase() === decodedCategory.toLowerCase()
-    );
+    // Personas are already filtered by category from the server
+    const matchingPersonas = personas;
 
     if (matchingPersonas.length === 0) {
         return null;

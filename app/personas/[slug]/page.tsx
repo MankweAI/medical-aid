@@ -7,8 +7,7 @@ import StrategyFooter from '@/components/StrategyFooter';
 import AppHeader from '@/components/AppHeader';
 import TrustTicker from '@/components/TrustTicker';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { PERSONAS } from '@/data/personas';
-import { PLANS } from '@/data/plans';
+import { getPersonas, getPersonaBySlug, getPlans, getPlanById } from '@/utils/db';
 import { Persona } from '@/utils/persona';
 import { Plan } from '@/utils/types';
 import { PricingEngine } from '@/utils/engine';
@@ -107,8 +106,10 @@ function getSmartPivot(currentPlan: Plan, currentPersona: Persona, allPlans: Pla
 // 1. DYNAMIC METADATA
 export async function generateMetadata(props: Props): Promise<Metadata> {
     const params = await props.params;
-    // Resolve persona by V1 or V2 slug
-    const persona = resolvePersona(params.slug);
+
+    // Fetch all personas to resolve by V1 or V2 slug
+    const allPersonas = await getPersonas();
+    const persona = resolvePersona(params.slug, allPersonas);
 
     if (!persona) return { title: 'Not Found | Intellihealth' };
 
@@ -143,17 +144,23 @@ export default async function PersonaPage(props: Props) {
     const params = await props.params;
     const { slug } = params;
 
+    // Fetch all data from database
+    const [allPersonas, allPlans] = await Promise.all([
+        getPersonas(),
+        getPlans()
+    ]);
+
     // Resolve persona by V1 or V2 slug (supports both URL formats)
-    const persona = resolvePersona(slug);
+    const persona = resolvePersona(slug, allPersonas);
 
     if (!persona) notFound();
 
-    // Fetch Target Plan from local data
+    // Fetch Target Plan from database
     const targetId = persona.actuarial_logic?.target_plan_id;
     let plan: Plan | undefined;
 
     if (targetId) {
-        plan = PLANS.find(p => p.id === targetId);
+        plan = allPlans.find(p => p.id === targetId);
     }
 
     // Calculate Pivots if plan exists
@@ -161,8 +168,8 @@ export default async function PersonaPage(props: Props) {
     let pivots: Pivots = { cheaper: null, richer: null };
 
     if (plan) {
-        // Use local data for all plans and personas
-        pivots = getSmartPivot(plan, persona, PLANS, PERSONAS);
+        // Use database data for all plans and personas
+        pivots = getSmartPivot(plan, persona, allPlans, allPersonas);
     }
 
     // Trust messages for the ticker
@@ -216,7 +223,7 @@ export default async function PersonaPage(props: Props) {
                 {/* THE ACTUARIAL FOOTNOTES */}
                 {plan && (
                     <div className="px-4 pb-8">
-                        <StrategyFooter plan={plan} persona={persona} pivots={pivots} allPersonas={PERSONAS} />
+                        <StrategyFooter plan={plan} persona={persona} pivots={pivots} allPersonas={allPersonas} />
                     </div>
                 )}
 

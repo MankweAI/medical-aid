@@ -8,7 +8,6 @@
  * The mapping is derived from the redirect configuration in next.config.ts
  */
 
-import { PERSONAS } from '@/data/personas';
 import { Persona } from './persona';
 
 /**
@@ -298,8 +297,10 @@ export function isV2Slug(slug: string): boolean {
 /**
  * Resolve a persona by either V1 or V2 slug
  * This ensures the application works regardless of which URL format is used
+ * @param slug - The slug to resolve (V1 or V2 format)
+ * @param personas - Array of personas to search in (required)
  */
-export function resolvePersona(slug: string, personas: Persona[] = PERSONAS): Persona | undefined {
+export function resolvePersona(slug: string, personas: Persona[]): Persona | undefined {
     // First try exact match on V1 slug (stored in persona.slug)
     let persona = personas.find(p => p.slug === slug);
 
@@ -325,7 +326,9 @@ export function getAllV2Slugs(): string[] {
 
 /**
  * Validate that a slug exists in either format
+ * @param slug - The slug to validate
+ * @param personas - Array of personas to search in (required)
  */
-export function isValidSlug(slug: string, personas: Persona[] = PERSONAS): boolean {
+export function isValidSlug(slug: string, personas: Persona[]): boolean {
     return resolvePersona(slug, personas) !== undefined;
 }

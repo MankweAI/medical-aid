@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { PERSONAS } from '@/data/personas';
+import { getPersonas } from '@/utils/db';
 import { getV2Slug } from '@/utils/slug-utils';
 
 const GLOBAL_LAUNCH_DATE = new Date('2025-10-01');
@@ -16,8 +16,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 1,
     }));
 
+    // Fetch personas from database
+    const personas = await getPersonas();
+
     // Generate persona routes using V2 slugs for SEO
-    const personaRoutes = PERSONAS.map((persona) => {
+    const personaRoutes = personas.map((persona) => {
         const v2Slug = getV2Slug(persona.slug);
         return {
             url: `${baseUrl}/personas/${v2Slug}`,

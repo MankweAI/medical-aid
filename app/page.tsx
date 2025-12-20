@@ -3,6 +3,7 @@ import AppHeader from '@/components/AppHeader';
 import HomeHero from '@/components/home/HomeHero';
 import DailyInsight from '@/components/DailyInsight';
 import CategoryFilter from '@/components/CategoryFilter';
+import { getPersonasByCategory } from '@/utils/db';
 
 export const metadata: Metadata = {
   title: 'Intellihealth | Find Your Perfect Medical Aid',
@@ -45,11 +46,14 @@ export default async function AppHome({ searchParams }: HomePageProps) {
         {/* HERO CONTENT CONTAINER */}
         <div className="relative z-10 h-full pt-32 px-4 container mx-auto max-w-6xl flex flex-col">
           {/* CATEGORY FILTER - Positioned relative to hero text */}
-          {categoryFilter && (
-            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-              <CategoryFilter category={categoryFilter} />
-            </div>
-          )}
+          {categoryFilter && (async () => {
+            const personas = await getPersonasByCategory(categoryFilter);
+            return (
+              <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
+                <CategoryFilter category={categoryFilter} personas={personas} />
+              </div>
+            );
+          })()}
 
           {/* CENTRAL INTERACTION LAYER */}
           <div className="flex-1 flex flex-col justify-center pb-24">

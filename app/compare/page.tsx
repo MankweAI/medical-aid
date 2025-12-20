@@ -1,6 +1,5 @@
-import { PLANS } from '@/data/plans';
+import { getPlansByIds } from '@/utils/db';
 import CompareClient from './CompareClient';
-import { Plan } from '@/utils/types';
 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ plans?: string }> }) {
     const { plans } = await searchParams;
@@ -10,8 +9,8 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
         return <CompareClient plans={[]} />;
     }
 
-    // Use local data instead of Supabase
-    const resolvedPlans = PLANS.filter(p => planIds.includes(p.id));
+    // Fetch plans from database
+    const resolvedPlans = await getPlansByIds(planIds);
 
     return <CompareClient plans={resolvedPlans} />;
 }
