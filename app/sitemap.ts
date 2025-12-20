@@ -1,30 +1,31 @@
+// app/sitemap.ts
+
 import { MetadataRoute } from 'next';
 import { getPersonas } from '@/utils/db';
 import { getV2Slug } from '@/utils/slug-utils';
 
-const GLOBAL_LAUNCH_DATE = new Date('2025-10-01');
+// Update this to the actual date of your "Big Migration"
+const MIGRATION_DATE = new Date(); // Use current date
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    // 🔴 UPDATE THIS LINE
     const baseUrl = 'https://www.intellihealth.co.za';
 
-    // Use local data instead of Supabase
     const staticRoutes = ['', '/about', '/methodology', '/disclaimer', '/privacy'].map((route) => ({
         url: `${baseUrl}${route}`,
-        lastModified: GLOBAL_LAUNCH_DATE,
+        lastModified: MIGRATION_DATE, // Updated signal
         changeFrequency: 'monthly' as const,
         priority: 1,
     }));
 
-    // Fetch personas from database
     const personas = await getPersonas();
 
-    // Generate persona routes using V2 slugs for SEO
     const personaRoutes = personas.map((persona) => {
         const v2Slug = getV2Slug(persona.slug);
         return {
             url: `${baseUrl}/personas/${v2Slug}`,
-            lastModified: GLOBAL_LAUNCH_DATE,
+            // If your DB tracks updates, use persona.updatedAt. 
+            // Otherwise, MIGRATION_DATE is perfect for this structural change.
+            lastModified: persona.updatedAt ? new Date(persona.updatedAt) : MIGRATION_DATE,
             changeFrequency: 'weekly' as const,
             priority: 0.9,
         };
