@@ -1,3 +1,4 @@
+// app/personas/[slug]/page.tsx
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import WelcomeStatement from '@/components/WelcomeStatement';
@@ -14,7 +15,6 @@ import { PricingEngine } from '@/utils/engine';
 import { getV2Slug, resolvePersona } from '@/utils/slug-utils';
 import { generateAllSchemas } from '@/utils/seo-schema';
 
-// Define the shape of our pivot data here or import from StrategyFooter if exported
 interface PivotItem {
     plan: Plan;
     persona: Persona;
@@ -40,27 +40,17 @@ const COMPATIBILITY_MAP: Record<string, string[]> = {
     'Budget': ['Student', 'Family', 'Savings']
 };
 
-// Logic to find upsell/downsell options
 function getSmartPivot(currentPlan: Plan, currentPersona: Persona, allPlans: Plan[], allPersonas: Persona[]): Pivots {
-
-    // Helper: Find best persona for a plan ID
     const findBestPersona = (targetPlanId: string) => {
         const candidates = allPersonas.filter(p => p.actuarial_logic?.target_plan_id === targetPlanId);
-
-        // 1. Exact Category Match
         const exact = candidates.find(p => p.meta.category === currentPersona.meta.category);
         if (exact) return exact;
-
-        // 2. Compatible Match
         const allowedCategories = COMPATIBILITY_MAP[currentPersona.meta.category] || [];
         const compatible = candidates.find(p => allowedCategories.includes(p.meta.category));
         if (compatible) return compatible;
-
-        // 3. Any Match
         return candidates.length > 0 ? candidates[0] : null;
     };
 
-    // Calculate Real-World Cost for sorting
     const calculatedLadder = allPlans.map(p => {
         const financials = PricingEngine.calculateProfile(
             p.contributions[0],
@@ -74,23 +64,19 @@ function getSmartPivot(currentPlan: Plan, currentPersona: Persona, allPlans: Pla
         };
     });
 
-    // Filter Invalid Candidates
     const validLadder = calculatedLadder.filter(item =>
         item.plan.id !== currentPlan.id &&
-        item.linkedPersona !== null // Must have a persona to link to
+        item.linkedPersona !== null
     );
 
-    // Sort by Price
     validLadder.sort((a, b) => a.realCost - b.realCost);
 
-    // Find Pivot Points relative to current plan's cost
     const currentCost = PricingEngine.calculateProfile(
         currentPlan.contributions[0],
         currentPersona.defaults.family_composition,
         currentPersona.defaults.income
     ).monthlyPremium;
 
-    // Find where the current plan fits in the ladder
     let insertionIndex = validLadder.findIndex(item => item.realCost >= currentCost);
     if (insertionIndex === -1) insertionIndex = validLadder.length;
 
@@ -103,17 +89,13 @@ function getSmartPivot(currentPlan: Plan, currentPersona: Persona, allPlans: Pla
     };
 }
 
-// 1. DYNAMIC METADATA
 export async function generateMetadata(props: Props): Promise<Metadata> {
     const params = await props.params;
-
-    // Fetch all personas to resolve by V1 or V2 slug
     const allPersonas = await getPersonas();
     const persona = resolvePersona(params.slug, allPersonas);
 
     if (!persona) return { title: 'Not Found | Intellihealth' };
 
-    // Always use V2 slug for canonical URL
     const canonicalSlug = getV2Slug(persona.slug);
 
     return {
@@ -126,7 +108,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
             'script:ld+json': JSON.stringify({
                 '@context': 'https://schema.org',
                 '@type': 'FinanceApplication',
-                'name': `Intellihealth Calculator: ${persona.meta.title}`,
+                'name': `Intellihealth Strategy: ${persona.meta.title}`,
                 'applicationCategory': 'Finance',
                 'operatingSystem': 'Web',
                 'offers': {
@@ -139,23 +121,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     };
 }
 
-// 2. PAGE COMPONENT
 export default async function PersonaPage(props: Props) {
     const params = await props.params;
     const { slug } = params;
 
-    // Fetch all data from database
     const [allPersonas, allPlans] = await Promise.all([
         getPersonas(),
         getPlans()
     ]);
 
-    // Resolve persona by V1 or V2 slug (supports both URL formats)
     const persona = resolvePersona(slug, allPersonas);
-
     if (!persona) notFound();
 
-    // Fetch Target Plan from database
     const targetId = persona.actuarial_logic?.target_plan_id;
     let plan: Plan | undefined;
 
@@ -163,16 +140,11 @@ export default async function PersonaPage(props: Props) {
         plan = allPlans.find(p => p.id === targetId);
     }
 
-    // Calculate Pivots if plan exists
-    // Explicitly typed as Pivots so it accepts non-null values later
     let pivots: Pivots = { cheaper: null, richer: null };
-
     if (plan) {
-        // Use database data for all plans and personas
         pivots = getSmartPivot(plan, persona, allPlans, allPersonas);
     }
 
-    // Trust messages for the ticker
     const trustMessages = [
         `${persona.meta.title} strategy verified`,
         `Covering ${persona.defaults.family_composition.adult + persona.defaults.family_composition.child} family members`,
@@ -180,16 +152,11 @@ export default async function PersonaPage(props: Props) {
     ];
 
     const isClinicalFirst = persona.ui_priority === 'Clinical_First';
-
-    // Generate canonical URL for schemas
     const canonicalUrl = `https://intellihealth.co.za/personas/${getV2Slug(persona.slug)}`;
-
-    // Generate JSON-LD schemas
     const schemas = plan ? generateAllSchemas(plan, persona, canonicalUrl) : [];
 
     return (
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden animate-page-enter">
-            {/* JSON-LD Structured Data */}
             {schemas.map((schema, index) => (
                 <script
                     key={index}
@@ -201,40 +168,28 @@ export default async function PersonaPage(props: Props) {
             <AppHeader />
 
             <section className="relative z-10 pt-16 px-4 sm:px-6 pb-2">
-                {/* Semantic Breadcrumb Navigation */}
                 <Breadcrumbs persona={persona} />
-
                 <WelcomeStatement persona={persona} />
-
-                {/* TrustTicker appears high for Clinical personas */}
                 {isClinicalFirst && (
                     <div className="mb-4">
                         <TrustTicker messages={trustMessages} />
                     </div>
                 )}
-
                 <ControlPanel />
             </section>
 
-            {/* THE ONE TRUE ANSWER */}
             <section className="relative z-10 max-w-2xl mx-auto">
                 {plan && <SinglePlanHero persona={persona} plan={plan} />}
-
-                {/* THE ACTUARIAL FOOTNOTES */}
                 {plan && (
                     <div className="px-4 pb-8">
                         <StrategyFooter plan={plan} persona={persona} pivots={pivots} allPersonas={allPersonas} />
                     </div>
                 )}
-
-                {/* TrustTicker appears lower for Budget personas */}
                 {!isClinicalFirst && (
                     <div className="px-4 pb-4">
                         <TrustTicker messages={trustMessages} />
                     </div>
                 )}
-
-
             </section>
         </main>
     );

@@ -1,3 +1,4 @@
+// utils/seo-schema.ts
 import { Plan } from '@/utils/types';
 import { Persona } from '@/utils/persona';
 import { ContentGenerator } from '@/utils/seo-content';
@@ -25,40 +26,62 @@ export function generateFAQSchema(plan: Plan, persona: Persona) {
 }
 
 /**
- * Generates MedicalWebPage JSON-LD schema
+ * Generates WebPage JSON-LD schema with Insurance context
+ * Replaces MedicalWebPage to emphasize financial/actuarial advice over clinical advice.
  */
-export function generateMedicalWebPageSchema(persona: Persona, canonicalUrl: string) {
-    // Use V2 fields with fallbacks
+export function generateInsuranceWebPageSchema(persona: Persona, canonicalUrl: string) {
     const name = persona.display_title || persona.meta.marketing_heading || persona.meta.title;
     const description = persona.human_insight || persona.actuarial_logic?.mathematical_basis || persona.meta.description;
 
-    // Map category to MedicalAudience
-    const audienceMap: Record<string, string> = {
-        'Chronic': 'Patient',
-        'Senior': 'Patient',
-        'Family': 'Patient',
-        'Maternity': 'Patient',
-        'Budget': 'Patient',
-        'Student': 'Patient',
-        'Savings': 'Patient'
-    };
-
     return {
         '@context': 'https://schema.org',
-        '@type': 'MedicalWebPage',
+        '@type': 'WebPage',
         'name': name,
         'description': description,
         'url': canonicalUrl,
         'lastReviewed': new Date().toISOString().split('T')[0],
-        'audience': {
-            '@type': 'MedicalAudience',
-            'audienceType': audienceMap[persona.meta.category] || 'Patient'
-        },
-        'specialty': 'PublicHealth',
-        'about': {
+        'mainEntity': {
             '@type': 'HealthInsurancePlan',
-            'name': `Medical Aid Strategy for ${persona.meta.category} profiles`
+            'name': `Medical Aid Strategy for ${persona.meta.category} profiles`,
+            'description': `Actuarial analysis and strategy for ${persona.meta.category} medical aid users.`
+        },
+        'about': {
+            '@type': 'FinancialService',
+            'name': 'Intellihealth Virtual Actuary'
         }
+    };
+}
+
+/**
+ * Generates BreadcrumbList JSON-LD schema
+ */
+export function generateBreadcrumbSchema(persona: Persona, canonicalUrl: string) {
+    const category = persona.meta.category;
+    const displayTitle = persona.display_title || persona.meta.title;
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+            {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': 'Home',
+                'item': 'https://intellihealth.co.za/'
+            },
+            {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': category,
+                'item': `https://intellihealth.co.za/?category=${encodeURIComponent(category)}`
+            },
+            {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': displayTitle,
+                'item': canonicalUrl
+            }
+        ]
     };
 }
 
@@ -99,8 +122,9 @@ export function generateAllSchemas(plan: Plan, persona: Persona, canonicalUrl: s
     const faqSchema = generateFAQSchema(plan, persona);
     if (faqSchema) schemas.push(faqSchema);
 
-    schemas.push(generateMedicalWebPageSchema(persona, canonicalUrl));
+    schemas.push(generateInsuranceWebPageSchema(persona, canonicalUrl));
     schemas.push(generateProductSchema(plan, persona, canonicalUrl));
+    schemas.push(generateBreadcrumbSchema(persona, canonicalUrl));
 
     return schemas;
 }
