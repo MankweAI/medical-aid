@@ -14,7 +14,7 @@
  *   1 - Missing redirects detected (fails CI/build)
  */
 
-import { PERSONAS } from '../data/personas-backup';
+import { PERSONAS } from '../data/personas';
 import { V1_TO_V2_SLUG_MAP } from '../utils/slug-utils';
 
 interface ValidationResult {

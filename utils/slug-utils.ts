@@ -8,7 +8,7 @@
  * The mapping is derived from the redirect configuration in next.config.ts
  */
 
-import { PERSONAS } from '@/data/personas-backup';
+import { PERSONAS } from '@/data/personas';
 import { Persona } from './persona';
 
 /**

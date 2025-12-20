@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { PERSONAS } from '@/data/personas-backup';
+import { PERSONAS } from '@/data/personas';
 import { getV2Slug } from '@/utils/slug-utils';
 import { X, ChevronRight, Filter, Users } from 'lucide-react';
 import clsx from 'clsx';
