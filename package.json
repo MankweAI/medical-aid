@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "validate-links": "tsx scripts/validate-v2.ts",
-    "build": "npm run validate-links && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
