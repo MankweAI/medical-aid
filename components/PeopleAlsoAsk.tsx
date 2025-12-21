@@ -8,30 +8,10 @@ interface FAQ {
 export default function PeopleAlsoAsk({ questions }: { questions: FAQ[] }) {
     if (!questions || questions.length === 0) return null;
 
-    // Generate JSON-LD for Google Rich Results
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        'mainEntity': questions.map(q => ({
-            '@type': 'Question',
-            'name': q.question,
-            'acceptedAnswer': {
-                '@type': 'Answer',
-                'text': q.answer
-            }
-        }))
-    };
+    // Note: FAQPage JSON-LD schema is generated centrally in seo-schema.ts
 
     return (
         <section className="my-12 px-2">
-            {/* Inject Schema */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-
-
-
             <div className="space-y-3">
                 {questions.map((faq, i) => (
                     <details key={i} className="group bg-white rounded-2xl border border-slate-100 open:shadow-sm open:border-blue-100 transition-all duration-300">
