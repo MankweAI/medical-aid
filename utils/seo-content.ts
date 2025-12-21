@@ -18,22 +18,34 @@ export const ContentGenerator = {
 
     generateFAQ: (plan: Plan, persona: Persona) => {
         const sourceSuffix = " (Verified via Actuarial Strategy Logic 2026)";
+        const personaContext = persona.meta.title || persona.meta.category;
+        const slugRef = persona.slug.slice(-8); // Unique identifier suffix
 
+        // If plan has custom FAQs, make them persona-unique by appending context
         if (plan.faq && plan.faq.length > 0) {
-            return plan.faq;
+            return plan.faq.map((faq, index) => ({
+                question: `${faq.question} [${personaContext}]`,
+                answer: `${faq.answer} Strategy reference: ${slugRef}.`
+            }));
         }
+
+        // Generate persona-unique fallback FAQs
         return [
             {
-                question: `Why is ${plan.identity.plan_name} recommended for ${persona.meta.category}?`,
-                answer: `${persona.actuarial_logic?.mathematical_basis}${sourceSuffix}` || `This plan offers the optimal balance of benefits vs premium for the ${persona.meta.category} profile.${sourceSuffix}`
+                question: `Why is ${plan.identity.plan_name} the best match for ${personaContext}?`,
+                answer: `${persona.actuarial_logic?.mathematical_basis || `This plan offers the optimal balance of benefits vs premium for the ${persona.meta.category} profile.`}${sourceSuffix} [Strategy: ${slugRef}]`
             },
             {
-                question: "What happens if I use a non-network hospital?",
-                answer: plan.network_restriction === 'Any' ? `Nothing. This plan allows you to use any private hospital in South Africa without penalty.${sourceSuffix}` : `You will be liable for a co-payment (typically R${plan.procedure_copays.admission_penalty_non_network || '15,000'}) unless it is a life-threatening emergency.${sourceSuffix}`
+                question: `What are the hospital rules for ${personaContext} on ${plan.identity.plan_name}?`,
+                answer: plan.network_restriction === 'Any'
+                    ? `${personaContext} can use any private hospital in South Africa without penalty on this plan.${sourceSuffix}`
+                    : `${personaContext} must use network hospitals. Non-network admissions incur a co-payment of approximately R${plan.procedure_copays.admission_penalty_non_network || '15,000'} unless it is a life-threatening emergency.${sourceSuffix}`
             },
             {
-                question: "Is maternity covered on this plan?",
-                answer: plan.defined_baskets.maternity.antenatal_consults > 0 ? `Yes. It includes a separate 'Risk Benefit' for ${plan.defined_baskets.maternity.antenatal_consults} antenatal visits.${sourceSuffix}` : `No specific maternity basket. All pregnancy-related costs will be paid from your Savings Account.${sourceSuffix}`
+                question: `Does ${plan.identity.plan_name} cover maternity for ${persona.meta.category} members?`,
+                answer: plan.defined_baskets.maternity.antenatal_consults > 0
+                    ? `Yes. ${personaContext} receives a separate 'Risk Benefit' covering ${plan.defined_baskets.maternity.antenatal_consults} antenatal visits.${sourceSuffix}`
+                    : `No dedicated maternity basket for ${personaContext}. Pregnancy-related costs are paid from the Medical Savings Account.${sourceSuffix}`
             }
         ];
     }
