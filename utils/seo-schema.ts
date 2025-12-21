@@ -39,7 +39,8 @@ export function generateInsuranceWebPageSchema(persona: Persona, canonicalUrl: s
         'description': description,
         'url': canonicalUrl,
         'lastReviewed': new Date().toISOString().split('T')[0],
-        'mainEntity': {
+        // Note: mainEntity removed to avoid conflict with FAQPage schema's mainEntity
+        'about': {
             '@type': 'HealthInsurancePlan',
             'name': `Medical Aid Strategy: ${persona.meta.category}`,
             'description': `Actuarial optimization strategy for ${persona.meta.category} medical aid profiles.`
