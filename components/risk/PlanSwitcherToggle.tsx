@@ -1,76 +1,85 @@
 'use client';
-import React from 'react';
-import { useRouter } from 'next/navigation';
 
-interface ToggleProps {
-    currentPlanId: string;
-    procedureId: string;
+import React, { useState } from 'react';
+import { ChevronDown, ArrowRight, Wallet } from 'lucide-react';
+import Link from 'next/link';
+import clsx from 'clsx';
+
+interface PlanOption {
+    name: string;
+    slug: string;
+    liability: number;
+    isCurrent: boolean;
 }
 
-export function PlanSwitcherToggle({ currentPlanId, procedureId }: ToggleProps) {
-    const router = useRouter();
-    const isTrapPlan = currentPlanId.includes('smart');
-    const targetPlan = isTrapPlan ? 'classic-saver' : 'active-smart';
+interface Props {
+    currentPlanName: string;
+    procedureSlug: string;
+    options: PlanOption[];
+}
+
+export default function PlanSwitcherToggle({ currentPlanName, procedureSlug, options }: Props) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const formatZAR = (n: number) =>
+        new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(n);
 
     return (
-        <div className="mt-8">
+        <div className="relative w-full mt-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            {/* THE TOGGLE BUTTON */}
             <button
-                onClick={() => router.push(`/risk/${procedureId}/${targetPlan}`)}
-                className={`w-full group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 ${isTrapPlan
-                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-lg shadow-emerald-500/20'
-                        : 'bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 shadow-lg shadow-slate-500/20'
-                    }`}
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between px-5 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl hover:bg-white/20 transition-all group"
             >
-                {/* Background Decoration */}
-                <div className="absolute inset-0 opacity-20">
-                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full blur-2xl" />
+                <div className="text-left">
+                    <p className="text-[9px] font-black text-emerald-200 uppercase tracking-widest leading-none mb-1">Current Strategy</p>
+                    <p className="text-sm font-bold text-white">{currentPlanName}</p>
                 </div>
-
-                <div className="relative flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        {/* Icon */}
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isTrapPlan
-                                ? 'bg-white/20 text-white'
-                                : 'bg-white/10 text-white'
-                            }`}>
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                            </svg>
-                        </div>
-
-                        {/* Text */}
-                        <div className="text-left">
-                            <div className="text-white font-bold text-lg">
-                                {isTrapPlan ? 'Switch Plan to Erase Bill' : 'See Risk on Smart Plan'}
-                            </div>
-                            <div className={`text-sm ${isTrapPlan ? 'text-emerald-100' : 'text-slate-300'}`}>
-                                {isTrapPlan
-                                    ? 'Compare with Classic Saver (no deductible)'
-                                    : 'See why Smart plans have hidden costs'
-                                }
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Arrow */}
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1 ${isTrapPlan ? 'bg-white/20' : 'bg-white/10'
-                        }`}>
-                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
+                <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black text-white/60 uppercase tracking-tighter">Compare Plans</span>
+                    <ChevronDown className={clsx("w-4 h-4 text-white transition-transform duration-300", isOpen && "rotate-180")} />
                 </div>
-
-                {/* Savings Preview (only on trap plan) */}
-                {isTrapPlan && (
-                    <div className="relative mt-4 pt-4 border-t border-white/20 flex items-center justify-between text-sm">
-                        <span className="text-emerald-100">Potential savings:</span>
-                        <span className="text-white font-bold bg-white/20 px-3 py-1 rounded-full">
-                            Full deductible eliminated
-                        </span>
-                    </div>
-                )}
             </button>
+
+            {/* THE DROPDOWN: FINANCIAL IMPLICATIONS */}
+            {isOpen && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden z-[100] animate-in zoom-in-95 duration-200">
+                    <div className="p-4 bg-slate-50 border-b border-slate-100">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Plan Impact Audit</p>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto no-scrollbar">
+                        {options.map((opt) => (
+                            <Link
+                                key={opt.slug}
+                                href={`/risk/${procedureSlug}/${opt.slug}`}
+                                className={clsx(
+                                    "flex items-center justify-between p-5 hover:bg-emerald-50 transition-colors border-b border-slate-50 last:border-0 group",
+                                    opt.isCurrent && "bg-emerald-50/50 pointer-events-none"
+                                )}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className={clsx(
+                                        "p-2 rounded-xl",
+                                        opt.isCurrent ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-400 group-hover:bg-white"
+                                    )}>
+                                        <Wallet className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-slate-800 leading-none mb-1">{opt.name}</p>
+                                        <p className={clsx(
+                                            "text-[10px] font-black uppercase tracking-tight",
+                                            opt.liability === 0 ? "text-emerald-600" : "text-rose-500"
+                                        )}>
+                                            {opt.liability === 0 ? "100% Covered" : `R${opt.liability.toLocaleString()} Shortfall`}
+                                        </p>
+                                    </div>
+                                </div>
+                                {!opt.isCurrent && <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

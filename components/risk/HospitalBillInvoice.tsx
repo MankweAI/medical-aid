@@ -1,155 +1,202 @@
+// components/risk/HospitalBillInvoice.tsx
 'use client';
-import React from 'react';
-import { Procedure, PlanDeductibleRule } from '@/data/procedures-2026';
 
-interface InvoiceProps {
-    procedure: Procedure;
-    plan: PlanDeductibleRule;
+import React, { useState } from 'react';
+import {
+    ShieldCheck,
+    Receipt,
+    ArrowDownRight,
+    ChevronDown,
+    ChevronRight,
+    Activity,
+    Stethoscope,
+    Scissors,
+    ArrowRight
+} from 'lucide-react';
+import clsx from 'clsx';
+import Link from 'next/link';
+
+interface PlanOption {
+    name: string;
+    slug: string;
     liability: number;
-    warning?: string;
+    isCurrent: boolean;
 }
 
-export function HospitalBillInvoice({ procedure, plan, liability, warning }: InvoiceProps) {
+interface InvoiceProps {
+    procedure: any;
+    plan: any;
+    liability: number;
+    planOptions: PlanOption[];
+    procedureSlug: string;
+}
+
+const formatZAR = (n: number) =>
+    new Intl.NumberFormat('en-ZA', {
+        style: 'currency',
+        currency: 'ZAR',
+        maximumFractionDigits: 0
+    }).format(n);
+
+export function HospitalBillInvoice({ procedure, plan, liability, planOptions, procedureSlug }: InvoiceProps) {
     const isClean = liability === 0;
+    const [expandedRisk, setExpandedRisk] = useState<string | null>(null);
+    const [isPlanSwitcherOpen, setIsPlanSwitcherOpen] = useState(false);
+
+    const audit = React.useMemo(() => ({
+        id: `AUTH-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+        base: procedure?.base_cost_estimate ?? 0,
+        scheme: Math.max(0, (procedure?.base_cost_estimate ?? 0) - liability),
+        risks: [
+            { id: '1', title: "Surgeon's Fee Gap", risk: "Critical", detail: "Specialists typically charge 300% of scheme rates. Gap cover is essential here.", icon: Scissors },
+            { id: '2', title: "Anaesthetist Billing", risk: "High", detail: "Often billed outside of hospital authorization. Verify payment arrangements.", icon: Stethoscope },
+            { id: '3', title: "Internal Prosthetics", risk: "Variable", detail: "Brand-specific limits (e.g. R30k for joints) may apply.", icon: Activity }
+        ]
+    }), [procedure, liability]);
 
     return (
-        <div className="relative">
-            {/* PAPER-STYLE INVOICE CARD */}
-            <div className={`relative overflow-hidden rounded-2xl shadow-xl ${isClean
-                    ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200'
-                    : 'bg-gradient-to-br from-white to-slate-50 border border-slate-200'
-                }`}>
+        <div className="px-4">
+            <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
 
-                {/* PERFORATED TOP EDGE */}
-                <div className="absolute top-0 inset-x-0 h-3 bg-[repeating-linear-gradient(90deg,transparent,transparent_8px,_var(--color)_8px,_var(--color)_16px)]"
-                    style={{ '--color': isClean ? '#D1FAE5' : '#E2E8F0' } as React.CSSProperties}
-                />
-
-                {/* HEADER */}
-                <div className={`pt-6 pb-4 px-6 flex items-center justify-between border-b ${isClean ? 'border-emerald-200/50' : 'border-slate-200'
-                    }`}>
-                    <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isClean
-                                ? 'bg-emerald-500 text-white'
-                                : 'bg-slate-100 text-slate-600'
-                            }`}>
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
+                {/* 1. AUTHORITY HEADER */}
+                <div className="p-8 pb-6 flex justify-between items-start">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-emerald-600 mb-1">
+                            <ShieldCheck className="w-4 h-4 fill-emerald-50" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Verified Audit</span>
                         </div>
-                        <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                Pre-Admission Estimate
-                            </div>
-                            <div className="text-sm font-medium text-slate-600">
-                                2026 Rates
-                            </div>
-                        </div>
+                        <h1 className="text-3xl font-black text-slate-900 tracking-tighter leading-none">
+                            Financial Clearance
+                        </h1>
                     </div>
-                    <div className="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">
-                        #EST-2026
+                    <div className="text-right">
+                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Audit Ref</p>
+                        <p className="text-xs font-mono font-bold text-slate-500">{audit.id}</p>
                     </div>
                 </div>
 
-                {/* LINE ITEMS */}
-                <div className="p-6 space-y-4">
-                    {/* Procedure */}
-                    <div className="flex justify-between items-center pb-4 border-b border-dashed border-slate-200">
-                        <div className="flex items-center gap-3">
-                            <span className="text-xl">🏥</span>
-                            <div>
-                                <span className="text-slate-900 font-medium">{procedure.label}</span>
-                                <span className="block text-xs text-slate-400">{procedure.medical_term}</span>
+                {/* 2. PRIMARY LEDGER: VERTICAL VALUE STACK */}
+                <div className="px-8 space-y-4">
+
+                    {/* HOSPITAL BASE RATE BOX */}
+                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col gap-3 transition-all">
+                        <div className="flex items-center gap-2">
+                            <Receipt className="w-4 h-4 text-slate-400" />
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Hospital Base Rate</p>
+                        </div>
+                        <div className="flex flex-col">
+                            <p className="text-sm font-bold text-slate-700 leading-tight mb-1">{procedure?.label ?? 'Procedure'}</p>
+                            {/* LARGE FONT AMOUNT BELOW TITLE */}
+                            <p className="text-3xl font-black text-slate-900 tracking-tight">
+                                {formatZAR(audit.base)}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* SCHEME ROW: THE DROPDOWN TRIGGER (VERTICAL VALUE STACK) */}
+                    <div className="space-y-2">
+                        <button
+                            onClick={() => setIsPlanSwitcherOpen(!isPlanSwitcherOpen)}
+                            className="w-full p-6 bg-emerald-50/50 rounded-2xl border border-emerald-100/50 hover:bg-emerald-100/50 transition-all group flex flex-col gap-3"
+                        >
+                            <div className="w-full flex justify-between items-start">
+                                <div className="flex items-center gap-2">
+                                    <ArrowDownRight className={clsx("w-4 h-4 text-emerald-600 transition-transform", isPlanSwitcherOpen && "rotate-90")} />
+                                    <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Scheme Settlement</p>
+                                </div>
+                                <ChevronDown className={clsx("w-4 h-4 text-emerald-400 transition-transform duration-300", isPlanSwitcherOpen && "rotate-180")} />
                             </div>
-                        </div>
-                        <span className="font-mono font-bold text-slate-900">
-                            R{procedure.base_cost_estimate.toLocaleString()}
-                        </span>
-                    </div>
 
-                    {/* Network Compliance */}
-                    <div className="flex justify-between items-center pb-4 border-b border-dashed border-slate-200">
-                        <div className="flex items-center gap-3">
-                            <span className="text-xl">📍</span>
-                            <div>
-                                <span className="text-slate-700">Network Compliance</span>
-                                <span className="ml-2 text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold uppercase">
-                                    Required
-                                </span>
+                            <div className="text-left flex flex-col">
+                                <p className="text-sm font-bold text-emerald-800 leading-tight mb-1">{plan?.plan_name ?? 'Scheme Cover'}</p>
+                                {/* LARGE FONT AMOUNT BELOW TITLE */}
+                                <p className="text-3xl font-black text-emerald-600 tracking-tight">
+                                    - {formatZAR(audit.scheme)}
+                                </p>
                             </div>
-                        </div>
-                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-                            ✓ Confirmed
-                        </span>
-                    </div>
+                        </button>
 
-                    {/* Scheme Coverage */}
-                    <div className="flex justify-between items-center pb-4 border-b border-dashed border-slate-200">
-                        <div className="flex items-center gap-3">
-                            <span className="text-xl">🛡️</span>
-                            <span className="text-slate-700">Scheme Rate Coverage</span>
-                        </div>
-                        <span className="font-mono font-bold text-emerald-600">
-                            -R{procedure.base_cost_estimate.toLocaleString()}
-                        </span>
+                        {/* PLAN SWITCHER DROPDOWN: SEO-FRIENDLY INTERLINKING */}
+                        {isPlanSwitcherOpen && (
+                            <div className="bg-white rounded-2xl border border-emerald-100 overflow-hidden shadow-lg animate-in slide-in-from-top-2 duration-200">
+                                <div className="p-3 bg-emerald-50/30 border-b border-emerald-50 text-center">
+                                    <p className="text-[8px] font-black text-emerald-600 uppercase tracking-[0.2em]">Compare Impact of other 2026 plans</p>
+                                </div>
+                                <div className="max-h-60 overflow-y-auto no-scrollbar">
+                                    {planOptions.filter(o => !o.isCurrent).map((opt) => (
+                                        <Link
+                                            key={opt.slug}
+                                            href={`/risk/${procedureSlug}/${opt.slug}`}
+                                            className="flex items-center justify-between p-4 hover:bg-emerald-50 transition-colors border-b border-slate-50 last:border-0 group"
+                                        >
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-700 leading-none mb-1">{opt.name}</p>
+                                                <p className={clsx("text-[9px] font-black uppercase tracking-tight", opt.liability === 0 ? "text-emerald-600" : "text-rose-500")}>
+                                                    {opt.liability === 0 ? "100% Covered" : `${formatZAR(opt.liability)} Shortfall`}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-xs font-black text-emerald-600 italic">-{formatZAR(audit.base - opt.liability)}</span>
+                                                <ArrowRight className="w-3 h-3 text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
+                </div>
 
-                    {/* TOTAL LIABILITY */}
-                    <div className={`flex justify-between items-center pt-4 p-4 -mx-4 rounded-xl ${isClean
-                            ? 'bg-emerald-100/50'
-                            : 'bg-gradient-to-r from-red-50 to-orange-50'
+                {/* 3. INTEGRATED GAP AUDIT: GROUNDING ANXIETY */}
+                <div className="px-8 mt-10 space-y-3">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] ml-2 mb-2">Technical Risk Points</p>
+                    {audit.risks.map((item) => (
+                        <div key={item.id} className="bg-slate-50/50 rounded-2xl border border-slate-100 overflow-hidden">
+                            <button
+                                onClick={() => setExpandedRisk(expandedRisk === item.id ? null : item.id)}
+                                className="w-full flex items-center justify-between p-4 text-left"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className={clsx("p-2 rounded-lg", expandedRisk === item.id ? "bg-emerald-100 text-emerald-600" : "bg-white text-slate-400")}>
+                                        <item.icon className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="block text-[11px] font-black text-slate-700 uppercase tracking-tight">{item.title}</span>
+                                        <span className="text-[9px] font-bold text-rose-500 uppercase tracking-tighter">{item.risk} Risk</span>
+                                    </div>
+                                </div>
+                                <ChevronRight className={clsx("w-4 h-4 transition-transform", expandedRisk === item.id && "rotate-90 text-emerald-500")} />
+                            </button>
+                            {expandedRisk === item.id && (
+                                <div className="px-4 pb-4 animate-in slide-in-from-top-1">
+                                    <p className="text-[11px] font-medium text-slate-500 leading-relaxed italic px-2 border-l-2 border-emerald-200 ml-4">
+                                        "{item.detail}"
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* 4. FINAL PAYOFF: THE EMOTIONAL RESOLUTION */}
+                <div className="p-8 pt-12">
+                    <div className={`p-8 rounded-[2rem] relative overflow-hidden shadow-2xl ${isClean ? 'bg-emerald-600 shadow-emerald-200' : 'bg-slate-900 shadow-slate-300'
                         }`}>
-                        <div className="flex items-center gap-3">
-                            <span className="text-2xl">{isClean ? '✅' : '💳'}</span>
-                            <div>
-                                <span className={`font-bold ${isClean ? 'text-emerald-800' : 'text-red-800'}`}>
-                                    Patient Liability
-                                </span>
-                                <span className="block text-xs text-slate-500">
-                                    Due at admission
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                            <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-2">Total Due Today</p>
+                            <h2 className="text-6xl font-black text-white tracking-tighter mb-4">{formatZAR(liability)}</h2>
+                            <div className="px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                <span className="text-[10px] font-black text-white uppercase tracking-widest">
+                                    {isClean ? 'Fully Cleared' : 'Shortfall Detected'}
                                 </span>
                             </div>
-                        </div>
-                        <div className={`text-3xl font-black ${isClean ? 'text-emerald-600' : 'text-red-600'}`}>
-                            R{liability.toLocaleString()}
                         </div>
                     </div>
                 </div>
 
-                {/* STATUS STAMP OVERLAY */}
-                {!isClean && (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                        <div className="relative -rotate-12">
-                            <div className="absolute inset-0 bg-red-500/10 blur-xl rounded-lg" />
-                            <div className="relative border-4 border-red-400/40 text-red-500/50 font-black text-3xl uppercase px-4 py-2 rounded-lg">
-                                Co-Payment
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* FOOTER STATUS BAR */}
-                <div className={`p-4 border-t flex items-center justify-center gap-2 ${isClean
-                        ? 'bg-emerald-500 text-white border-emerald-600'
-                        : 'bg-gradient-to-r from-red-500 to-orange-500 text-white border-red-400'
-                    }`}>
-                    {isClean ? (
-                        <>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            <span className="font-bold">FULLY COVERED</span>
-                            <span className="text-emerald-100 text-sm">(In-Network Provider)</span>
-                        </>
-                    ) : (
-                        <>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                            <span className="font-bold">{warning || 'Deductible Applies'}</span>
-                        </>
-                    )}
-                </div>
+                <p className="pb-8 text-center text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em]">
+                    Authorized for 2026 Benefit Year • Ref: {audit.id}
+                </p>
             </div>
         </div>
     );
