@@ -16,21 +16,21 @@ export const PROCEDURES = [
 ];
 
 export const PLAN_PROCEDURE_RULES: Record<string, any> = {
-    "discovery-active-smart-2026": {
+    "classic-smart": {
         base_deductible: 7750,
         scope_penalty: 5000,
         non_day_surgery_penalty: 7750,
         note: "R7,750 upfront for all elective admissions."[cite: 32, 124]
     },
-    "discovery-essential-dynamic-smart-2026": {
+    "essential-dynamic-smart": {
         base_deductible: 15300,
         note: "Highest procedural deductible in the Smart series."[cite: 178]
     },
-    "discovery-classic-delta-core-2026": {
+    "classic-delta-core": {
         non_network_penalty: 11100,
         note: "Admission to non-Delta hospital triggers this deductible."[cite: 163]
     },
-    "discovery-classic-smart-comprehensive-2026": {
+    "classic-smart-comprehensive": {
         non_network_penalty: 12650,
         note: "Using non-Smart hospitals on this plan carries high risk."[cite: 113]
     }

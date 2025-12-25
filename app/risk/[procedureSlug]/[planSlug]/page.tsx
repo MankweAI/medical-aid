@@ -1,4 +1,3 @@
-// app/risk/[procedureSlug]/[planSlug]/page.tsx
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
@@ -9,16 +8,20 @@ import AppHeader from '@/components/AppHeader';
 import { HospitalBillInvoice } from '@/components/risk/HospitalBillInvoice';
 import RiskAuditFaqs from '@/components/risk/RiskAuditFaqs';
 import ContactExpertTrigger from '@/components/risk/ContactExpertTrigger';
-import { PROCEDURES_2026, PLAN_DEDUCTIBLES_2026, getRiskProfile } from '../../../../data/procedures-2026';
+import { RiskEngine } from '@/lib/risk/engine';
+import { ProcedureRepository, PlanRuleRepository } from '@/lib/risk/repositories';
 
 interface PageProps {
     params: Promise<{ procedureSlug: string; planSlug: string; }>;
 }
 
 export async function generateStaticParams() {
+    const procedures = ProcedureRepository.getAll();
+    const plans = PlanRuleRepository.getAllRules();
     const paths: { procedureSlug: string; planSlug: string }[] = [];
-    PROCEDURES_2026.forEach(proc => {
-        PLAN_DEDUCTIBLES_2026.forEach(plan => {
+
+    procedures.forEach(proc => {
+        plans.forEach(plan => {
             paths.push({ procedureSlug: proc.id, planSlug: plan.plan_id });
         });
     });
@@ -27,51 +30,41 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { procedureSlug, planSlug } = await params;
-    const profile = getRiskProfile(procedureSlug, planSlug);
-    if (!profile) return { title: 'Audit Not Found' };
-    const status = profile.liability > 0 ? `R${profile.liability.toLocaleString()} Shortfall` : '100% Covered';
+    const audit = RiskEngine.generateFullAudit(procedureSlug, planSlug);
+
+    if (!audit) return { title: 'Audit Not Found' };
+
     return {
-        title: `${profile.procedure.label} on ${profile.plan.plan_name}: ${status} Audit`,
-        description: `Official 2026 coverage audit for ${profile.procedure.label} using ${profile.plan.plan_name} benefits.`,
+        title: `${audit.procedure.label} on ${audit.plan.plan_name}: ${audit.meta.coverage_percent}% Covered`,
+        description: `Official 2026 coverage audit. Base cost: R${audit.breakdown.base_rate}. Your liability: R${audit.liability}.`,
     };
 }
 
 export default async function RiskLandingPage({ params }: PageProps) {
     const { procedureSlug, planSlug } = await params;
-    const profile = getRiskProfile(procedureSlug, planSlug);
 
-    if (!profile) notFound();
+    // 1. GET THE CORE AUDIT
+    const audit = RiskEngine.generateFullAudit(procedureSlug, planSlug);
+    if (!audit) notFound();
 
-    const isTrap = profile.liability > 0;
-    const coveragePercentage = Math.round(
-        ((profile.procedure.base_cost_estimate - profile.liability) / profile.procedure.base_cost_estimate) * 100
-    );
+    // 2. GET THE COMPARISONS (For the Dropdown)
+    const planOptions = RiskEngine.compareAllPlans(procedureSlug, planSlug);
 
-    // ROBUST SEO: Calculate all plan implications for internal linking
-    const planOptions = PLAN_DEDUCTIBLES_2026.map(p => {
-        const tempProfile = getRiskProfile(procedureSlug, p.plan_id);
-        return {
-            name: p.plan_name,
-            slug: p.plan_id,
-            liability: tempProfile?.liability ?? 0,
-            isCurrent: p.plan_id === planSlug
-        };
-    });
-
+    // 3. DEFINE STATIC FAQs (Presentation Layer)
     const faqs = [
         {
             question: "Is this surgery covered in full?",
-            answer: isTrap
-                ? `No. Your plan requires an upfront payment of R${profile.liability.toLocaleString()} at the hospital.`
-                : `Yes. Your plan covers the hospital bill 100% if you use a network provider.`
+            answer: audit.meta.is_trap
+                ? `No. You must pay R${audit.liability.toLocaleString()} upfront.`
+                : `Yes. 100% covered at network providers.`
         },
         {
-            question: "What if I use a different hospital?",
-            answer: `If you go outside the ${profile.plan.network_type} network, your co-payment will increase by R${profile.plan.deductibles.penalty_non_network.toLocaleString()}.`
+            question: "What about the Anaesthetist?",
+            answer: "This audit covers the Hospital Account only. Anaesthetists bill separately."
         },
         {
-            question: "Are there any hidden doctor fees?",
-            answer: "Yes. Specialists often charge more than the medical aid rate. We recommend verifying your specific surgeon's rate before booking."
+            question: "Is this a confirmed quote?",
+            answer: "No. This is an actuarial estimate based on 2026 Scheme Rules."
         }
     ];
 
@@ -79,7 +72,7 @@ export default async function RiskLandingPage({ params }: PageProps) {
         <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden animate-page-enter">
             <AppHeader />
 
-            {/* MINIMALIST GAUGE HERO */}
+            {/* HERO SECTION */}
             <section className="relative h-[55vh] flex flex-col items-center justify-center px-6 overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-800 to-slate-50/50">
                 <div className="absolute top-20 left-6">
                     <Link href="/risk" className="p-2 bg-white/10 rounded-xl backdrop-blur-md border border-white/20 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest">
@@ -94,12 +87,12 @@ export default async function RiskLandingPage({ params }: PageProps) {
                             <circle
                                 cx="50" cy="50" r="45" fill="none" stroke="#10B981" strokeWidth="8"
                                 strokeDasharray="282.7"
-                                strokeDashoffset={282.7 - (282.7 * coveragePercentage) / 100}
+                                strokeDashoffset={282.7 - (282.7 * audit.meta.coverage_percent) / 100}
                                 strokeLinecap="round"
                             />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-                            <span className="text-5xl font-black tracking-tighter">{coveragePercentage}%</span>
+                            <span className="text-5xl font-black tracking-tighter">{audit.meta.coverage_percent}%</span>
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 leading-tight">Covered by Scheme</span>
                         </div>
                     </div>
@@ -107,12 +100,12 @@ export default async function RiskLandingPage({ params }: PageProps) {
                 </div>
             </section>
 
-            {/* AUDIT SECTION: The Integrated Invoice Ledger */}
+            {/* DATA DRIVEN INVOICE */}
             <section className="relative z-20 max-w-xl mx-auto -mt-12">
                 <HospitalBillInvoice
-                    procedure={profile.procedure}
-                    plan={profile.plan}
-                    liability={profile.liability}
+                    procedure={audit.procedure}
+                    plan={audit.plan}
+                    liability={audit.liability}
                     planOptions={planOptions}
                     procedureSlug={procedureSlug}
                 />
@@ -120,8 +113,8 @@ export default async function RiskLandingPage({ params }: PageProps) {
                 <div className="px-4 mt-12 space-y-12">
                     <RiskAuditFaqs
                         faqs={faqs}
-                        planName={profile.plan.plan_name}
-                        profileContext={`${profile.procedure.id} | ${profile.plan.plan_id}`}
+                        planName={audit.plan.plan_name}
+                        profileContext={`${audit.procedure.id} | ${audit.plan.plan_id}`}
                     />
 
                     <div className="bg-slate-900 rounded-[2.5rem] p-10 text-center shadow-2xl relative overflow-hidden">
@@ -132,8 +125,8 @@ export default async function RiskLandingPage({ params }: PageProps) {
                                 Don't risk a massive shortfall. Our experts can verify if your surgeon has a 2026 Payment Arrangement.
                             </p>
                             <ContactExpertTrigger
-                                planName={profile.plan.plan_name}
-                                context={`${profile.procedure.label} Clearance Audit`}
+                                planName={audit.plan.plan_name}
+                                context={`${audit.procedure.label} Clearance Audit`}
                             />
                         </div>
                     </div>

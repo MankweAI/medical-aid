@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { PROCEDURES_2026 } from '@/data/procedures-2026';
+import { DUMMY_PROCEDURES } from '@/lib/risk/repositories';
 
 export default function NotFound() {
     // Get 3 popular procedures for suggestions
-    const suggestions = PROCEDURES_2026.slice(0, 3);
+    const suggestions = DUMMY_PROCEDURES.slice(0, 3);
 
     return (
         <div className="min-h-[70vh] flex flex-col items-center justify-center p-6">
