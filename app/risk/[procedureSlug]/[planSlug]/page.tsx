@@ -15,101 +15,113 @@ interface PageProps {
     params: Promise<{ procedureSlug: string; planSlug: string; }>;
 }
 
+// --- 1. UPDATED BUILD LOGIC (Only Valid Combinations) ---
 export async function generateStaticParams() {
-    const procedures = ProcedureRepository.getAllProcedures();
+    // We iterate PLANS first, because plans dictate availability
     const plans = PlanRuleRepository.getAllRules();
     const paths: { procedureSlug: string; planSlug: string }[] = [];
 
-    procedures.forEach(proc => {
-        plans.forEach(plan => {
-            paths.push({ procedureSlug: proc.id, planSlug: plan.plan_id });
-        });
+    plans.forEach(plan => {
+        // Only generate routes for procedures explicitly linked to this plan
+        // This prevents "Essential Smart + Hip Replacement" pages from being built
+        if (plan.available_procedure_ids && plan.available_procedure_ids.length > 0) {
+            plan.available_procedure_ids.forEach(procId => {
+                paths.push({
+                    procedureSlug: procId,
+                    planSlug: plan.plan_id
+                });
+            });
+        }
     });
 
-    // console.log("---------Paths Generated---------");
-    // console.log(paths);
-    // console.log("---------Paths Generated---------");
     return paths;
 }
 
+// --- 2. UPDATED METADATA (With Validation) ---
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { procedureSlug, planSlug } = await params;
-    const audit = RiskEngine.generateFullAudit(procedureSlug, planSlug);
 
-    if (!audit) return { title: 'Audit Not Found' };
+    const plan = PlanRuleRepository.getRuleForPlan(planSlug);
+    const procedure = ProcedureRepository.getById(procedureSlug);
+
+    // Actuarial Validation: If plan doesn't exist OR procedure isn't covered by this plan
+    if (!plan || !procedure || !plan.available_procedure_ids.includes(procedureSlug)) {
+        return {
+            title: 'Plan Coverage Not Found',
+        };
+    }
 
     return {
-        title: `${audit.procedure.label} on ${audit.plan.plan_name}: ${audit.meta.coverage_percent}% Covered`,
-        description: `Official 2026 coverage audit. Base cost: R${audit.breakdown.base_rate}. Your liability: R${audit.liability}.`,
+        title: `${procedure.label} on ${plan.plan_name} | 2026 Cost Audit`,
+        description: `Actuarial audit of member liability for ${procedure.label} on the ${plan.plan_name} plan (2026). Check deductibles, co-pays, and network penalties.`,
     };
 }
 
-export default async function RiskLandingPage({ params }: PageProps) {
+// --- 3. MAIN PAGE COMPONENT (With Logic Gate) ---
+export default async function AuditPage({ params }: PageProps) {
     const { procedureSlug, planSlug } = await params;
 
-    // 1. GET THE CORE AUDIT
-    const audit = RiskEngine.generateFullAudit(procedureSlug, planSlug);
-    if (!audit) notFound();
+    // Fetch Data
+    const plan = PlanRuleRepository.getRuleForPlan(planSlug);
+    const procedure = ProcedureRepository.getById(procedureSlug);
 
-    // 2. GET THE COMPARISONS (For the Dropdown)
-    const planOptions = RiskEngine.compareAllPlans(procedureSlug, planSlug);
+    // LOGIC GATE: Immediate 404 if this combination is actuarially invalid
+    // This protects the user from seeing "R0 Deductible" on an excluded procedure
+    if (!plan || !procedure || !plan.available_procedure_ids.includes(procedureSlug)) {
+        notFound();
+    }
 
-    // 3. DEFINE STATIC FAQs (Presentation Layer)
+    // Run the Risk Engine (Now guaranteed to be safe)
+    const audit = RiskEngine.audit(planSlug, procedureSlug);
+
+    // Helpers for UI
+    const planOptions = PlanRuleRepository.getAllRules().map(p => ({
+        id: p.plan_id,
+        name: p.plan_name
+    }));
+
+    // Generate FAQ schema specifically for this valid combination
     const faqs = [
         {
-            question: "Is this surgery covered in full?",
-            answer: audit.meta.is_trap
-                ? `No. You must pay R${audit.liability.toLocaleString()} upfront.`
-                : `Yes. 100% covered at network providers.`
+            question: `Is ${procedure.label} covered in full on ${plan.plan_name}?`,
+            answer: `It depends on the provider. While the plan offers cover, you must look out for the ${audit.breakdown.deductibles.total_deductible > 0
+                    ? `R${audit.breakdown.deductibles.total_deductible.toLocaleString()} upfront payment`
+                    : 'network restrictions'
+                }.`
         },
         {
-            question: "What about the Anaesthetist?",
-            answer: "This audit covers the Hospital Account only. Anaesthetists bill separately."
-        },
-        {
-            question: "Is this a confirmed quote?",
-            answer: "No. This is an actuarial estimate based on 2026 Scheme Rules."
+            question: "What if I use a non-network hospital?",
+            answer: plan.network_type === 'any'
+                ? "You have freedom of choice for hospitals, but doctor rates may still cause shortfalls."
+                : `You will face a penalty of R${plan.deductibles.penalty_non_network.toLocaleString()} for using a non-${plan.network_type} facility.`
         }
     ];
 
     return (
-        <main className="min-h-screen bg-slate-50/50 pb-32 relative overflow-hidden animate-page-enter">
+        <main className="min-h-screen bg-slate-50 pb-20">
             <AppHeader />
 
-            {/* HERO SECTION */}
-            <section className="relative h-[55vh] flex flex-col items-center justify-center px-6 overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-800 to-slate-50/50">
-                <div className="absolute top-20 left-6">
-                    <Link href="/risk" className="p-2 bg-white/10 rounded-xl backdrop-blur-md border border-white/20 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest">
-                        <ChevronLeft className="w-4 h-4" /> Back
-                    </Link>
+            {/* Breadcrumbs / Nav */}
+            <div className="max-w-3xl mx-auto px-4 pt-6 pb-2">
+                <Link
+                    href="/"
+                    className="inline-flex items-center text-slate-500 hover:text-emerald-600 transition-colors text-sm font-medium"
+                >
+                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    Back to Search
+                </Link>
+            </div>
+
+            <section className="max-w-3xl mx-auto pt-4">
+                <div className="flex items-center gap-2 px-4 mb-6">
+                    <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                    <span className="text-xs font-bold tracking-wider text-emerald-800 uppercase bg-emerald-100 px-2 py-1 rounded">
+                        2026 Verified Data
+                    </span>
                 </div>
 
-                <div className="relative z-10 flex flex-col items-center text-center">
-                    <div className="relative w-56 h-56 mb-8">
-                        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="white" strokeWidth="8" className="opacity-10" />
-                            <circle
-                                cx="50" cy="50" r="45" fill="none" stroke="#10B981" strokeWidth="8"
-                                strokeDasharray="282.7"
-                                strokeDashoffset={282.7 - (282.7 * audit.meta.coverage_percent) / 100}
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-                            <span className="text-5xl font-black tracking-tighter">{audit.meta.coverage_percent}%</span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 leading-tight">Covered by Scheme</span>
-                        </div>
-                    </div>
-                    <h1 className="text-3xl font-black text-white tracking-tighter leading-[0.85] uppercase">Your Surgery <br /> Money Check</h1>
-                </div>
-            </section>
-
-            {/* DATA DRIVEN INVOICE */}
-            <section className="relative z-20 max-w-xl mx-auto -mt-12">
                 <HospitalBillInvoice
-                    procedure={audit.procedure}
-                    plan={audit.plan}
-                    liability={audit.liability}
+                    audit={audit}
                     planOptions={planOptions}
                     procedureSlug={procedureSlug}
                 />
@@ -117,8 +129,8 @@ export default async function RiskLandingPage({ params }: PageProps) {
                 <div className="px-4 mt-12 space-y-12">
                     <RiskAuditFaqs
                         faqs={faqs}
-                        planName={audit.plan.plan_name}
-                        profileContext={`${audit.procedure.id} | ${audit.plan.plan_id}`}
+                        planName={plan.plan_name}
+                        profileContext={`${procedure.id} | ${plan.plan_id}`}
                     />
 
                     <div className="bg-slate-900 rounded-[2.5rem] p-10 text-center shadow-2xl relative overflow-hidden">
@@ -129,8 +141,8 @@ export default async function RiskLandingPage({ params }: PageProps) {
                                 Don't risk a massive shortfall. Our experts can verify if your surgeon has a 2026 Payment Arrangement.
                             </p>
                             <ContactExpertTrigger
-                                planName={audit.plan.plan_name}
-                                context={`${audit.procedure.label} Clearance Audit`}
+                                planName={plan.plan_name}
+                                context={`${procedure.label} Clearance Audit`}
                             />
                         </div>
                     </div>

@@ -18,6 +18,7 @@ export interface PlanDeductibleRule {
     plan_id: string;
     plan_name: string;
     network_type: NetworkType;
+    available_procedure_ids: string[];
     deductibles: {
         default: number;
         penalty_non_network: number;
