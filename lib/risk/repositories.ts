@@ -1,7 +1,7 @@
 // lib/risk/repositories.ts
 import { Procedure, PlanDeductibleRule } from '@/types/risk';
 
-// --- PROCEDURE DEFINITIONS (Consolidated 2026 Source of Truth) ---
+// --- PROCEDURE DEFINITIONS ---
 const PROCEDURES: Procedure[] = [
     {
         id: "hip-replacement",
@@ -9,7 +9,7 @@ const PROCEDURES: Procedure[] = [
         medical_term: "Total Hip Arthroplasty",
         category: "major_joint",
         base_cost_estimate: 192000,
-        risk_notes: "Essential Smart/Active Smart: PMB cover only. Smart plans: High network penalties."
+        risk_notes: "Essential Smart excludes this (PMB only)."
     },
     {
         id: "cataract-surgery",
@@ -17,7 +17,7 @@ const PROCEDURES: Procedure[] = [
         medical_term: "Phacoemulsification",
         category: "ophthalmology",
         base_cost_estimate: 28000,
-        risk_notes: "Delta/Smart networks impose ~R11k-R15k penalty if non-DSP used."
+        risk_notes: "Strict network lists apply."
     },
     {
         id: "gastroscopy",
@@ -25,7 +25,26 @@ const PROCEDURES: Procedure[] = [
         medical_term: "Upper GI Endoscopy",
         category: "scope",
         base_cost_estimate: 8500,
-        risk_notes: "R8,000 deductible applies if performed in acute hospital (non-day clinic)."
+        risk_notes: "Must use Day Clinic to avoid high deductibles.",
+        scope_complexity: "single"
+    },
+    {
+        id: "colonoscopy",
+        label: "Colonoscopy",
+        medical_term: "Lower GI Endoscopy",
+        category: "scope",
+        base_cost_estimate: 9500,
+        risk_notes: "Must use Day Clinic.",
+        scope_complexity: "single"
+    },
+    {
+        id: "gastroscopy-colonoscopy",
+        label: "Gastroscopy & Colonoscopy",
+        medical_term: "Bi-directional Endoscopy",
+        category: "scope",
+        base_cost_estimate: 14500,
+        risk_notes: "Combined procedure rule applies.",
+        scope_complexity: "combo"
     },
     {
         id: "spinal-surgery",
@@ -33,204 +52,112 @@ const PROCEDURES: Procedure[] = [
         medical_term: "Laminectomy/Fusion",
         category: "spinal",
         base_cost_estimate: 150000,
-        risk_notes: "Strict network rules apply. Prosthesis limits on lower tier plans."
+        risk_notes: "Subject to spinal prosthesis limits."
     }
 ];
 
-// --- 2026 ACTUARIAL RULES ENGINE ---
-// Update: Now includes 'available_procedure_ids' to handle plan-specific exclusions (e.g. Essential Smart excludes elective joints)
-
+// --- 2026 ACTUARIAL RULES ---
 const DUMMY_RULES: PlanDeductibleRule[] = [
-    // --- CORE SERIES (Comprehensive Hospital Cover) ---
+    // --- CORE SERIES ---
     {
         plan_id: "discovery-core-classic-2026",
         plan_name: "Classic Core",
+        plan_series: "core",
         network_type: "any",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
+        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "colonoscopy", "gastroscopy-colonoscopy", "spinal-surgery"],
         deductibles: {
             default: 0,
             penalty_non_network: 0,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 0
+            scope_structure: {
+                day_clinic_single: 0,
+                day_clinic_combo: 0,
+                hospital_network_single: 8000,
+                hospital_network_combo: 9950,
+                hospital_non_network_single: 8000,
+                hospital_non_network_combo: 9950,
+                rooms_single: 0,
+                rooms_combo: 0,
+                penalty_outside_day_surgery: 8000
+            },
+            hip_replacement_penalty: 0,
+            cataract_penalty: 0,
+            spinal_surgery_penalty: 0
         }
     },
     {
         plan_id: "discovery-core-classic-delta-2026",
         plan_name: "Classic Delta Core",
+        plan_series: "core",
         network_type: "delta",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
+        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "colonoscopy", "gastroscopy-colonoscopy", "spinal-surgery"],
         deductibles: {
             default: 0,
             penalty_non_network: 11100,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 11100
-        }
-    },
-    {
-        plan_id: "discovery-core-essential-2026",
-        plan_name: "Essential Core",
-        network_type: "any",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 0,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 0
-        }
-    },
-    {
-        plan_id: "discovery-core-essential-delta-2026",
-        plan_name: "Essential Delta Core",
-        network_type: "delta",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 11100,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 11100
-        }
-    },
-    {
-        plan_id: "discovery-core-coastal-2026",
-        plan_name: "Coastal Core",
-        network_type: "coastal",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 7250,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 0
+            scope_structure: {
+                day_clinic_single: 0,
+                day_clinic_combo: 0,
+                hospital_network_single: 8000,
+                hospital_network_combo: 9950,
+                hospital_non_network_single: 8000,
+                hospital_non_network_combo: 9950,
+                rooms_single: 0,
+                rooms_combo: 0,
+                penalty_outside_day_surgery: 8000
+            },
+            hip_replacement_penalty: 0,
+            cataract_penalty: 11100, // Delta Specific
+            spinal_surgery_penalty: 0
         }
     },
 
-    // --- SMART SERIES (High Efficiency, Restricted Lists) ---
+    // --- SMART SERIES ---
     {
         plan_id: "discovery-smart-classic-2026",
         plan_name: "Classic Smart",
+        plan_series: "smart",
         network_type: "smart",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
+        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "colonoscopy", "gastroscopy-colonoscopy", "spinal-surgery"],
         deductibles: {
             default: 7750,
             penalty_non_network: 12650,
-            scope_penalty: 4650,
-            joint_penalty: 0,
-            cataract_penalty: 12650
+            scope_structure: {
+                day_clinic_single: 4650,
+                day_clinic_combo: 5700,
+                hospital_network_single: 5450,
+                hospital_network_combo: 6850,
+                hospital_non_network_single: 12650,
+                hospital_non_network_combo: 14750,
+                rooms_single: 1800,
+                rooms_combo: 3100,
+                penalty_outside_day_surgery: 7750
+            },
+            hip_replacement_penalty: 0,
+            cataract_penalty: 7100, // Smart Specific
+            spinal_surgery_penalty: 0
         }
     },
     {
         plan_id: "discovery-smart-essential-2026",
         plan_name: "Essential Smart",
+        plan_series: "smart",
         network_type: "smart",
-        // EXCLUSION: Hip Replacements are PMB Only on Essential Smart
-        available_procedure_ids: ["cataract-surgery", "gastroscopy", "spinal-surgery"],
+        available_procedure_ids: ["cataract-surgery", "gastroscopy", "colonoscopy", "gastroscopy-colonoscopy", "spinal-surgery"],
         deductibles: {
             default: 7750,
             penalty_non_network: 12650,
-            scope_penalty: 4650,
-            joint_penalty: 999999, // Fallback if forced
-            cataract_penalty: 12650
-        }
-    },
-    {
-        plan_id: "discovery-smart-active-2026",
-        plan_name: "Active Smart",
-        network_type: "smart",
-        // EXCLUSION: Hip Replacements are PMB Only on Active Smart
-        available_procedure_ids: ["cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 7750,
-            penalty_non_network: 15300,
-            scope_penalty: 4650,
-            joint_penalty: 999999,
-            cataract_penalty: 15300
-        }
-    },
-
-    // --- SAVER SERIES (Medical Savings Account) ---
-    {
-        plan_id: "discovery-saver-classic-2026",
-        plan_name: "Classic Saver",
-        network_type: "any",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 0,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 0
-        }
-    },
-    {
-        plan_id: "discovery-saver-classic-delta-2026",
-        plan_name: "Classic Delta Saver",
-        network_type: "delta",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 11100,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 11100
-        }
-    },
-    {
-        plan_id: "discovery-saver-essential-2026",
-        plan_name: "Essential Saver",
-        network_type: "any",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 0,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 0
-        }
-    },
-    {
-        plan_id: "discovery-saver-coastal-2026",
-        plan_name: "Coastal Saver",
-        network_type: "coastal",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 7250,
-            scope_penalty: 8000,
-            joint_penalty: 0,
-            cataract_penalty: 0
-        }
-    },
-
-    // --- NEW SMART SAVER SERIES (2026 Hybrid) ---
-    {
-        plan_id: "discovery-smart-saver-classic-2026",
-        plan_name: "Classic Smart Saver",
-        network_type: "smart",
-        available_procedure_ids: ["hip-replacement", "cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 12650,
-            scope_penalty: 4650,
-            joint_penalty: 0,
-            cataract_penalty: 12650
-        }
-    },
-    {
-        plan_id: "discovery-smart-saver-essential-2026",
-        plan_name: "Essential Smart Saver",
-        network_type: "smart",
-        // EXCLUSION: Follows Essential Smart logic for Joints
-        available_procedure_ids: ["cataract-surgery", "gastroscopy", "spinal-surgery"],
-        deductibles: {
-            default: 0,
-            penalty_non_network: 12650,
-            scope_penalty: 4650,
-            joint_penalty: 999999,
-            cataract_penalty: 12650
+            scope_structure: {
+                day_clinic_single: 4650,
+                day_clinic_combo: 5700,
+                hospital_network_single: 5450,
+                hospital_network_combo: 6850,
+                hospital_non_network_single: 12650,
+                hospital_non_network_combo: 14750,
+                rooms_single: 1800,
+                rooms_combo: 3100,
+                penalty_outside_day_surgery: 7750
+            },
+            cataract_penalty: 12650,
+            spinal_surgery_penalty: 0
         }
     }
 ];
@@ -243,12 +170,6 @@ export const ProcedureRepository = {
 };
 
 export const PlanRuleRepository = {
-    getRuleForPlan: (planId: string) => DUMMY_RULES.find(rule => rule.plan_id === planId),
-    getAllRules: () => DUMMY_RULES,
-    // Helper to get only valid procedures for a specific plan
-    getProceduresForPlan: (planId: string) => {
-        const plan = DUMMY_RULES.find(r => r.plan_id === planId);
-        if (!plan) return [];
-        return PROCEDURES.filter(p => plan.available_procedure_ids.includes(p.id));
-    }
+    getRuleForPlan: (planId: string) => DUMMY_RULES.find(r => r.plan_id === planId),
+    getAllRules: () => DUMMY_RULES
 };

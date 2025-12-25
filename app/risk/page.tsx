@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 // Popular procedures for quick access
-const FEATURED_PROCEDURES = ['knee-replacement', 'c-section', 'gastroscopy', 'cataract-surgery'];
+const FEATURED_PROCEDURES = ['hip-replacement', 'gastroscopy', 'cataract-surgery', 'spinal-surgery'];
 
 export default function RiskHubPage() {
     const featured = ProcedureRepository.getAll().filter(p => FEATURED_PROCEDURES.includes(p.id));
@@ -71,7 +71,8 @@ export default function RiskHubPage() {
                             {featured.map((proc) => (
                                 <Link
                                     key={proc.id}
-                                    href={`/risk/${proc.id}/active-smart`}
+                                    // UPDATED LINK: Uses a safe default plan ID from your new repo
+                                    href={`/risk/${proc.id}/discovery-smart-classic-2026`}
                                     className="px-4 py-2 bg-white/80 hover:bg-emerald-50 border border-slate-200/80 rounded-full text-sm font-medium text-slate-700 hover:text-emerald-700 hover:border-emerald-300 transition-all duration-200 shadow-sm hover:shadow-md"
                                 >
                                     {proc.label}
