@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { DUMMY_PROCEDURES } from '@/lib/risk/repositories';
+import { PlanRuleRepository } from '@/lib/risk/repositories';
 
 export default function NotFound() {
     // Get 3 popular procedures for suggestions
-    const suggestions = DUMMY_PROCEDURES.slice(0, 3);
+    const suggestions = PlanRuleRepository.getAllRules().slice(0, 3);
 
     return (
         <div className="min-h-[70vh] flex flex-col items-center justify-center p-6">
@@ -33,24 +33,24 @@ export default function NotFound() {
                         <span className="text-sm font-semibold text-slate-600">Try these instead:</span>
                     </div>
                     <div className="divide-y divide-slate-100">
-                        {suggestions.map((proc) => (
+                        {suggestions.map((plan) => (
                             <Link
-                                key={proc.id}
-                                href={`/risk/${proc.id}/active-smart`}
+                                key={plan.plan_id}
+                                href={`/risk/${plan.plan_id}/active-smart`}
                                 className="flex items-center justify-between p-4 hover:bg-emerald-50 transition-colors group"
                             >
                                 <div className="flex items-center gap-3">
                                     <span className="text-xl">
-                                        {proc.category === 'major_joint' ? '🦴' :
-                                            proc.category === 'maternity' ? '👶' :
-                                                proc.category === 'scope' ? '🔬' :
+                                        {plan.plan_name === 'Classic Core' ? '🦴' :
+                                            plan.plan_name === 'Essential Core' ? '👶' :
+                                                plan.plan_name === 'Scope' ? '🔬' :
                                                     '🏥'}
                                     </span>
                                     <div className="text-left">
                                         <div className="font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                                            {proc.label}
+                                            {plan.plan_name}
                                         </div>
-                                        <div className="text-xs text-slate-400">{proc.medical_term}</div>
+                                        <div className="text-xs text-slate-400">{plan.plan_id}</div>
                                     </div>
                                 </div>
                                 <svg className="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ProcedureAutocomplete } from '@/components/risk/ProcedureAutocomplete';
-import { PROCEDURES_2026 } from '@/data/procedures-2026';
+import { ProcedureRepository } from '@/lib/risk/repositories';
 
 export const metadata = {
     title: 'Surgery Cost Simulator 2026 | Intellihealth',
@@ -12,7 +12,7 @@ export const metadata = {
 const FEATURED_PROCEDURES = ['knee-replacement', 'c-section', 'gastroscopy', 'cataract-surgery'];
 
 export default function RiskHubPage() {
-    const featured = PROCEDURES_2026.filter(p => FEATURED_PROCEDURES.includes(p.id));
+    const featured = ProcedureRepository.getAll().filter(p => FEATURED_PROCEDURES.includes(p.id));
 
     return (
         <div className="min-h-screen relative overflow-hidden">

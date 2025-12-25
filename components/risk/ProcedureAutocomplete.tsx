@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { PROCEDURES_2026 } from '@/data/procedures-2026';
+import { ProcedureRepository } from '@/lib/risk/repositories';
 
 export function ProcedureAutocomplete() {
     const router = useRouter();
@@ -12,7 +12,7 @@ export function ProcedureAutocomplete() {
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Filter procedures
-    const matches = PROCEDURES_2026.filter(p =>
+    const matches = ProcedureRepository.getAll().filter(p =>
         p.label.toLowerCase().includes(query.toLowerCase()) ||
         p.medical_term.toLowerCase().includes(query.toLowerCase())
     );
@@ -133,18 +133,18 @@ export function ProcedureAutocomplete() {
                                     key={proc.id}
                                     onClick={() => router.push(`/risk/${proc.id}/active-smart`)}
                                     className={`w-full text-left p-4 flex items-center justify-between gap-4 transition-all duration-150 border-b border-slate-50 last:border-0 ${index === activeIndex
-                                            ? 'bg-gradient-to-r from-emerald-50 to-teal-50'
-                                            : 'hover:bg-slate-50'
+                                        ? 'bg-gradient-to-r from-emerald-50 to-teal-50'
+                                        : 'hover:bg-slate-50'
                                         }`}
                                     onMouseEnter={() => setActiveIndex(index)}
                                 >
                                     <div className="flex items-center gap-4">
                                         {/* Category Icon */}
                                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${proc.category === 'major_joint' ? 'bg-blue-100 text-blue-600' :
-                                                proc.category === 'scope' ? 'bg-purple-100 text-purple-600' :
-                                                    proc.category === 'maternity' ? 'bg-pink-100 text-pink-600' :
-                                                        proc.category === 'ophthalmology' ? 'bg-cyan-100 text-cyan-600' :
-                                                            'bg-slate-100 text-slate-600'
+                                            proc.category === 'scope' ? 'bg-purple-100 text-purple-600' :
+                                                proc.category === 'maternity' ? 'bg-pink-100 text-pink-600' :
+                                                    proc.category === 'ophthalmology' ? 'bg-cyan-100 text-cyan-600' :
+                                                        'bg-slate-100 text-slate-600'
                                             }`}>
                                             <span className="text-lg">
                                                 {proc.category === 'major_joint' ? '🦴' :

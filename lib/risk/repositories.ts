@@ -1,8 +1,16 @@
 // lib/risk/repositories.ts
 import { Procedure, PlanDeductibleRule } from '@/types/risk';
 
-// --- PROCEDURE DEFINITIONS (Updated with 2026 Context) ---
-const DUMMY_PROCEDURES: Procedure[] = [
+// --- PROCEDURE DEFINITIONS (Consolidated 2026 Source of Truth) ---
+const PROCEDURES: Procedure[] = [
+    {
+        id: "knee-replacement",
+        label: "Knee Replacement",
+        medical_term: "Total Knee Arthroplasty",
+        category: "major_joint",
+        base_cost_estimate: 185000,
+        risk_notes: "Essential Smart/Active Smart: PMB cover only. Smart plans: High network penalties."
+    },
     {
         id: "hip-replacement",
         label: "Hip Replacement",
@@ -10,6 +18,30 @@ const DUMMY_PROCEDURES: Procedure[] = [
         category: "major_joint",
         base_cost_estimate: 192000,
         risk_notes: "Essential Smart/Active Smart: PMB cover only. Smart plans: High network penalties."
+    },
+    {
+        id: "spinal-fusion",
+        label: "Spinal Fusion / Laminectomy",
+        medical_term: "Laminectomy/Fusion",
+        category: "spinal",
+        base_cost_estimate: 150000,
+        risk_notes: "Strict network rules apply. Prosthesis limits on lower tier plans."
+    },
+    {
+        id: "gastroscopy",
+        label: "Gastroscopy (Scope)",
+        medical_term: "Upper GI Endoscopy",
+        category: "scope",
+        base_cost_estimate: 8500,
+        risk_notes: "R8,000 deductible applies if performed in acute hospital (non-day clinic)."
+    },
+    {
+        id: "colonoscopy",
+        label: "Colonoscopy (Scope)",
+        medical_term: "Lower GI Endoscopy",
+        category: "scope",
+        base_cost_estimate: 9500,
+        risk_notes: "R8,000 deductible applies if performed in acute hospital (non-day clinic)."
     },
     {
         id: "cataract-surgery",
@@ -20,20 +52,52 @@ const DUMMY_PROCEDURES: Procedure[] = [
         risk_notes: "Delta/Smart networks impose ~R11k-R15k penalty if non-DSP used."
     },
     {
-        id: "gastroscopy",
-        label: "Gastroscopy",
-        medical_term: "Upper GI Endoscopy",
-        category: "scope",
-        base_cost_estimate: 8500,
-        risk_notes: "R8,000 deductible applies if performed in acute hospital (non-day clinic)."
+        id: "caesarean-section",
+        label: "Elective Caesarean Section",
+        medical_term: "Elective C-Section",
+        category: "maternity",
+        base_cost_estimate: 45000,
+        risk_notes: "Most plans cover maternity, but check waiting periods and facility networks."
     },
     {
-        id: "spinal-surgery",
-        label: "Spinal Surgery",
-        medical_term: "Laminectomy/Fusion",
-        category: "spinal",
-        base_cost_estimate: 150000,
-        risk_notes: "Strict network rules apply. Prosthesis limits on lower tier plans."
+        id: "tonsillectomy",
+        label: "Tonsillectomy",
+        medical_term: "Tonsillectomy",
+        category: "general",
+        base_cost_estimate: 22000,
+        risk_notes: "Day surgery preferred. Acute hospital admission may incur penalties."
+    },
+    {
+        id: "grommets",
+        label: "Grommet Insertion",
+        medical_term: "Myringotomy with Tubes",
+        category: "general",
+        base_cost_estimate: 15000,
+        risk_notes: "Common paediatric procedure. Day surgery preferred."
+    },
+    {
+        id: "inguinal-hernia",
+        label: "Inguinal Hernia Repair",
+        medical_term: "Inguinal Herniorrhaphy",
+        category: "general",
+        base_cost_estimate: 32000,
+        risk_notes: "Laparoscopic vs open approach may affect costs."
+    },
+    {
+        id: "gallbladder",
+        label: "Gallbladder Removal",
+        medical_term: "Cholecystectomy",
+        category: "general",
+        base_cost_estimate: 38000,
+        risk_notes: "Laparoscopic approach standard. Network rules apply on Smart plans."
+    },
+    {
+        id: "hysterectomy",
+        label: "Hysterectomy",
+        medical_term: "Hysterectomy",
+        category: "general",
+        base_cost_estimate: 65000,
+        risk_notes: "Various surgical approaches. Check prosthesis limits on lower tier plans."
     }
 ];
 
@@ -41,7 +105,7 @@ const DUMMY_PROCEDURES: Procedure[] = [
 // Data Source: 2026 Discovery Health Brochures (Period: April - Dec 2026)
 // Status: VERIFIED via Deep Research Extraction
 
-const DUMMY_RULES: PlanDeductibleRule[] = [
+const PLAN_RULES: PlanDeductibleRule[] = [
     // --- CORE SERIES ---
     {
         plan_id: "discovery-core-classic-2026",
@@ -222,12 +286,12 @@ const DUMMY_RULES: PlanDeductibleRule[] = [
 // --- REPOSITORY METHODS ---
 
 export const ProcedureRepository = {
-    getById: (slug: string) => DUMMY_PROCEDURES.find(p => p.id === slug),
-    getAll: () => DUMMY_PROCEDURES
+    getById: (slug: string) => PROCEDURES.find(p => p.id === slug),
+    getAll: () => PROCEDURES
 };
 
 export const PlanRuleRepository = {
-    getById: (planId: string) => DUMMY_RULES.find(r => r.plan_id === planId),
-    getRuleForPlan: (planId: string) => DUMMY_RULES.find(r => r.plan_id === planId),
-    getAllRules: () => DUMMY_RULES
+    getById: (planId: string) => PLAN_RULES.find(r => r.plan_id === planId),
+    getRuleForPlan: (planId: string) => PLAN_RULES.find(r => r.plan_id === planId),
+    getAllRules: () => PLAN_RULES
 };

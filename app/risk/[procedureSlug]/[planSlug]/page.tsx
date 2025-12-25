@@ -16,7 +16,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    const procedures = ProcedureRepository.getAll();
+    const procedures = ProcedureRepository.getAllProcedures();
     const plans = PlanRuleRepository.getAllRules();
     const paths: { procedureSlug: string; planSlug: string }[] = [];
 
@@ -25,6 +25,10 @@ export async function generateStaticParams() {
             paths.push({ procedureSlug: proc.id, planSlug: plan.plan_id });
         });
     });
+
+    // console.log("---------Paths Generated---------");
+    // console.log(paths);
+    // console.log("---------Paths Generated---------");
     return paths;
 }
 
