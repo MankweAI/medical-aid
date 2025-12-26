@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ProcedureRepository } from '@/lib/risk/repositories';
+import { ProcedureRepository } from '@/lib/risk/resolver';
 
 export function ProcedureAutocomplete() {
     const router = useRouter();

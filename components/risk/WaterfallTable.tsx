@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { RiskAudit } from '@/types/risk';
+import { RiskAudit } from '@/types/schemes/discovery';
 import { Info, CheckCircle2, XCircle } from 'lucide-react';
 
 const formatZAR = (n: number) =>
@@ -22,8 +22,8 @@ export function WaterfallTable({ audit }: { audit: RiskAudit }) {
         // 1. Is it a Scope Deductible?
         if (procedure.category === 'scope' && audit.breakdown.scope_variants) {
             const s = audit.breakdown.scope_variants;
-            if (audit.liability === s.day_clinic_single || audit.liability === s.day_clinic_combo) return "Day Clinic Deductible";
-            if (audit.liability === s.hospital_network_single) return "Hospital Admission Deductible";
+            if (audit.liability === s.day_clinic || audit.liability === s.day_clinic_combo) return "Day Clinic Deductible";
+            if (audit.liability === s.hospital_network) return "Hospital Admission Deductible";
         }
 
         // 2. Is it a Non-Network Penalty?

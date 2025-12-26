@@ -1,14 +1,15 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { RiskResolver } from '@/lib/risk/resolver'; // <--- NEW BRAIN
-import { ProcedureRepository } from '@/lib/risk/repositories';
+import { RiskResolver } from '@/lib/risk/resolver';
+import { ProcedureRepository } from '@/lib/risk/resolver';
 import { LiabilityCard } from '@/components/risk/LiabilityCard';
 import { WaterfallTable } from '@/components/risk/WaterfallTable';
 import AppHeader from '@/components/AppHeader';
 
 // Import your new plan keys for building paths
-import { CLASSIC_SMART_2026, ESSENTIAL_SMART_2026, ESSENTIAL_DYNAMIC_SMART_2026 } from '@/lib/discovery/smart-series-plans';
+import { CLASSIC_SMART_2026, ESSENTIAL_SMART_2026, ESSENTIAL_DYNAMIC_SMART_2026 } from '@/data/discovery/smart-series-plans';
+
 
 interface PageProps {
     params: Promise<{ schemeSlug: string; planSlug: string; procedureSlug: string }>;

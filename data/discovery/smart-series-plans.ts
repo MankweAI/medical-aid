@@ -258,7 +258,26 @@ export const ESSENTIAL_SMART_2026: DiscoveryPlan = {
                 condition: "Patient 12 or under with dyspepsia",
                 noCopaymentRequired: true,
             },
-        }
+        },
+        {
+            procedureName: "Colonoscopy",
+            facilityType: "Day Clinic Account",
+            daySurgeryNetworkDayClinicCopayment: 4650,
+            hospitalAccountCopayment: 8000,
+            outOfNetworkUpfrontPayment: 12650,
+            valueBasedNetworkReduction: {
+                applicableToClassicEssential: true,
+                reducedDayClinicCopayment: 4650,
+                reducedHospitalCopayment: 6650,
+            },
+            inRoomsScopesCopayment: { singleScope: 1800, biDirectionalScopes: 3100 },
+            nonNetworkInRoomsCopayment: { singleScope: 1800, biDirectionalScopes: 3100 },
+            prescribedMinimumBenefitExemption: {
+                condition: "Patient 12 or under with dyspepsia",
+                noCopaymentRequired: true,
+            },
+        },
+
     ],
 
     dentalBenefit: [],
@@ -307,4 +326,20 @@ export const ESSENTIAL_SMART_2026: DiscoveryPlan = {
         personalHealthPathways: true,
         usageForDayToDayCover: true,
     },
+};
+
+// ============================================================================
+// 3. ESSENTIAL DYNAMIC SMART (2026)
+// ============================================================================
+
+export const ESSENTIAL_DYNAMIC_SMART_2026: DiscoveryPlan = {
+    ...ESSENTIAL_SMART_2026,
+    planId: "discovery-smart-essential-dynamic-2026",
+    planName: "Essential Dynamic Smart",
+    // Custom overrides if known, otherwise identical to Essential for now
+    monthlyContribution: { mainMember: 1550, adult: 1550, child: 600 },
+    hospitalBenefit: {
+        ...ESSENTIAL_SMART_2026.hospitalBenefit,
+        outOfNetworkUpfrontPayment: 15300
+    }
 };

@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { RiskAudit } from '@/types/risk';
+import { RiskAudit } from '@/types/schemes/discovery';
 
 interface PlanOption {
     id: string;

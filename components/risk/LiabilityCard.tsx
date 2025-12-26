@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { RiskAudit } from '@/types/risk';
+import { RiskAudit } from '@/types/schemes/discovery';
 import {
     AlertTriangle,
     CheckCircle2,
@@ -41,14 +41,14 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
         const isCombo = audit.procedure.scope_complexity === 'combo';
 
         if (location === 'day_clinic') {
-            currentLiability = isCombo ? variants.day_clinic_combo : variants.day_clinic;
+            currentLiability = isCombo ? (variants.day_clinic_combo ?? variants.day_clinic) : variants.day_clinic;
 
             // Calculate savings vs hospital
-            const hospitalCost = isCombo ? variants.hospital_network_combo : variants.hospital_network;
+            const hospitalCost = isCombo ? (variants.hospital_network_combo ?? variants.hospital_network) : variants.hospital_network;
             savedAmount = hospitalCost - currentLiability;
         } else {
             // Hospital view (Default high risk)
-            currentLiability = isCombo ? variants.hospital_network_combo : variants.hospital_network;
+            currentLiability = isCombo ? (variants.hospital_network_combo ?? variants.hospital_network) : variants.hospital_network;
         }
     }
 

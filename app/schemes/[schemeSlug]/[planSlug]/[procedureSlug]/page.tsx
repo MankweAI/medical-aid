@@ -1,8 +1,10 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { RiskEngine } from '@/lib/risk/engine';
-import { PlanRuleRepository, ProcedureRepository } from '@/lib/risk/repositories';
+import { RiskResolver as RiskEngine } from '@/lib/risk/resolver'; // Alias for compatibility
+import { PlanRuleRepository, ProcedureRepository } from '@/lib/risk/resolver';
+
+
 import { LiabilityCard } from '@/components/risk/LiabilityCard';
 import { WaterfallTable } from '@/components/risk/WaterfallTable';
 import AppHeader from '@/components/AppHeader';
@@ -45,7 +47,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     // We run the audit solely to get the cost for the title tag
     try {
-        const audit = RiskEngine.audit(planSlug, procedureSlug);
+        const audit = RiskEngine.resolve(planSlug, procedureSlug);
+
         const cost = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(audit.liability);
 
         return {
@@ -66,7 +69,8 @@ export default async function LeafPage({ params }: PageProps) {
         notFound();
     }
 
-    const audit = RiskEngine.audit(planSlug, procedureSlug);
+    const audit = RiskEngine.resolve(planSlug, procedureSlug);
+
 
     return (
         <main className="min-h-screen bg-slate-50 pb-20">
