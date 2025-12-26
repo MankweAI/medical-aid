@@ -27,9 +27,15 @@ export interface Procedure {
 }
 // 2. The Scope Matrix
 export interface ScopeBenefitStructure {
-    day_clinic: number;
-    hospital_network: number;
-    hospital_non_network: number;
+    day_clinic_single: number;
+    day_clinic_combo: number;
+    hospital_network_single: number;
+    hospital_network_combo: number;
+    hospital_non_network_single: number;
+    hospital_non_network_combo: number;
+    rooms_single: number;
+    rooms_combo: number;
+    penalty_outside_day_surgery: number;
 }
 
 // 3. The Insurance Rule Entity
@@ -69,8 +75,14 @@ export interface RiskAudit {
         deductibles: { total_deductible: number; };
         scope_variants?: {
             day_clinic: number;
+            day_clinic_combo: number;
             hospital_network: number;
+            hospital_network_combo: number;
             hospital_non_network: number;
+            hospital_non_network_combo: number;
+            rooms: number;
+            rooms_combo: number;
+            penalty_outside_day_surgery: number;
         };
     };
     meta: {

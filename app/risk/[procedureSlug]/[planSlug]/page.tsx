@@ -1,85 +1,89 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { RiskEngine } from '@/lib/risk/engine';
-import { PlanRuleRepository, ProcedureRepository } from '@/lib/risk/repositories';
-import { HospitalBillInvoice } from '@/components/risk/HospitalBillInvoice';
+import { RiskResolver } from '@/lib/risk/resolver'; // <--- NEW BRAIN
+import { ProcedureRepository } from '@/lib/risk/repositories';
+import { LiabilityCard } from '@/components/risk/LiabilityCard';
+import { WaterfallTable } from '@/components/risk/WaterfallTable';
 import AppHeader from '@/components/AppHeader';
 
+// Import your new plan keys for building paths
+import { CLASSIC_SMART_2026, ESSENTIAL_SMART_2026, ESSENTIAL_DYNAMIC_SMART_2026 } from '@/lib/discovery/smart-series-plans';
+
 interface PageProps {
-    params: Promise<{ procedureSlug: string; planSlug: string }>;
+    params: Promise<{ schemeSlug: string; planSlug: string; procedureSlug: string }>;
 }
 
+// 1. GENERATE STATIC PARAMS (Now using Real 2026 Plans)
 export async function generateStaticParams() {
-    const plans = PlanRuleRepository.getAllRules();
-    const paths: { procedureSlug: string; planSlug: string }[] = [];
+    const procedures = ProcedureRepository.getAll();
 
-    plans.forEach(plan => {
-        if (plan.available_procedure_ids && plan.available_procedure_ids.length > 0) {
-            plan.available_procedure_ids.forEach(procId => {
-                paths.push({
-                    procedureSlug: procId,
-                    planSlug: plan.plan_id
-                });
+    // List of all active plans we have built engines for
+    const activePlans = [
+        CLASSIC_SMART_2026,
+        ESSENTIAL_SMART_2026,
+        ESSENTIAL_DYNAMIC_SMART_2026
+    ];
+
+    const paths: { schemeSlug: string; planSlug: string; procedureSlug: string }[] = [];
+
+    activePlans.forEach(plan => {
+        const schemeSlug = 'discovery-health'; // Currently hardcoded for Discovery
+
+        // For now, we assume all procedures are "available" to test the engine
+        // In future, you can filter this based on plan exclusions if needed
+        procedures.forEach(proc => {
+            paths.push({
+                schemeSlug,
+                planSlug: plan.planId, // Uses the real ID (e.g. 'discovery-smart-classic-2026')
+                procedureSlug: proc.id
             });
-        }
+        });
     });
 
     return paths;
 }
 
+// 2. DYNAMIC METADATA
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { procedureSlug, planSlug } = await params;
+    const { planSlug, procedureSlug } = await params;
 
-    const plan = PlanRuleRepository.getRuleForPlan(planSlug);
-    const procedure = ProcedureRepository.getById(procedureSlug);
+    try {
+        // Use the new Resolver
+        const audit = RiskResolver.resolve(planSlug, procedureSlug);
+        const cost = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 0 }).format(audit.liability);
 
-    if (!plan || !procedure || !plan.available_procedure_ids?.includes(procedureSlug)) {
         return {
-            title: 'Plan Coverage Not Found',
+            title: `${audit.procedure.label} Cost on ${audit.plan.plan_name}: ${cost} (2026)`,
+            description: `Calculate your co-payment for a ${audit.procedure.label} on the ${audit.plan.plan_name} plan. Current 2026 rules show a liability of ${cost}.`,
         };
+    } catch (e) {
+        return { title: 'Benefit Calculator' };
     }
-
-    return {
-        title: `${procedure.label} on ${plan.plan_name} | 2026 Cost Audit`,
-        description: `Actuarial audit of member liability for ${procedure.label} on the ${plan.plan_name} plan (2026). Check deductibles, co-pays, and network penalties.`,
-    };
 }
 
-export default async function AuditPage({ params }: PageProps) {
-    // 1. Await Params for Next.js 15 compatibility
-    const { procedureSlug, planSlug } = await params;
+export default async function LeafPage({ params }: PageProps) {
+    const { planSlug, procedureSlug } = await params;
 
-    // 2. Fetch Data
-    const plan = PlanRuleRepository.getRuleForPlan(planSlug);
-    const procedure = ProcedureRepository.getById(procedureSlug);
-
-    // 3. Logic Gate: Validate combination before calling the engine
-    if (!plan || !procedure || !plan.available_procedure_ids?.includes(procedureSlug)) {
-        notFound();
+    // 3. THE SWITCH: Call the Resolver
+    // This will now trigger the DiscoveryRiskEngine -> Adapter -> Generic Audit flow
+    let audit;
+    try {
+        audit = RiskResolver.resolve(planSlug, procedureSlug);
+    } catch (error) {
+        console.error(error);
+        notFound(); // If the resolver fails (e.g. plan doesn't exist), 404
     }
-
-    // 4. Run Risk Engine
-    const audit = RiskEngine.audit(planSlug, procedureSlug);
-
-    // 5. Generate Plan Comparison Options
-    const planOptions = PlanRuleRepository.getAllRules().map(p => ({
-        id: p.plan_id,
-        name: p.plan_name,
-        liability: RiskEngine.calculateLiability(procedureSlug, p.plan_id),
-        isCurrent: p.plan_id === planSlug,
-        slug: p.plan_id
-    }));
 
     return (
         <main className="min-h-screen bg-slate-50 pb-20">
             <AppHeader />
-            <section className="max-w-3xl mx-auto pt-4">
-                <HospitalBillInvoice
-                    audit={audit}
-                    planOptions={planOptions}
-                    procedureSlug={procedureSlug}
-                />
+            <section className="max-w-3xl mx-auto pt-8 px-4 space-y-8">
+
+                {/* 4. The Answer Engine UI (Unchanged, it just consumes the generic audit) */}
+                <LiabilityCard audit={audit} />
+                <WaterfallTable audit={audit} />
+
             </section>
         </main>
     );

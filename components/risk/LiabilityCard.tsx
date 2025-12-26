@@ -2,7 +2,14 @@
 
 import React, { useState } from 'react';
 import { RiskAudit } from '@/types/risk';
-import { AlertTriangle, CheckCircle2, Building2, BedDouble, ArrowRight } from 'lucide-react';
+import {
+    AlertTriangle,
+    CheckCircle2,
+    Building2,
+    BedDouble,
+    ArrowRight,
+    ShieldCheck
+} from 'lucide-react';
 import clsx from 'clsx';
 
 const formatZAR = (n: number) =>
@@ -13,30 +20,35 @@ const formatZAR = (n: number) =>
     }).format(n);
 
 export function LiabilityCard({ audit }: { audit: RiskAudit }) {
-    // STATE: Handle the "Context Toggles" 
-    // Default to the engine's calculation, but allow user to override view
+    // STATE: Handle the "Context Toggles" for Scopes
+    // Default to the engine's calculation (usually Hospital/High Risk), 
+    // but allow user to override the view instantly.
     const [location, setLocation] = useState<'hospital' | 'day_clinic'>('hospital');
 
-    // Determine displayed liability based on toggle
+    // Determine displayed liability based on toggle state
     const variants = audit.breakdown.scope_variants;
     const isScope = !!variants;
 
     let currentLiability = audit.liability;
     let savedAmount = 0;
 
+    console.log("How come", formatZAR(currentLiability));
+    console.log("*********************************************");
+
+
     if (isScope && variants) {
+        // Logic: Is it a combo or single?
+        const isCombo = audit.procedure.scope_complexity === 'combo';
+
         if (location === 'day_clinic') {
-            // Logic: Is it a combo or single?
-            const isCombo = audit.procedure.scope_complexity === 'combo';
-            currentLiability = isCombo ? variants.day_clinic_combo : variants.day_clinic_single;
+            currentLiability = isCombo ? variants.day_clinic_combo : variants.day_clinic;
 
             // Calculate savings vs hospital
-            const hospitalCost = isCombo ? variants.hospital_network_combo : variants.hospital_network_single;
+            const hospitalCost = isCombo ? variants.hospital_network_combo : variants.hospital_network;
             savedAmount = hospitalCost - currentLiability;
         } else {
             // Hospital view (Default high risk)
-            const isCombo = audit.procedure.scope_complexity === 'combo';
-            currentLiability = isCombo ? variants.hospital_network_combo : variants.hospital_network_single;
+            currentLiability = isCombo ? variants.hospital_network_combo : variants.hospital_network;
         }
     }
 
@@ -44,24 +56,29 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
 
     return (
         <div className="bg-white rounded-[2rem] shadow-xl border border-slate-200 overflow-hidden">
-            {/* HEADER: The "Financial Diagnosis" [cite: 11] */}
-            <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+
+            {/* 1. HEADER: The "Financial Diagnosis" */}
+            <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-start">
                 <div>
                     <h1 className="text-xl font-black text-slate-900 leading-tight">
                         {audit.procedure.label}
                     </h1>
-                    <p className="text-sm font-medium text-slate-500">
+                    {/* ACCURATE MEDICAL CODE DISPLAY [cite: 25, 39] */}
+                    <p className="text-xs font-mono font-bold text-slate-400 mt-1">
+                        CPT Code: {audit.procedure.cpt_code}
+                    </p>
+                    <p className="text-sm font-medium text-emerald-600 mt-1">
                         on {audit.plan.plan_name}
                     </p>
                 </div>
-                {/* Trust Signal: Verified 2026 Rules */}
-                <div className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-full">
-                    2026 Rules Verified
+                {/* Trust Signal: Verified 2026 Rules [cite: 74] */}
+                <div className="flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-full">
+                    <ShieldCheck className="w-3 h-3" /> Verified 2026
                 </div>
             </div>
 
             <div className="p-8">
-                {/* PRIMARY STAT: The Risk [cite: 46] */}
+                {/* 2. PRIMARY STAT: The Risk [cite: 45, 46] */}
                 <div className="text-center mb-8">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
                         Your Estimated Co-Payment
@@ -70,17 +87,17 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
                         {formatZAR(currentLiability)}
                     </div>
 
-                    {/* GAP COVER SIMULATION OVERLAY [cite: 50] */}
+                    {/* GAP COVER SIMULATION OVERLAY [cite: 22, 51] */}
                     {!isClean && (
                         <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg border border-blue-100">
                             <span className="text-xs font-bold">With Gap Cover:</span>
                             <span className="text-sm font-black text-emerald-600">R0.00</span>
-                            <span className="text-[10px] text-blue-400 line-through">{formatZAR(currentLiability)}</span>
+                            <span className="text-[10px] text-blue-400 line-through decoration-red-400 decoration-2">{formatZAR(currentLiability)}</span>
                         </div>
                     )}
                 </div>
 
-                {/* CONTEXT TOGGLES: The "Why"  */}
+                {/* 3. CONTEXT TOGGLES: The "Why" (Scopes Only) [cite: 48] */}
                 {isScope && (
                     <div className="bg-slate-50 p-2 rounded-xl flex gap-2 mb-6">
                         <button
@@ -106,9 +123,9 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
                     </div>
                 )}
 
-                {/* SAVINGS NUDGE [cite: 39] */}
+                {/* 4. SAVINGS NUDGE [cite: 1] */}
                 {savedAmount > 0 && (
-                    <div className="mb-6 flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <div className="mb-6 flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100 animate-in fade-in slide-in-from-top-2">
                         <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                         <div>
                             <p className="text-sm font-bold text-emerald-800">Smart Choice Available</p>
@@ -119,9 +136,36 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
                     </div>
                 )}
 
-                {/* CTA: The Solution [cite: 51] */}
+                {/* 5. SEO "THICK CONTENT" SECTION [cite: 39, 49] */}
+                <div className="mt-8 pt-6 border-t border-slate-100">
+                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">
+                        Medical Context
+                    </p>
+                    <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                        {audit.procedure.description}
+                    </p>
+
+                    {/* The "Value Injection" List: Common Diagnoses */}
+                    <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">
+                            Common Diagnosis Codes (ICD-10)
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                            {audit.procedure.common_diagnoses.map(d => (
+                                <span key={d.code} className="px-2 py-1 bg-white border border-slate-200 rounded-md text-[10px] text-slate-600 font-medium shadow-sm">
+                                    <strong className="text-slate-900">{d.code}:</strong> {d.label}
+                                </span>
+                            ))}
+                        </div>
+                        <p className="text-[9px] text-slate-400 mt-2 italic">
+                            * Note: Your doctor must define your specific ICD-10 code.
+                        </p>
+                    </div>
+                </div>
+
+                {/* 6. CTA: The Solution [cite: 22, 51] */}
                 {!isClean && (
-                    <button className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors">
+                    <button className="w-full mt-6 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-slate-200">
                         Get Gap Cover Quote
                         <ArrowRight className="w-4 h-4" />
                     </button>
