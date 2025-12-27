@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { PlanRuleRepository } from '@/lib/risk/repositories';
+import { PlanRuleRepository } from '@/lib/risk/discovery-resolver';
 
 export default function NotFound() {
     // Get 3 popular procedures for suggestions

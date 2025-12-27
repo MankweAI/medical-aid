@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { PlanRuleRepository, ProcedureRepository } from '@/lib/risk/resolver';
+import { PlanRuleRepository, ProcedureRepository } from '@/lib/risk/discovery-resolver';
 import AppHeader from '@/components/AppHeader';
 import { Shield, Activity, ArrowRight, LayoutGrid, AlertCircle } from 'lucide-react';
 

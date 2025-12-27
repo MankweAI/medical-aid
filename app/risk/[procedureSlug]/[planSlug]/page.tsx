@@ -1,8 +1,8 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { RiskResolver } from '@/lib/risk/resolver';
-import { ProcedureRepository } from '@/lib/risk/resolver';
+import { RiskResolver } from '@/lib/risk/discovery-resolver';
+import { ProcedureRepository } from '@/lib/risk/discovery-resolver';
 import { LiabilityCard } from '@/components/risk/LiabilityCard';
 import { WaterfallTable } from '@/components/risk/WaterfallTable';
 import AppHeader from '@/components/AppHeader';

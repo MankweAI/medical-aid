@@ -153,9 +153,6 @@ export const CLASSIC_SMART_2026: DiscoveryPlan = {
         },
     ],
 
-    prostheticDevices: [],
-    mentalHealthBenefit: [],
-
     cancerCover: {
         annualLimit: 250000,
         copaymentAboveLimit: 20,
@@ -163,42 +160,7 @@ export const CLASSIC_SMART_2026: DiscoveryPlan = {
         essentialSmartNetworkRestriction: { mustUseNetwork: false, limitedToPMB: false },
     },
 
-    chronicIllnessBenefit: {
-        chronicDiseaseListConditions: 27,
-        prescribedMinimumBenefitCompliant: true,
-        medicineFormulary: { fullCoverAtNetworkPharmacy: true, designatedServiceProviderRequired: true },
-    },
-
-    dayToDayBenefits: {
-        gpConsultations: {
-            unlimitedConsultations: true,
-            fixedCopaymentPerConsultation: { Classic: 70, Essential: 125, EssentialDynamic: 125, Active: 125 },
-            networkRequirement: "Smart Network GP",
-        },
-        eyeTest: {
-            annualLimit: 1,
-            fixedCopayment: { Classic: 70, Essential: 125, EssentialDynamic: 125, Active: 125 },
-        },
-        dentalCheckup: {
-            annualLimit: 1,
-            fixedCopayment: { Classic: 125, Essential: 190, EssentialDynamic: 190, Active: 190 },
-        },
-        acuteMedicine: { coverageType: "Over-the-Counter (OTC) Medicine", networkPharmacyRequirement: true },
-        sportsRelatedInjuries: {
-            coverage: {
-                basicXrays: true,
-                specialistVisits: 2,
-                physiotherapistBiokineticistChiropractor: { totalVisits: 4, referralRequired: true, copaymentPerVisit: 125 },
-            },
-        },
-    },
-
-    medicalSavingsAccount: undefined,
-    personalHealthFund: {
-        earnedThroughHealthActions: true,
-        personalHealthPathways: true,
-        usageForDayToDayCover: true,
-    },
+    // LOW-INTENT properties removed for revenue focus
 };
 
 // ============================================================================
@@ -281,8 +243,6 @@ export const ESSENTIAL_SMART_2026: DiscoveryPlan = {
     ],
 
     dentalBenefit: [],
-    prostheticDevices: [],
-    mentalHealthBenefit: [],
 
     cancerCover: {
         annualLimit: 250000,
@@ -291,41 +251,7 @@ export const ESSENTIAL_SMART_2026: DiscoveryPlan = {
         essentialSmartNetworkRestriction: { mustUseNetwork: true, limitedToPMB: false },
     },
 
-    chronicIllnessBenefit: {
-        chronicDiseaseListConditions: 27,
-        prescribedMinimumBenefitCompliant: true,
-        medicineFormulary: { fullCoverAtNetworkPharmacy: true, designatedServiceProviderRequired: true },
-    },
-
-    dayToDayBenefits: {
-        gpConsultations: {
-            unlimitedConsultations: true,
-            fixedCopaymentPerConsultation: { Classic: 70, Essential: 125, EssentialDynamic: 125, Active: 125 },
-            networkRequirement: "Smart Network GP",
-        },
-        eyeTest: {
-            annualLimit: 1,
-            fixedCopayment: { Classic: 70, Essential: 125, EssentialDynamic: 125, Active: 125 },
-        },
-        dentalCheckup: {
-            annualLimit: 1,
-            fixedCopayment: { Classic: 125, Essential: 190, EssentialDynamic: 190, Active: 190 },
-        },
-        acuteMedicine: { coverageType: "Over-the-Counter (OTC) Medicine", networkPharmacyRequirement: true },
-        sportsRelatedInjuries: {
-            coverage: {
-                basicXrays: true,
-                specialistVisits: 2,
-                physiotherapistBiokineticistChiropractor: { totalVisits: 4, referralRequired: true, copaymentPerVisit: 125 },
-            },
-        },
-    },
-
-    personalHealthFund: {
-        earnedThroughHealthActions: true,
-        personalHealthPathways: true,
-        usageForDayToDayCover: true,
-    },
+    // LOW-INTENT properties removed for revenue focus
 };
 
 // ============================================================================

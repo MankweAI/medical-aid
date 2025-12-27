@@ -48,15 +48,28 @@ export enum DiscoveryPlanVariant {
  * Network Types for Hospital Admissions
  */
 export enum DiscoveryNetworkType {
+    // Smart Series
     SMART_HOSPITAL_NETWORK = "Smart Hospital Network",
     SMART_DAY_SURGERY_NETWORK = "Smart Day Surgery Network",
     DYNAMIC_SMART_HOSPITAL_NETWORK = "Dynamic Smart Hospital Network",
+
+    // Core Series
+    CORE_HOSPITAL_NETWORK = "Core Hospital Network",
+    CORE_DAY_SURGERY_NETWORK = "Core Day Surgery Network",
+    ESSENTIAL_CORE_HOSPITAL_NETWORK = "Essential Core Hospital Network",
+
+    // General Networks
     DAY_SURGERY_NETWORK = "Day Surgery Network",
     DELTA_DAY_SURGERY_NETWORK = "Delta Day Surgery Network",
+    DELTA_HOSPITAL_NETWORK = "Delta Hospital Network",
     COASTAL_DAY_SURGERY_NETWORK = "Coastal Day Surgery Network",
+    COASTAL_HOSPITAL_NETWORK = "Coastal Hospital Network",
+
+    // KeyCare Series
     KEYCARE_DAY_SURGERY_NETWORK = "KeyCare Day Surgery Network",
     KEYCARE_START_DAY_SURGERY_NETWORK = "KeyCare Start Day Surgery Network",
     KEYCARE_START_REGIONAL_DAY_SURGERY_NETWORK = "KeyCare Start Regional Day Surgery Network",
+
     ANY_APPROVED_FACILITY = "Any Approved Facility",
 }
 
@@ -540,16 +553,18 @@ export interface DiscoveryPlan {
     hospitalNetwork: DiscoveryNetworkType;
     daySurgeryNetwork: DiscoveryNetworkType;
 
-    // Benefit Rules
+    // HIGH-INTENT Benefit Rules (monetizable via Gap Cover)
     hospitalBenefit: HospitalBenefitRule;
     daySurgeryBenefit: DaySurgeryBenefitRule;
     scopesBenefit: ScopesProcedureRule[];
     dentalBenefit: DentalTreatmentInHospitalRule[];
-    prostheticDevices: ProstheticDeviceRule[];
-    mentalHealthBenefit: MentalHealthBenefitRule[];
     cancerCover: CancerCoverRule;
-    chronicIllnessBenefit: ChronicIllnessBenefitRule;
-    dayToDayBenefits: DayToDayBenefits;
+
+    // LOW-INTENT Benefit Rules (optional - informational only)
+    prostheticDevices?: ProstheticDeviceRule[];
+    mentalHealthBenefit?: MentalHealthBenefitRule[];
+    chronicIllnessBenefit?: ChronicIllnessBenefitRule;
+    dayToDayBenefits?: DayToDayBenefits;
 
     // Accounts & Limits
     medicalSavingsAccount?: MedicalSavingsAccountRule;
@@ -695,7 +710,7 @@ export interface DiscoveryBenefitRule {
 // LEGACY / SHARED RISK TYPES (Migrated from types/risk.ts)
 // ============================================================================
 
-export type ProcedureCategory = 'major_joint' | 'scope' | 'spinal' | 'ophthalmology' | 'maternity' | 'dental' | 'general';
+export type ProcedureCategory = 'major_joint' | 'scope' | 'spinal' | 'ophthalmology' | 'maternity' | 'dental' | 'ent' | 'general';
 export type NetworkType = 'smart' | 'delta' | 'coastal' | 'any';
 export type PlanSeries = 'core' | 'smart' | 'saver' | 'priority' | 'comprehensive' | 'coastal';
 
@@ -742,6 +757,97 @@ export interface PlanDeductibleRule {
     };
 }
 
+/**
+ * Scope-Specific Insights (Gastroscopy, Colonoscopy)
+ * These are procedure-specific critical fields that must be surfaced in the UI.
+ */
+export interface ScopeInsights {
+    /** Hospital co-payment when using a Value-Based Network doctor */
+    reducedHospitalCopayment?: number;
+    /** Day clinic co-payment when using a Value-Based Network doctor */
+    reducedDayClinicCopayment?: number;
+    /** Co-payment if scope is performed in-rooms at a network provider (single scope) */
+    inRoomsSingleScopeCopayment?: number;
+    /** Co-payment if bi-directional scopes performed in-rooms (Gastro + Colonoscopy) */
+    inRoomsBiDirectionalCopayment?: number;
+    /** Out-of-network upfront payment penalty */
+    outOfNetworkPenalty?: number;
+    /** PMB exemption condition (e.g., "Patient 12 or under with dyspepsia") */
+    pmbExemptionCondition?: string;
+    /** Whether no co-payment is required under PMB exemption */
+    pmbExemptionNoCopayment?: boolean;
+}
+
+/**
+ * Dental-Specific Insights (Dental Surgery In-Hospital)
+ * Procedure-specific critical fields for dental surgery pages.
+ */
+export interface DentalInsights {
+    /** Hospital account co-payment (13+ years) */
+    hospitalCopayment?: number;
+    /** Day clinic account co-payment (13+ years) */
+    dayClinicCopayment?: number;
+    /** Age group this co-payment applies to */
+    ageGroup?: string;
+    /** Whether pre-authorisation is required */
+    requiresApproval?: boolean;
+    /** Coverage level for anaesthetist (e.g., 200% of DHR) */
+    anaesthetistCoverage?: number;
+    /** Whether the plan covers severe dental surgery */
+    coveredOnPlan?: boolean;
+}
+
+/**
+ * Ophthalmology-Specific Insights (Cataract, Vitrectomy)
+ * Procedure-specific fields for eye surgery pages.
+ */
+export interface OphthalmologyInsights {
+    /** Day Surgery Network required */
+    daySurgeryNetworkRequired?: boolean;
+    /** Out-of-network upfront payment */
+    outOfNetworkPenalty?: number;
+    /** Lens/IOL cost limits */
+    lensCostLimit?: number;
+    /** Whether procedure is on Day Surgery Network list */
+    onDaySurgeryNetworkList?: boolean;
+    /** Excluded on specific plans */
+    excludedOnPlans?: string[];
+}
+
+/**
+ * ENT-Specific Insights (Tonsillectomy, Grommets)
+ * Procedure-specific fields for ENT surgery pages.
+ */
+export interface ENTInsights {
+    /** Day Surgery Network required */
+    daySurgeryNetworkRequired?: boolean;
+    /** Out-of-network upfront payment */
+    outOfNetworkPenalty?: number;
+    /** Age restrictions (e.g., children only) */
+    ageRestriction?: string;
+    /** Whether overnight stay may be required */
+    overnightStayPossible?: boolean;
+    /** Excluded on specific plans */
+    excludedOnPlans?: string[];
+}
+
+/**
+ * Major Joint Surgery Insights (Hip, Knee Replacement)
+ * Procedure-specific fields for joint replacement pages.
+ */
+export interface MajorJointInsights {
+    /** Network provider required for full cover */
+    networkProviderRequired?: boolean;
+    /** Prosthesis limit per admission */
+    prosthesisLimit?: number;
+    /** Out-of-network prosthesis limit */
+    nonNetworkProsthesisLimit?: number;
+    /** Excluded joint types on this plan */
+    excludedJointsOnPlan?: string[];
+    /** Whether trauma/oncology cases are exempt */
+    traumaOncologyExempt?: boolean;
+}
+
 export interface RiskAudit {
     procedure: Procedure;
     plan: PlanDeductibleRule;
@@ -761,9 +867,26 @@ export interface RiskAudit {
         };
     };
 
+    /** Scope-specific insights for Gastroscopy/Colonoscopy procedures */
+    scope_insights?: ScopeInsights;
+
+    /** Dental-specific insights for dental surgery procedures */
+    dental_insights?: DentalInsights;
+
+    /** Ophthalmology-specific insights for eye surgery procedures */
+    ophthalmology_insights?: OphthalmologyInsights;
+
+    /** ENT-specific insights for ear/nose/throat procedures */
+    ent_insights?: ENTInsights;
+
+    /** Major joint surgery insights for replacements */
+    major_joint_insights?: MajorJointInsights;
+
     meta: {
         is_trap: boolean;
         coverage_percent: number;
         warning_label: string | null;
     };
 }
+
+

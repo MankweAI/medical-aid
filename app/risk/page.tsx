@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ProcedureAutocomplete } from '@/components/risk/ProcedureAutocomplete';
-import { ProcedureRepository } from '@/lib/risk/resolver';
+import { ProcedureRepository } from '@/lib/risk/discovery-resolver';
 
 export const metadata = {
     title: 'Surgery Cost Simulator 2026 | Intellihealth',

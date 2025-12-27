@@ -97,6 +97,140 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
                     )}
                 </div>
 
+                {/* SCOPE INSIGHTS: Procedure-Specific Tips */}
+                {audit.scope_insights && (
+                    <div className="mb-6 space-y-2">
+                        {/* Value-Based Network Reduction */}
+                        {audit.scope_insights.reducedHospitalCopayment && location === 'hospital' && (
+                            <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                                <div className="p-1.5 bg-amber-100 rounded-lg">
+                                    <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-amber-800">Value-Based Network Discount</p>
+                                    <p className="text-[11px] text-amber-700 mt-0.5">
+                                        Reduces to <span className="font-black">{formatZAR(audit.scope_insights.reducedHospitalCopayment)}</span> if your doctor is part of the Scheme's Value-Based Network.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* In-Rooms Option */}
+                        {audit.scope_insights.inRoomsSingleScopeCopayment && (
+                            <div className="flex items-start gap-3 p-3 bg-sky-50 rounded-xl border border-sky-100">
+                                <div className="p-1.5 bg-sky-100 rounded-lg">
+                                    <Building2 className="w-4 h-4 text-sky-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-sky-800">In-Rooms Option Available</p>
+                                    <p className="text-[11px] text-sky-700 mt-0.5">
+                                        Only <span className="font-black">{formatZAR(audit.scope_insights.inRoomsSingleScopeCopayment)}</span> if performed in-rooms at a network provider (no theatre required).
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PMB Exemption */}
+                        {audit.scope_insights.pmbExemptionCondition && audit.scope_insights.pmbExemptionNoCopayment && (
+                            <div className="flex items-start gap-3 p-3 bg-violet-50 rounded-xl border border-violet-100">
+                                <div className="p-1.5 bg-violet-100 rounded-lg">
+                                    <ShieldCheck className="w-4 h-4 text-violet-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-violet-800">PMB Exemption</p>
+                                    <p className="text-[11px] text-violet-700 mt-0.5">
+                                        <span className="font-black">No co-payment</span> if: {audit.scope_insights.pmbExemptionCondition}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Out-of-Network Warning */}
+                        {audit.scope_insights.outOfNetworkPenalty && (
+                            <div className="flex items-start gap-3 p-3 bg-rose-50 rounded-xl border border-rose-100">
+                                <div className="p-1.5 bg-rose-100 rounded-lg">
+                                    <AlertTriangle className="w-4 h-4 text-rose-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-rose-800">Out-of-Network Warning</p>
+                                    <p className="text-[11px] text-rose-700 mt-0.5">
+                                        Using a non-network facility increases your liability to <span className="font-black">{formatZAR(audit.scope_insights.outOfNetworkPenalty)}</span>.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* DENTAL INSIGHTS: Procedure-Specific Tips */}
+                {audit.dental_insights && (
+                    <div className="mb-6 space-y-2">
+                        {/* Hospital vs Day Clinic Comparison */}
+                        {audit.dental_insights.hospitalCopayment && audit.dental_insights.dayClinicCopayment && (
+                            <div className="flex items-start gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                                <div className="p-1.5 bg-emerald-100 rounded-lg">
+                                    <Building2 className="w-4 h-4 text-emerald-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-emerald-800">Day Clinic Saves You Money</p>
+                                    <p className="text-[11px] text-emerald-700 mt-0.5">
+                                        <span className="font-black">{formatZAR(audit.dental_insights.dayClinicCopayment)}</span> at a Day Clinic vs <span className="font-black">{formatZAR(audit.dental_insights.hospitalCopayment)}</span> at Hospital.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Age-Based Co-payment */}
+                        {audit.dental_insights.ageGroup && (
+                            <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                                <div className="p-1.5 bg-amber-100 rounded-lg">
+                                    <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-amber-800">Age-Based Co-payment</p>
+                                    <p className="text-[11px] text-amber-700 mt-0.5">
+                                        These co-payments apply to patients <span className="font-black">{audit.dental_insights.ageGroup}</span>. Children under 13 may have reduced or no co-payment.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Pre-Authorisation Required */}
+                        {audit.dental_insights.requiresApproval && (
+                            <div className="flex items-start gap-3 p-3 bg-violet-50 rounded-xl border border-violet-100">
+                                <div className="p-1.5 bg-violet-100 rounded-lg">
+                                    <ShieldCheck className="w-4 h-4 text-violet-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-violet-800">Pre-Authorisation Required</p>
+                                    <p className="text-[11px] text-violet-700 mt-0.5">
+                                        Dental surgery in hospital requires <span className="font-black">scheme approval</span> before admission.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Anaesthetist Coverage */}
+                        {audit.dental_insights.anaesthetistCoverage && (
+                            <div className="flex items-start gap-3 p-3 bg-sky-50 rounded-xl border border-sky-100">
+                                <div className="p-1.5 bg-sky-100 rounded-lg">
+                                    <CheckCircle2 className="w-4 h-4 text-sky-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-sky-800">Anaesthetist Covered</p>
+                                    <p className="text-[11px] text-sky-700 mt-0.5">
+                                        Anaesthetist fees covered at <span className="font-black">{audit.dental_insights.anaesthetistCoverage}% of Discovery Health Rate</span>.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* 3. CONTEXT TOGGLES: The "Why" (Scopes Only) [cite: 48] */}
                 {isScope && (
                     <div className="bg-slate-50 p-2 rounded-xl flex gap-2 mb-6">
