@@ -7,9 +7,16 @@ import { getV2Slug } from '@/utils/slug-utils';
 // Update this to the actual date of your "Big Migration"
 const MIGRATION_DATE = new Date(); // Use current date
 
+/**
+ * Main Sitemap
+ * 
+ * Contains static pages and /personas cluster (already indexed).
+ * Discovery Health routes are in /discovery-health-sitemap.xml
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.intellihealth.co.za';
 
+    // 1. Static Routes
     const staticRoutes = ['', '/about', '/methodology', '/disclaimer', '/privacy'].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: MIGRATION_DATE, // Updated signal
@@ -17,8 +24,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 1,
     }));
 
+    // 2. Persona Routes (already indexed)
     const personas = await getPersonas();
-
     const personaRoutes = personas.map((persona) => {
         const v2Slug = getV2Slug(persona.slug);
         return {
@@ -31,5 +38,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         };
     });
 
-    return [...staticRoutes, ...personaRoutes];
+    return [
+        ...staticRoutes,
+        ...personaRoutes,
+    ];
 }
