@@ -42,6 +42,7 @@ export enum DiscoveryPlanVariant {
     PLUS = "Plus",
     START = "Start",
     START_REGIONAL = "Start Regional",
+    EXECUTIVE = "Executive",
 }
 
 /**
@@ -69,6 +70,9 @@ export enum DiscoveryNetworkType {
     KEYCARE_DAY_SURGERY_NETWORK = "KeyCare Day Surgery Network",
     KEYCARE_START_DAY_SURGERY_NETWORK = "KeyCare Start Day Surgery Network",
     KEYCARE_START_REGIONAL_DAY_SURGERY_NETWORK = "KeyCare Start Regional Day Surgery Network",
+
+    // Priority Series
+    PRIORITY_HOSPITAL_NETWORK = "Priority Hospital Network",
 
     ANY_APPROVED_FACILITY = "Any Approved Facility",
 }

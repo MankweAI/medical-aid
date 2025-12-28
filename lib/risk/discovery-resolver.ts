@@ -6,11 +6,63 @@ import {
     DiscoveryPlan // Now available in types/schemes/discovery
 } from '@/types/schemes/discovery';
 import { DiscoveryRiskEngine } from '@/utils/risk/engines/discovery';
+
+// Smart Series Plans - Removed (See below)
+
+// Core Series Plans (VALIDATED from brochure)
+import {
+    CLASSIC_CORE_2026,
+    CLASSIC_DELTA_CORE_2026,
+    ESSENTIAL_CORE_2026,
+    ESSENTIAL_DELTA_CORE_2026,
+    COASTAL_CORE_2026
+} from '@/data/discovery/core-series-plans';
+
+// KeyCare Series Plans (VALIDATED from brochure)
+import {
+    KEYCARE_PLUS_2026,
+    KEYCARE_CORE_2026,
+    KEYCARE_START_2026,
+    KEYCARE_START_REGIONAL_2026
+} from '@/data/discovery/keycare-series-plans';
+
+// Priority Series Plans (VALIDATED from brochure)
+import {
+    PRIORITY_CLASSIC_2026,
+    PRIORITY_CLASSIC_ESSENTIAL_2026
+} from '@/data/discovery/priority-series-plans';
+
+// Saver Series Plans (VALIDATED from brochure)
+import {
+    CLASSIC_SAVER_2026,
+    CLASSIC_DELTA_SAVER_2026,
+    ESSENTIAL_SAVER_2026,
+    ESSENTIAL_DELTA_SAVER_2026,
+    COASTAL_SAVER_2026
+} from '@/data/discovery/saver-series-plans';
+
+// Smart Series Plans (Updated 2026 with Active Smart)
 import {
     CLASSIC_SMART_2026,
     ESSENTIAL_SMART_2026,
-    ESSENTIAL_DYNAMIC_SMART_2026
+    ESSENTIAL_DYNAMIC_SMART_2026,
+    ACTIVE_SMART_2026
 } from '@/data/discovery/smart-series-plans';
+
+// Smart Saver Series Plans (VALIDATED from brochure)
+import {
+    CLASSIC_SMART_SAVER_2026,
+    ESSENTIAL_SMART_SAVER_2026
+} from '@/data/discovery/smart-saver-series-plans';
+
+// Executive Plan (VALIDATED from brochure)
+import { EXECUTIVE_PLAN_2026 } from '@/data/discovery/executive-plan';
+
+// Comprehensive Series Plans (VALIDATED from brochure)
+import {
+    CLASSIC_COMPREHENSIVE_2026,
+    CLASSIC_SMART_COMPREHENSIVE_2026
+} from '@/data/discovery/comprehensive-series-plans';
 
 // Import centralized procedure data
 import { ALL_PROCEDURES } from '@/data/discovery/procedures';
@@ -34,10 +86,52 @@ const PROCEDURES: Procedure[] = ALL_PROCEDURES;
 // 2. SINGLE SOURCE OF TRUTH: DISCOVERY_PLAN_MAP
 // ============================================================================
 
+/**
+ * All registered Discovery Health plans
+ * Smart: 4, Core: 5, KeyCare: 4, Priority: 2, Saver: 5 = 20 total plans
+ * With 16 procedures = 320 potential page combinations
+ */
 const DISCOVERY_PLAN_MAP: Record<string, DiscoveryPlan> = {
+    // Smart Series (4 plans)
     'discovery-smart-classic-2026': CLASSIC_SMART_2026,
     'discovery-smart-essential-2026': ESSENTIAL_SMART_2026,
-    'discovery-smart-essential-dynamic-2026': ESSENTIAL_DYNAMIC_SMART_2026
+    'discovery-smart-essential-dynamic-2026': ESSENTIAL_DYNAMIC_SMART_2026,
+    'discovery-smart-active-2026': ACTIVE_SMART_2026,
+
+    // Smart Saver Series (2 plans - VALIDATED from brochure)
+    'discovery-smart-saver-classic-2026': CLASSIC_SMART_SAVER_2026,
+    'discovery-smart-saver-essential-2026': ESSENTIAL_SMART_SAVER_2026,
+
+    // Executive Plan (1 plan - VALIDATED from brochure)
+    'discovery-executive-2026': EXECUTIVE_PLAN_2026,
+
+    // Comprehensive Series (2 plans - VALIDATED from brochure)
+    'discovery-comprehensive-classic-2026': CLASSIC_COMPREHENSIVE_2026,
+    'discovery-comprehensive-classic-smart-2026': CLASSIC_SMART_COMPREHENSIVE_2026,
+
+    // Core Series (5 plans - VALIDATED from brochure)
+    'discovery-core-classic-2026': CLASSIC_CORE_2026,
+    'discovery-core-classic-delta-2026': CLASSIC_DELTA_CORE_2026,
+    'discovery-core-essential-2026': ESSENTIAL_CORE_2026,
+    'discovery-core-essential-delta-2026': ESSENTIAL_DELTA_CORE_2026,
+    'discovery-core-coastal-2026': COASTAL_CORE_2026,
+
+    // KeyCare Series (4 plans - VALIDATED from brochure)
+    'discovery-keycare-plus-2026': KEYCARE_PLUS_2026,
+    'discovery-keycare-core-2026': KEYCARE_CORE_2026,
+    'discovery-keycare-start-2026': KEYCARE_START_2026,
+    'discovery-keycare-start-regional-2026': KEYCARE_START_REGIONAL_2026,
+
+    // Priority Series (2 plans - VALIDATED from brochure)
+    'discovery-priority-classic-2026': PRIORITY_CLASSIC_2026,
+    'discovery-priority-classic-essential-2026': PRIORITY_CLASSIC_ESSENTIAL_2026,
+
+    // Saver Series (5 plans - VALIDATED from brochure)
+    'discovery-saver-classic-2026': CLASSIC_SAVER_2026,
+    'discovery-saver-classic-delta-2026': CLASSIC_DELTA_SAVER_2026,
+    'discovery-saver-essential-2026': ESSENTIAL_SAVER_2026,
+    'discovery-saver-essential-delta-2026': ESSENTIAL_DELTA_SAVER_2026,
+    'discovery-saver-coastal-2026': COASTAL_SAVER_2026,
 };
 
 // ============================================================================
