@@ -1,7 +1,7 @@
 // components/cliffs/IncomeEfficiencyAudit.tsx
 import { Plan } from '@/utils/types';
 import { CliffAudit } from '@/utils/cliff-audit';
-import { GlassCard } from '@/components/ui/GlassCard';
+import GlassCard from '@/components/ui/GlassCard';
 
 export function IncomeEfficiencyAudit({ plan, income, audit }: { plan: Plan, income: number, audit: any }) {
     return (

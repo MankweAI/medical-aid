@@ -4,11 +4,16 @@ import { getV2Slug } from '@/utils/slug-utils';
 
 const GLOBAL_LAUNCH_DATE = new Date('2025-10-01');
 
+/**
+ * Main Sitemap
+ * 
+ * Contains static pages and /personas cluster (already indexed).
+ * Discovery Health routes are in /discovery-health-sitemap.xml
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    // 🔴 UPDATE THIS LINE
     const baseUrl = 'https://www.intellihealth.co.za';
 
-    // Use local data instead of Supabase
+    // 1. Static Routes
     const staticRoutes = ['', '/about', '/methodology', '/disclaimer', '/privacy'].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: GLOBAL_LAUNCH_DATE,
@@ -16,10 +21,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 1,
     }));
 
-    // Fetch personas from database
+    // 2. Persona Routes (already indexed)
     const personas = await getPersonas();
-
-    // Generate persona routes using V2 slugs for SEO
     const personaRoutes = personas.map((persona) => {
         const v2Slug = getV2Slug(persona.slug);
         return {
@@ -30,5 +33,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         };
     });
 
-    return [...staticRoutes, ...personaRoutes];
+    return [
+        ...staticRoutes,
+        ...personaRoutes,
+    ];
 }

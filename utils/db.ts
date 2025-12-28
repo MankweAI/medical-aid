@@ -146,3 +146,155 @@ export async function getPlansByIds(ids: string[]): Promise<Plan[]> {
     // Extract the full plan object from the JSONB 'data' column
     return (data || []).map(row => row.data as Plan);
 }
+
+// ============================================================================
+// DISCOVERY HEALTH (Plans & Procedures for /discovery-health cluster)
+// Uses build-time client to avoid cookies requirement in generateStaticParams
+// ============================================================================
+
+import { DiscoveryPlan, Procedure } from '@/types/schemes/discovery';
+import { createBuildTimeClient } from '@/utils/supabase/build-client';
+
+/**
+ * Fetch all Discovery plans from database (build-time compatible)
+ */
+export async function getDiscoveryPlans(): Promise<DiscoveryPlan[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_plans')
+        .select('data')
+        .order('id') as { data: { data: DiscoveryPlan }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching discovery plans:', error.message);
+        return [];
+    }
+
+    return (data || []).map(row => row.data);
+}
+
+/**
+ * Fetch a single Discovery plan by ID (build-time compatible)
+ */
+export async function getDiscoveryPlanById(id: string): Promise<DiscoveryPlan | null> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_plans')
+        .select('data')
+        .eq('id', id)
+        .single() as { data: { data: DiscoveryPlan } | null; error: any };
+
+    if (error) {
+        if (error?.code !== 'PGRST116') {
+            console.error('Error fetching discovery plan:', error?.message);
+        }
+        return null;
+    }
+
+    return data?.data || null;
+}
+
+/**
+ * Fetch a Discovery plan by SEO slug (build-time compatible)
+ */
+export async function getDiscoveryPlanBySlug(slug: string): Promise<{ id: string; plan: DiscoveryPlan } | null> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_plans')
+        .select('id, data')
+        .eq('slug', slug)
+        .single() as { data: { id: string; data: DiscoveryPlan } | null; error: any };
+
+    if (error) {
+        if (error?.code !== 'PGRST116') {
+            console.error('Error fetching discovery plan by slug:', error?.message);
+        }
+        return null;
+    }
+
+    return data ? { id: data.id, plan: data.data } : null;
+}
+
+/**
+ * Fetch all Discovery plan slugs (for static generation, build-time compatible)
+ */
+export async function getDiscoveryPlanSlugs(): Promise<{ id: string; slug: string; series: string }[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_plans')
+        .select('id, slug, series')
+        .order('series') as { data: { id: string; slug: string; series: string }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching discovery plan slugs:', error?.message);
+        return [];
+    }
+
+    return data || [];
+}
+
+/**
+ * Fetch all Discovery procedures from database (build-time compatible)
+ */
+export async function getDiscoveryProcedures(): Promise<Procedure[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_procedures')
+        .select('data')
+        .order('id') as { data: { data: Procedure }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching discovery procedures:', error?.message);
+        return [];
+    }
+
+    return (data || []).map(row => row.data);
+}
+
+/**
+ * Fetch a single Discovery procedure by ID (build-time compatible)
+ */
+export async function getDiscoveryProcedureById(id: string): Promise<Procedure | null> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_procedures')
+        .select('data')
+        .eq('id', id)
+        .single() as { data: { data: Procedure } | null; error: any };
+
+    if (error) {
+        if (error?.code !== 'PGRST116') {
+            console.error('Error fetching discovery procedure:', error?.message);
+        }
+        return null;
+    }
+
+    return data?.data || null;
+}
+
+/**
+ * Fetch Discovery procedures by category (build-time compatible)
+ */
+export async function getDiscoveryProceduresByCategory(category: string): Promise<Procedure[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('discovery_procedures')
+        .select('data')
+        .eq('category', category)
+        .order('id') as { data: { data: Procedure }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching discovery procedures by category:', error?.message);
+        return [];
+    }
+
+    return (data || []).map(row => row.data);
+}
+

@@ -34,7 +34,7 @@ export function CliffChart({ plan, currentIncome }: { plan: Plan; currentIncome:
                     />
                     <YAxis hide />
                     <Tooltip
-                        formatter={(val: number) => [`R${val}`, 'Monthly Premium']}
+                        formatter={(val) => [`R${val ?? 0}`, 'Monthly Premium']}
                         labelFormatter={(label) => `Income: R${label}`}
                     />
                     <Area
