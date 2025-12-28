@@ -7,6 +7,7 @@ import { PersonaProvider } from "@/context/PersonaContext";
 import ActionDock from "@/components/PinsFab";
 import TrustFooter from "@/components/TrustFooter";
 import SplashScreen from "@/components/SplashScreen";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 
 const geistSans = Geist({
@@ -75,6 +76,7 @@ export default function RootLayout({
             </PersonaProvider>
           </div>
         </SplashScreen>
+        <SpeedInsights />
       </body>
     </html>
   );
