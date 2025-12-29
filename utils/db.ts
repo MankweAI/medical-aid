@@ -298,3 +298,132 @@ export async function getDiscoveryProceduresByCategory(category: string): Promis
     return (data || []).map(row => row.data);
 }
 
+// ============================================================================
+// BESTMED (Plans & Procedures for /bestmed cluster)
+// Uses build-time client to avoid cookies requirement in generateStaticParams
+// ============================================================================
+
+import { BestmedPlan, BestmedProcedure } from '@/types/schemes/bestmed';
+
+/**
+ * Fetch all Bestmed plans from database (build-time compatible)
+ */
+export async function getBestmedPlans(): Promise<BestmedPlan[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bestmed_plans')
+        .select('data')
+        .order('id') as { data: { data: BestmedPlan }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching bestmed plans:', error?.message);
+        return [];
+    }
+
+    return (data || []).map(row => row.data);
+}
+
+/**
+ * Fetch a single Bestmed plan by ID (build-time compatible)
+ */
+export async function getBestmedPlanById(id: string): Promise<BestmedPlan | null> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bestmed_plans')
+        .select('data')
+        .eq('id', id)
+        .single() as { data: { data: BestmedPlan } | null; error: any };
+
+    if (error) {
+        if (error?.code !== 'PGRST116') {
+            console.error('Error fetching bestmed plan:', error?.message);
+        }
+        return null;
+    }
+
+    return data?.data || null;
+}
+
+/**
+ * Fetch a Bestmed plan by SEO slug (build-time compatible)
+ */
+export async function getBestmedPlanBySlug(slug: string): Promise<{ id: string; plan: BestmedPlan } | null> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bestmed_plans')
+        .select('id, data')
+        .eq('slug', slug)
+        .single() as { data: { id: string; data: BestmedPlan } | null; error: any };
+
+    if (error) {
+        if (error?.code !== 'PGRST116') {
+            console.error('Error fetching bestmed plan by slug:', error?.message);
+        }
+        return null;
+    }
+
+    return data ? { id: data.id, plan: data.data } : null;
+}
+
+/**
+ * Fetch all Bestmed plan slugs (for static generation, build-time compatible)
+ */
+export async function getBestmedPlanSlugs(): Promise<{ id: string; slug: string; series: string; tier: number }[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bestmed_plans')
+        .select('id, slug, series, tier')
+        .order('series') as { data: { id: string; slug: string; series: string; tier: number }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching bestmed plan slugs:', error?.message);
+        return [];
+    }
+
+    return data || [];
+}
+
+/**
+ * Fetch all Bestmed procedures from database (build-time compatible)
+ */
+export async function getBestmedProcedures(): Promise<BestmedProcedure[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bestmed_procedures')
+        .select('data')
+        .order('id') as { data: { data: BestmedProcedure }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching bestmed procedures:', error?.message);
+        return [];
+    }
+
+    return (data || []).map(row => row.data);
+}
+
+/**
+ * Fetch a single Bestmed procedure by ID (build-time compatible)
+ */
+export async function getBestmedProcedureById(id: string): Promise<BestmedProcedure | null> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bestmed_procedures')
+        .select('data')
+        .eq('id', id)
+        .single() as { data: { data: BestmedProcedure } | null; error: any };
+
+    if (error) {
+        if (error?.code !== 'PGRST116') {
+            console.error('Error fetching bestmed procedure:', error?.message);
+        }
+        return null;
+    }
+
+    return data?.data || null;
+}
