@@ -427,3 +427,48 @@ export async function getBestmedProcedureById(id: string): Promise<BestmedProced
 
     return data?.data || null;
 }
+
+// ============================================================================
+// BONITAS PLAN & PROCEDURE ACCESS (build-time compatible)
+// ============================================================================
+
+import { BonitasProcedure } from '@/types/schemes/bonitas';
+
+/**
+ * Fetch all Bonitas plan slugs from database (build-time compatible)
+ */
+export async function getBonitasPlanSlugs(): Promise<{ id: string; slug: string; series: string }[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bonitas_plans')
+        .select('id, slug, series')
+        .order('series') as { data: { id: string; slug: string; series: string }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching bonitas plan slugs:', error?.message);
+        return [];
+    }
+
+    return data || [];
+}
+
+/**
+ * Fetch all Bonitas procedures from database (build-time compatible)
+ */
+export async function getBonitasProcedures(): Promise<BonitasProcedure[]> {
+    const supabase = createBuildTimeClient();
+
+    const { data, error } = await supabase
+        .from('bonitas_procedures')
+        .select('data')
+        .order('id') as { data: { data: BonitasProcedure }[] | null; error: any };
+
+    if (error) {
+        console.error('Error fetching bonitas procedures:', error?.message);
+        return [];
+    }
+
+    return (data || []).map(row => row.data);
+}
+
