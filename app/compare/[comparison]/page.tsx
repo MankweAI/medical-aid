@@ -4,11 +4,14 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import AppHeader from '@/components/AppHeader';
 import TrustFooter from '@/components/TrustFooter';
+import SemanticGlossary from '@/components/SemanticGlossary';
+import PeopleAlsoAsk from '@/components/PeopleAlsoAsk';
 import {
     CONDITIONS,
     getAllConditionSlugs,
     type ConditionSlug,
 } from '@/utils/condition-mapping';
+import { ContentGenerator, FINANCIAL_DISCLAIMER } from '@/utils/seo-content';
 import {
     Scale,
     ArrowRight,
@@ -16,6 +19,8 @@ import {
     CheckCircle,
     AlertCircle,
     TrendingDown,
+    BookOpen,
+    HelpCircle,
 } from 'lucide-react';
 
 // ============================================================================
@@ -116,6 +121,24 @@ export default async function PlanComparisonPage({ params }: PageProps) {
     const conditionDef = CONDITIONS[parsed.condition];
     const currentYear = new Date().getFullYear();
 
+    // Generate semantic content
+    const glossaryTerms = ContentGenerator.generateConditionGlossary(parsed.condition);
+    const conditionFAQs = ContentGenerator.generateConditionFAQ(parsed.condition);
+
+    // FAQPage JSON-LD Schema for rich snippets
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: conditionFAQs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+            },
+        })),
+    };
+
     const planAData = {
         name: formatPlanName(parsed.planA),
         scheme: parsed.planA.includes('discovery') ? 'Discovery Health' : 'Bestmed',
@@ -178,6 +201,12 @@ export default async function PlanComparisonPage({ params }: PageProps) {
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            {/* FAQPage JSON-LD for Rich Snippets */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+
             <AppHeader />
 
             <div className="max-w-6xl mx-auto px-4 pt-6">
@@ -327,16 +356,42 @@ export default async function PlanComparisonPage({ params }: PageProps) {
                     </Link>
                 </div>
 
+                {/* ================================================================ */}
+                {/* SEMANTIC LAYER: SEO Content for Long-Tail Rankings              */}
+                {/* ================================================================ */}
+
+                {/* Jargon Buster: Condition-Specific Glossary */}
+                <section className="mb-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-amber-50 text-amber-600 rounded-full">
+                            <BookOpen className="w-5 h-5" />
+                        </div>
+                        <h2 className="text-xl font-bold text-slate-900">
+                            Key Terms for {conditionDef.label}
+                        </h2>
+                    </div>
+                    <SemanticGlossary terms={glossaryTerms} />
+                </section>
+
+                {/* People Also Ask: Condition-Specific FAQs */}
+                <section className="mb-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-blue-50 text-blue-600 rounded-full">
+                            <HelpCircle className="w-5 h-5" />
+                        </div>
+                        <h2 className="text-xl font-bold text-slate-900">
+                            Frequently Asked Questions
+                        </h2>
+                    </div>
+                    <PeopleAlsoAsk questions={conditionFAQs} />
+                </section>
+
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
                     <div className="flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-amber-800">
                             <p className="font-semibold mb-1">Financial Disclaimer</p>
-                            <p>
-                                Results are the product of a mathematical risk model mapping Council for
-                                Medical Schemes regulatory rules against scheme deductibles. This is not
-                                clinical or financial advice.
-                            </p>
+                            <p>{FINANCIAL_DISCLAIMER}</p>
                             <p className="mt-2 text-amber-600">[Source: Council for Medical Schemes Official Benefit Rules]</p>
                         </div>
                     </div>

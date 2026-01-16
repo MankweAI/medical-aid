@@ -4,11 +4,13 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import AppHeader from '@/components/AppHeader';
 import TrustFooter from '@/components/TrustFooter';
+import RiskAuditFaqs from '@/components/risk/RiskAuditFaqs';
 import {
     CONDITIONS,
     getAllConditionSlugs,
     type ConditionSlug,
 } from '@/utils/condition-mapping';
+import { ContentGenerator, FINANCIAL_DISCLAIMER } from '@/utils/seo-content';
 import {
     FileText,
     ArrowLeft,
@@ -193,6 +195,23 @@ export default async function LiabilityAuditPage({ params }: PageProps) {
     const planName = formatDisplayName(parsed.plan);
     const schemeName = formatDisplayName(parsed.scheme);
 
+    // Generate audit-specific FAQs for transactional doubt-clearing
+    const auditFAQs = ContentGenerator.generateAuditFAQ(parsed.condition, schemeName, planName);
+
+    // FAQPage JSON-LD Schema for rich snippets
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: auditFAQs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+            },
+        })),
+    };
+
     const waterfallSteps: WaterfallStep[] = [
         {
             label: 'Total Condition Cost',
@@ -251,6 +270,12 @@ export default async function LiabilityAuditPage({ params }: PageProps) {
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            {/* FAQPage JSON-LD for Rich Snippets */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+
             <AppHeader />
 
             <div className="max-w-4xl mx-auto px-4 pt-6">
@@ -309,6 +334,17 @@ export default async function LiabilityAuditPage({ params }: PageProps) {
                     </p>
                 </div>
 
+                {/* ================================================================ */}
+                {/* RISK AUDIT FAQs: Transactional Doubt-Clearing                   */}
+                {/* ================================================================ */}
+                <div className="mb-8">
+                    <RiskAuditFaqs
+                        faqs={auditFAQs}
+                        planName={`${schemeName} ${planName}`}
+                        profileContext={`${conditionDef.label} patient looking at ${schemeName} ${planName}`}
+                    />
+                </div>
+
                 <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white mb-8">
                     <div className="flex items-center justify-between">
                         <div>
@@ -330,13 +366,7 @@ export default async function LiabilityAuditPage({ params }: PageProps) {
                         <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-amber-800">
                             <p className="font-semibold mb-1">Financial Disclaimer</p>
-                            <p>
-                                This liability audit is the product of a mathematical risk model mapping
-                                Council for Medical Schemes regulatory rules against {schemeName} benefit
-                                schedules. Actual costs may vary based on service providers, treatment
-                                protocols, and individual circumstances. This is not clinical or financial
-                                advice.
-                            </p>
+                            <p>{FINANCIAL_DISCLAIMER}</p>
                             <p className="mt-2 text-amber-600">[Source: Council for Medical Schemes Official Benefit Rules]</p>
                         </div>
                     </div>
@@ -347,3 +377,4 @@ export default async function LiabilityAuditPage({ params }: PageProps) {
         </main>
     );
 }
+
