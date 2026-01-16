@@ -853,8 +853,165 @@ const nextConfig: NextConfig = {
         destination: '/personas/sizwehosmed-titanium-executive-internal-device-risk-transfer',
         permanent: true,
       },
+
+      // ========================================================================
+      // PROCEDURE-TO-CONDITION REDIRECTS (V2 Architecture)
+      // Migrate old procedure pages to new condition-based audit pages
+      // ========================================================================
+
+      // Discovery Health - Digestive Disorders (Scopes)
+      {
+        source: '/discovery-health/:plan/gastroscopy',
+        destination: '/audit/digestive-disorders-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/colonoscopy',
+        destination: '/audit/digestive-disorders-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/sigmoidoscopy',
+        destination: '/audit/digestive-disorders-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/endoscopy',
+        destination: '/audit/digestive-disorders-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+
+      // Discovery Health - Joint Care
+      {
+        source: '/discovery-health/:plan/hip-replacement',
+        destination: '/audit/hip-conditions-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/knee-replacement',
+        destination: '/audit/knee-injuries-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/knee-arthroscopy',
+        destination: '/audit/knee-injuries-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+
+      // Discovery Health - Spinal Conditions
+      {
+        source: '/discovery-health/:plan/back-surgery',
+        destination: '/audit/spinal-conditions-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/spinal-fusion',
+        destination: '/audit/spinal-conditions-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+
+      // Discovery Health - Eye Health
+      {
+        source: '/discovery-health/:plan/cataract',
+        destination: '/audit/eye-health-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+      {
+        source: '/discovery-health/:plan/cataract-surgery',
+        destination: '/audit/eye-health-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+
+      // Discovery Health - Maternity Care
+      {
+        source: '/discovery-health/:plan/caesarean-section',
+        destination: '/audit/maternity-care-cost-audit-discovery-:plan',
+        permanent: true,
+      },
+
+      // Bestmed - Digestive Disorders
+      {
+        source: '/bestmed/:plan/gastroscopy',
+        destination: '/audit/digestive-disorders-cost-audit-bestmed-:plan',
+        permanent: true,
+      },
+      {
+        source: '/bestmed/:plan/colonoscopy',
+        destination: '/audit/digestive-disorders-cost-audit-bestmed-:plan',
+        permanent: true,
+      },
+
+      // Bestmed - Joint Care
+      {
+        source: '/bestmed/:plan/hip-replacement',
+        destination: '/audit/hip-conditions-cost-audit-bestmed-:plan',
+        permanent: true,
+      },
+      {
+        source: '/bestmed/:plan/knee-replacement',
+        destination: '/audit/knee-injuries-cost-audit-bestmed-:plan',
+        permanent: true,
+      },
+
+      // Bestmed - Spinal Conditions
+      {
+        source: '/bestmed/:plan/back-neck-surgery',
+        destination: '/audit/spinal-conditions-cost-audit-bestmed-:plan',
+        permanent: true,
+      },
+
+      // Bonitas - Digestive Disorders
+      {
+        source: '/bonitas/:plan/gastroscopy',
+        destination: '/audit/digestive-disorders-cost-audit-bonitas-:plan',
+        permanent: true,
+      },
+      {
+        source: '/bonitas/:plan/colonoscopy',
+        destination: '/audit/digestive-disorders-cost-audit-bonitas-:plan',
+        permanent: true,
+      },
+
+      // Bonitas - Joint Care
+      {
+        source: '/bonitas/:plan/hip-replacement',
+        destination: '/audit/hip-conditions-cost-audit-bonitas-:plan',
+        permanent: true,
+      },
+      {
+        source: '/bonitas/:plan/knee-replacement',
+        destination: '/audit/knee-injuries-cost-audit-bonitas-:plan',
+        permanent: true,
+      },
+
+      // ========================================================================
+      // STRATEGY HUB REDIRECTS
+      // Redirect old plan hub pages to new condition optimization pages
+      // ========================================================================
+      {
+        source: '/discovery-health/:plan',
+        destination: '/optimize/joint-care',
+        permanent: true,
+      },
+      {
+        source: '/bestmed/:plan',
+        destination: '/optimize/joint-care',
+        permanent: true,
+      },
+      {
+        source: '/bonitas/:plan',
+        destination: '/optimize/joint-care',
+        permanent: true,
+      },
+      // Legacy URL redirects
+      {
+        source: '/medical-aid-optimization-:condition',
+        destination: '/optimize/:condition',
+        permanent: true,
+      },
     ];
   },
 };
 
 export default nextConfig;
+

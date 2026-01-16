@@ -298,12 +298,12 @@ export function LiabilityCard({ audit }: { audit: RiskAudit }) {
                 </div>
 
                 {/* 6. CTA: The Solution [cite: 22, 51] */}
-                {/* {!isClean && (
+                {!isClean && (
                     <button className="w-full mt-6 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-slate-200">
                         Get Gap Cover Quote
                         <ArrowRight className="w-4 h-4" />
                     </button>
-                )} */}
+                )}
             </div>
         </div>
     );
