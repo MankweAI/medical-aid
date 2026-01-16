@@ -182,7 +182,7 @@ export default async function PlanComparisonPage({ params }: PageProps) {
 
             <div className="max-w-6xl mx-auto px-4 pt-6">
                 <Link
-                    href={`/optimize/${parsed.condition}`}
+                    href={`/medical-aid-optimization/${parsed.condition}`}
                     className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4" />

@@ -990,23 +990,29 @@ const nextConfig: NextConfig = {
       // ========================================================================
       {
         source: '/discovery-health/:plan',
-        destination: '/optimize/joint-care',
+        destination: '/medical-aid-optimization/joint-care',
         permanent: true,
       },
       {
         source: '/bestmed/:plan',
-        destination: '/optimize/joint-care',
+        destination: '/medical-aid-optimization/joint-care',
         permanent: true,
       },
       {
         source: '/bonitas/:plan',
-        destination: '/optimize/joint-care',
+        destination: '/medical-aid-optimization/joint-care',
         permanent: true,
       },
-      // Legacy URL redirects
+      // Legacy /optimize/ redirects (from earlier implementation)
+      {
+        source: '/optimize/:condition',
+        destination: '/medical-aid-optimization/:condition',
+        permanent: true,
+      },
+      // Legacy hyphenated URL redirects
       {
         source: '/medical-aid-optimization-:condition',
-        destination: '/optimize/:condition',
+        destination: '/medical-aid-optimization/:condition',
         permanent: true,
       },
     ];
@@ -1014,4 +1020,5 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
 

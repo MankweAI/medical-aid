@@ -5,8 +5,10 @@ import { getPersonas } from '@/utils/db';
 import { getV2Slug } from '@/utils/slug-utils';
 import { getAllConditionSlugs, CONDITIONS } from '@/utils/condition-mapping';
 
-// Update this to the actual date of your "Big Migration"
-const MIGRATION_DATE = new Date(); // Use current date
+// IMPORTANT: Hardcode the migration date to avoid "false freshness" spam signals.
+// Only update this when actual structural changes occur.
+// Using new Date() at build time causes Google to think ALL pages changed on every deploy.
+const MIGRATION_DATE = new Date('2026-01-16');
 
 /**
  * Main Sitemap
@@ -38,9 +40,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     // 3. NEW: Condition Optimization Routes (Strategy Hubs)
+    // Uses nested route structure: /medical-aid-optimization/[condition]
     const conditions = getAllConditionSlugs();
     const optimizeRoutes = conditions.map((condition) => ({
-        url: `${baseUrl}/optimize/${condition}`,
+        url: `${baseUrl}/medical-aid-optimization/${condition}`,
         lastModified: MIGRATION_DATE,
         changeFrequency: 'weekly' as const,
         priority: 0.9,

@@ -50,6 +50,8 @@ export function generateInsuranceWebPageSchema(persona: Persona, canonicalUrl: s
 
 /**
  * Generates BreadcrumbList JSON-LD schema
+ * NOTE: Category breadcrumb links to Home instead of query-parameterized URL
+ * to avoid crawl budget waste on "thin" filter pages.
  */
 export function generateBreadcrumbSchema(persona: Persona, canonicalUrl: string) {
     const category = persona.meta.category;
@@ -69,7 +71,9 @@ export function generateBreadcrumbSchema(persona: Persona, canonicalUrl: string)
                 '@type': 'ListItem',
                 'position': 2,
                 'name': category,
-                'item': `https://www.intellihealth.co.za/?category=${encodeURIComponent(category)}`
+                // Link to Home page instead of query-parameterized filter URL
+                // This prevents index bloat from ?category= URLs
+                'item': 'https://www.intellihealth.co.za/'
             },
             {
                 '@type': 'ListItem',

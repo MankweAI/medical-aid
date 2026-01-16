@@ -332,3 +332,83 @@ export function getAllV2Slugs(): string[] {
 export function isValidSlug(slug: string, personas: Persona[]): boolean {
     return resolvePersona(slug, personas) !== undefined;
 }
+
+// ============================================================================
+// CANONICAL URL UTILITIES
+// Ensures single canonical version of each URL to prevent duplicate content
+// ============================================================================
+
+const BASE_URL = 'https://www.intellihealth.co.za';
+
+/**
+ * Generate canonical URL for a persona page
+ * Always uses V2 slug format for canonical URLs
+ */
+export function getCanonicalPersonaUrl(slug: string): string {
+    const v2Slug = getV2Slug(slug);
+    return `${BASE_URL}/personas/${v2Slug}`;
+}
+
+/**
+ * Generate canonical URL for condition optimization pages
+ * Uses nested route structure: /medical-aid-optimization/[condition]
+ */
+export function getCanonicalOptimizationUrl(conditionSlug: string): string {
+    return `${BASE_URL}/medical-aid-optimization/${conditionSlug}`;
+}
+
+/**
+ * Generate canonical URL for audit pages
+ * Uses: /audit/[condition]-cost-audit-[scheme]-[plan]
+ */
+export function getCanonicalAuditUrl(conditionSlug: string, scheme: string, plan: string): string {
+    return `${BASE_URL}/audit/${conditionSlug}-cost-audit-${scheme}-${plan}`;
+}
+
+/**
+ * Generate canonical URL for comparison pages
+ * Uses: /compare/[planA]-vs-[planB]-for-[condition]
+ */
+export function getCanonicalCompareUrl(planA: string, planB: string, conditionSlug: string): string {
+    return `${BASE_URL}/compare/${planA}-vs-${planB}-for-${conditionSlug}`;
+}
+
+/**
+ * Check if a URL matches its canonical form
+ * Returns true if URL is canonical, false if it needs redirect
+ */
+export function isCanonicalUrl(url: string): boolean {
+    // Strip base URL if present
+    const path = url.replace(BASE_URL, '');
+
+    // Check for legacy patterns that need redirects
+    const legacyPatterns = [
+        /^\/optimize\//,              // Legacy /optimize/ prefix
+        /^\/medical-aid-optimization-/,  // Legacy hyphenated format
+        /-2026$/,                      // Year-suffixed slugs
+    ];
+
+    return !legacyPatterns.some(pattern => pattern.test(path));
+}
+
+/**
+ * Get the canonical version of any URL
+ * Transforms legacy URLs to their canonical form
+ */
+export function getCanonicalUrl(url: string): string {
+    let path = url.replace(BASE_URL, '');
+
+    // Transform /optimize/:condition to /medical-aid-optimization/:condition
+    if (path.startsWith('/optimize/')) {
+        path = path.replace('/optimize/', '/medical-aid-optimization/');
+    }
+
+    // Transform /medical-aid-optimization-:condition to /medical-aid-optimization/:condition
+    const hyphenatedMatch = path.match(/^\/medical-aid-optimization-([a-z-]+)$/);
+    if (hyphenatedMatch) {
+        path = `/medical-aid-optimization/${hyphenatedMatch[1]}`;
+    }
+
+    return `${BASE_URL}${path}`;
+}
+

@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: 'Googlebot',
                 allow: [
-                    '/optimize/',
+                    '/medical-aid-optimization/',
                     '/audit/',
                     '/compare/',
                     '/personas/',
