@@ -1,0 +1,480 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://intellihealth.co.za/schemas/plan-extraction-v1.json",
+    "title": "Medical Aid Plan Extraction Schema",
+    "description": "Schema for extracting structured data from South African medical scheme brochures. Used by Intellihealth's Virtual Actuary engine.",
+    "version": "1.0.0",
+    "type": "object",
+    "required": [
+        "identity",
+        "premiums",
+        "hospital_benefits"
+    ],
+    "properties": {
+        "identity": {
+            "type": "object",
+            "description": "Plan identification and classification",
+            "required": [
+                "scheme_name",
+                "plan_name",
+                "year"
+            ],
+            "properties": {
+                "scheme_name": {
+                    "type": "string",
+                    "description": "Official scheme name as registered with CMS",
+                    "examples": [
+                        "Discovery Health",
+                        "Bestmed",
+                        "Bonitas"
+                    ]
+                },
+                "plan_name": {
+                    "type": "string",
+                    "description": "Specific plan/option name",
+                    "examples": [
+                        "Smart Classic",
+                        "Pace 2",
+                        "BonClassic"
+                    ]
+                },
+                "plan_slug": {
+                    "type": "string",
+                    "description": "URL-safe slug for the plan",
+                    "pattern": "^[a-z0-9-]+$",
+                    "examples": [
+                        "smart-classic",
+                        "pace2",
+                        "bonclassic"
+                    ]
+                },
+                "scheme_slug": {
+                    "type": "string",
+                    "description": "URL-safe slug for the scheme",
+                    "pattern": "^[a-z0-9-]+$",
+                    "examples": [
+                        "discovery",
+                        "bestmed",
+                        "bonitas"
+                    ]
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "Benefit year",
+                    "examples": [
+                        2026
+                    ]
+                },
+                "network_type": {
+                    "type": "string",
+                    "enum": [
+                        "Network",
+                        "Any",
+                        "Hybrid"
+                    ],
+                    "description": "Hospital network restriction type"
+                },
+                "plan_tier": {
+                    "type": "string",
+                    "enum": [
+                        "Budget",
+                        "Entry",
+                        "Mid-Range",
+                        "Comprehensive",
+                        "Executive"
+                    ],
+                    "description": "Plan tier classification"
+                }
+            }
+        },
+        "premiums": {
+            "type": "object",
+            "description": "Monthly premium structure",
+            "required": [
+                "main_member"
+            ],
+            "properties": {
+                "main_member": {
+                    "type": "number",
+                    "description": "Monthly premium for principal member in ZAR",
+                    "minimum": 0
+                },
+                "adult_dependant": {
+                    "type": "number",
+                    "description": "Monthly premium per adult dependant in ZAR",
+                    "minimum": 0
+                },
+                "child_dependant": {
+                    "type": "number",
+                    "description": "Monthly premium per child dependant in ZAR",
+                    "minimum": 0
+                },
+                "income_band_premiums": {
+                    "type": "array",
+                    "description": "Income-based premium tiers (if applicable)",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "income_min": {
+                                "type": "number"
+                            },
+                            "income_max": {
+                                "type": "number"
+                            },
+                            "premium": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "msa": {
+            "type": "object",
+            "description": "Medical Savings Account details",
+            "properties": {
+                "has_msa": {
+                    "type": "boolean",
+                    "description": "Whether the plan includes an MSA"
+                },
+                "allocation_percentage": {
+                    "type": "number",
+                    "description": "Percentage of premium allocated to MSA",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "annual_allocation": {
+                    "type": "number",
+                    "description": "Annual MSA allocation in ZAR"
+                },
+                "rollover_allowed": {
+                    "type": "boolean",
+                    "description": "Whether unused MSA rolls over to next year"
+                }
+            }
+        },
+        "hospital_benefits": {
+            "type": "object",
+            "description": "In-hospital cover details",
+            "required": [
+                "cover_type"
+            ],
+            "properties": {
+                "cover_type": {
+                    "type": "string",
+                    "enum": [
+                        "Unlimited",
+                        "Limited"
+                    ],
+                    "description": "Whether hospital cover is unlimited or capped"
+                },
+                "annual_limit": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "description": "Annual hospital benefit limit in ZAR (null if unlimited)"
+                },
+                "network_hospitals": {
+                    "type": "array",
+                    "description": "List of designated network hospitals",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "non_network_copayment": {
+                    "type": "number",
+                    "description": "Co-payment for using non-network hospitals in ZAR"
+                },
+                "elective_surgery_copayment": {
+                    "type": "number",
+                    "description": "Fixed co-payment for elective surgeries in ZAR"
+                },
+                "emergency_copayment": {
+                    "type": "number",
+                    "description": "Co-payment for emergency admissions in ZAR"
+                }
+            }
+        },
+        "chronic_medication": {
+            "type": "object",
+            "description": "Chronic Disease List (CDL) benefits",
+            "properties": {
+                "cdl_conditions": {
+                    "type": "array",
+                    "description": "List of CDL conditions covered",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "condition_name": {
+                                "type": "string"
+                            },
+                            "icd10_codes": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "formulary_type": {
+                    "type": "string",
+                    "enum": [
+                        "Open",
+                        "Closed",
+                        "Hybrid"
+                    ],
+                    "description": "Drug formulary restriction type"
+                },
+                "annual_limit": {
+                    "type": [
+                        "number",
+                        "null"
+                    ],
+                    "description": "Annual limit for chronic medication in ZAR"
+                },
+                "dsp_required": {
+                    "type": "boolean",
+                    "description": "Whether Designated Service Provider (DSP) is required"
+                }
+            }
+        },
+        "day_to_day_benefits": {
+            "type": "object",
+            "description": "Out-of-hospital / day-to-day benefits",
+            "properties": {
+                "gp_visits": {
+                    "type": "object",
+                    "properties": {
+                        "annual_limit": {
+                            "type": [
+                                "number",
+                                "null"
+                            ]
+                        },
+                        "copayment_per_visit": {
+                            "type": "number"
+                        },
+                        "network_only": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "specialist_consultations": {
+                    "type": "object",
+                    "properties": {
+                        "annual_limit": {
+                            "type": [
+                                "number",
+                                "null"
+                            ]
+                        },
+                        "referral_required": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "radiology": {
+                    "type": "object",
+                    "properties": {
+                        "annual_limit": {
+                            "type": [
+                                "number",
+                                "null"
+                            ]
+                        },
+                        "pre_auth_required": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "pathology": {
+                    "type": "object",
+                    "properties": {
+                        "annual_limit": {
+                            "type": [
+                                "number",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "procedure_rules": {
+            "type": "array",
+            "description": "Procedure-specific coverage rules (critical for audits)",
+            "items": {
+                "type": "object",
+                "required": [
+                    "procedure_name",
+                    "pmb_covered"
+                ],
+                "properties": {
+                    "procedure_name": {
+                        "type": "string",
+                        "description": "Common procedure name",
+                        "examples": [
+                            "Gastroscopy",
+                            "Colonoscopy",
+                            "Knee Replacement",
+                            "Hip Replacement",
+                            "Cataract Surgery"
+                        ]
+                    },
+                    "cpt_codes": {
+                        "type": "array",
+                        "description": "Associated CPT/NAPPI codes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "icd10_codes": {
+                        "type": "array",
+                        "description": "Associated ICD-10 diagnosis codes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "scheme_rate": {
+                        "type": "number",
+                        "description": "Scheme rate reimbursement in ZAR"
+                    },
+                    "copayment": {
+                        "type": "number",
+                        "description": "Member co-payment in ZAR"
+                    },
+                    "pmb_covered": {
+                        "type": "boolean",
+                        "description": "Whether covered under Prescribed Minimum Benefits"
+                    },
+                    "pre_authorization_required": {
+                        "type": "boolean",
+                        "description": "Whether pre-authorization is needed"
+                    },
+                    "annual_limit": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "description": "Annual limit for this procedure in ZAR"
+                    },
+                    "waiting_period_months": {
+                        "type": "integer",
+                        "description": "Waiting period before coverage applies"
+                    }
+                }
+            }
+        },
+        "maternity_benefits": {
+            "type": "object",
+            "description": "Maternity-specific benefits",
+            "properties": {
+                "covered": {
+                    "type": "boolean"
+                },
+                "antenatal_visits": {
+                    "type": "integer",
+                    "description": "Number of covered antenatal visits"
+                },
+                "scans_covered": {
+                    "type": "integer",
+                    "description": "Number of ultrasound scans covered"
+                },
+                "delivery_cover": {
+                    "type": "string",
+                    "enum": [
+                        "Natural Only",
+                        "Caesarean Covered",
+                        "Both Covered"
+                    ]
+                },
+                "waiting_period_months": {
+                    "type": "integer"
+                }
+            }
+        },
+        "oncology_benefits": {
+            "type": "object",
+            "description": "Cancer treatment benefits",
+            "properties": {
+                "annual_limit": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "pmb_covered": {
+                    "type": "boolean"
+                },
+                "approved_protocols_only": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "pmb_coverage": {
+            "type": "object",
+            "description": "Prescribed Minimum Benefits coverage matrix",
+            "properties": {
+                "treatment_pairs": {
+                    "type": "array",
+                    "description": "Array of ICD-10 to treatment mappings",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "icd10_code": {
+                                "type": "string"
+                            },
+                            "condition_name": {
+                                "type": "string"
+                            },
+                            "treatment_description": {
+                                "type": "string"
+                            },
+                            "coverage_level": {
+                                "type": "string",
+                                "enum": [
+                                    "Full",
+                                    "Scheme Rate",
+                                    "Partial",
+                                    "DSP Only"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "known_gaps": {
+                    "type": "array",
+                    "description": "Known PMB exclusions or partial covers",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "description": "Extraction metadata",
+            "properties": {
+                "source_document": {
+                    "type": "string",
+                    "description": "Original PDF filename"
+                },
+                "extraction_date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "confidence_score": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "LLM confidence in extraction accuracy"
+                },
+                "manual_review_required": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
