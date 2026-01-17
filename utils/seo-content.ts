@@ -249,11 +249,55 @@ export const ContentGenerator = {
         const winner = savingsAmount > 0 ? planA : planB;
         const savings = Math.abs(savingsAmount);
 
+        // Detect Intra-Scheme Comparison (Same Scheme)
+        // e.g., Discovery Classic vs Discovery Essential
+        const isSameScheme = planA.identity.scheme_name === planB.identity.scheme_name;
+
+        let headline = `${winner.identity.plan_name} shows lower Total Cost of Care`;
+        let subtext = `Actuarial modeling indicates potential annual savings of R${savings.toLocaleString()}`;
+
+        if (isSameScheme) {
+            // "Upgrade" scenario: User chose deeper coverage (winner might be more expensive but safer)
+            // But here 'winner' is purely mathematical TCO winner.
+            // If the cheaper option wins TCO, it's a "Safe Downgrade?"
+            // If the expensive option wins TCO (rare, means gap cover is effectively cheaper), it's "Value Upgrade"
+
+            if (savings > 5000) {
+                headline = `Potential "Safe Downgrade" Opportunity`;
+                subtext = `Switching to ${winner.identity.plan_name} could save R${savings.toLocaleString()} while maintaining core PMB coverage.`;
+            } else {
+                headline = `Network Efficiency Optimization`;
+                subtext = `${winner.identity.plan_name} offers a more efficient structure for this condition.`;
+            }
+        }
+
         return {
-            headline: `${winner.identity.plan_name} shows lower Total Cost of Care`,
-            subtext: `Actuarial modeling indicates potential annual savings of R${savings.toLocaleString()}`,
+            headline,
+            subtext,
             disclaimer: FINANCIAL_DISCLAIMER,
             citation: `[Source: ${REGULATORY_CITATIONS.CMS}]`,
+        };
+    },
+
+    /**
+     * Generate tailored advice for Upgrade/Downgrade vs Brand Switch
+     */
+    generateComparisonInsight: (planA: Plan, planB: Plan, conditionSlug: ConditionSlug) => {
+        const isSameScheme = planA.identity.scheme_name === planB.identity.scheme_name;
+        const conditionDef = CONDITIONS[conditionSlug];
+
+        if (isSameScheme) {
+            return {
+                type: 'INTRA-SCHEME',
+                title: 'Upgrade vs Downgrade Analysis',
+                content: `Since both ${planA.identity.plan_name} and ${planB.identity.plan_name} belong to the same scheme, your choice comes down to **Network Freedom vs Premium Savings**. ${planA.network_restriction !== planB.network_restriction ? 'One plan restricts you to specific hospitals.' : ''} Review the **Above Threshold Benefit** differences closely for ${conditionDef.label}.`
+            };
+        }
+
+        return {
+            type: 'CROSS-SCHEME',
+            title: 'Scheme Comparison Strategy',
+            content: `Comparing **${planA.identity.scheme_name}** vs **${planB.identity.scheme_name}** requires looking at solvency ratios and global rate increases. Ideally, choose the scheme with the most stable risk pool for ${conditionDef.label} patients.`
         };
     },
 
@@ -265,4 +309,44 @@ export const ContentGenerator = {
             disclaimer: FINANCIAL_DISCLAIMER,
         };
     },
+
+    /**
+     * Generate generic comparison FAQs for Gateway Pages
+     * Focused on high-level plan selection criteria
+     */
+    generateGenericComparisonFaqs: (planA: Plan, planB: Plan) => {
+        // Cast to any to access properties that might be on the mock object but not strictly on the Plan type
+        const pA = planA as any;
+        const pB = planB as any;
+
+        return [
+            {
+                question: `Which plan is cheaper: ${planA.identity.plan_name} or ${planB.identity.plan_name}?`,
+                answer: pA.annualPremium < pB.annualPremium
+                    ? `${planA.identity.plan_name} has a lower annual premium of R${pA.annualPremium.toLocaleString()}. However, always compare the Medical Savings Account allocation to calculate real value.`
+                    : `${planB.identity.plan_name} is more affordable annually at R${pB.annualPremium.toLocaleString()}. Ensure you check if this lower premium comes with restrictive network hospitals.`
+            },
+            {
+                question: `Do I need Gap Cover for ${planA.identity.scheme_name}?`,
+                answer: `Yes, Gap Cover is highly recommended. Both ${planA.identity.scheme_name} and ${planB.identity.scheme_name} pay specialists at a set tariff (100% or 200%). Private specialists often charge 300% to 500%, leaving you liable for the shortfall.`
+            },
+            {
+                question: `What is the main difference between ${planA.identity.plan_name} and ${planB.identity.plan_name}?`,
+                answer: `The primary difference often lies in the Hospital Network rules and the Savings Account amount. Review the "Sticker Price Battle" above to see the exact MSA difference.`
+            }
+        ];
+    },
+
+    /**
+     * Generate generic glossary terms for Gateway Pages
+     */
+    generateGenericGlossary: () => {
+        const sourceSuffix = ` [Source: ${REGULATORY_CITATIONS.CMS}]`;
+        return [
+            { term: 'Medical Savings Account (MSA)', definition: `A portion of your monthly premium held by the scheme to pay for day-to-day expenses like GP visits and scripts.${sourceSuffix}` },
+            { term: 'Gap Cover', definition: `An independent insurance policy that covers the shortfall between what your medical scheme pays and what private doctors charge.${sourceSuffix}` },
+            { term: 'Network Hospital', definition: `A list of hospitals designated by the scheme. Using a non-network hospital for elective surgery will result in a co-payment.${sourceSuffix}` },
+            { term: 'Prescribed Minimum Benefits (PMB)', definition: `A set of defined benefits to ensure that all medical scheme members have access to certain minimum health services, regardless of the benefit option they have selected.${sourceSuffix}` }
+        ];
+    }
 };

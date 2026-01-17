@@ -1,38 +1,33 @@
-import { Code, Linkedin, Github, Terminal, ShieldCheck, Database } from 'lucide-react';
+import { Database, Terminal, ShieldCheck, ArrowRight, Server, Globe } from 'lucide-react';
 import CloseButton from '@/components/CloseButton';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'About the Creator | Intellihealth',
-    description: 'Mankwe Mokgabudi is the Data Analyst & Software Engineer behind Intellihealth, the Virtual Actuary for South African Medical Aid comparison.',
+    title: 'About Big Data Query | Intellihealth',
+    description: 'Intellihealth is a product of Big Data Query, a software engineering firm dedicated to solving information asymmetry through algorithmic data analysis.',
     openGraph: {
-        title: 'Meet the Architect behind Intellihealth',
-        description: 'Merging Actuarial Science with Modern Engineering to decode Medical Aid.',
-        type: 'profile',
-        firstName: 'Mankwe',
-        lastName: 'Mokgabudi',
-        username: 'mankwe',
+        title: 'Big Data Query',
+        description: 'Building Intelligence for the Information Age.',
+        type: 'website',
+        url: 'http://www.bigdataquery.co.za',
     }
 };
 
 export default function AboutPage() {
-    // SEO: Structured Data for "Person"
+    // SEO: Structured Data for "Organization"
     const jsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'Person',
-        name: 'Mankwe Mokgabudi',
-        jobTitle: 'Data Analyst & Software Engineer',
-        knowsAbout: ['Medical Schemes Act', 'Actuarial Science', 'Next.js', 'Data Engineering'],
-        url: 'https://intellihealth.co.za/about',
-        sameAs: [
-            'https://www.linkedin.com/in/mankwe-mokgabudi/',
-            'https://github.com/mankwe'
-        ],
-        worksFor: {
-            '@type': 'Organization',
-            name: 'Intellihealth'
-        }
+        '@type': 'Organization',
+        name: 'Big Data Query',
+        url: 'http://www.bigdataquery.co.za',
+        logo: 'https://intellihealth.co.za/images/bdq-logo.png',
+        contactPoint: {
+            '@type': 'ContactPoint',
+            email: 'hello@bigdataquery.co.za',
+            contactType: 'customer support'
+        },
+        description: 'Software engineering firm specializing in actuarial data analysis and consumer empowerment tools.'
     };
 
     return (
@@ -46,37 +41,33 @@ export default function AboutPage() {
                 <CloseButton />
 
                 {/* DECORATIVE BACKGROUND ELEMENT */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none" />
 
-                {/* HERO PROFILE */}
+                {/* HERO SECTION */}
                 <header className="flex flex-col md:flex-row gap-8 items-center mb-12 relative z-10">
                     <div className="group relative">
-                        <div className="absolute -inset-1 bg-gradient-to-tr from-blue-600 to-emerald-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                        <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 relative shrink-0 overflow-hidden">
-                            <img
-                                src="/images/mankwe-profile.jpeg"
-                                alt="Mankwe Mokgabudi"
-                                className="w-full h-full object-cover"
-                            />
+                        <div className="absolute -inset-1 bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                        <div className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 relative shrink-0">
+                            <Database className="w-10 h-10 text-emerald-600" />
                         </div>
                     </div>
 
                     <div className="text-center md:text-left space-y-3">
                         <div>
                             <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">
-                                The Architect
+                                The Creator
                             </p>
                             <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-                                Mankwe Mokgabudi
+                                Big Data Query
                             </h1>
                         </div>
 
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-lg text-[11px] font-bold text-slate-600 border border-slate-200">
-                                <Code className="w-3 h-3" /> Software Engineer
+                                <Terminal className="w-3 h-3" /> Data Engineering
                             </span>
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 rounded-lg text-[11px] font-bold text-blue-700 border border-blue-100">
-                                <Database className="w-3 h-3" /> Data Analyst
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 rounded-lg text-[11px] font-bold text-emerald-700 border border-emerald-100">
+                                <Server className="w-3 h-3" /> Algorithmic Analysis
                             </span>
                         </div>
                     </div>
@@ -86,64 +77,71 @@ export default function AboutPage() {
                 <section className="prose prose-slate prose-sm md:prose-base max-w-none mb-12 relative z-10">
                     <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                        Why I Built Intellihealth
+                        Solving Information Asymmetry
                     </h2>
 
                     <div className="pl-4 border-l-2 border-emerald-500/30 italic text-slate-600 text-lg leading-relaxed my-6">
-                        "I built Intellihealth to solve a problem I faced myself: Medical Aid jargon is designed to confuse.
-                        By combining <strong>Actuarial Data Science</strong> with <strong>Modern Software Engineering</strong>,
-                        I created this 'Virtual Actuary' to give South Africans an unfair advantage."
+                        "Intellihealth is a flagship product of Big Data Query, built to decode the complexity of the South African medical aid market using raw actuarial data."
                     </div>
 
                     <p className="text-slate-500">
-                        Unlike traditional comparison sites that prioritize "Sponsored" plans, this engine runs on
-                        <strong> raw, independent data</strong> registered with the Council for Medical Schemes (CMS).
-                        It is an engineering solution to a financial problem. If a plan has a hidden trap—like a
-                        restrictive State Hospital rule—the code exposes it. No exceptions.
+                        Big Data Query is a specialized software engineering firm building tools that translate complex datasets into actionable consumer intelligence.
+                        We believe that when data is transparent, consumers make better financial decisions.
+                    </p>
+
+                    <p className="text-slate-500">
+                        Our "Virtual Actuary" engine is powered by independent data registered with the <strong>Council for Medical Schemes (CMS)</strong>.
+                        It operates without surveyor bias or sponsored influence, ensuring that every recommendation is mathematically optimized for your specific risk profile.
                     </p>
                 </section>
 
-                {/* SOCIAL PROOF & CODE LINK */}
+                {/* CTA / LINKS */}
                 <div className="grid md:grid-cols-2 gap-4 border-t border-slate-100 pt-8 relative z-10">
-                    {/* LinkedIn */}
-                    <Link
-                        href="https://www.linkedin.com/in/mankwe-mokgabudi-9a90a9353/"
+                    {/* Website Link */}
+                    <a
+                        href="http://www.bigdataquery.co.za"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl hover:bg-[#0077b5]/5 hover:border-[#0077b5]/20 border border-transparent transition-all group"
+                        className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl hover:bg-emerald-50 hover:border-emerald-200 border border-transparent transition-all group"
                     >
-                        <div className="p-3 bg-white rounded-xl shadow-sm text-[#0077b5] border border-slate-100 group-hover:scale-110 transition-transform">
-                            <Linkedin className="w-5 h-5" />
+                        <div className="p-3 bg-white rounded-xl shadow-sm text-emerald-600 border border-slate-100 group-hover:scale-110 transition-transform">
+                            <Globe className="w-5 h-5" />
                         </div>
                         <div>
-                            <p className="font-bold text-slate-900 text-sm group-hover:text-[#0077b5] transition-colors">Connect on LinkedIn</p>
-                            <p className="text-xs text-slate-500">View Professional History</p>
+                            <p className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors">Visit Corporate Website</p>
+                            <p className="text-xs text-slate-500">www.bigdataquery.co.za</p>
                         </div>
-                    </Link>
+                    </a>
 
-                    {/* THE "SOURCE CODE" REDIRECT */}
+                    {/* Methodology Link (Internal) */}
                     <Link
                         href="/methodology"
                         className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 border border-transparent transition-all group"
                     >
                         <div className="p-3 bg-white rounded-xl shadow-sm text-slate-900 border border-slate-100 group-hover:scale-110 transition-transform">
-                            <Github className="w-5 h-5" />
+                            <Termina className="w-5 h-5" />
                         </div>
                         <div>
-                            {/* This phrasing implies openness ("Source Logic") while redirecting to your methodology page */}
-                            <p className="font-bold text-slate-900 text-sm">View Source Logic</p>
-                            <p className="text-xs text-slate-500">Audit the Decision Engine</p>
+                            <p className="font-bold text-slate-900 text-sm">View Methodology</p>
+                            <p className="text-xs text-slate-500">How our algorithms work</p>
                         </div>
                     </Link>
                 </div>
 
                 {/* TECH FOOTER */}
-                <div className="mt-8 flex items-center justify-center gap-2 text-[10px] font-mono font-medium text-slate-400 uppercase tracking-wider opacity-70 hover:opacity-100 transition-opacity">
-                    <Terminal className="w-3 h-3" />
-                    <span>Engineered with Next.js 15 & Supabase</span>
+                <div className="mt-8 text-center space-y-2">
+                    <p className="text-[10px] text-slate-400">
+                        Need assistance? Email us at <a href="mailto:hello@bigdataquery.co.za" className="hover:text-emerald-600 font-bold">hello@bigdataquery.co.za</a>
+                    </p>
+                    <div className="flex items-center justify-center gap-2 text-[10px] font-mono font-medium text-slate-400 uppercase tracking-wider opacity-60">
+                        <span>© {new Date().getFullYear()} Big Data Query (Pty) Ltd</span>
+                    </div>
                 </div>
 
             </article>
         </main>
     );
 }
+
+// Fix typo in icon name (Termina -> Terminal)
+function Termina(props: any) { return <Terminal {...props} /> }

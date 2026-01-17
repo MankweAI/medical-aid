@@ -68,8 +68,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
 
     // 5. NEW: Comparison Routes
-    const comparisonRoutes = conditions.map((condition) => ({
-        url: `${baseUrl}/compare/discovery-smart-classic-vs-bestmed-pace2-for-${condition}`,
+    // 5. NEW: Comparison Routes (Cross-Scheme & Intra-Scheme)
+    const comparisonRoutes = conditions.flatMap((condition) => [
+        // Cross-Scheme Anchors (Brand Battles)
+        { url: `${baseUrl}/compare/discovery-smart-classic-vs-bestmed-pace2-for-${condition}` },
+        { url: `${baseUrl}/compare/discovery-saver-vs-bonitas-bonclassic-for-${condition}` },
+
+        // Intra-Scheme Anchors (Upgrade/Downgrade Decisions)
+        { url: `${baseUrl}/compare/discovery-classic-saver-vs-discovery-essential-saver-for-${condition}` }, // Network Trade-off
+        { url: `${baseUrl}/compare/discovery-classic-comprehensive-vs-discovery-classic-saver-for-${condition}` }, // Safety Net Upgrade
+        { url: `${baseUrl}/compare/bestmed-pace2-vs-bestmed-pace1-for-${condition}` }, // Budget Downgrade
+    ]).map(route => ({
+        ...route,
         lastModified: MIGRATION_DATE,
         changeFrequency: 'weekly' as const,
         priority: 0.8,

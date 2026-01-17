@@ -55,16 +55,19 @@ export default function TrustFooter() {
                     <div className="lg:col-span-3 flex flex-col gap-2 text-xs font-medium text-slate-500">
                         <h6 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Platform</h6>
                         <Link href="/about" className="hover:text-emerald-600 transition-colors flex items-center gap-2">
-                            About the Creator
+                            About the Creator: Big Data Query
                         </Link>
                         <Link href="/methodology" className="hover:text-emerald-600 transition-colors">
                             Methodology & Logic
                         </Link>
+                        <a href="mailto:hello@bigdataquery.co.za" className="hover:text-emerald-600 transition-colors flex items-center gap-2 text-left">
+                            <Mail className="w-3 h-3" /> hello@bigdataquery.co.za
+                        </a>
                         <button
                             onClick={() => setIsContactOpen(true)}
                             className="hover:text-emerald-600 transition-colors flex items-center gap-2 text-left"
                         >
-                            <Mail className="w-3 h-3" /> Contact Support
+                            <Mail className="w-3 h-3" /> Contact Form
                         </button>
                     </div>
                 </div>

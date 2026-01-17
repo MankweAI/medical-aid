@@ -2,12 +2,11 @@ import { Metadata } from 'next';
 import AppHeader from '@/components/AppHeader';
 import HomeHero from '@/components/home/HomeHero';
 import DailyInsight from '@/components/DailyInsight';
-import CategoryFilter from '@/components/CategoryFilter';
-import { getPersonasByCategory } from '@/utils/db';
+import { ShieldCheck, Activity, Award } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Intellihealth | Find Your Perfect Medical Aid',
-  description: 'Navigate 70+ medical aid plans with confidence. Compare benefits, prices, and find your ideal match for 2026.',
+  title: 'Intellihealth | Virtual Actuary for Medical Aid',
+  description: 'Navigate 70+ medical aid plans with confidence. Compare benefits, prices, and find your ideal match for 2026 using algorithmic analysis.',
 };
 
 interface HomePageProps {
@@ -16,73 +15,79 @@ interface HomePageProps {
 
 export default async function AppHome({ searchParams }: HomePageProps) {
   const params = await searchParams;
-  const categoryFilter = params?.category || null;
+  // Category filter legacy support removed, keeping params parsing for safety if needed later
 
   return (
-    <main className="min-h-screen bg-slate-50 relative selection:bg-emerald-500/30 font-sans overflow-x-hidden">
+    <main className="min-h-screen bg-slate-50 relative font-sans overflow-x-hidden">
       <AppHeader />
 
-      {/* 1. ATMOSPHERIC HERO BACKGROUND (Redesigned Position) */}
-      <div className="relative h-[85vh] min-h-[700px] w-full bg-slate-900 overflow-hidden">
-        {/* The Image: Positioned at Top 30% to keep subjects visible */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/hero/home-page-backround.jpg"
-            alt="Healthcare lifestyle"
-            className="w-full h-full object-cover object-[center_30%] opacity-60 scale-105"
-          />
+      {/* 1. HERO SECTION: Clean, Topographic, Light Theme */}
+      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
 
-          {/* Strategic Gradients for Readability */}
-          {/* Top Mask: Ensures Header visibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-transparent to-transparent" />
-
-          {/* Side Mask: Provides contrast for the HomeHero text */}
-          <div className="absolute inset-y-0 left-0 w-full md:w-1/2 bg-gradient-to-r from-slate-900/40 to-transparent" />
-
-          {/* Bottom Mask: Deep blend into the page body */}
-          <div className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-slate-50 via-slate-50/20 to-transparent" />
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-50/50 via-slate-50 to-white" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full opacity-30 pointer-events-none">
+          <div className="absolute top-20 right-0 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl" />
+          <div className="absolute top-40 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl" />
         </div>
 
-        {/* HERO CONTENT CONTAINER */}
-        <div className="relative z-10 h-full pt-32 px-4 container mx-auto max-w-6xl flex flex-col">
-          {/* CATEGORY FILTER - Positioned relative to hero text */}
-          {categoryFilter && (async () => {
-            const personas = await getPersonasByCategory(categoryFilter);
-            return (
-              <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-                <CategoryFilter category={categoryFilter} personas={personas} />
-              </div>
-            );
-          })()}
-
-          {/* CENTRAL INTERACTION LAYER */}
-          <div className="flex-1 flex flex-col justify-center pb-24">
-            <HomeHero />
-          </div>
+        <div className="relative z-10 container mx-auto px-4 max-w-6xl">
+          {/* MAIN HERO COMPONENT */}
+          <HomeHero />
         </div>
       </div>
 
-      {/* 2. OVERLAP SECTION (The "Decision Stack" Visual) */}
-      <div className="relative z-20 -mt-20 px-4 container mx-auto max-w-6xl pb-20">
-        <div className="max-w-4xl mx-auto">
-          {/* ACTUARIAL INSIGHT CARD - Integrated with Negative Margin */}
-          <div className="relative group">
-            {/* Subtle glow effect on hover */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition duration-700" />
+      {/* 2. VALUE PROPOSITION / INSIGHT SECTION */}
+      <section className="relative z-10 bg-white border-t border-slate-100 py-16 lg:py-24">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">
+              Why Trust This Engine?
+            </h2>
+            <h3 className="text-3xl font-bold text-slate-900 mb-4">
+              Independent, Algorithmic Analysis
+            </h3>
+            <p className="text-slate-500 leading-relaxed">
+              We don't sell data. We simply reverse-engineer the complexity of medical aid rules to give you the upper hand.
+            </p>
+          </div>
 
-            <div className="bg-white/95 border border-white rounded-[2rem] p-2 backdrop-blur-3xl shadow-2xl shadow-slate-900/10 relative hover:shadow-emerald-900/5 transition-all">
-              <DailyInsight />
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-emerald-600 mb-4">
+                <Activity className="w-6 h-6" />
+              </div>
+              <h4 className="font-bold text-slate-900 mb-2">Mathematical Precision</h4>
+              <p className="text-sm text-slate-500">
+                Rankings are based on liability matching, not marketing budgets. We calculate potential out-of-pocket costs for your specific profile.
+              </p>
+            </div>
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 mb-4">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h4 className="font-bold text-slate-900 mb-2">Regulatory Compliance</h4>
+              <p className="text-sm text-slate-500">
+                Our dataset is strictly aligned with the Council for Medical Schemes (CMS) 2026 registered rules and benefit definitions.
+              </p>
+            </div>
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-amber-500 mb-4">
+                <Award className="w-6 h-6" />
+              </div>
+              <h4 className="font-bold text-slate-900 mb-2">Unbiased "Virtual Actuary"</h4>
+              <p className="text-sm text-slate-500">
+                This tool was created by Big Data Query to democratize access to actuarial advice. No hidden broker fees or preferential listings.
+              </p>
             </div>
           </div>
 
-          {/* Trust Footer/Logo Area */}
-          <div className="mt-12 text-center">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4">
-              Powered by Actuarial Intelligence
-            </p>
+          {/* DAILY INSIGHT INTEGRATION */}
+          <div className="max-w-4xl mx-auto">
+            <DailyInsight />
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
