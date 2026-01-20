@@ -5,7 +5,8 @@ import {
     getProcedureForScheme,
     getAllPlans,
     getAllProcedureSlugs,
-    getPlansForComparison
+    getPlansForComparison,
+    ExtractedPlan
 } from '@/lib/data-loader';
 import { PlanDetailView } from '@/components/scheme/PlanDetailView';
 import { ProcedureHubView } from '@/components/scheme/ProcedureHubView';
@@ -17,6 +18,37 @@ interface PageProps {
 
 const SCHEME_SLUG = 'discovery-health';
 const SCHEME_NAME = 'Discovery Health';
+
+/**
+ * SEO Safeguard: Logic to determine if a comparison is "sensible".
+ * Prevents "Combinatorial Explosion" and "Doorway Pages" (Spam).
+ * 
+ * Rules:
+ * 1. Same Series (e.g. Saver vs Saver)
+ * 2. Similar Price Point (+/- 30% premium difference)
+ */
+function isLogicalComparison(plan1: ExtractedPlan, plan2: ExtractedPlan): boolean {
+    // 1. Series Match
+    const seriesKeywords = ['saver', 'comprehensive', 'priority', 'smart', 'core', 'keycare', 'executive'];
+    const p1Name = plan1.identity.plan_name.toLowerCase();
+    const p2Name = plan2.identity.plan_name.toLowerCase();
+
+    const p1Series = seriesKeywords.find(s => p1Name.includes(s));
+    const p2Series = seriesKeywords.find(s => p2Name.includes(s));
+
+    if (p1Series && p2Series && p1Series === p2Series) {
+        return true;
+    }
+
+    // 2. Premium Proximity (+/- 30%)
+    const cost1 = plan1.premiums.main_member;
+    const cost2 = plan2.premiums.main_member;
+    const diff = Math.abs(cost1 - cost2);
+    // Be generous: Allow if difference is within 30% of the more expensive plan
+    const maxCost = Math.max(cost1, cost2);
+
+    return (diff / maxCost) <= 0.3;
+}
 
 /**
  * Parse a comparison slug like "keycare-plus-vs-executive-plan"
@@ -40,7 +72,7 @@ export async function generateStaticParams() {
     const procedures = getAllProcedureSlugs();
     const procParams = procedures.map(slug => ({ slug }));
 
-    // 3. Comparison Params
+    // 3. Comparison Params (Pruned)
     const compareParams: { slug: string }[] = [];
     for (let i = 0; i < plans.length; i++) {
         for (let j = i + 1; j < plans.length; j++) {
@@ -49,9 +81,12 @@ export async function generateStaticParams() {
             if (plan1.identity.scheme_slug !== SCHEME_SLUG) continue;
             if (plan2.identity.scheme_slug !== SCHEME_SLUG) continue;
 
-            compareParams.push({
-                slug: `${plan1.identity.plan_slug}-vs-${plan2.identity.plan_slug}`
-            });
+            // SEO Filter: Only generate logical comparisons
+            if (isLogicalComparison(plan1, plan2)) {
+                compareParams.push({
+                    slug: `${plan1.identity.plan_slug}-vs-${plan2.identity.plan_slug}`
+                });
+            }
         }
     }
 
@@ -72,7 +107,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const comparison = parseComparisonSlug(slug);
     if (comparison) {
         const result = getPlansForComparison(SCHEME_SLUG, comparison.planSlug1, comparison.planSlug2);
-        if (result) {
+
+        // SEO Safeguard: If not logical, treat as 404 (don't indexing nonsense)
+        if (result && isLogicalComparison(result.plan1, result.plan2)) {
             const { plan1, plan2 } = result;
             const title = `${plan1.identity.plan_name} vs ${plan2.identity.plan_name} | ${SCHEME_NAME} Comparison`;
             const description = `Compare ${plan1.identity.plan_name} (R${plan1.premiums.main_member.toLocaleString()}/month) with ${plan2.identity.plan_name} (R${plan2.premiums.main_member.toLocaleString()}/month).`;
@@ -137,13 +174,16 @@ export default async function DispatcherPage({ params }: PageProps) {
     const comparison = parseComparisonSlug(slug);
     if (comparison) {
         const result = getPlansForComparison(SCHEME_SLUG, comparison.planSlug1, comparison.planSlug2);
-        if (result) {
+
+        // SEO Safeguard: Only render if logical
+        if (result && isLogicalComparison(result.plan1, result.plan2)) {
             return <PlanComparisonView
                 plan1={result.plan1}
                 plan2={result.plan2}
                 schemeSlug={SCHEME_SLUG}
             />;
         }
+        // If result exists but is illogical -> Fall through (will eventually 404 or maybe show plan if slug matched that? No, -vs- check ensures it's comparison format)
     }
 
     // 2. Is it a Plan?

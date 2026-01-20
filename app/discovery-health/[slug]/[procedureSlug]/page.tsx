@@ -52,6 +52,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const procedure = plan.procedures.find(p => slugifyProcedure(p.procedure_name) === procedureSlug);
     if (!procedure) return { title: 'Procedure Not Found | Intellihealth' };
 
+    // SEO Safeguard: Logic to prevent Index Bloat ("Thin Content")
+    // Only index "High Value" pages.
+    const highInterestProcs = ['gastroscopy', 'cataract-surgery', 'maternity', 'mri-scan', 'ct-scan', 'wisdom-teeth-removal', 'colonoscopy'];
+    const popularSeries = ['saver', 'comprehensive', 'executive', 'smart'];
+
+    const isHighInterestProc = highInterestProcs.includes(procedureSlug);
+    const isPopularPlan = popularSeries.some(s => planSlug.includes(s));
+    const hasUniqueData = (procedure.copayment !== null && procedure.copayment > 0) || (procedure.notes && procedure.notes.length > 30);
+
+    // Index if: (High Interest Proc) OR (Popular Plan AND Specific Data)
+    const shouldIndex = isHighInterestProc || (isPopularPlan && hasUniqueData);
+
     const cost = procedure.copayment === 0 ? 'Fully Covered' : (procedure.copayment ? `R${formatCurrency(procedure.copayment)} Co-payment` : 'Coverage Varies');
 
     const title = `${procedure.procedure_name} Cost on ${plan.identity.plan_name} | ${cost}`;
@@ -62,6 +74,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title,
         description,
         alternates: { canonical: canonicalUrl },
+        robots: {
+            index: shouldIndex,
+            follow: true, // Always follow links to Hubs
+            googleBot: {
+                index: shouldIndex,
+                follow: true,
+            }
+        },
         openGraph: {
             title,
             description,
