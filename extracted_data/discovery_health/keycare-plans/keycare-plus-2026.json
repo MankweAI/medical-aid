@@ -1,0 +1,487 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "keycare-plus",
+        "plan_name": "KeyCare Plus",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "extraction_method": "claude-vision-pipeline",
+        "extracted_at": "2026-01-20T11:37:00Z",
+        "extraction_model": "claude-sonnet-4.5",
+        "confidence_score": 0.96,
+        "requires_review": false,
+        "source_pages": 37
+    },
+    "premiums": {
+        "main_member": 3980,
+        "adult_dependant": 3980,
+        "child_dependant": 1064,
+        "msa_percentage": null,
+        "income_bands": [],
+        "notes": [
+            "Apr-Dec 2026: Main R3,980, Adult R3,980, Child R1,064",
+            "Jan-Mar 2026: Main R3,687, Adult R3,687, Child R986"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": null,
+        "annual_limit_unlimited": true,
+        "rate_covered": "100%",
+        "network_hospitals": [
+            "KeyCare Hospital Network"
+        ],
+        "co_payment_in_network": 0,
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Reconstructive treatment and surgery (cosmetic)",
+            "Otoplasty for bat ears, blepharoplasty",
+            "Breast reduction or enlargement",
+            "Treatment for obesity",
+            "Infertility treatment",
+            "Wilful participation in war, terrorism, rioting",
+            "Injuries sustained in country and/or territory at war",
+            "Frail care services",
+            "Hospital admissions related to nail disorders",
+            "Varicose veins treatment",
+            "Benign growths and lipomas",
+            "Investigations",
+            "Experimental surgery",
+            "Surgery for oesophageal reflux and hiatus hernia",
+            "Breast and nipple surgery",
+            "Knee and shoulder surgery",
+            "Carpal tunnel and trigger finger release",
+            "Cochlear implants and bone anchored hearing aids",
+            "Healthcare services that abuse the point of hospital admission",
+            "Endoscopic procedures",
+            "Cosmetic and plastic surgery",
+            "Bariatric surgery (Roux-en-Y, sleeve)",
+            "Refractive eye surgery",
+            "Non-emergency breast conditions",
+            "Healthcare services outside South Africa",
+            "Transboundary Myringotomies and Adenoidectomies"
+        ],
+        "waiting_periods": {
+            "general": "3 months",
+            "pre_existing": "12 months",
+            "maternity": null
+        },
+        "notes": [
+            "Unlimited hospital cover at 100% Discovery Health Rate in KeyCare Hospital Network",
+            "Full cover for chronic medicine at network provider",
+            "Defined list of procedures in KeyCare Day Surgery Network"
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Sigmoidoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Proctoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Diagnostic hysteroscopy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Diagnostic laparoscopy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Cystoscopy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Arthroscopy (knee, ankle, wrist, hip, shoulder)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - articulating shoulder, elbow, knee, ankle, wrist, hip"
+        },
+        {
+            "procedure_name": "Tonsillectomy and/or adenoidectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Grommets (myringotomy)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Septoplasty and/or turbinectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Functional endoscopic sinus surgery (FESS)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Stapedectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Mastoidectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Cataract surgery",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - at network provider"
+        },
+        {
+            "procedure_name": "Pterygium excision",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Chalazion excision",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Eyelid procedures (entropion, ectropion, ptosis, blepharoplasty)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Squint surgery (strabismus surgery)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Lacrimal duct procedures",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Skin biopsy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - subcutaneous tissue, soft tissue, bone marrow"
+        },
+        {
+            "procedure_name": "Breast biopsy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - mastectomy for gynecomastia, lumpectomy, wide local excision"
+        },
+        {
+            "procedure_name": "Circumcision",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Vasectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Hydrocele repair",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Orchidopexy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Hernia repair (inguinal, umbilical, femoral)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Haemorrhoidectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Anal fissure surgery",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Pilonidal sinus excision",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Abscess drainage",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Lipoma removal",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Sebaceous cyst removal",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Skin lesion excision",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - dependent on size and diagnosis"
+        },
+        {
+            "procedure_name": "Ganglion excision",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Tendon and ligament repair",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - muscle, abdominoplasty, tendon, nerve"
+        },
+        {
+            "procedure_name": "Carpal tunnel release",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": false,
+            "notes": "NOT covered - listed in exclusions"
+        },
+        {
+            "procedure_name": "Trigger finger release",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": false,
+            "notes": "NOT covered - listed in exclusions"
+        },
+        {
+            "procedure_name": "Dupuytren's contracture release",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Bunionectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Hammer toe correction",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Ingrown toenail surgery",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Dilation and curettage (D&C)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Hysteroscopy with polypectomy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Endometrial ablation",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Laparoscopic sterilization (tubal ligation)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Bartholin's cyst excision/marsupialization",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Cervical biopsy/cone biopsy/LLETZ",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network"
+        },
+        {
+            "procedure_name": "Dental procedures (extractions, implants, crowns)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - multi-quad procedures, impactions, cyst of jaws, hypoplasia, erosion, varicosities, vasectomy"
+        },
+        {
+            "procedure_name": "Removal of foreign body",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered in Day Surgery Network - subcutaneous tissue, muscle, external auditory canal under general anaesthetic"
+        }
+    ],
+    "modules": [
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Accumulate up to R2,000 in PHF by taking necessary steps to get healthy",
+            "data": {
+                "max_accumulation": 2000,
+                "phf_base_max": 1000,
+                "phf_boost_max": 1000
+            }
+        }
+    ],
+    "day_to_day": {
+        "structure": "Personal Health Fund covers day-to-day at nominated KeyCare GP. Medicine from nominated KeyCare Network GP covered at 100% of Discovery Health Rate or up to 100% of SEP. Specialists covered at nominated network GP must refer",
+        "gp_visits": {
+            "limit": "Unlimited",
+            "network": "Nominated KeyCare GP",
+            "copayment": null
+        },
+        "specialist_visits": {
+            "limit": "Unlimited",
+            "annual_cap": null,
+            "notes": "Must be referred by nominated KeyCare GP"
+        },
+        "medicine": {
+            "acute": "100% of SEP or up to 100% of Discovery Health Rate from nominated KeyCare Network GP",
+            "chronic": "100% of Discovery Health Rate from nominated KeyCare Network pharmacy"
+        },
+        "dentist": {
+            "limit": null,
+            "notes": "Subject to PHF benefits"
+        },
+        "optometry": {
+            "limit": null,
+            "notes": "Subject to PHF benefits"
+        }
+    },
+    "chronic": {
+        "cdl_conditions_covered": 27,
+        "medicine_formulary": "Chronic Disease List",
+        "additional_disease_list": false,
+        "pmb_conditions_covered": true,
+        "notes": "Full cover for chronic medicine at nominated KeyCare Network GP. Must use state facility if not using nominated KeyCare Network GP"
+    },
+    "oncology": {
+        "oncology_benefit_limit": null,
+        "pmb_unlimited": true,
+        "innovation_benefit": false,
+        "extended_benefit": false,
+        "notes": "PMB cancer treatment covered. Oncology Care Programme available with DSP at 100% DHR"
+    },
+    "maternity": {
+        "waiting_period_months": null,
+        "antenatal_visits": "Unlimited",
+        "delivery_cover": "100% DHR at KeyCare Hospital Network",
+        "scan_limit": null,
+        "notes": "Comprehensive maternity and early childhood cover. Blood tests for defined list. Pre and post-natal care subject to PHF day-to-day benefits"
+    }
+}

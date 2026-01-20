@@ -1,0 +1,136 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "essential-smart",
+        "plan_name": "Essential Smart",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "source_directory": "raw_data/discovery-health/smart-plans-2026/",
+        "categories_extracted": [
+            "premiums",
+            "hospital",
+            "procedures",
+            "modules"
+        ],
+        "extracted_at": "2026-01-19T14:55:00.000000",
+        "confidence_score": 0.96,
+        "requires_review": false,
+        "review_notes": [],
+        "extraction_method": "claude-vision-pipeline",
+        "extraction_model": "claude-sonnet-4.5",
+        "validation_model": "claude-opus-4.5"
+    },
+    "premiums": {
+        "main_member": 2163,
+        "adult_dependant": 2163,
+        "child_dependant": 2163,
+        "msa_percentage": null,
+        "income_bands": [],
+        "notes": [
+            "Applicable from 1 April 2026 to 31 December 2026",
+            "Jan-Mar 2026 premiums: R2,021 for all members",
+            "Flat pricing across all member types"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": null,
+        "annual_limit_unlimited": true,
+        "network_hospitals": [
+            "Private hospitals in the Smart hospital network"
+        ],
+        "co_payment_in_network": null,
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Dentistry",
+            "Nail disorders",
+            "Skin disorders including benign growths and lipomas",
+            "Functional nasal surgery",
+            "Elective caesarean section (except if medically necessary)",
+            "Back and neck treatment or surgery",
+            "Knee and shoulder surgery",
+            "Joint replacements (hips, knees, shoulders, elbows)",
+            "Cochlear implants and auditory brain implants",
+            "Tonsillectomies and adenoidectomies"
+        ],
+        "waiting_periods": {
+            "general": null,
+            "pre_existing": null,
+            "maternity": null
+        },
+        "notes": [
+            "Unlimited hospital cover in the Smart hospital network.",
+            "Co-payment of R130 for GP consultations in the Smart network (Day-to-day)."
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 12650,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Smart Day Surgery Network required. Out-of-network upfront payment of R12,650.",
+            "marketing_description": "Essential Smart members should use the Smart Day Surgery Network for Gastroscopies to avoid a R12,650 upfront payment.",
+            "jargon_busters": [
+                {
+                    "term": "Smart Day Surgery Network",
+                    "definition": "The specific list of day clinics for Classic and Essential Smart plans."
+                }
+            ],
+            "faqs": [
+                {
+                    "question": "Which hospitals can I use?",
+                    "answer": "You must use a facility in the Smart Day Surgery Network for this procedure."
+                }
+            ],
+            "preparation": [
+                "Fast for 6 hours.",
+                "Arrange transport."
+            ],
+            "recovery_time": "1-2 hours observation."
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 12650,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Smart Day Surgery Network required. Out-of-network upfront payment of R12,650.",
+            "marketing_description": "Colonoscopies listed in the Day Surgery network must be performed there. Out-of-network usage incurs R12,650 cost.",
+            "preparation": [
+                "Bowel prep 24h before.",
+                "Clear fluids."
+            ],
+            "recovery_time": "24 hours recovery from sedation."
+        }
+    ],
+    "modules": [
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Day-to-day benefits with accumulation.",
+            "data": {
+                "base_value": 4000,
+                "boost_value": 4000,
+                "total_max": 8000
+            }
+        },
+        {
+            "type": "oncology_care",
+            "title": "Oncology Care Programme",
+            "description": "Comprehensive cancer cover.",
+            "data": {
+                "cover_amount": "First R250,000 covered at 100% DHR",
+                "extended_cover": "80% of DHR after R250,000",
+                "pmb_cover": "Full cover for PMB"
+            }
+        }
+    ]
+}

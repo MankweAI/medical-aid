@@ -1,0 +1,21 @@
+{
+    "category": "oncology",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_24.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.95,
+    "flags": [],
+    "data": {
+        "oncology_benefit_limit": 400000,
+        "pmb_unlimited": true,
+        "innovation_benefit": true,
+        "extended_benefit": true,
+        "oncology_innovation_benefit": "Up to R24,000 per cycle for drugs or treatments not yet registered on CAMS or not yet on SA Oncology Consortium formulary",
+        "extended_oncology_benefit": "Up to R24,000 for a defined list of cancer and treatments that are not subject to PMB clinical entry criteria",
+        "medicine_coverage": "All cancer-related medicine from a designated service provider at 100% of Discovery Health Rate",
+        "screening_and_prevention": "Included in Programme",
+        "programme_access": "Comprehensive cover if diagnosed with cancer for high-cost, hospital-intensive and innovative treatments",
+        "notes": "Oncology Benefit covers first R400,000 of treatment costs. PMB treatment covered above R400,000. 12-month cycle."
+    }
+}

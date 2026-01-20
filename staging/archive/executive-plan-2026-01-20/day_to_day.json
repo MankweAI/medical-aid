@@ -1,0 +1,69 @@
+{
+    "category": "day_to_day",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_16.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_17.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_18.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_19.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.94,
+    "flags": [],
+    "data": {
+        "gp_visits": {
+            "limit": "Unlimited",
+            "network": "Scheme",
+            "copayment": null
+        },
+        "specialist_visits": {
+            "limit": "Unlimited",
+            "annual_cap": null,
+            "notes": "300% of Discovery Health Rate (DHR)"
+        },
+        "medicine": {
+            "prescribed_acute": "100% of SEP or 75% of DHR if price within 25% of SEP, else more than 50% of DHR",
+            "over_the_counter": "R12,500 for your family"
+        },
+        "dentist": {
+            "limit": 3500,
+            "notes": "R3,500 per person for basic dentistry"
+        },
+        "optometry": {
+            "limit": 10950,
+            "notes": "R10,950 per person - includes optical frames, contact lenses (from Day clinic)"
+        },
+        "allied_therapeutic_psychology": {
+            "limit": 32000,
+            "single_member": 32000,
+            "one_dependant": 46450,
+            "two_dependants": 45000,
+            "three_or_more_dependants": 54000,
+            "notes": "Acupuncture, biokinetics, chiropractics, counselling, dieticians, homeopaths, naturopaths, osteopaths. Limit varies by family size."
+        },
+        "dental_appliances_and_orthodontics": {
+            "limit": "R27,500 per person"
+        },
+        "antenatal_classes": {
+            "limit": "R2,500 for your family"
+        },
+        "appliances_and_equipment": {
+            "optical": "R10,950 per person",
+            "external_medical_items": "R64,500 for your family",
+            "hearing_aids": "R41,250 for your family"
+        },
+        "personal_health_fund": {
+            "accumulation_limit": "Up to R24,000 in PHF",
+            "notes": "Earn by taking steps to get healthy, can be used for day-to-day healthcare needs"
+        },
+        "msa": {
+            "main_member": 34284,
+            "adult_dependant": 34284,
+            "child_dependant": 6552
+        },
+        "annual_threshold": {
+            "main_member": 42370,
+            "adult_dependant": 42370,
+            "child_dependant": 8069
+        }
+    }
+}

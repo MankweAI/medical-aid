@@ -1,0 +1,169 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "executive-plan",
+        "plan_name": "Executive Plan",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "extraction_method": "claude-vision-pipeline",
+        "extracted_at": "2026-01-20T10:49:00Z",
+        "extraction_model": "claude-sonnet-4.5-thinking",
+        "validation_model": "opus-4.5",
+        "confidence_score": 0.94,
+        "requires_review": false,
+        "source_pages": 24
+    },
+    "premiums": {
+        "main_member": 11430,
+        "adult_dependant": 11430,
+        "child_dependant": 2185,
+        "msa_percentage": null,
+        "notes": [
+            "Jan-Mar 2026: R11,430. Apr-Dec 2026: R12,338"
+        ]
+    },
+    "hospital_benefits": {
+        "network_hospitals": [
+            "Any Scheme-approved private hospital"
+        ],
+        "waiting_periods": {
+            "general": "3",
+            "pre_existing": "12"
+        },
+        "designated_service_provider_required": false,
+        "rate_covered": "100%",
+        "unlimited_cover": true,
+        "exclusions": [
+            "Reconstructive treatment and surgery (cosmetic)",
+            "Otoplasty for bat ears, blepharoplasty",
+            "Breast reduction or enlargement",
+            "Treatment for obesity",
+            "Infertility treatment (unless via ART Benefit)",
+            "Wilful participation in war, terrorism, rioting",
+            "Frail care services"
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "R0 if PMB, age 12+, in-rooms network provider. Otherwise: Day clinic R4,650, Hospital R5,700."
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "R0 if PMB, age 12+, in-rooms network provider. Otherwise: Day clinic R4,650, Hospital R5,700."
+        },
+        {
+            "procedure_name": "Sigmoidoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "R0 if in-rooms network provider. Day clinic R4,650, Hospital R5,700."
+        },
+        {
+            "procedure_name": "Proctoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "R0 if in-rooms network provider. Day clinic R4,650, Hospital R5,700."
+        },
+        {
+            "procedure_name": "Gastroscopy and Colonoscopy (bi-directional)",
+            "copayment": 5700,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "R5,700 if both scopes performed same admission. R0 if value-based network doctor."
+        }
+    ],
+    "modules": [
+        {
+            "type": "medical_savings_account",
+            "title": "Medical Savings Account (MSA)",
+            "description": "Annual savings allocation for day-to-day expenses",
+            "data": {
+                "annual_allocation": {
+                    "main_member": 34284,
+                    "adult_dependant": 34284,
+                    "child_dependant": 6552
+                }
+            }
+        },
+        {
+            "type": "day_to_day_benefit",
+            "title": "Above Threshold Benefit",
+            "description": "Unlimited cover after reaching Annual Threshold",
+            "data": {
+                "above_threshold_benefit": true,
+                "annual_threshold": {
+                    "main_member": 42370,
+                    "adult_dependant": 42370,
+                    "child_dependant": 8069
+                }
+            }
+        },
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Earn up to R24,000 by completing health actions",
+            "data": {
+                "max_accumulation": 24000,
+                "phf_advance": 1000,
+                "phf_base": 3000,
+                "phf_boost": 1500
+            }
+        }
+    ],
+    "day_to_day": {
+        "gp_visits": {
+            "limit": "Unlimited",
+            "network": "Any Scheme-approved provider",
+            "copayment": null
+        },
+        "specialist_visits": {
+            "limit": "Unlimited",
+            "annual_cap": null,
+            "notes": "300% of Discovery Health Rate"
+        },
+        "dentist": {
+            "limit": 3500,
+            "notes": "R3,500 per person for basic dentistry"
+        },
+        "optometry": {
+            "limit": 10950,
+            "notes": "R10,950 per person"
+        }
+    },
+    "chronic": {
+        "cdl_conditions_covered": 27,
+        "medicine_formulary": "Discovery Chronic Medicine List",
+        "additional_disease_list": true,
+        "examples": [
+            "Diabetes Type 1",
+            "Diabetes Type 2",
+            "Hypertension",
+            "Asthma",
+            "HIV",
+            "Epilepsy"
+        ]
+    },
+    "oncology": {
+        "oncology_benefit_limit": 400000,
+        "pmb_unlimited": true,
+        "innovation_benefit": true,
+        "extended_benefit": true,
+        "notes": "R400,000 per 12-month cycle. Innovation benefit up to R24,000."
+    },
+    "maternity": {
+        "waiting_period_months": 9,
+        "antenatal_visits": 12,
+        "delivery_cover": "100% DHR",
+        "scan_limit": 4,
+        "notes": "2-4 scans based on clinical criteria. Private ward R2,800/day."
+    }
+}

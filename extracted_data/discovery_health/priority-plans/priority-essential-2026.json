@@ -1,0 +1,216 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "priority-essential",
+        "plan_name": "Priority Essential",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "extraction_method": "claude-vision-pipeline",
+        "extracted_at": "2026-01-20T12:35:00Z",
+        "extraction_model": "claude-sonnet-4.5",
+        "confidence_score": 0.97,
+        "requires_review": false,
+        "source_pages": 39
+    },
+    "premiums": {
+        "main_member": 5881,
+        "adult_dependant": 5161,
+        "child_dependant": 2122,
+        "msa_percentage": null,
+        "income_bands": [],
+        "notes": [
+            "Apr-Dec 2026: Main R5,881, Adult R5,161, Child R2,122",
+            "Jan-Mar 2026: Main R5,327, Adult R4,758, Child R1,989"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": null,
+        "annual_limit_unlimited": true,
+        "rate_covered": "200%",
+        "network_hospitals": [
+            "Any private hospital approved by the Scheme"
+        ],
+        "co_payment_in_network": 0,
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": false,
+        "exclusions": [
+            "Reconstructive treatment and surgery unless part of PMB",
+            "Breast reduction or enlargement and gynaecomastia",
+            "Otoplasty for bat ears, blepharoplasty (eyelid surgery) and treatment of ptosis (droopy eyelids)",
+            "Treatment, surgery and procedures for obesity",
+            "Infertility-related treatments, procedures and/or tests unless part of PMB",
+            "Ultra-high cost treatments, experiments, or practices",
+            "Sperm and tissue",
+            "Medical conditions during waiting period",
+            "Healthcare services related to alcohol, drug or solvent abuse",
+            "Wilful participation in war, terrorism, rioting, civil commotion, rebellion or uprising",
+            "Injuries sustained or healthcare services received in country at war",
+            "Searches and rescues",
+            "Healthcare services related to nail disorders except where required as part of a defined benefit or under the Prescribed Minimum Benefits"
+        ],
+        "waiting_periods": {
+            "general": "3 months",
+            "pre_existing": "12 months",
+            "maternity": null
+        },
+        "notes": [
+            "Unlimited hospital cover. We pay up to 200% of the Discovery Health Rate (DHR) or Classic rate and up to 100% of the DHR for essential care",
+            "Payment is subject to the Scheme authorizing your hospital stay",
+            "Upfront payments for in-hospital procedures performed outside the Day Surgery Network. We pay up to 200% of DHR and you pay the balance"
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Unlimited if performed in Day Surgery Network, R4,700 upfront payment outside network"
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Unlimited if performed in Day Surgery Network, R4,700 upfront payment outside network"
+        },
+        {
+            "procedure_name": "Sigmoidoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Unlimited if performed in Day Surgery Network, R4,700 upfront payment outside network"
+        },
+        {
+            "procedure_name": "Proctoscopy",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "Unlimited if performed in Day Surgery Network, R4,700 upfront payment outside network"
+        },
+        {
+            "procedure_name": "Conservative back and neck treatment",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Radiology, physiotherapy, paraments, biokinetics. R5,020 upfront payment if admitted to hospital"
+        },
+        {
+            "procedure_name": "Arthroscopy",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Functional knee procedures, hysteroscopy (except for pre-ovulatory diagnostics/lysis), scopes for nasal sinuses, ankle and wrist. R11,500 upfront payment if admitted to hospital"
+        },
+        {
+            "procedure_name": "Medial epicondylitis (golfer's elbow) and/or lateral epicondylitis (tennis elbow)",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Spinal surgery (back and neck), joint replacements. R23,700 upfront payment if admitted to hospital"
+        },
+        {
+            "procedure_name": "Cataract surgery at a network provider",
+            "copayment": 0,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "notes": "We pay the full amount at the agreed rate at a network facility for cataract surgery performed by a doctor who is part of the Scheme's value-based network"
+        },
+        {
+            "procedure_name": "MRI and CT Scans",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Covered from Hospital Benefit"
+        },
+        {
+            "procedure_name": "Dental treatment in hospital",
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "notes": "Members 13 years and older: pay upfront R1,590, Members under 13 years: pay upfront R1,550. We cover the rest of the hospital dental surgery fees for other (a defined list applies)"
+        }
+    ],
+    "modules": [
+        {
+            "type": "medical_savings_account",
+            "title": "Medical Savings Account",
+            "description": "25% of your contributions allocated to your MSA for day-to-day medical expenses",
+            "data": {
+                "annual_allocation": {
+                    "single_member": 18950,
+                    "main_member_one_dependant": 35250,
+                    "main_member_two_dependants": 51850,
+                    "main_member_three_or_more": 62800
+                },
+                "percentage_of_contribution": 25
+            }
+        },
+        {
+            "type": "above_threshold_benefit",
+            "title": "Above Threshold Benefit (ATB)",
+            "description": "Once MSA is depleted, you pay first R10,100 of day-to-day claims before ATB covers 100% of Discovery Health Rate",
+            "data": {
+                "annual_threshold": 10100
+            }
+        },
+        {
+            "type": "oncology_care_programme",
+            "title": "Oncology Care Programme",
+            "description": "Comprehensive cancer cover including high-cost and biological cancer treatment. Oncology Benefit up to R50,000 for treatment costs above the cover amount",
+            "data": {
+                "oncology_benefit_limit": 50000,
+                "precision_medicine_limit": null,
+                "advanced_illness_benefit": true
+            }
+        }
+    ],
+    "day_to_day": {
+        "structure": "MSA covers day-to-day expenses. After MSA is depleted, you pay the first R10,100 (annual threshold) before Above Threshold Benefit covers 100% of Discovery Health Rate",
+        "gp_visits": {
+            "limit": "From MSA and ATB",
+            "network": "Any GP in Discovery Health Rate network",
+            "copayment": null
+        },
+        "specialist_visits": {
+            "limit": "From MSA and ATB",
+            "annual_cap": null,
+            "notes": "Covered at 100% of Discovery Health Rate from MSA and ATB"
+        },
+        "medicine": {
+            "acute": "From MSA and ATB at 100% of SEP or Discovery Health Rate",
+            "chronic": "From Chronic benefits at network pharmacy"
+        },
+        "dentist": {
+            "limit": "From MSA and ATB",
+            "notes": "R2,500 per family for antenatal classes"
+        },
+        "optometry": {
+            "limit": "From MSA and ATB",
+            "notes": "Covered at 100% of Discovery Health Rate"
+        }
+    },
+    "chronic": {
+        "cdl_conditions_covered": 27,
+        "medicine_formulary": "Chronic Disease List (CDL)",
+        "additional_disease_list": false,
+        "pmb_conditions_covered": true,
+        "notes": "We cover you in full for approved chronic medicine on our medicine list (formulary). Medicine covered on network pharmacies at 100% of Discovery Health Rate. Chronic Drug Amount (CDA) is the monthly maximum you can claim based on your plan type - applies to chronic medicine for the 27 CDL conditions"
+    },
+    "oncology": {
+        "oncology_benefit_limit": 50000,
+        "pmb_unlimited": true,
+        "innovation_benefit": false,
+        "extended_benefit": true,
+        "notes": "Oncology Care Programme available. If we approve your cancer treatment, we pay 100% for approved cancer costs in full. Oncology Benefit provides up to R50,000 if your treatment costs more than the cover amount. Advanced Illness Benefit available for appropriate end-of-life clinical and psychological services"
+    },
+    "maternity": {
+        "waiting_period_months": null,
+        "antenatal_visits": "Unlimited consultations with GP or midwife, ultrasound scan, oral and mental translucency test (10-20 wks), genetic counselling at the rate per visit for 30-50 wks, blood tests and vaccinations at 100% DHR",
+        "delivery_cover": "Unlimited hospital cover for baby delivery. GP and specialists to help after birth covered under our Postnatal care",
+        "scan_limit": null,
+        "notes": "Comprehensive maternity care. Antenatal care consultations covered. Enhanced maternity support via Parent Sense app. Pre and postnatal care. Nurture at Home: If baby is admitted at Neonatal Intensive Care Unit (NICU), you qualify for additional neonatal support"
+    }
+}

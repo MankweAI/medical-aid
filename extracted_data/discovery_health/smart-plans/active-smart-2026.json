@@ -1,0 +1,146 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "active-smart",
+        "plan_name": "Active Smart",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "source_directory": "raw_data/discovery-health/smart-plans-2026/",
+        "categories_extracted": [
+            "premiums",
+            "hospital",
+            "procedures",
+            "modules"
+        ],
+        "extracted_at": "2026-01-19T14:55:00.000000",
+        "confidence_score": 0.96,
+        "requires_review": false,
+        "review_notes": [],
+        "extraction_method": "claude-vision-pipeline",
+        "extraction_model": "claude-sonnet-4.5",
+        "validation_model": "claude-opus-4.5"
+    },
+    "premiums": {
+        "main_member": 1350,
+        "adult_dependant": 1350,
+        "child_dependant": 1350,
+        "msa_percentage": null,
+        "income_bands": [],
+        "notes": [
+            "Applicable from 1 April 2026 to 31 December 2026",
+            "Flat pricing across all member types"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": 72500,
+        "annual_limit_unlimited": false,
+        "network_hospitals": [
+            "Private hospitals in the Dynamic Smart hospital network"
+        ],
+        "co_payment_in_network": 5500,
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Dentistry",
+            "Nail disorders",
+            "Skin disorders including benign growths and lipomas",
+            "Functional nasal surgery",
+            "Elective caesarean section (except if medically necessary)",
+            "Back and neck treatment or surgery",
+            "Knee and shoulder surgery",
+            "Joint replacements (hips, knees, shoulders, elbows)",
+            "Cochlear implants and auditory brain implants"
+        ],
+        "waiting_periods": {
+            "general": null,
+            "pre_existing": null,
+            "maternity": null
+        },
+        "notes": [
+            "Neonatal admissions limited to R72,500.",
+            "Upfront payment of R5,500 applies to all hospital admissions.",
+            "Oncology benefit covered at network provider, limited to Prescribed Minimum Benefits."
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 15300,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Day Surgery Network required. Out-of-network upfront payment of R15,300.",
+            "marketing_description": "On Active Smart, Gastroscopy must be performed in the Dynamic Smart Day Surgery Network. If you go out-of-network, you pay an upfront amount of R15,300. PMB conditions may qualify for full cover at a designated provider.",
+            "jargon_busters": [
+                {
+                    "term": "Day Surgery Network",
+                    "definition": "A network of approved facilities where day procedures like scopes are performed at reduced or no cost."
+                },
+                {
+                    "term": "Upfront Payment",
+                    "definition": "An amount you must pay before or at admission if using an out-of-network facility."
+                }
+            ],
+            "faqs": [
+                {
+                    "question": "What if I use the Day Surgery Network?",
+                    "answer": "You avoid the R15,300 out-of-network fee. Always use the Dynamic Smart Day Surgery Network for scopes."
+                },
+                {
+                    "question": "Is pre-authorization required?",
+                    "answer": "Yes, you must obtain pre-authorization before any scope procedure."
+                }
+            ],
+            "preparation": [
+                "Fast for at least 6 hours before the procedure (no food or water).",
+                "Arrange for someone to drive you home as you will be sedated.",
+                "Inform your doctor about any chronic medication you are taking."
+            ],
+            "recovery_time": "You can usually go home 1-2 hours after the procedure. Mild bloating or throat irritation may persist for 24 hours."
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 15300,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Day Surgery Network required. Out-of-network upfront payment of R15,300.",
+            "marketing_description": "Colonoscopies on Active Smart must be in the Dynamic Smart Day Surgery Network. Out-of-network procedures attract a R15,300 upfront payment.",
+            "preparation": [
+                "Strict clear liquid diet 24h before.",
+                "Drink the purgative solution as prescribed to clear the bowel.",
+                "Stay hydrated but stop all fluids 2 hours before admission."
+            ],
+            "recovery_time": "You will be groggy from sedation. Do not drive for 24 hours. Eat light meals initially."
+        }
+    ],
+    "modules": [
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Day-to-day healthcare benefit with accumulation based on Personal Health Pathway engagement.",
+            "data": {
+                "base_value": 4000,
+                "boost_value": 4000,
+                "total_max": 8000,
+                "notes": "Complete Personal Health Pathway challenges to double your PHF limit."
+            }
+        },
+        {
+            "type": "oncology_care",
+            "title": "Oncology Care Programme",
+            "description": "Cancer treatment cover limited to Prescribed Minimum Benefits at network providers.",
+            "data": {
+                "pmb_cover": "Full cover for PMB cancer treatment at network providers",
+                "precision_medicine": "Not available on Active Smart",
+                "advanced_illness_benefit": "Unlimited cover for approved end-of-life care"
+            }
+        }
+    ]
+}

@@ -1,0 +1,203 @@
+{
+  "identity": {
+    "scheme_slug": "discovery-health",
+    "plan_slug": "classic-comprehensive",
+    "plan_name": "Classic Comprehensive",
+    "year": 2026
+  },
+  "extraction_metadata": {
+    "source_directory": "data/raw/",
+    "categories_extracted": [
+      "premiums",
+      "hospital",
+      "procedures",
+      "modules"
+    ],
+    "extracted_at": "2026-01-18T13:59:32.805041",
+    "confidence_score": 0.86,
+    "requires_review": true,
+    "review_notes": [
+      "PMB with high co-payment",
+      "PMB with high co-payment"
+    ],
+    "extraction_method": "vision_categorized_multi_plan"
+  },
+  "premiums": {
+    "main_member": 10037,
+    "adult_dependant": 9492,
+    "child_dependant": 2002,
+    "msa_percentage": 25,
+    "income_bands": [],
+    "notes": [
+      "Applicable from 1 April 2026 to 31 December 2026",
+      "We count a maximum of three children when calculating the monthly contribution."
+    ]
+  },
+  "hospital_benefits": {
+    "annual_limit": null,
+    "annual_limit_unlimited": true,
+    "network_hospitals": [
+      "Any private hospital approved by the Scheme"
+    ],
+    "co_payment_in_network": null,
+    "co_payment_out_of_network": null,
+    "pre_authorization_required": true,
+    "designated_service_provider_required": false,
+    "exclusions": [
+      "Specific limits for certain treatments",
+      "Contact required before hospital admission"
+    ],
+    "waiting_periods": {
+      "general": null,
+      "pre_existing": null,
+      "maternity": null
+    },
+    "notes": [
+      "Payment up to 200% of Discovery Health Rate for healthcare professionals with payment arrangements."
+    ]
+  },
+  "procedures": [
+    {
+      "procedure_name": "Gastroscopy",
+      "procedure_code": null,
+      "scheme_rate": null,
+      "copayment": 7250,
+      "pmb_covered": true,
+      "pre_authorization_required": true,
+      "annual_limit": null,
+      "notes": "Higher upfront payment if both gastroscopy and colonoscopy are performed.",
+      "marketing_description": "On Classic Comprehensive, a standalone Gastroscopy in hospital attracts a co-payment of R7,250. This is designed to encourage the use of 'Doctor's Rooms' where the procedure is often fully covered.",
+      "preparation": [
+        "Fast for at least 6 hours before the procedure (no food or water).",
+        "Arrangement for a driver is essential as sedation is used.",
+        "Stop blood thinners if advised by your doctor."
+      ],
+      "recovery_time": "1-2 hours in the recovery room. You can return to work the next day."
+    },
+    {
+      "procedure_name": "Colonoscopy",
+      "procedure_code": null,
+      "scheme_rate": null,
+      "copayment": 7250,
+      "pmb_covered": true,
+      "pre_authorization_required": true,
+      "annual_limit": null,
+      "notes": "Higher upfront payment if both gastroscopy and colonoscopy are performed.",
+      "marketing_description": "A Colonoscopy on Classic Comprehensive has a R7,250 co-payment if performed in a hospital without being part of a care basket. Consider using an In-Rooms provider to potentially reduce costs.",
+      "preparation": [
+        "Follow a low-fiber diet 2-3 days before.",
+        "Take the prescribed bowel preparation medication the day before (this will cause frequent loose stools).",
+        "Stay near a bathroom and drink clear fluids only on the day before."
+      ],
+      "recovery_time": "You will be monitored until the sedative wears off. Bloating and gas are common for a few hours."
+    },
+    {
+      "procedure_name": "Scopes performed in-rooms",
+      "procedure_code": null,
+      "scheme_rate": null,
+      "copayment": 0,
+      "pmb_covered": true,
+      "pre_authorization_required": false,
+      "annual_limit": null,
+      "notes": "No co-payment for in-room network provider."
+    }
+  ],
+  "modules": [
+    {
+      "type": "screening_benefit",
+      "title": "Essential Screening and Prevention Benefits",
+      "description": "Covers various screening tests at wellness providers for early detection of serious illnesses.",
+      "data": {
+        "screening_for_kids": "Covers assessment of child’s growth and development.",
+        "screening_for_adults": "Includes Health Check and screenings for BMI, blood pressure, cholesterol, and HIV.",
+        "screening_for_seniors": "Includes age-appropriate falls-risk screening assessment for members 65 years and older.",
+        "additional_tests": [
+          "Diabetes and cholesterol screening tests",
+          "Breast MRI or mammogram",
+          "Colonoscopy for bowel cancer",
+          "Pap smear or HPV test"
+        ],
+        "vaccines": [
+          "Seasonal flu vaccine",
+          "Pneumococcal vaccine"
+        ]
+      }
+    },
+    {
+      "type": "day_to_day_benefit",
+      "title": "Day-to-day Benefits",
+      "description": "Covers day-to-day healthcare expenses from defined benefits and accounts.",
+      "data": {
+        "medical_savings_account": "Covers day-to-day medical expenses from available money in MSA.",
+        "self_payment_gap": "Period where claims are paid from own pocket until reaching Annual Threshold.",
+        "day_to_day_extender_benefit": "Covers certain day-to-day benefits after MSA is depleted.",
+        "above_threshold_benefit": "Covers day-to-day expenses at DHR or portion of DHR after reaching Annual Threshold.",
+        "personal_health_fund": "Provides additional day-to-day medical funding."
+      }
+    },
+    {
+      "type": "chronic_illness_benefit",
+      "title": "Chronic Benefits",
+      "description": "Covers treatment for a list of 27 medical conditions under the Chronic Disease List.",
+      "data": {
+        "prescribed_minimum_benefit_conditions": "Access to treatment for conditions under Prescribed Minimum Benefits.",
+        "medicine_cover_for_chronic_disease_list": "Full cover for approved chronic medicine on the medicine list.",
+        "medicine_cover_for_additional_disease_list": "Cover for medicine on the Additional Disease List."
+      }
+    },
+    {
+      "type": "oncology_benefit",
+      "title": "Oncology Care Programme",
+      "description": "Comprehensive cover for cancer treatment, including high-cost medicine and innovative treatment.",
+      "data": {
+        "prescribed_minimum_benefits": "Covers treatment costs up to the cover amount.",
+        "oncology_benefit": "Covers approved cancer treatment over a 12-month cycle.",
+        "oncology_innovation_benefit": "Covers innovative cancer medicine meeting Scheme’s criteria.",
+        "extended_oncology_benefit": "Extended cover for a defined list of cancers after reaching cover limit.",
+        "advanced_illness_benefit": "Access to comprehensive palliative care programme."
+      }
+    },
+    {
+      "type": "hospital_cover",
+      "title": "Hospital Cover",
+      "description": "Unlimited hospital cover for comprehensive plans.",
+      "data": {
+        "admissions_for_scopes": "Covers certain amounts from day-to-day benefits for scope procedures.",
+        "co_payments_for_scope_admissions": {
+          "day_clinic_account": "R4,650",
+          "hospital_account": "R6,800"
+        },
+        "upfront_payments_for_scopes": {
+          "classic_comprehensive": "R7,250",
+          "classic_smart_comprehensive": "R12,650"
+        }
+      }
+    },
+    {
+      "type": "day_surgery_network_benefit",
+      "title": "Day Surgery Network",
+      "description": "Cover for specific procedures in the Day Surgery Network.",
+      "data": {
+        "how_we_pay": "Covers services from Hospital Benefit, up to 200% of DHR for certain professionals.",
+        "when_you_need_to_pay": {
+          "classic": "R7,250",
+          "classic_smart": "R12,650"
+        }
+      }
+    },
+    {
+      "type": "international_travel_benefit",
+      "title": "International Travel Benefit",
+      "description": "Covers medical emergencies when traveling outside South Africa.",
+      "data": {
+        "cover_amount": "Up to R5 million per person per journey",
+        "duration": "90 days from departure",
+        "exclusions": "Pre-existing conditions"
+      }
+    }
+  ],
+  "_metadata": {
+    "written_at": "2026-01-18T13:59:32.806847",
+    "file_path": "data\\output\\discovery-health\\classic-comprehensive-2026.json"
+  }
+}

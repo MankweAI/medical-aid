@@ -1,0 +1,58 @@
+{
+    "category": "hospital",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_25.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_26.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_28.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_29.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.93,
+    "flags": [],
+    "data": {
+        "network_hospitals": [
+            "Any Scheme-approved private hospital"
+        ],
+        "unlimited_cover": true,
+        "waiting_periods": {
+            "general": "3",
+            "pre_existing": "12"
+        },
+        "designated_service_provider_required": false,
+        "rate_covered": "100%",
+        "payment_structure": {
+            "hospital_account": "Unlimited",
+            "specialists_in_hospital": "100% Discovery Health Rate",
+            "gps_and_other_professionals": "100% Discovery Health Rate",
+            "prosthetics_devices": "Limited to R528,000 per person per year for first three years of membership",
+            "xray_blood_radiology_pathology": "100% of Discovery Health Rate"
+        },
+        "yearly_limits": {
+            "bone_anchored_hearing_aids": 910000,
+            "cochlear_implants_auditory_brain_implants_stapedectomy": 522000,
+            "internal_nerve_stimulators": 446000,
+            "shoulder_joint_prosthesis": null,
+            "alcohol_drug_rehabilitation": "21 days per person for three days",
+            "prosthetic_devices_spinal_surgery": 4600,
+            "mental_health": "21 days of admission per person for affective disorders, 30 days per person for major affective or organic mental disorders"
+        },
+        "dental_in_hospital": {
+            "severe_dental_trauma": "R9,300 per person limit",
+            "basic_dental_trauma": "R9,300 per person limit for appliances, 100% DHR for anaesthetist"
+        },
+        "exclusions": [
+            "Reconstructive treatment and surgery",
+            "Obesity for tail ears, cleft lip/palate",
+            "Breast reduction or enlargement",
+            "Treatment, surgery and procedures for obesity",
+            "Healthcare services related to infertility",
+            "Wilful participation in war, terrorism, rioting",
+            "Injuries sustained or healthcare services arising from travel to",
+            "Sports and exercises"
+        ],
+        "notes": [
+            "No upfront payment required for admissions",
+            "Pre-authorization required for elective admissions"
+        ]
+    }
+}

@@ -1,0 +1,147 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "classic-delta-saver",
+        "plan_name": "Classic Delta Saver",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "source_directory": "raw_data/discovery-health/saver/",
+        "categories_extracted": [
+            "premiums",
+            "hospital",
+            "procedures",
+            "modules"
+        ],
+        "extracted_at": "2026-01-19T15:25:32Z",
+        "confidence_score": 0.95,
+        "requires_review": false,
+        "review_notes": [],
+        "extraction_method": "claude-vision-pipeline"
+    },
+    "marketing_description": "Classic Delta Saver provides extensive hospital cover at Delta Network hospitals with 200% Discovery Health Rate reimbursement and a 20% Medical Savings Account allocation.",
+    "premiums": {
+        "main_member": 2875,
+        "adult_dependant": 2062,
+        "child_dependant": 1556,
+        "msa_percentage": 20,
+        "income_bands": [],
+        "notes": [
+            "Applicable from 1 April 2026 to 31 December 2026",
+            "Jan-Mar 2026: Main R3,624, Adult R2,863, Child R1,455",
+            "Maximum of 3 children charged for monthly contributions",
+            "Must use Delta Hospital Network for planned admissions"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": null,
+        "annual_limit_unlimited": true,
+        "rate_covered": "200%",
+        "network_hospitals": [
+            "Delta Hospital Network"
+        ],
+        "co_payment_in_network": 0,
+        "co_payment_out_of_network": 11100,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Reconstructive treatment and surgery",
+            "Cosmetic procedures",
+            "Treatment related to alcohol/drug abuse",
+            "Infertility treatment",
+            "Obesity surgery"
+        ],
+        "waiting_periods": {
+            "general": null,
+            "pre_existing": null,
+            "maternity": null
+        },
+        "notes": [
+            "We pay up to 200% of the Discovery Health Rate for healthcare professionals",
+            "Delta options require R11,100 upfront for hospitals outside Delta Network",
+            "Private day surgery facility in the Delta Day Surgery Network"
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Delta Day Surgery Network. Out-of-network upfront payment R11,100"
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Delta Day Surgery Network. Out-of-network upfront payment R11,100"
+        },
+        {
+            "procedure_name": "Sigmoidoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Delta Day Surgery Network. Out-of-network upfront payment R11,100"
+        },
+        {
+            "procedure_name": "Proctoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Delta Day Surgery Network. Out-of-network upfront payment R11,100"
+        }
+    ],
+    "modules": [
+        {
+            "type": "medical_savings_account",
+            "title": "Medical Savings Account",
+            "description": "20% of your monthly contribution allocated to day-to-day medical expenses",
+            "data": {
+                "annual_allocation": {
+                    "main_member": 8688,
+                    "adult_dependant": 6864,
+                    "child_dependant": 3492
+                }
+            }
+        },
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Accumulate up to R20,000 in your PHF by completing health pathways",
+            "data": {
+                "advance": 1000,
+                "phf_base_max": 10000,
+                "phf_boost_max": 10000,
+                "total_max": 20000
+            }
+        },
+        {
+            "type": "day_to_day_extender",
+            "title": "Day-to-day Extender Benefit",
+            "description": "Extra cover for essential healthcare services in network after MSA exhausted",
+            "data": {}
+        },
+        {
+            "type": "oncology_care",
+            "title": "Oncology Care Programme",
+            "description": "Comprehensive cancer cover with R250,000 oncology benefit limit",
+            "data": {
+                "oncology_limit": 250000,
+                "pmb_unlimited": true
+            }
+        }
+    ]
+}

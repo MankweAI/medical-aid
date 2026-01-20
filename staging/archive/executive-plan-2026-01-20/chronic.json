@@ -1,0 +1,45 @@
+{
+    "category": "chronic",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_21.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_22.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.95,
+    "flags": [],
+    "data": {
+        "cdl_conditions_covered": 27,
+        "medicine_formulary": "Discovery Chronic Medicine List and Additional Disease List",
+        "additional_disease_list": true,
+        "pmb_conditions_covered": true,
+        "conditions_list": [
+            "Addison's disease, asthma",
+            "Bipolar mood disorder, bronchiectasis",
+            "Cardiac failure, cardiomyopathy, chronic obstructive pulmonary disease, chronic renal disease, coronary artery disease, Crohn's disease",
+            "Diabetes insipidus, diabetes type 1, diabetes type 2",
+            "Epilepsy",
+            "Glaucoma",
+            "Haemophilia, HIV, hyperlipidaemia, hypertension, hypothyroidism",
+            "Multiple sclerosis",
+            "Parkinson's disease",
+            "Rheumatoid arthritis",
+            "Schizophrenia, systemic lupus erythematosus",
+            "Ulcerative colitis"
+        ],
+        "additional_disease_list_conditions": [
+            "Ankylosing spondylitis",
+            "Behçet's disease",
+            "Cystic fibrosis",
+            "Dyssomic disorder, dermatomyositis/polymyositis",
+            "Generalised anxiety disorder",
+            "Huntington's disease",
+            "Isolated growth hormone deficiency",
+            "Major depression, motor neuron disease, muscular dystrophy and other inherited myopathies, myasthenia gravis",
+            "Obsessive compulsive disorder, osteoporosis",
+            "Paget's disease, panic disorder, polyarteritis nodosa, post-traumatic stress disorder, psoriasis, pulmonary interstitial fibrosis",
+            "Sjögren's syndrome, systemic sclerosis"
+        ],
+        "how_to_activate": "Apply for Chronic Illness Benefit via Primary Care GP or send to Discovery Health for approval",
+        "coverage_details": "Medicine on Discovery Chronic Medicine List for CDL. Extended medicine list for Additional Disease List. No medicine fee applies for CDL formulary medicine."
+    }
+}

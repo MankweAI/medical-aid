@@ -1,0 +1,48 @@
+{
+    "phase": "3.2",
+    "model": "opus-4.5",
+    "status": "approved",
+    "corrections": [
+        {
+            "category": "maternity",
+            "field": "scan_limit",
+            "original_value": 4,
+            "corrected_value": "2-4 depending on clinical criteria",
+            "notes": "Page 20 states: 'up to two 2D ultrasound scans or one 2D ultrasound scan and one nuchal translucency test' - this means 2-4 scans based on pregnancy type. '12 consultations' refers to antenatal visits, not scans."
+        },
+        {
+            "category": "procedures",
+            "field": "copayment",
+            "original_value": 0,
+            "corrected_value": "Varies: R0 at network provider for PMB, R4,650 day clinic, R5,700 hospital",
+            "notes": "Page 27 clarifies: - Day clinic account: R4,650 (reduces to R5,450 if doctor in value-based network). - Hospital account: R5,700 (reduces to R6,850 if scopes performed by value-based network doctor). - Bi-directional (gastro + colonoscopy same admission): R5,700. - R0 if PMB condition, patient 12+ years, performed at in-rooms network provider."
+        }
+    ],
+    "verified_values": {
+        "premiums": {
+            "main_member": 11430,
+            "status": "verified"
+        },
+        "hospital": {
+            "unlimited_cover": true,
+            "rate_covered": "100%",
+            "status": "verified"
+        },
+        "day_to_day": {
+            "msa_main_member": 34284,
+            "annual_threshold_main_member": 42370,
+            "status": "verified"
+        },
+        "chronic": {
+            "cdl_conditions": 27,
+            "additional_disease_list": true,
+            "status": "verified"
+        },
+        "oncology": {
+            "limit": 400000,
+            "innovation_benefit": 24000,
+            "status": "verified"
+        }
+    },
+    "notes": "Cross-validation complete. Corrections applied to maternity scan limits and procedure co-payments. Data ready for promotion to extracted_data."
+}

@@ -1,0 +1,21 @@
+{
+    "category": "maternity",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_20.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.95,
+    "flags": [],
+    "data": {
+        "waiting_period_months": 9,
+        "antenatal_visits": "Unlimited",
+        "delivery_cover": "100% Discovery Health Rate",
+        "scan_limit": 4,
+        "ultrasound_scans": "Up to 4 scans - 1 nuchal translucency test covered",
+        "antenatal_support": "Enhanced maternity support via Discovery Health app: create pregnancy profile, track pregnancy milestones, access Women's Health Hub",
+        "prenatal_care_postnatal_care": "We pay for up to R2,400 per day for private ward. Caesarean requires pre-auth",
+        "delivery_devices": "Breast pumps and smart thermometers covered",
+        "specialists": "Up to R6,500 for essential required device fees",
+        "notes": "12 consultations with gynaecologist during pregnancy. Must register pregnancy on Discovery website 13 weeks before delivery. Access to Parent Sense app for advice and tracking."
+    }
+}

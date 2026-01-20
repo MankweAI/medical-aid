@@ -1,0 +1,50 @@
+{
+    "category": "procedures",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_27.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.95,
+    "flags": [
+        "Limited procedure data - only scopes found on page 27. Need additional pages for comprehensive procedure list."
+    ],
+    "data": {
+        "procedures": [
+            {
+                "procedure_name": "Gastroscopy",
+                "copayment": 0,
+                "pmb_covered": true,
+                "pre_authorization_required": true,
+                "notes": "R0 if performed in Day clinic account, R1,800 if Hospital account. Bi-directional scopes R3,100."
+            },
+            {
+                "procedure_name": "Colonoscopy",
+                "copayment": 0,
+                "pmb_covered": true,
+                "pre_authorization_required": true,
+                "notes": "R0 if performed in Day clinic account, R1,800 if Hospital account. Bi-directional scopes R3,100."
+            },
+            {
+                "procedure_name": "Sigmoidoscopy",
+                "copayment": 0,
+                "pmb_covered": true,
+                "pre_authorization_required": true,
+                "notes": "R0 if performed in Day clinic account, R1,800 if Hospital account."
+            },
+            {
+                "procedure_name": "Proctoscopy",
+                "copayment": 0,
+                "pmb_covered": true,
+                "pre_authorization_required": true,
+                "notes": "R0 if performed in Day clinic account, R1,800 if Hospital account."
+            },
+            {
+                "procedure_name": "Gastroscopy and Colonoscopy (same admission)",
+                "copayment": 0,
+                "pmb_covered": true,
+                "pre_authorization_required": true,
+                "notes": "R0 if both performed by doctor in Executive Plan value-based network. Otherwise R1,700."
+            }
+        ]
+    }
+}

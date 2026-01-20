@@ -1,0 +1,147 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "coastal-saver",
+        "plan_name": "Coastal Saver",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "source_directory": "raw_data/discovery-health/saver/",
+        "categories_extracted": [
+            "premiums",
+            "hospital",
+            "procedures",
+            "modules"
+        ],
+        "extracted_at": "2026-01-19T15:25:32Z",
+        "confidence_score": 0.95,
+        "requires_review": false,
+        "review_notes": [],
+        "extraction_method": "claude-vision-pipeline"
+    },
+    "marketing_description": "Coastal Saver is designed for members living in coastal provinces, offering unlimited hospital cover at approved hospitals in the four coastal provinces with a 15% Medical Savings Account allocation.",
+    "premiums": {
+        "main_member": 4098,
+        "adult_dependant": 3082,
+        "child_dependant": 1648,
+        "msa_percentage": 15,
+        "income_bands": [],
+        "notes": [
+            "Applicable from 1 April 2026 to 31 December 2026",
+            "Jan-Mar 2026: Main R3,797, Adult R2,855, Child R1,533",
+            "Maximum of 3 children charged for monthly contributions",
+            "Only available to members in four coastal provinces"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": null,
+        "annual_limit_unlimited": true,
+        "rate_covered": "100%",
+        "network_hospitals": [
+            "Approved hospitals in the four coastal provinces"
+        ],
+        "co_payment_in_network": 0,
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Reconstructive treatment and surgery",
+            "Cosmetic procedures",
+            "Treatment related to alcohol/drug abuse",
+            "Infertility treatment",
+            "Obesity surgery"
+        ],
+        "waiting_periods": {
+            "general": null,
+            "pre_existing": null,
+            "maternity": null
+        },
+        "notes": [
+            "Any private hospital in the four coastal provinces approved by the Scheme",
+            "We pay 70% of the Discovery Health Rate outside coastal regions",
+            "Private day surgery facility in the Coastal Day Surgery Network"
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Coastal Day Surgery Network. Out-of-network upfront payment R7,250"
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Coastal Day Surgery Network. Out-of-network upfront payment R7,250"
+        },
+        {
+            "procedure_name": "Sigmoidoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Coastal Day Surgery Network. Out-of-network upfront payment R7,250"
+        },
+        {
+            "procedure_name": "Proctoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 0,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "R0 if performed in Coastal Day Surgery Network. Out-of-network upfront payment R7,250"
+        }
+    ],
+    "modules": [
+        {
+            "type": "medical_savings_account",
+            "title": "Medical Savings Account",
+            "description": "15% of your monthly contribution allocated to day-to-day medical expenses",
+            "data": {
+                "annual_allocation": {
+                    "main_member": 6828,
+                    "adult_dependant": 5136,
+                    "child_dependant": 2760
+                }
+            }
+        },
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Accumulate up to R6,000 in your PHF by completing health pathways",
+            "data": {
+                "advance": 1000,
+                "phf_base_max": 6000,
+                "phf_boost_max": 6000,
+                "total_max": 12000
+            }
+        },
+        {
+            "type": "day_to_day_extender",
+            "title": "Day-to-day Extender Benefit",
+            "description": "Extra cover for essential healthcare services in network after MSA exhausted",
+            "data": {}
+        },
+        {
+            "type": "oncology_care",
+            "title": "Oncology Care Programme",
+            "description": "Comprehensive cancer cover with R250,000 oncology benefit limit",
+            "data": {
+                "oncology_limit": 250000,
+                "pmb_unlimited": true
+            }
+        }
+    ]
+}

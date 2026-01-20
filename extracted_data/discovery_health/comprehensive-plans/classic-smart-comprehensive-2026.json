@@ -1,0 +1,116 @@
+{
+  "identity": {
+    "scheme_slug": "discovery-health",
+    "plan_slug": "classic-smart-comprehensive",
+    "plan_name": "Classic Smart Comprehensive",
+    "year": 2026
+  },
+  "extraction_metadata": {
+    "source_directory": "data/raw/",
+    "categories_extracted": [
+      "premiums",
+      "hospital",
+      "procedures",
+      "modules"
+    ],
+    "extracted_at": "2026-01-18T13:59:32.808815",
+    "confidence_score": 0.86,
+    "requires_review": true,
+    "review_notes": [
+      "PMB with high co-payment",
+      "PMB with high co-payment"
+    ],
+    "extraction_method": "vision_categorized_multi_plan"
+  },
+  "premiums": {
+    "main_member": 8576,
+    "adult_dependant": 7920,
+    "child_dependant": 2002,
+    "msa_percentage": 15,
+    "income_bands": [],
+    "notes": [
+      "Applicable from 1 April 2026 to 31 December 2026",
+      "We count a maximum of three children when calculating the monthly contribution."
+    ]
+  },
+  "hospital_benefits": {
+    "annual_limit": null,
+    "annual_limit_unlimited": true,
+    "network_hospitals": [
+      "Private hospitals in the Smart Hospital Network"
+    ],
+    "co_payment_in_network": null,
+    "co_payment_out_of_network": null,
+    "pre_authorization_required": true,
+    "designated_service_provider_required": true,
+    "exclusions": [
+      "Specific limits for certain treatments",
+      "Contact required before hospital admission"
+    ],
+    "waiting_periods": {
+      "general": null,
+      "pre_existing": null,
+      "maternity": null
+    },
+    "notes": [
+      "Payment up to 200% of Discovery Health Rate for healthcare professionals with payment arrangements."
+    ]
+  },
+  "procedures": [
+    {
+      "procedure_name": "Gastroscopy",
+      "procedure_code": null,
+      "scheme_rate": null,
+      "copayment": 12650,
+      "pmb_covered": true,
+      "pre_authorization_required": true,
+      "annual_limit": null,
+      "notes": "Higher upfront payment if both gastroscopy and colonoscopy are performed."
+    },
+    {
+      "procedure_name": "Colonoscopy",
+      "procedure_code": null,
+      "scheme_rate": null,
+      "copayment": 12650,
+      "pmb_covered": true,
+      "pre_authorization_required": true,
+      "annual_limit": null,
+      "notes": "Higher upfront payment if both gastroscopy and colonoscopy are performed."
+    },
+    {
+      "procedure_name": "Scopes performed in-rooms",
+      "procedure_code": null,
+      "scheme_rate": null,
+      "copayment": 0,
+      "pmb_covered": true,
+      "pre_authorization_required": false,
+      "annual_limit": null,
+      "notes": "No co-payment for in-room network provider."
+    }
+  ],
+  "modules": [
+    {
+      "type": "chronic_illness_benefit",
+      "title": "Chronic Benefits",
+      "description": "Limited cover for chronic conditions, not available on Classic Smart Comprehensive Plan.",
+      "data": {
+        "prescribed_minimum_benefit_conditions": "Access to treatment for conditions under Prescribed Minimum Benefits.",
+        "medicine_cover_for_chronic_disease_list": "Full cover for approved chronic medicine on the medicine list."
+      }
+    },
+    {
+      "type": "oncology_benefit",
+      "title": "Oncology Care Programme",
+      "description": "Limited cover for cancer treatment, not available on Classic Smart Comprehensive Plan.",
+      "data": {
+        "prescribed_minimum_benefits": "Covers treatment costs up to the cover amount.",
+        "oncology_benefit": "Covers approved cancer treatment over a 12-month cycle.",
+        "oncology_innovation_benefit": "Covers innovative cancer medicine meeting Scheme’s criteria."
+      }
+    }
+  ],
+  "_metadata": {
+    "written_at": "2026-01-18T13:59:32.811373",
+    "file_path": "data\\output\\discovery-health\\classic-smart-comprehensive-2026.json"
+  }
+}

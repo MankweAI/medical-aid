@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import AppHeader from '@/components/AppHeader';
 import HomeHero from '@/components/home/HomeHero';
+import FeaturedPlans from '@/components/home/FeaturedPlans';
+import ProcedureSearchPilot from '@/components/home/ProcedureSearchPilot';
 import DailyInsight from '@/components/DailyInsight';
 import { ShieldCheck, Activity, Award } from 'lucide-react';
 
@@ -9,21 +11,13 @@ export const metadata: Metadata = {
   description: 'Navigate 70+ medical aid plans with confidence. Compare benefits, prices, and find your ideal match for 2026 using algorithmic analysis.',
 };
 
-interface HomePageProps {
-  searchParams: Promise<{ category?: string }>;
-}
-
-export default async function AppHome({ searchParams }: HomePageProps) {
-  const params = await searchParams;
-  // Category filter legacy support removed, keeping params parsing for safety if needed later
-
+export default function AppHome() {
   return (
     <main className="min-h-screen bg-slate-50 relative font-sans overflow-x-hidden">
       <AppHeader />
 
-      {/* 1. HERO SECTION: Clean, Topographic, Light Theme */}
+      {/* 1. HERO SECTION */}
       <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
-
         {/* Background Elements */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-50/50 via-slate-50 to-white" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full opacity-30 pointer-events-none">
@@ -32,13 +26,18 @@ export default async function AppHome({ searchParams }: HomePageProps) {
         </div>
 
         <div className="relative z-10 container mx-auto px-4 max-w-6xl">
-          {/* MAIN HERO COMPONENT */}
           <HomeHero />
         </div>
       </div>
 
-      {/* 2. VALUE PROPOSITION / INSIGHT SECTION */}
-      <section className="relative z-10 bg-white border-t border-slate-100 py-16 lg:py-24">
+      {/* 2. FEATURED PLANS (Dynamic Data) */}
+      <FeaturedPlans />
+
+      {/* 3. PROCEDURE COST PILOT */}
+      <ProcedureSearchPilot />
+
+      {/* 4. VALUE PROPOSITION */}
+      <section className="relative z-10 bg-white border-t border-slate-100 py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">
@@ -82,7 +81,7 @@ export default async function AppHome({ searchParams }: HomePageProps) {
             </div>
           </div>
 
-          {/* DAILY INSIGHT INTEGRATION */}
+          {/* DAILY INSIGHT */}
           <div className="max-w-4xl mx-auto">
             <DailyInsight />
           </div>

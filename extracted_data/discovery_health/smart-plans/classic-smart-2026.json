@@ -1,0 +1,148 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "classic-smart",
+        "plan_name": "Classic Smart",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "source_directory": "raw_data/discovery-health/smart-plans-2026/",
+        "categories_extracted": [
+            "premiums",
+            "hospital",
+            "procedures",
+            "modules"
+        ],
+        "extracted_at": "2026-01-19T14:55:00.000000",
+        "confidence_score": 0.96,
+        "requires_review": false,
+        "review_notes": [],
+        "extraction_method": "claude-vision-pipeline",
+        "extraction_model": "claude-sonnet-4.5",
+        "validation_model": "claude-opus-4.5"
+    },
+    "premiums": {
+        "main_member": 3018,
+        "adult_dependant": 2381,
+        "child_dependant": 1205,
+        "msa_percentage": null,
+        "income_bands": [],
+        "notes": [
+            "Applicable from 1 April 2026 to 31 December 2026",
+            "Jan-Mar 2026 premiums: Main R2,822, Adult R2,227, Child R1,127"
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": null,
+        "annual_limit_unlimited": true,
+        "network_hospitals": [
+            "Private hospitals in the Smart hospital network"
+        ],
+        "co_payment_in_network": null,
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Dentistry (except severe/trauma)",
+            "Nail disorders",
+            "Skin disorders including benign growths and lipomas",
+            "Functional nasal surgery",
+            "Elective caesarean section (except if medically necessary)",
+            "Back and neck treatment or surgery",
+            "Knee and shoulder surgery",
+            "Joint replacements (hips, knees, shoulders, elbows)",
+            "Cochlear implants and auditory brain implants",
+            "Tonsillectomies and adenoidectomies"
+        ],
+        "waiting_periods": {
+            "general": null,
+            "pre_existing": null,
+            "maternity": null
+        },
+        "notes": [
+            "Unlimited hospital cover in the Smart hospital network.",
+            "Cover for defined acute medicine categories prescribed by a Smart network GP.",
+            "Sports-related injuries: basic X-rays and specialist visits covered."
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 12650,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Smart Day Surgery Network required. Out-of-network upfront payment of R12,650.",
+            "marketing_description": "Gastroscopies on Classic Smart must use the Smart Day Surgery Network. A R12,650 upfront payment applies out-of-network.",
+            "jargon_busters": [
+                {
+                    "term": "Smart Day Surgery Network",
+                    "definition": "The specific list of day clinics for Classic and Essential Smart plans."
+                }
+            ],
+            "faqs": [
+                {
+                    "question": "Does my plan cover scopes?",
+                    "answer": "Yes, if performed in the Smart Day Surgery Network."
+                }
+            ],
+            "preparation": [
+                "Fast for 6 hours.",
+                "Arrange transport."
+            ],
+            "recovery_time": "1-2 hours observation."
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 12650,
+            "pmb_covered": true,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Smart Day Surgery Network required. Out-of-network upfront payment of R12,650.",
+            "marketing_description": "Colonoscopy cover requires use of the Smart Day Surgery Network. Out-of-network use incurs a R12,650 fee.",
+            "preparation": [
+                "Bowel prep 24h before.",
+                "Clear fluids."
+            ],
+            "recovery_time": "24 hours recovery from sedation."
+        },
+        {
+            "procedure_name": "Dental Admissions",
+            "procedure_code": null,
+            "scheme_rate": null,
+            "copayment": 8950,
+            "pmb_covered": false,
+            "pre_authorization_required": true,
+            "annual_limit": null,
+            "notes": "Upfront payment: Members 13+ R8,950 (Hospital) / R5,750 (Day Clinic). Under 13 R3,470 (Hospital) / R1,550 (Day Clinic).",
+            "marketing_description": "Classic Smart covers the rest of the hospital account from your Hospital Benefit for dental admissions, subject to an upfront payment."
+        }
+    ],
+    "modules": [
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Day-to-day healthcare benefit with higher accumulation limits.",
+            "data": {
+                "base_value": 8000,
+                "boost_value": 8000,
+                "total_max": 16000,
+                "notes": "Classic Smart members receive higher PHF accumulation limits."
+            }
+        },
+        {
+            "type": "oncology_care",
+            "title": "Oncology Care Programme",
+            "description": "Comprehensive cancer cover.",
+            "data": {
+                "cover_amount": "First R250,000 covered at 100% DHR",
+                "extended_cover": "80% of DHR after R250,000",
+                "pmb_cover": "Full cover for PMB"
+            }
+        }
+    ]
+}

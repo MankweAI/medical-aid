@@ -1,0 +1,152 @@
+{
+    "plan": "executive-plan",
+    "scheme": "discovery-health",
+    "created_at": "2026-01-20T10:32:00Z",
+    "model": "claude-sonnet-4.5-thinking",
+    "images": [
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_9.png",
+            "category": "other",
+            "confidence": "high",
+            "notes": "PMB and emergency information"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_12.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Personal Health Fund overview"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_13.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Discovery Health app and virtual benefits"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_14.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Care at home services"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_15.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Screening and prevention benefits"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_16.png",
+            "category": "day_to_day",
+            "confidence": "high",
+            "notes": "Day-to-day benefits structure overview"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_17.png",
+            "category": "day_to_day",
+            "confidence": "high",
+            "notes": "MSA, Self-payment Gap, Day-to-day Extender Benefit details"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_18.png",
+            "category": "day_to_day",
+            "confidence": "high",
+            "notes": "Day-to-day benefits table - medicine and specialists"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_19.png",
+            "category": "day_to_day",
+            "confidence": "high",
+            "notes": "Allied healthcare, optical, dental, antenatal services limits"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_20.png",
+            "category": "maternity",
+            "confidence": "high",
+            "notes": "Maternity benefit details"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_21.png",
+            "category": "chronic",
+            "confidence": "high",
+            "notes": "Chronic benefits overview - CDL and Extended chronic lists"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_22.png",
+            "category": "chronic",
+            "confidence": "high",
+            "notes": "Chronic Disease List conditions and Additional Disease List"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_23.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Care programmes: diabetes, HIV, heart, mental health"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_24.png",
+            "category": "oncology",
+            "confidence": "high",
+            "notes": "Oncology Care Programme benefits and limits"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_25.png",
+            "category": "hospital",
+            "confidence": "high",
+            "notes": "Hospital Benefit overview - unlimited cover"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_26.png",
+            "category": "hospital",
+            "confidence": "high",
+            "notes": "Hospital cover payment rates table"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_27.png",
+            "category": "procedures",
+            "confidence": "high",
+            "notes": "Scopes co-payments (gastroscopy, colonoscopy) - Day clinic R0 vs Hospital R1,800"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_28.png",
+            "category": "hospital",
+            "confidence": "high",
+            "notes": "Hospital benefits with yearly limits - bone anchored, cochlear, nerve stimulators, prosthetics"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_29.png",
+            "category": "hospital",
+            "confidence": "high",
+            "notes": "Hospital dental treatment benefits and upfront payments"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_30.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Extra benefits: Advanced illness, Assisted reproductive"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_31.png",
+            "category": "modules",
+            "confidence": "high",
+            "notes": "Additional extra benefits: International travel, Overseas Treatment, Spinal Care"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_32.png",
+            "category": "other",
+            "confidence": "high",
+            "notes": "Plan exclusions list"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_33.png",
+            "category": "premiums",
+            "confidence": "high",
+            "notes": "Your contributions (premiums) table Jan-Mar and Apr-Dec 2026"
+        },
+        {
+            "file": "discovery-health-medical-scheme-executive-plan-guide_page_34.png",
+            "category": "premiums",
+            "confidence": "high",
+            "notes": "PHF, MSA, and Annual Threshold amounts"
+        }
+    ]
+}

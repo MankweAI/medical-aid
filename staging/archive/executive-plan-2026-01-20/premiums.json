@@ -1,0 +1,19 @@
+{
+    "category": "premiums",
+    "extracted_from": [
+        "discovery-health-medical-scheme-executive-plan-guide_page_33.png",
+        "discovery-health-medical-scheme-executive-plan-guide_page_34.png"
+    ],
+    "model": "claude-sonnet-4.5-thinking",
+    "confidence": 0.95,
+    "flags": [],
+    "data": {
+        "main_member": 11430,
+        "adult_dependant": 11430,
+        "child_dependant": 2185,
+        "notes": [
+            "Jan-Mar 2026: Main R11,430, Adult R11,430, Child R2,185",
+            "Apr-Dec 2026: Main R12,338, Adult R12,338, Child R2,358"
+        ]
+    }
+}

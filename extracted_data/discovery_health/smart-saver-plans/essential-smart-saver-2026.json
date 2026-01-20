@@ -1,0 +1,127 @@
+{
+    "identity": {
+        "scheme_slug": "discovery-health",
+        "plan_slug": "essential-smart-saver",
+        "plan_name": "Essential Smart Saver",
+        "year": 2026
+    },
+    "extraction_metadata": {
+        "source_directory": "raw_data/discovery-health/smart-saver/",
+        "categories_extracted": [
+            "premiums",
+            "hospital",
+            "procedures",
+            "modules"
+        ],
+        "extracted_at": "2026-01-19T13:45:00Z",
+        "confidence_score": 0.98,
+        "requires_review": false,
+        "review_notes": [
+            "Opus corrected MSA/Risk split"
+        ],
+        "extraction_method": "multi-model-pipeline"
+    },
+    "marketing_description": "The Essential Smart Saver plan offers cost-effective private hospital cover at 100% of the Discovery Health Rate, combined with a Medical Savings Account for day-to-day care. It excludes cover for certain expensive procedures like joint replacements.",
+    "premiums": {
+        "main_member": 2750,
+        "adult_dependant": 2350,
+        "child_dependant": 895,
+        "msa_percentage": 16,
+        "income_bands": [],
+        "notes": [
+            "Applicable from 1 Jan 2026 to 31 Dec 2026.",
+            "Premiums include Medical Savings Account portion.",
+            "Maximum of 3 children charged for."
+        ]
+    },
+    "hospital_benefits": {
+        "annual_limit": "Unlimited",
+        "annual_limit_unlimited": true,
+        "rate_covered": "100%",
+        "network_hospitals": [
+            "Any private hospital"
+        ],
+        "co_payment_in_network": "None",
+        "co_payment_out_of_network": null,
+        "pre_authorization_required": true,
+        "designated_service_provider_required": true,
+        "exclusions": [
+            "Reconstructive treatment",
+            "Otoplasty",
+            "Breast reductions",
+            "Obesity surgery",
+            "Infertility",
+            "Frail care",
+            "Nail disorders",
+            "Skin disorders/benign growths",
+            "Investigations",
+            "Functional nasal surgery",
+            "Oesophageal reflux/hiatus hernia surgery",
+            "Back and neck treatment/surgery",
+            "Knee and shoulder surgery",
+            "Joint replacements",
+            "Cochlear implants",
+            "Varicose veins",
+            "Refractive eye surgery",
+            "Non-cancerous breast conditions"
+        ],
+        "waiting_periods": {
+            "general": "3 months",
+            "pre_existing": "12 months"
+        },
+        "notes": [
+            "We pay up to the Discovery Health Rate (100%).",
+            "Certain procedures regarding joints, spine, and hearing implants are not covered."
+        ]
+    },
+    "procedures": [
+        {
+            "procedure_name": "Gastroscopy",
+            "copayment": 0,
+            "notes": "Must be done in Smart Day Surgery Network. If done out of network, R12,650 upfront payment applies.",
+            "marketing_description": "This procedure is fully covered (R0 co-payment) ONLY if performed in the Smart Day Surgery Network. Using a non-network facility will result in a substantial R12,650 upfront payment.",
+            "pre_authorization_required": true
+        },
+        {
+            "procedure_name": "Colonoscopy",
+            "copayment": 0,
+            "notes": "Must be done in Smart Day Surgery Network. If done out of network, R12,650 upfront payment applies.",
+            "pre_authorization_required": true
+        },
+        {
+            "procedure_name": "Dental Admissions",
+            "copayment": 8950,
+            "notes": "Upfront payment of R8,950 for hospital admissions (13+ years). R5,750 for day clinic admissions. Severe dental cover applies.",
+            "pre_authorization_required": true
+        }
+    ],
+    "modules": [
+        {
+            "type": "personal_health_fund",
+            "title": "Personal Health Fund",
+            "description": "Accumulate up to R6,000 per family for additional day-to-day cover.",
+            "data": {
+                "base_limit": 6000,
+                "mechanism": "Health checks and physical activity goals unlock funds."
+            }
+        },
+        {
+            "type": "screening_benefit",
+            "title": "Screening and Prevention",
+            "description": "Cover for screening tests like mammograms, pap smears, and prostate screening.",
+            "data": {}
+        },
+        {
+            "type": "medical_savings_account",
+            "title": "Medical Savings Account",
+            "description": "16% of your premium goes to a savings account for day-to-day expenses.",
+            "data": {
+                "monthly_allocation": {
+                    "main_member": 434,
+                    "adult": 370,
+                    "child": 139
+                }
+            }
+        }
+    ]
+}
