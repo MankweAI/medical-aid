@@ -7,6 +7,7 @@ import TrustFooter from '@/components/TrustFooter';
 import {
     CONDITIONS,
     getAllConditionSlugs,
+    getProceduresForCondition,
     type ConditionSlug,
 } from '@/utils/condition-mapping';
 import {
@@ -148,10 +149,10 @@ export default async function StrategyHubPage({ params }: PageProps) {
                                 <div className="flex items-start gap-4">
                                     <div
                                         className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold ${ranking.rank === 1
-                                                ? 'bg-emerald-100 text-emerald-700'
-                                                : ranking.rank === 2
-                                                    ? 'bg-teal-100 text-teal-700'
-                                                    : 'bg-slate-100 text-slate-700'
+                                            ? 'bg-emerald-100 text-emerald-700'
+                                            : ranking.rank === 2
+                                                ? 'bg-teal-100 text-teal-700'
+                                                : 'bg-slate-100 text-slate-700'
                                             }`}
                                     >
                                         #{ranking.rank}
@@ -181,6 +182,32 @@ export default async function StrategyHubPage({ params }: PageProps) {
                             </div>
                         </Link>
                     ))}
+                </div>
+            </section>
+
+            {/* SEO Topical Glue: Link to specific Procedure Hubs */}
+            <section className="max-w-6xl mx-auto px-4 py-12">
+                <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <h2 className="text-xl font-bold text-slate-900 mb-4">
+                        Check Specific Procedure Costs
+                    </h2>
+                    <p className="text-slate-600 mb-6">
+                        View detailed cost breakdowns for procedures related to {conditionDef.label}:
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {getProceduresForCondition(conditionSlug).slice(0, 8).map((procSlug) => (
+                            <Link
+                                key={procSlug}
+                                href={`/discovery-health/${procSlug}`}
+                                className="flex items-center gap-2 px-4 py-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg transition-colors group"
+                            >
+                                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600" />
+                                <span className="text-sm font-medium text-slate-700 group-hover:text-emerald-700 capitalize">
+                                    {procSlug.replace(/-/g, ' ')}
+                                </span>
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </section>
 

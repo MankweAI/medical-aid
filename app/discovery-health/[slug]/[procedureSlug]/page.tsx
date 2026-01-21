@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const isHighInterestProc = highInterestProcs.includes(procedureSlug);
     const isPopularPlan = popularSeries.some(s => planSlug.includes(s));
-    const hasUniqueData = (procedure.copayment !== null && procedure.copayment > 0) || (procedure.notes && procedure.notes.length > 30);
+    const hasUniqueData = (procedure.copayment !== null && procedure.copayment > 0) || Boolean(procedure.notes && procedure.notes.length > 30);
 
     // Index if: (High Interest Proc) OR (Popular Plan AND Specific Data)
     const shouldIndex = isHighInterestProc || (isPopularPlan && hasUniqueData);
@@ -328,13 +328,11 @@ export default async function PlanProcedurePage({ params }: PageProps) {
         'procedureType': 'SurgicalProcedure',
         'bodyLocation': 'Body',
         'status': 'Active',
-        'offers': {
-            '@type': 'Offer',
-            'price': procedure.copayment ?? 0,
-            'priceCurrency': 'ZAR',
-            'priceValidUntil': `${plan.identity.year}-12-31`,
-            'description': `Co-payment for ${procedure.procedure_name} on ${plan.identity.plan_name}`
-        }
+        // SEO Fix: Removed 'offers' to avoid price confusion (co-payment vs premium)
+        // Cost info moved to description for clarity
+        'description': procedure.copayment === 0
+            ? `${procedure.procedure_name} is fully covered on ${plan.identity.plan_name} (no co-payment required).`
+            : `${procedure.procedure_name} on ${plan.identity.plan_name} requires a co-payment of R${procedure.copayment?.toLocaleString() ?? 0}. Plan premium: R${plan.premiums.main_member.toLocaleString()}/month.`
     };
 
     const hospitalNetwork = plan.hospital_benefits?.network_hospitals?.[0] || "Any private hospital";
