@@ -10,6 +10,7 @@ import {
     getProceduresForCondition,
     type ConditionSlug,
 } from '@/utils/condition-mapping';
+import { getAllPlans, slugifyProcedure } from '@/lib/data-loader';
 import {
     TrendingUp,
     ArrowRight,
@@ -74,35 +75,79 @@ export default async function StrategyHubPage({ params }: PageProps) {
 
     const currentYear = new Date().getFullYear();
 
-    const schemeRankings = [
-        {
-            rank: 1,
-            scheme: 'Discovery Health',
-            planName: 'Smart Classic',
-            planSlug: 'smart-classic',
-            tco: 45000,
-            efficiency: 'High',
-            highlights: ['Full PMB coverage', 'Lower co-payments', 'MSA benefit'],
-        },
-        {
-            rank: 2,
-            scheme: 'Bestmed',
-            planName: 'Pace 2',
-            planSlug: 'pace2',
-            tco: 48500,
-            efficiency: 'High',
-            highlights: ['Network discounts', 'Competitive premiums'],
-        },
-        {
-            rank: 3,
-            scheme: 'Bonitas',
-            planName: 'BonClassic',
-            planSlug: 'bonclassic',
-            tco: 52000,
-            efficiency: 'Medium',
-            highlights: ['Wide network', 'DSP benefits'],
-        },
-    ];
+    // ========================================================================
+    // DYNAMIC TCO CALCULATION
+    // ========================================================================
+    const plans = getAllPlans();
+    const relatedProcedures = getProceduresForCondition(conditionSlug);
+
+    // Helper to derive highlights from plan properties
+    const buildHighlights = (plan: ReturnType<typeof getAllPlans>[0], basketCost: number): string[] => {
+        const highlights: string[] = [];
+
+        // Check PMB coverage
+        const hasPMB = plan.procedures.some(p => p.pmb_covered);
+        if (hasPMB) highlights.push('PMB coverage');
+
+        // Check MSA benefit
+        if (plan.premiums.msa_percentage > 0) {
+            highlights.push(`${plan.premiums.msa_percentage}% MSA benefit`);
+        }
+
+        // Check hospital benefits
+        if (plan.hospital_benefits.annual_limit_unlimited) {
+            highlights.push('Unlimited hospital');
+        }
+
+        // Check co-payment situation
+        if (basketCost === 0) {
+            highlights.push('Full procedure coverage');
+        } else if (plan.hospital_benefits.co_payment_in_network === 0) {
+            highlights.push('No in-network co-pay');
+        }
+
+        return highlights.slice(0, 3); // Max 3 highlights
+    };
+
+    // Calculate TCO for each plan and rank
+    const schemeRankings = plans
+        .map(plan => {
+            const annualPremium = plan.premiums.main_member * 12;
+
+            // Calculate basket cost for this condition's procedures
+            const basketCost = relatedProcedures.reduce((acc, procSlug) => {
+                const proc = plan.procedures.find(p =>
+                    slugifyProcedure(p.procedure_name) === procSlug
+                );
+                return acc + (proc?.copayment ?? 0);
+            }, 0);
+
+            const tco = annualPremium + basketCost;
+
+            // Determine efficiency rating based on basket cost ratio
+            let efficiency: 'High' | 'Medium' | 'Low';
+            if (basketCost === 0) {
+                efficiency = 'High';
+            } else if (basketCost < annualPremium * 0.1) {
+                efficiency = 'Medium';
+            } else {
+                efficiency = 'Low';
+            }
+
+            return {
+                rank: 0, // Will be assigned after sorting
+                scheme: 'Discovery Health',
+                planName: plan.identity.plan_name,
+                planSlug: plan.identity.plan_slug,
+                tco,
+                efficiency,
+                highlights: buildHighlights(plan, basketCost),
+            };
+        })
+        .sort((a, b) => a.tco - b.tco)
+        .slice(0, 3) // Top 3 plans
+        .map((ranking, index) => ({ ...ranking, rank: index + 1 }));
+
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">

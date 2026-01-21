@@ -9,8 +9,10 @@ import PeopleAlsoAsk from '@/components/PeopleAlsoAsk';
 import {
     CONDITIONS,
     getAllConditionSlugs,
+    getProceduresForCondition,
     type ConditionSlug,
 } from '@/utils/condition-mapping';
+import { getAllPlans, slugifyProcedure } from '@/lib/data-loader';
 import { ContentGenerator, FINANCIAL_DISCLAIMER } from '@/utils/seo-content';
 import {
     TrendingUp,
@@ -96,38 +98,73 @@ export default async function StrategyHubPage({ params }: PageProps) {
         })),
     };
 
-    const schemeRankings = [
-        {
-            rank: 1,
-            scheme: 'Discovery Health',
-            planName: 'Smart Classic',
-            planSlug: 'smart-classic',
-            schemeSlug: 'discovery',
-            tco: 45000,
-            efficiency: 'High',
-            highlights: ['Full PMB coverage', 'Lower co-payments', 'MSA benefit'],
-        },
-        {
-            rank: 2,
-            scheme: 'Bestmed',
-            planName: 'Pace 2',
-            planSlug: 'pace2',
-            schemeSlug: 'bestmed',
-            tco: 48500,
-            efficiency: 'High',
-            highlights: ['Network discounts', 'Competitive premiums'],
-        },
-        {
-            rank: 3,
-            scheme: 'Bonitas',
-            planName: 'BonClassic',
-            planSlug: 'bonclassic',
-            schemeSlug: 'bonitas',
-            tco: 52000,
-            efficiency: 'Medium',
-            highlights: ['Wide network', 'DSP benefits'],
-        },
-    ];
+    // ========================================================================
+    // DYNAMIC TCO CALCULATION
+    // ========================================================================
+    const plans = getAllPlans();
+    const relatedProcedures = getProceduresForCondition(conditionSlug);
+
+    // Helper to derive highlights from plan properties
+    const buildHighlights = (plan: ReturnType<typeof getAllPlans>[0], basketCost: number): string[] => {
+        const highlights: string[] = [];
+
+        const hasPMB = plan.procedures.some(p => p.pmb_covered);
+        if (hasPMB) highlights.push('PMB coverage');
+
+        if (plan.premiums.msa_percentage > 0) {
+            highlights.push(`${plan.premiums.msa_percentage}% MSA benefit`);
+        }
+
+        if (plan.hospital_benefits.annual_limit_unlimited) {
+            highlights.push('Unlimited hospital');
+        }
+
+        if (basketCost === 0) {
+            highlights.push('Full procedure coverage');
+        } else if (plan.hospital_benefits.co_payment_in_network === 0) {
+            highlights.push('No in-network co-pay');
+        }
+
+        return highlights.slice(0, 3);
+    };
+
+    // Calculate TCO for each plan and rank
+    const schemeRankings = plans
+        .map(plan => {
+            const annualPremium = plan.premiums.main_member * 12;
+
+            const basketCost = relatedProcedures.reduce((acc, procSlug) => {
+                const proc = plan.procedures.find(p =>
+                    slugifyProcedure(p.procedure_name) === procSlug
+                );
+                return acc + (proc?.copayment ?? 0);
+            }, 0);
+
+            const tco = annualPremium + basketCost;
+
+            let efficiency: 'High' | 'Medium' | 'Low';
+            if (basketCost === 0) {
+                efficiency = 'High';
+            } else if (basketCost < annualPremium * 0.1) {
+                efficiency = 'Medium';
+            } else {
+                efficiency = 'Low';
+            }
+
+            return {
+                rank: 0,
+                scheme: 'Discovery Health',
+                planName: plan.identity.plan_name,
+                planSlug: plan.identity.plan_slug,
+                schemeSlug: 'discovery-health',
+                tco,
+                efficiency,
+                highlights: buildHighlights(plan, basketCost),
+            };
+        })
+        .sort((a, b) => a.tco - b.tco)
+        .slice(0, 3)
+        .map((ranking, index) => ({ ...ranking, rank: index + 1 }));
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -213,6 +250,32 @@ export default async function StrategyHubPage({ params }: PageProps) {
                             </div>
                         </Link>
                     ))}
+                </div>
+            </section>
+
+            {/* SEO Topical Glue: Link to specific Procedure Hubs */}
+            <section className="max-w-6xl mx-auto px-4 py-12">
+                <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <h2 className="text-xl font-bold text-slate-900 mb-4">
+                        Check Specific Procedure Costs
+                    </h2>
+                    <p className="text-slate-600 mb-6">
+                        View detailed cost breakdowns for procedures related to {conditionDef.label}:
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {relatedProcedures.slice(0, 8).map((procSlug) => (
+                            <Link
+                                key={procSlug}
+                                href={`/discovery-health/${procSlug}`}
+                                className="flex items-center gap-2 px-4 py-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg transition-colors group"
+                            >
+                                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600" />
+                                <span className="text-sm font-medium text-slate-700 group-hover:text-emerald-700 capitalize">
+                                    {procSlug.replace(/-/g, ' ')}
+                                </span>
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </section>
 
